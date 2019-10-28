@@ -39,3 +39,11 @@ def test_base_32_encode():
 
 def test_rotate():
     assert Chepy("some data").rotate(20).output == "migy xunu"
+
+
+def test_to_hex():
+    assert Chepy("AAA").to_hex.out().decode() == "414141"
+
+
+def test_hex_to_int():
+    assert Chepy("0x123").hex_to_int.output == 291
