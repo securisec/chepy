@@ -1,6 +1,7 @@
 import binascii
 import string
 import base64
+import base58
 import re
 from typing import Any
 
@@ -17,6 +18,11 @@ class DataFormat(Core):
     def base_64_encode(self) -> "Chepy":
         self._holder = base64.b64encode(self._convert_to_bytes())
         return self
+    
+    @property
+    def base_58_encode(self) -> "Chepy":
+        self._holder = base58.b58encode(self._convert_to_bytes())
+        return self
 
     @property
     def base_32_decode(self) -> "Chepy":
@@ -26,6 +32,11 @@ class DataFormat(Core):
     @property
     def base_64_decode(self) -> "Chepy":
         self._holder = base64.b64decode(self._holder)
+        return self
+    
+    @property
+    def base_58_decode(self) -> "Chepy":
+        self._holder = base58.b58decode(self._holder)
         return self
 
     @property
