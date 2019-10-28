@@ -26,6 +26,7 @@ class DataFormat(Core):
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This operation encodes raw data 
         into an ASCII Base58 string.
+
         Returns
         -------
         Chepy
@@ -47,6 +48,18 @@ class DataFormat(Core):
     
     @property
     def base_58_decode(self) -> "Chepy":
+        """
+        Base58 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This operation encodes raw data 
+        into an ASCII Base58 string.
+        
+        Returns
+        -------
+        Chepy
+        The Chepy object. Extract data with `out` or `output()` or 
+        copy to clipboard with `copy()`
+        """
         self._holder = base58.b58decode(self._holder)
         return self
 
