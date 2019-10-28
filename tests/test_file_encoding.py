@@ -49,3 +49,6 @@ def test_to_hex():
 
 def test_hex_to_int():
     assert Chepy("0x123").hex_to_int.output == 291
+
+def test_base_58_decode():
+    assert Chepy("2UDrs31qcWSPi").base_58_decode.output.decode() == "some data"
