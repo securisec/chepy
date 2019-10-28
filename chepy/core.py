@@ -33,6 +33,15 @@ class Core(object):
             # todo check more types here
             raise NotImplementedError
 
+    def _convert_to_str(self):
+        if isinstance(self._holder, bytes):
+            return self._holder.decode()
+        elif isinstance(self._holder, str):
+            return self._holder
+        else:
+            # todo check more types here
+            raise NotImplementedError
+
     def _remove_spaces(self):
         return re.sub(r"\s", "", self._holder)
 

@@ -2,3 +2,4 @@ pyperclip
 hexdump
 hashid
 base58
+pycryptodome

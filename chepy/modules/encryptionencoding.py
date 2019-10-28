@@ -16,7 +16,7 @@ class EncryptionEncoding(Core):
 
     @property
     def rot_13(self) -> "Chepy":
-        self._holder = codecs.encode(self._holder, "rot_13")
+        self._holder = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
     @property

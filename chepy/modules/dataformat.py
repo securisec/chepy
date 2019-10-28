@@ -20,8 +20,8 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-        The Chepy object. Extract data with `out` or `output()` or 
-        copy to clipboard with `copy()`
+            The Chepy object. Extract data with `out` or `output()` or 
+            copy to clipboard with `copy()`
         """
         self._holder = base58.b58encode(self._convert_to_bytes())
         return self
@@ -37,8 +37,8 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-        The Chepy object. Extract data with `out` or `output()` or 
-        copy to clipboard with `copy()`
+            The Chepy object. Extract data with `out` or `output()` or 
+            copy to clipboard with `copy()`
         """
         self._holder = base58.b58decode(self._holder)
         return self
