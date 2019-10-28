@@ -10,21 +10,11 @@ from ..core import Core
 
 class DataFormat(Core):
     @property
-    def base_32_encode(self) -> "Chepy":
-        self._holder = base64.b32encode(self._convert_to_bytes())
-        return self
-
-    @property
-    def base_64_encode(self) -> "Chepy":
-        self._holder = base64.b64encode(self._convert_to_bytes())
-        return self
-    
-    @property
     def base_58_encode(self) -> "Chepy":
         """
         Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This operation encodes raw data 
+        and processed by computers.This property encodes raw data 
         into an ASCII Base58 string.
 
         Returns
@@ -37,21 +27,11 @@ class DataFormat(Core):
         return self
 
     @property
-    def base_32_decode(self) -> "Chepy":
-        self._holder = base64.b32decode(self._holder)
-        return self
-
-    @property
-    def base_64_decode(self) -> "Chepy":
-        self._holder = base64.b64decode(self._holder)
-        return self
-    
-    @property
     def base_58_decode(self) -> "Chepy":
         """
         Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This operation encodes raw data 
+        and processed by computers.This property decodes raw data 
         into an ASCII Base58 string.
         
         Returns
@@ -61,6 +41,48 @@ class DataFormat(Core):
         copy to clipboard with `copy()`
         """
         self._holder = base58.b58decode(self._holder)
+        return self
+
+    @property
+    def base_64_encode(self) -> "Chepy":
+        """Base64 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property encodes raw data 
+        into an ASCII Base64 string.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out` or `output()` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = base64.b64encode(self._convert_to_bytes())
+        return self
+
+    @property
+    def base_64_decode(self) -> "Chepy":
+        """Base64 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property decodes raw data 
+        into an ASCII Base64 string.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out` or `output()` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = base64.b64decode(self._holder)
+        return self
+
+    @property
+    def base_32_encode(self) -> "Chepy":
+        self._holder = base64.b32encode(self._convert_to_bytes())
+        return self
+
+    @property
+    def base_32_decode(self) -> "Chepy":
+        self._holder = base64.b32decode(self._holder)
         return self
 
     @property
