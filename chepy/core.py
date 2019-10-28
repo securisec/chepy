@@ -75,3 +75,10 @@ class Core(object):
         pyperclip.copy(self._holder)
         return None
 
+    def write_to_file(self, file_path: str) -> None:
+        # todo
+        raise NotImplementedError
+
+    def write_binary_to_file(self, file_path: str) -> None:
+        # todo
+        raise NotImplementedError
