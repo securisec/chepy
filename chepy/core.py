@@ -29,6 +29,8 @@ class Core(object):
             return self._holder
         elif isinstance(self._holder, str):
             return self._holder.encode()
+        elif isinstance(self._holder, int):
+            return str(self._holder).encode()
         else:
             # todo check more types here
             raise NotImplementedError
@@ -38,12 +40,18 @@ class Core(object):
             return self._holder.decode()
         elif isinstance(self._holder, str):
             return self._holder
+        elif isinstance(self._holder, int):
+            return str(self._holder)
         else:
             # todo check more types here
             raise NotImplementedError
 
+    def to_int(self):
+        self._holder = int(self._holder)
+        return self
+
     def _remove_spaces(self):
-        return re.sub(r"\s", "", self._holder)
+        return re.sub(r"\s", "", self._convert_to_str())
 
     # def __clean_hex(self):
     #     # TODO
@@ -97,7 +105,4 @@ class Core(object):
         return self._holder
 
     def __str__(self):
-        if isinstance(self._holder, str):
-            return self._holder
-        elif isinstance(self._holder, bytes):
-            return self._holder.decode()
+        return self._convert_to_str()

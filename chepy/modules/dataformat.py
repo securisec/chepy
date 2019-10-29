@@ -20,7 +20,7 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = base58.b58encode(self._convert_to_bytes())
@@ -37,7 +37,7 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = base58.b58decode(self._holder)
@@ -53,7 +53,7 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = base64.b64encode(self._convert_to_bytes())
@@ -69,7 +69,7 @@ class DataFormat(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = base64.b64decode(self._holder)
@@ -101,7 +101,7 @@ class DataFormat(Core):
 
     
     def hex_to_int(self) -> "Chepy":
-        if self._holder.startswith("0x"):
+        if self._convert_to_str().startswith("0x"):
             self._holder = int(self._holder, 0)
         else:
             self._holder = int(self._remove_spaces(), 16)

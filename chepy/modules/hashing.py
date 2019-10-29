@@ -33,7 +33,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha1(self._convert_to_bytes()).hexdigest()
@@ -52,7 +52,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha256(self._convert_to_bytes()).hexdigest()
@@ -71,7 +71,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha512(self._convert_to_bytes()).hexdigest()
@@ -90,7 +90,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha384(self._convert_to_bytes()).hexdigest()
@@ -109,7 +109,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha224(self._convert_to_bytes()).hexdigest()
@@ -125,7 +125,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
@@ -141,7 +141,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
@@ -157,7 +157,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
@@ -173,7 +173,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
@@ -188,7 +188,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = MD2.new()
@@ -204,7 +204,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = MD4.new()
@@ -222,7 +222,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = MD5.new()
@@ -239,7 +239,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = keccak.new(digest_bits=512)
@@ -256,7 +256,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = keccak.new(digest_bits=384)
@@ -273,7 +273,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = keccak.new(digest_bits=256)
@@ -290,7 +290,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = keccak.new(digest_bits=224)
@@ -310,7 +310,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = SHAKE256.new()
@@ -330,7 +330,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = SHAKE128.new()
@@ -348,7 +348,7 @@ class Hashing(Core):
         Returns
         -------
         Chepy
-            The Chepy object. Extract data with `out` or `output()` or 
+            The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
         h = RIPEMD.new()
