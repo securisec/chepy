@@ -28,5 +28,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
+    python_requires=">=3.6",
     entry_points={"console_scripts": ["chepy = chepy.__main__:main"]}
 )

@@ -35,6 +35,9 @@ class Core(object):
             # todo check more types here
             raise NotImplementedError
 
+    def _convert_to_bytearray(self):
+        return bytearray(self._convert_to_bytes())
+
     def _convert_to_str(self):
         if isinstance(self._holder, bytes):
             return self._holder.decode()
@@ -46,8 +49,20 @@ class Core(object):
             # todo check more types here
             raise NotImplementedError
 
+    def _convert_to_int(self):
+        if isinstance(self._holder, int):
+            return self._holder
+        elif isinstance(self._holder, str) or isinstance(self._holder, bytes):
+            return int(self._holder)
+        else:
+            raise NotImplementedError
+
     def to_int(self):
         self._holder = int(self._holder)
+        return self
+
+    def int_to_hex(self):
+        self._holder = format(self._convert_to_int(), "x")
         return self
 
     def _remove_spaces(self):

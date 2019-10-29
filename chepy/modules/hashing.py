@@ -1,10 +1,14 @@
 import binascii
 import hashlib
 import hashid
+import typing
 from Crypto.Hash import MD2, MD4, MD5
 from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
 from Crypto.Hash import RIPEMD
+from Crypto.Hash import BLAKE2b, BLAKE2s
+from PyCRC.CRC16 import CRC16
+from PyCRC.CRC32 import CRC32
 
 from ..core import Core
 
@@ -354,4 +358,90 @@ class Hashing(Core):
         h = RIPEMD.new()
         h.update(self._convert_to_bytes())
         self._holder = h.hexdigest()
+        return self
+
+    def blake_2b(self, bits: int = 256, key: bytes = "") -> "Chepy":
+        """Performs BLAKE2b hashing on the input. BLAKE2b is a flavour of the 
+        BLAKE cryptographic hash function that is optimized for 64-bit 
+        platforms and produces digests of any size between 1 and 64 bytes. 
+        Supports the use of an optional key.
+        
+        Parameters
+        ----------
+        bits : int, optional
+            Number of digest bits, by default 256
+        key : bytes, optional
+            Encryption secret key, by default ''
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        assert bits in [
+            512,
+            384,
+            256,
+            160,
+            128,
+        ], "Valid bits are 512, 384, 256, 160, 128"
+        h = BLAKE2b.new(digest_bits=bits, key=key.encode())
+        h.update(self._convert_to_bytes())
+        self._holder = h.hexdigest()
+        return self
+
+    def blake_2s(self, bits: int = 256, key: bytes = "") -> "Chepy":
+        """Performs BLAKE2s hashing on the input. BLAKE2s is a flavour of 
+        the BLAKE cryptographic hash function that is optimized for 8- to 
+        32-bit platforms and produces digests of any size between 1 and 32 bytes. 
+        Supports the use of an optional key.
+        
+        Parameters
+        ----------
+        bits : int, optional
+            Number of digest bits, by default 256
+        key : bytes, optional
+            Encryption secret key, by default ''
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        assert bits in [256, 160, 128], "Valid bits are 256, 160, 128"
+        h = BLAKE2s.new(digest_bits=bits, key=key.encode())
+        h.update(self._convert_to_bytes())
+        self._holder = h.hexdigest()
+        return self
+
+    def crc16_checksum(self):
+        """A cyclic redundancy check (CRC) is an error-detecting code commonly 
+        used in digital networks and storage devices to detect accidental changes 
+        to raw data. The CRC was invented by W. Wesley Peterson in 1961.
+
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = CRC16().calculate(self._convert_to_str())
+        self._holder = self.int_to_hex().out()
+        return self
+
+    def crc32_checksum(self):
+        """A cyclic redundancy check (CRC) is an error-detecting code commonly 
+        used in digital networks and storage devices to detect accidental changes 
+        to raw data. The CRC was invented by W. Wesley Peterson in 1961.
+
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = CRC32().calculate(self._convert_to_str())
+        self._holder = self.int_to_hex().out()
         return self

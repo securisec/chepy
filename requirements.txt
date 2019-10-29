@@ -4,3 +4,4 @@ hashid
 base58
 pycryptodome
 fire
+PyCRC

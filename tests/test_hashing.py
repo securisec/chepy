@@ -124,3 +124,25 @@ def test_shake_128():
 
 def test_ripemd_160():
     assert Chepy("A").ripemd_160().output == "ddadef707ba62c166051b9e3cd0294c27515f2bc"
+
+
+def test_blake_2b():
+    assert (
+        Chepy("A").blake_2b(bits=128, key="key").output
+        == "6d2e4cba3bc564e02d1a76f585a6795d"
+    )
+
+
+def test_blake_2s():
+    assert (
+        Chepy("A").blake_2s(bits=128, key="key").output
+        == "4e33cc702e9d08c28a5e9691f23bc66a"
+    )
+
+
+def test_crc16_checksum():
+    assert Chepy("a").crc16_checksum().output == "e8c1"
+
+
+def test_crc32_checksum():
+    assert Chepy("a").crc32_checksum().output == "e8b7be43"
