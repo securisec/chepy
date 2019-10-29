@@ -14,12 +14,10 @@ class EncryptionEncoding(Core):
         self._holder = self._holder.translate(lookup)
         return self
 
-    @property
     def rot_13(self) -> "Chepy":
         self._holder = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
-    @property
     def rot_47(self) -> "Chepy":
         x = []
         for i in range(len(self._holder)):

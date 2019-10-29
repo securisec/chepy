@@ -5,8 +5,8 @@ import pyperclip
 
 
 class Core(object):
-    def __init__(self, string: str, is_file: bool = False):
-        self._holder = string
+    def __init__(self, input: str, is_file: bool = False):
+        self._holder = input
         self.is_binary = is_file
 
         if is_file:
@@ -54,7 +54,7 @@ class Core(object):
     @property
     def output(self) -> Any:
         """Get the final output
-        
+
         Returns
         -------
         Any
@@ -91,3 +91,13 @@ class Core(object):
     def write_binary_to_file(self, file_path: str) -> None:
         # todo
         raise NotImplementedError
+
+    def pipe(self):
+        # todo
+        return self._holder
+
+    def __str__(self):
+        if isinstance(self._holder, str):
+            return self._holder
+        elif isinstance(self._holder, bytes):
+            return self._holder.decode()

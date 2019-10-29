@@ -3,3 +3,4 @@ hexdump
 hashid
 base58
 pycryptodome
+fire

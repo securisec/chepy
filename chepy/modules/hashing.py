@@ -4,7 +4,7 @@ import hashid
 from Crypto.Hash import MD2, MD4, MD5
 from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
-from Crypto.Hash import RIPEMD, RIPEMD160
+from Crypto.Hash import RIPEMD
 
 from ..core import Core
 
@@ -24,7 +24,6 @@ class Hashing(Core):
             hashes.append({"name": h.name, "hashcat": h.hashcat, "john": h.john})
         return hashes
 
-    @property
     def sha1(self) -> "Chepy":
         """The SHA (Secure Hash Algorithm) hash functions were designed by the NSA. 
         SHA-1 is the most established of the existing SHA hash functions and it is 
@@ -40,7 +39,6 @@ class Hashing(Core):
         self._holder = hashlib.sha1(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha2_256(self) -> "Chepy":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
@@ -60,7 +58,6 @@ class Hashing(Core):
         self._holder = hashlib.sha256(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha2_512(self) -> "Chepy":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
@@ -80,7 +77,6 @@ class Hashing(Core):
         self._holder = hashlib.sha512(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha2_384(self) -> "Chepy":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
@@ -100,7 +96,6 @@ class Hashing(Core):
         self._holder = hashlib.sha384(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha2_224(self) -> "Chepy":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
@@ -120,7 +115,6 @@ class Hashing(Core):
         self._holder = hashlib.sha224(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha3_512(self) -> "Chepy":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
@@ -137,7 +131,6 @@ class Hashing(Core):
         self._holder = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha3_256(self) -> "Chepy":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
@@ -154,7 +147,6 @@ class Hashing(Core):
         self._holder = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha3_384(self) -> "Chepy":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
@@ -171,7 +163,6 @@ class Hashing(Core):
         self._holder = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def sha3_224(self) -> "Chepy":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
@@ -188,7 +179,6 @@ class Hashing(Core):
         self._holder = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
         return self
 
-    @property
     def md2(self):
         """The MD2 (Message-Digest 2) algorithm is a cryptographic hash function developed by 
         Ronald Rivest in 1989. The algorithm is optimized for 8-bit computers.Although MD2 is 
@@ -206,7 +196,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def md4(self):
         """The MD4 (Message-Digest 4) algorithm is a cryptographic hash function 
         developed by Ronald Rivest in 1990. The digest length is 128 bits. The algorithm 
@@ -223,7 +212,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def md5(self):
         """MD5 (Message-Digest 5) is a widely used hash function. It has been used 
         in a variety of security applications and is also commonly used to check 
@@ -242,7 +230,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def keccak_512(self):
         """The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
         Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
@@ -260,7 +247,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def keccak_384(self):
         """The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
         Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
@@ -278,7 +264,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def keccak_256(self):
         """The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
         Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
@@ -296,7 +281,6 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    @property
     def keccak_224(self):
         """The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
         Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
@@ -354,7 +338,6 @@ class Hashing(Core):
         self._holder = binascii.hexlify(h.read(size))
         return self
 
-    @property
     def ripemd_160(self) -> "Chepy":
         """RIPEMD (RACE Integrity Primitives Evaluation Message Digest) is a family of 
         cryptographic hash functions developed in Leuven, Belgium, by Hans Dobbertin, 
