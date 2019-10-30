@@ -30,7 +30,7 @@ class Hashing(Core):
             hashes.append({"name": h.name, "hashcat": h.hashcat, "john": h.john})
         return hashes
 
-    def sha1(self) -> "Chepy":
+    def sha1(self) -> "Baked":
         """The SHA (Secure Hash Algorithm) hash functions were designed by the NSA. 
         SHA-1 is the most established of the existing SHA hash functions and it is 
         used in a variety of security applications and protocols. However, SHA-1's 
@@ -38,14 +38,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha1(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha2_256(self) -> "Chepy":
+    def sha2_256(self) -> "Baked":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
         hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
@@ -57,14 +56,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha256(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha2_512(self) -> "Chepy":
+    def sha2_512(self) -> "Baked":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
         hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
@@ -76,14 +74,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha512(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha2_512_truncate(self, truncate: int = 256) -> "Chepy":
+    def sha2_512_truncate(self, truncate: int = 256) -> "Baked":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
         hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
@@ -95,16 +92,15 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         assert truncate in [256, 224], "Valid truncates are 256, 224"
         h = SHA512.new(self._convert_to_bytes(), truncate=str(truncate))
         self._holder = h.hexdigest()
         return self
 
-    def sha2_384(self) -> "Chepy":
+    def sha2_384(self) -> "Baked":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
         hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
@@ -116,14 +112,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha384(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha2_224(self) -> "Chepy":
+    def sha2_224(self) -> "Baked":
         """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
         includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
         hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
@@ -135,14 +130,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha224(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha3_512(self) -> "Chepy":
+    def sha3_512(self) -> "Baked":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
         MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
@@ -151,14 +145,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha3_256(self) -> "Chepy":
+    def sha3_256(self) -> "Baked":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
         MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
@@ -167,14 +160,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha3_384(self) -> "Chepy":
+    def sha3_384(self) -> "Baked":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
         MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
@@ -183,14 +175,13 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
         return self
 
-    def sha3_224(self) -> "Chepy":
+    def sha3_224(self) -> "Baked":
         """The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
         Although part of the same series of standards, SHA-3 is internally quite different from the 
         MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
@@ -199,9 +190,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
         return self
@@ -214,9 +204,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = MD2.new()
         h.update(self._convert_to_bytes())
@@ -230,9 +219,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = MD4.new()
         h.update(self._convert_to_bytes())
@@ -248,9 +236,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = MD5.new()
         h.update(self._convert_to_bytes())
@@ -265,9 +252,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = keccak.new(digest_bits=512)
         h.update(self._convert_to_bytes())
@@ -282,9 +268,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = keccak.new(digest_bits=384)
         h.update(self._convert_to_bytes())
@@ -299,9 +284,8 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = keccak.new(digest_bits=256)
         h.update(self._convert_to_bytes())
@@ -316,16 +300,15 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = keccak.new(digest_bits=224)
         h.update(self._convert_to_bytes())
         self._holder = h.hexdigest()
         return self
 
-    def shake_256(self, size: int = 64) -> "Chepy":
+    def shake_256(self, size: int = 64) -> "Baked":
         """Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm, 
         part of the Keccak family, allowing for variable output length/size.
 
@@ -336,16 +319,15 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = SHAKE256.new()
         h.update(self._convert_to_bytes())
         self._holder = binascii.hexlify(h.read(size))
         return self
 
-    def shake_128(self, size: int = 64) -> "Chepy":
+    def shake_128(self, size: int = 64) -> "Baked":
         """Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm, 
         part of the Keccak family, allowing for variable output length/size.
 
@@ -356,16 +338,15 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = SHAKE128.new()
         h.update(self._convert_to_bytes())
         self._holder = binascii.hexlify(h.read(size))
         return self
 
-    def ripemd_160(self) -> "Chepy":
+    def ripemd_160(self) -> "Baked":
         """RIPEMD (RACE Integrity Primitives Evaluation Message Digest) is a family of 
         cryptographic hash functions developed in Leuven, Belgium, by Hans Dobbertin, 
         Antoon Bosselaers and Bart Preneel at the COSIC research group at the Katholieke 
@@ -374,16 +355,15 @@ class Hashing(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         h = RIPEMD.new()
         h.update(self._convert_to_bytes())
         self._holder = h.hexdigest()
         return self
 
-    def blake_2b(self, bits: int = 256, key: bytes = "") -> "Chepy":
+    def blake_2b(self, bits: int = 256, key: bytes = "") -> "Baked":
         """Performs BLAKE2b hashing on the input. BLAKE2b is a flavour of the 
         BLAKE cryptographic hash function that is optimized for 64-bit 
         platforms and produces digests of any size between 1 and 64 bytes. 
@@ -398,9 +378,8 @@ class Hashing(Core):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         assert bits in [
             512,
@@ -414,7 +393,7 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    def blake_2s(self, bits: int = 256, key: bytes = "") -> "Chepy":
+    def blake_2s(self, bits: int = 256, key: bytes = "") -> "Baked":
         """Performs BLAKE2s hashing on the input. BLAKE2s is a flavour of 
         the BLAKE cryptographic hash function that is optimized for 8- to 
         32-bit platforms and produces digests of any size between 1 and 32 bytes. 
@@ -429,9 +408,8 @@ class Hashing(Core):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         assert bits in [256, 160, 128], "Valid bits are 256, 160, 128"
         h = BLAKE2s.new(digest_bits=bits, key=key.encode())
@@ -439,49 +417,46 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    def crc8_checksum(self):
+    def crc8_checksum(self) -> "Baked":
         """A cyclic redundancy check (CRC) is an error-detecting code commonly 
         used in digital networks and storage devices to detect accidental changes 
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = Crc8().process(self._convert_to_bytes()).finalhex()
         return self
 
-    def crc16_checksum(self):
+    def crc16_checksum(self) -> "Baked":
         """A cyclic redundancy check (CRC) is an error-detecting code commonly 
         used in digital networks and storage devices to detect accidental changes 
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = CrcArc().process(self._convert_to_bytes()).finalhex()
         return self
 
-    def crc32_checksum(self):
+    def crc32_checksum(self) -> "Baked":
         """A cyclic redundancy check (CRC) is an error-detecting code commonly 
         used in digital networks and storage devices to detect accidental changes 
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = Crc32().process(self._convert_to_bytes()).finalhex()
         return self
 
-    def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
+    def hmac_hash(self, key: bytes = b"", digest: str = "sha1") -> "Baked":
         """Keyed-Hash Message Authentication Codes (HMAC) are a mechanism for 
         message authentication using cryptographic hash functions.
         
@@ -495,9 +470,8 @@ class Hashing(Core):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         
         Raises
         ------
@@ -529,7 +503,7 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
-    def bcrypt_hash(self, rounds: int = 10):
+    def bcrypt_hash(self, rounds: int = 10) -> "Baked":
         """bcrypt is a password hashing function designed by Niels Provos and David Mazières, 
         based on the Blowfish cipher, and presented at USENIX in 1999. Besides incorporating 
         a salt to protect against rainbow table attacks, bcrypt is an adaptive function: over 
@@ -543,9 +517,8 @@ class Hashing(Core):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
         return self

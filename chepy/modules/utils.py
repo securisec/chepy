@@ -4,19 +4,18 @@ from ..core import Core
 
 
 class Utils(Core):
-    def reverse(self) -> "Chepy":
+    def reverse(self) -> "Baked":
         """Reverses the string.
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = self._holder[::-1]
         return self
 
-    def count_occurances(self, regex: str, case_sensitive: bool = False) -> "Chepy":
+    def count_occurances(self, regex: str, case_sensitive: bool = False) -> "Baked":
         """Counts the number of times the provided string occurs in the input.
 
         Parameters
@@ -28,9 +27,8 @@ class Utils(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         if case_sensitive:
             r = re.compile(regex)

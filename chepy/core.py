@@ -6,10 +6,69 @@ import pyperclip
 import regex as re
 
 
+class Baked(object):
+    def __init__(self, o):
+        self.holder = o
+
+    @property
+    def output(self):
+        """Get the final output
+        
+        Returns
+        -------
+        Any
+            Final output
+        """
+        return self.holder
+
+    def out(self) -> Any:
+        """Get the final output
+        
+        Returns
+        -------
+        Any
+            Final output
+        """
+        return self.holder
+
+    def copy_to_clipboard(self) -> None:
+        """Copy the final output to the clipboard. If an 
+        error is raised, refer to the documentation on the error.
+        
+        Returns
+        -------
+        None
+            Copies final output to the clipboard
+        """
+        pyperclip.copy(self.holder)
+        return None
+
+    def copy(self):
+        """Copy the final output to the clipboard. If an 
+        error is raised, refer to the documentation on the error.
+        
+        Returns
+        -------
+        None
+            Copies final output to the clipboard
+        """
+        pyperclip.copy(self.holder)
+        return None
+
+    def write_to_file(self, file_path: str) -> None:
+        # todo
+        raise NotImplementedError
+
+    def write_binary_to_file(self, file_path: str) -> None:
+        # todo
+        raise NotImplementedError
+
+
 class Core(object):
-    def __init__(self, input: str, is_file: bool = False):
-        self._holder = input
+    def __init__(self, data: str, is_file: bool = False):
+        self._holder = data
         self.is_file = is_file
+        # self.baked = Baked(self._holder)
 
         if self.is_file:
             path = pathlib.Path(self._holder).expanduser().absolute()
@@ -19,6 +78,9 @@ class Core(object):
             except UnicodeDecodeError:
                 with open(path, "rb") as f:
                     self._holder = f.read()
+
+    def __getattr__(self, i):
+        return getattr(Baked(self._holder), i)
 
     def _is_bytes(self):
         return isinstance(self._holder, bytes)
@@ -76,48 +138,7 @@ class Core(object):
     #     if '0x' in self._holder:
     #         return self._holder = self._holder.strip('0x')
 
-    @property
-    def output(self) -> Any:
-        """Get the final output
-
-        Returns
-        -------
-        Any
-            Final output
-        """
-        return self.out()
-
-    def out(self) -> Any:
-        """Get the final output
-        
-        Returns
-        -------
-        Any
-            Final output
-        """
-        return self._holder
-
-    def copy_to_clipboard(self) -> None:
-        """Copy the final output to the clipboard. If an 
-        error is raised, refer to the documentation on the error.
-        
-        Returns
-        -------
-        None
-            Copies final output to the clipboard
-        """
-        pyperclip.copy(self._holder)
-        return None
-
-    def write_to_file(self, file_path: str) -> None:
-        # todo
-        raise NotImplementedError
-
-    def write_binary_to_file(self, file_path: str) -> None:
-        # todo
-        raise NotImplementedError
-
-    def base_64_encode(self) -> "Chepy":
+    def base_64_encode(self) -> "Baked":
         """Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property encodes raw data 
@@ -125,15 +146,13 @@ class Core(object):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = base64.b64encode(self._convert_to_bytes())
         return self
 
-    
-    def base_64_decode(self) -> "Chepy":
+    def base_64_decode(self) -> "Baked":
         """Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
@@ -141,20 +160,17 @@ class Core(object):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = base64.b64decode(self._holder)
         return self
 
-
-    def to_hex(self) -> "Chepy":
+    def to_hex(self) -> "Baked":
         self._holder = binascii.hexlify(self._convert_to_bytes())
         return self
 
-    
-    def hex_to_int(self) -> "Chepy":
+    def hex_to_int(self) -> "Baked":
         if self._convert_to_str().startswith("0x"):
             self._holder = int(self._holder, 0)
         else:

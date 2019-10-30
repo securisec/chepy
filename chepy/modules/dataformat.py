@@ -8,7 +8,7 @@ from ..core import Core
 
 
 class DataFormat(Core):
-    def base_58_encode(self) -> "Chepy":
+    def base_58_encode(self) -> "Baked":
         """
         Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
@@ -17,14 +17,13 @@ class DataFormat(Core):
 
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = base58.b58encode(self._convert_to_bytes())
         return self
 
-    def base_58_decode(self) -> "Chepy":
+    def base_58_decode(self) -> "Baked":
         """
         Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
@@ -33,22 +32,21 @@ class DataFormat(Core):
         
         Returns
         -------
-        Chepy
-            The Chepy object. Extract data with `out()` or `output` or 
-            copy to clipboard with `copy()`
+        Baked
+            The Baked object. 
         """
         self._holder = base58.b58decode(self._holder)
         return self
 
-    def base_32_encode(self) -> "Chepy":
+    def base_32_encode(self) -> "Baked":
         self._holder = base64.b32encode(self._convert_to_bytes())
         return self
 
-    def base_32_decode(self) -> "Chepy":
+    def base_32_decode(self) -> "Baked":
         self._holder = base64.b32decode(self._holder)
         return self
 
-    def string_from_hexdump(self) -> "Chepy":
+    def string_from_hexdump(self) -> "Baked":
         if self._is_bytes():
             data = self._holder.decode()
         else:

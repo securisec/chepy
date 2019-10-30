@@ -8,15 +8,13 @@ Welcome to chepy's documentation!
 
 Chepy
 =====
-.. autoclass:: chepy.Chepy
-    :members:
-    :inherited-members:
-
-    .. automethod:: __init__
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   chepy.rst
+   baked.rst
 
 
 
