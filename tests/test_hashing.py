@@ -40,6 +40,13 @@ def test_sha2_224():
     )
 
 
+def test_sha2_512_truncate():
+    assert (
+        Chepy("abc").sha2_512_truncate().output
+        == "53048e2681941ef99b2e29b76b4c7dabe4c2d0c634fc6d46e0e2f13107e7af23"
+    )
+
+
 def test_sha3_512():
     assert (
         Chepy("A").sha3_512().out()
@@ -156,3 +163,21 @@ def test_hmac_hash():
     assert (
         Chepy("abc").hmac_hash("", "md5").output == "dd2701993d29fdd0b032c233cec63403"
     )
+
+
+def test_bcrypt_hash():
+    assert Chepy("abc").bcrypt_hash().output.decode().startswith("$2a$10")
+
+
+def test_bcrypt_compare():
+    assert Chepy("abc").bcrypt_compare(
+        "$2a$10$SpXMRnrQ4IQqC710xMHfAu0BBr4nJkuPqDvzhiAACnykgn87iE2S2"
+    )
+
+
+def test_scrypt_hash():
+    assert (
+        Chepy("abc").scrypt_hash(salt="", key_length=16).out()
+        == "f352f3374cf4e344dde4108b96985248"
+    )
+

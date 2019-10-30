@@ -1,3 +1,5 @@
+import base64
+import binascii
 import pathlib
 from typing import Any
 import pyperclip
@@ -7,9 +9,9 @@ import regex as re
 class Core(object):
     def __init__(self, input: str, is_file: bool = False):
         self._holder = input
-        self.is_binary = is_file
+        self.is_file = is_file
 
-        if is_file:
+        if self.is_file:
             path = pathlib.Path(self._holder).expanduser().absolute()
             try:
                 with open(path, "r") as f:
@@ -115,9 +117,49 @@ class Core(object):
         # todo
         raise NotImplementedError
 
-    def pipe(self):
-        # todo
-        return self._holder
+    def base_64_encode(self) -> "Chepy":
+        """Base64 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property encodes raw data 
+        into an ASCII Base64 string.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = base64.b64encode(self._convert_to_bytes())
+        return self
+
+    
+    def base_64_decode(self) -> "Chepy":
+        """Base64 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property decodes raw data 
+        into an ASCII Base64 string.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = base64.b64decode(self._holder)
+        return self
+
+
+    def to_hex(self) -> "Chepy":
+        self._holder = binascii.hexlify(self._convert_to_bytes())
+        return self
+
+    
+    def hex_to_int(self) -> "Chepy":
+        if self._convert_to_str().startswith("0x"):
+            self._holder = int(self._holder, 0)
+        else:
+            self._holder = int(self._remove_spaces(), 16)
+        return self
 
     def __str__(self):
         return self._convert_to_str()

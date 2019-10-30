@@ -2,12 +2,14 @@ import binascii
 import hmac
 import hashlib
 import hashid
-import typing
-from Crypto.Hash import MD2, MD4, MD5
+from Crypto.Hash import MD2, MD4, MD5, SHA256, SHA512
 from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
 from Crypto.Hash import RIPEMD
 from Crypto.Hash import BLAKE2b, BLAKE2s
+from Crypto.Protocol.KDF import bcrypt as _crypto_bcrypt
+from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
+from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
 from crccheck.crc import CrcArc, Crc32, Crc8
 
 from ..core import Core
@@ -24,7 +26,7 @@ class Hashing(Core):
             Dictionary of hash name, hashcat and john the ripper types
         """
         hashes = []
-        for h in hashid.HashID().identifyHash(self._holder):
+        for h in hashid.HashID().identifyHash(self._convert_to_str()):
             hashes.append({"name": h.name, "hashcat": h.hashcat, "john": h.john})
         return hashes
 
@@ -79,6 +81,27 @@ class Hashing(Core):
             copy to clipboard with `copy()`
         """
         self._holder = hashlib.sha512(self._convert_to_bytes()).hexdigest()
+        return self
+
+    def sha2_512_truncate(self, truncate: int = 256) -> "Chepy":
+        """The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
+        are truncated versions of SHA-512, but the initial values are generated using the method 
+        described in Federal Information Processing Standards (FIPS) PUB 180-4.
+
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        assert truncate in [256, 224], "Valid truncates are 256, 224"
+        h = SHA512.new(self._convert_to_bytes(), truncate=str(truncate))
+        self._holder = h.hexdigest()
         return self
 
     def sha2_384(self) -> "Chepy":
@@ -504,5 +527,56 @@ class Hashing(Core):
             )
 
         self._holder = h.hexdigest()
+        return self
+
+    def bcrypt_hash(self, rounds: int = 10):
+        """bcrypt is a password hashing function designed by Niels Provos and David Mazières, 
+        based on the Blowfish cipher, and presented at USENIX in 1999. Besides incorporating 
+        a salt to protect against rainbow table attacks, bcrypt is an adaptive function: over 
+        time, the iteration count (rounds) can be increased to make it slower, so it remains 
+        resistant to brute-force search attacks even with increasing computation power.
+        
+        Parameters
+        ----------
+        rounds : int, optional
+            rounds of hashing, by default 10
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
+        return self
+
+    def bcrypt_compare(self, hash: str) -> bool:
+        """Tests whether the provided hash matches the given string at init.
+        
+        Parameters
+        ----------
+        hash : str
+            brypt hash
+        
+        Returns
+        -------
+        bool
+            True if it is a match, else False
+        """
+        try:
+            if _crypto_bcrypt_check(self._convert_to_str(), hash) is None:
+                return True
+            else:
+                return False
+        except ValueError:
+            return False
+
+    def scrypt_hash(
+        self, salt: str = "", key_length: int = 64, N: int = 14, r: int = 8, p: int = 1
+    ):
+        assert N < 32, "N must be less than 32"
+        self._holder = _crypto_scrypt(
+            self._convert_to_bytes(), salt=salt, key_len=key_length, N=2 ** N, r=r, p=p
+        ).hex()
         return self
 

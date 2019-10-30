@@ -15,10 +15,28 @@ class EncryptionEncoding(Core):
         return self
 
     def rot_13(self) -> "Chepy":
+        """A simple caesar substitution cipher which rotates alphabet 
+        characters by the specified amount (default 13).
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
         self._holder = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
     def rot_47(self) -> "Chepy":
+        """A slightly more complex variation of a caesar cipher, which includes 
+        ASCII characters from 33 '!' to 126 '~'. Default rotation: 47.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
         x = []
         for i in range(len(self._holder)):
             j = ord(self._holder[i])
