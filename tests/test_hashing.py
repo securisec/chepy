@@ -140,9 +140,19 @@ def test_blake_2s():
     )
 
 
+def test_crc8_checksum():
+    assert Chepy("abc").crc8_checksum().output == "5f"
+
+
 def test_crc16_checksum():
     assert Chepy("a").crc16_checksum().output == "e8c1"
 
 
 def test_crc32_checksum():
     assert Chepy("a").crc32_checksum().output == "e8b7be43"
+
+
+def test_hmac_hash():
+    assert (
+        Chepy("abc").hmac_hash("", "md5").output == "dd2701993d29fdd0b032c233cec63403"
+    )

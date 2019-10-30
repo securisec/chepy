@@ -2,7 +2,7 @@ import binascii
 import string
 import base64
 import base58
-import re
+import regex as re
 from typing import Any
 
 from ..core import Core

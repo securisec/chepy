@@ -1,7 +1,7 @@
-import re
 import pathlib
 from typing import Any
 import pyperclip
+import regex as re
 
 
 class Core(object):

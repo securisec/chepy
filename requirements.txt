@@ -4,4 +4,6 @@ hashid
 base58
 pycryptodome
 fire
-PyCRC
+crccheck
+regex
+emoji

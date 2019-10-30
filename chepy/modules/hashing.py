@@ -1,4 +1,5 @@
 import binascii
+import hmac
 import hashlib
 import hashid
 import typing
@@ -7,8 +8,7 @@ from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
 from Crypto.Hash import RIPEMD
 from Crypto.Hash import BLAKE2b, BLAKE2s
-from PyCRC.CRC16 import CRC16
-from PyCRC.CRC32 import CRC32
+from crccheck.crc import CrcArc, Crc32, Crc8
 
 from ..core import Core
 
@@ -416,6 +416,20 @@ class Hashing(Core):
         self._holder = h.hexdigest()
         return self
 
+    def crc8_checksum(self):
+        """A cyclic redundancy check (CRC) is an error-detecting code commonly 
+        used in digital networks and storage devices to detect accidental changes 
+        to raw data. The CRC was invented by W. Wesley Peterson in 1961.
+
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        """
+        self._holder = Crc8().process(self._convert_to_bytes()).finalhex()
+        return self
+
     def crc16_checksum(self):
         """A cyclic redundancy check (CRC) is an error-detecting code commonly 
         used in digital networks and storage devices to detect accidental changes 
@@ -427,8 +441,7 @@ class Hashing(Core):
             The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
-        self._holder = CRC16().calculate(self._convert_to_str())
-        self._holder = self.int_to_hex().out()
+        self._holder = CrcArc().process(self._convert_to_bytes()).finalhex()
         return self
 
     def crc32_checksum(self):
@@ -442,6 +455,54 @@ class Hashing(Core):
             The Chepy object. Extract data with `out()` or `output` or 
             copy to clipboard with `copy()`
         """
-        self._holder = CRC32().calculate(self._convert_to_str())
-        self._holder = self.int_to_hex().out()
+        self._holder = Crc32().process(self._convert_to_bytes()).finalhex()
         return self
+
+    def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
+        """Keyed-Hash Message Authentication Codes (HMAC) are a mechanism for 
+        message authentication using cryptographic hash functions.
+        
+        Parameters
+        ----------
+        key : bytes, optional
+            Starting key for the hash, by default b''
+        digest : str, optional
+            The digest type, by default "sha1". Possible values are 
+            md5, sha1, sha256 and sha512
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object. Extract data with `out()` or `output` or 
+            copy to clipboard with `copy()`
+        
+        Raises
+        ------
+        TypeError
+            If key is not in bytes
+        TypeError
+            If not a valid/allowed digest type
+        """
+        if isinstance(key, str):
+            key = key.encode()
+        elif isinstance(key, bytes):
+            key = key
+        else:
+            raise TypeError("key has to be bytes")
+
+        if digest == "md5":
+            h = hmac.new(key, self._convert_to_bytes(), hashlib.md5)
+        elif digest == "sha1":
+            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha1)
+        elif digest == "sha256":
+            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha256)
+        elif digest == "sha512":
+            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha512)
+        else:
+            raise TypeError(
+                "Currently supported digests are md5, sha1, sha256 and sha512"
+            )
+
+        self._holder = h.hexdigest()
+        return self
+
