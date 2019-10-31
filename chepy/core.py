@@ -1,8 +1,9 @@
 import base64
 import binascii
 import pathlib
-from typing import Any
+import webbrowser
 import pyperclip
+from typing import Any
 import regex as re
 
 
@@ -53,6 +54,17 @@ class Baked(object):
             # todo check more types here
             raise NotImplementedError
 
+    def out_as_bytes(self):
+        if isinstance(self.holder, bytes):
+            return self.holder
+        elif isinstance(self.holder, str):
+            return self.holder.encode()
+        elif isinstance(self.holder, int):
+            return str(self.holder).encode()
+        else:
+            # todo check more types here
+            raise NotImplementedError
+
     def copy_to_clipboard(self) -> None:
         """Copy the final output to the clipboard. If an 
         error is raised, refer to the documentation on the error.
@@ -65,7 +77,7 @@ class Baked(object):
         pyperclip.copy(self.holder)
         return None
 
-    def copy(self):
+    def copy(self) -> None: # placeholder for documentation
         """Copy the final output to the clipboard. If an 
         error is raised, refer to the documentation on the error.
         
@@ -74,7 +86,16 @@ class Baked(object):
         None
             Copies final output to the clipboard
         """
-        pyperclip.copy(self.holder)
+        return None
+
+    def web(self) -> None: # place holder for documentation
+        """Opens the current string in CyberChef on the browser as hex
+        
+        Returns
+        -------
+        None
+            Opens the current data in CyberChef
+        """
         return None
 
     def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
@@ -139,75 +160,24 @@ class Core(object):
         else:
             raise NotImplementedError
 
-    def to_int(self):
-        self._holder = int(self._holder)
-        return self
-
     def _remove_spaces(self):
         return re.sub(r"\s", "", self._convert_to_str())
 
-    def base_64_encode(self) -> "Baked":
-        """Base64 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property encodes raw data 
-        into an ASCII Base64 string.
-        
-        Returns
-        -------
-        Baked
-            The Baked object. 
-        """
-        self._holder = base64.b64encode(self._convert_to_bytes())
-        return self
+    def copy(self) -> None:
+        # DONT document
+        pyperclip.copy(self._holder)
+        return None
 
-    def base_64_decode(self) -> "Baked":
-        """Base64 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property decodes raw data 
-        into an ASCII Base64 string.
-        
-        Returns
-        -------
-        Baked
-            The Baked object. 
-        """
-        self._holder = base64.b64decode(self._holder)
-        return self
-
-    def to_hex(self) -> "Baked":
-        self._holder = binascii.hexlify(self._convert_to_bytes())
-        return self
-
-    def hex_to_int(self) -> "Baked":
-        if self._convert_to_str().startswith("0x"):
-            self._holder = int(self._holder, 0)
-        else:
-            self._holder = int(self._remove_spaces(), 16)
-        return self
-
-    def str_to_hex(self) -> "Baked":
-        self._holder = binascii.hexlify(self._convert_to_bytes())
-        return self
-
-    def int_to_hex(self):
-        self._holder = format(self._convert_to_int(), "x")
-        return self
-
-    def binary_to_hex(self):
-        self._holder = binascii.hexlify(self._convert_to_bytes())
-        return self
-
-    def hex_to_binary(self):
-        self._holder = binascii.unhexlify(self._convert_to_bytes())
-        return self
-
-    def normalize_hex(self):
-        assert r"\x" not in self._holder, "Cannot normalize binary data"
-        delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
-        string = re.sub("|".join(delimiters), "", self._holder)
-        assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
-        self._holder = string
-        return self
+    def web(self) -> None:
+        # DONT document
+        data = re.sub(b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes())))
+        print(data)
+        url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')&input={}".format(
+            data.decode()
+        )
+        print(url)
+        webbrowser.open_new_tab(url)
+        return None
 
     def __str__(self):
         return self._convert_to_str()

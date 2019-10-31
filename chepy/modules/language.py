@@ -38,10 +38,46 @@ class Language(Core):
         """
         return emoji.get_emoji_regexp().findall(self._convert_to_str())
 
+    def encode_utf_16_le(self, decode: bool=False) -> "Baked":
+        """Encode string as UTF16LE (1200). 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_str().encode('utf_16_le')
+        return self
+
+    def decode_utf_16_le(self, decode: bool=False):
+        """Decode string as UTF16LE (1200). 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_bytes().decode('utf_16_le')
+        return self
+
     def encode_utf_16_be(self, decode: bool=False):
+        """Encode string as UTF16BE (1201). 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
         self._holder = self._convert_to_str().encode('utf_16_be')
         return self
 
     def decode_utf_16_be(self, decode: bool=False):
+        """Decode string as UTF16BE (1201). 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
         self._holder = self._convert_to_bytes().decode('utf_16_be')
         return self
