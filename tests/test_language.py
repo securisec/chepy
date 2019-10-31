@@ -7,3 +7,6 @@ def test_unicode_languages():
 
 def test_find_emojis():
     assert len(Chepy("hello 😍 🇰🇷 🇺🇸").find_emojis()) == 3
+
+def test_encode_utf_16_be():
+    assert Chepy("안녕").encode_utf_16_be().to_hex().o.decode() == 'c548b155' 

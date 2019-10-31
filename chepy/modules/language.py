@@ -38,3 +38,10 @@ class Language(Core):
         """
         return emoji.get_emoji_regexp().findall(self._convert_to_str())
 
+    def encode_utf_16_be(self, decode: bool=False):
+        self._holder = self._convert_to_str().encode('utf_16_be')
+        return self
+
+    def decode_utf_16_be(self, decode: bool=False):
+        self._holder = self._convert_to_bytes().decode('utf_16_be')
+        return self

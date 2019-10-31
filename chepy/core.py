@@ -7,8 +7,19 @@ import regex as re
 
 
 class Baked(object):
-    def __init__(self, o):
-        self.holder = o
+    def __init__(self, data):
+        self.holder = data
+
+    @property
+    def o(self):
+        """Get the final output
+        
+        Returns
+        -------
+        Any
+            Final output
+        """
+        return self.holder
 
     @property
     def output(self):
@@ -30,6 +41,17 @@ class Baked(object):
             Final output
         """
         return self.holder
+
+    def out_as_str(self) -> str:
+        if isinstance(self.holder, bytes):
+            return self.holder.decode()
+        elif isinstance(self.holder, str):
+            return self.holder
+        elif isinstance(self.holder, int):
+            return str(self.holder)
+        else:
+            # todo check more types here
+            raise NotImplementedError
 
     def copy_to_clipboard(self) -> None:
         """Copy the final output to the clipboard. If an 
@@ -55,11 +77,7 @@ class Baked(object):
         pyperclip.copy(self.holder)
         return None
 
-    def write_to_file(self, file_path: str) -> None:
-        # todo
-        raise NotImplementedError
-
-    def write_binary_to_file(self, file_path: str) -> None:
+    def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
         # todo
         raise NotImplementedError
 
@@ -125,18 +143,8 @@ class Core(object):
         self._holder = int(self._holder)
         return self
 
-    def int_to_hex(self):
-        self._holder = format(self._convert_to_int(), "x")
-        return self
-
     def _remove_spaces(self):
         return re.sub(r"\s", "", self._convert_to_str())
-
-    # def __clean_hex(self):
-    #     # TODO
-    #     self.output = re.sub(r"\s|\\x", "", self.output)
-    #     if '0x' in self._holder:
-    #         return self._holder = self._holder.strip('0x')
 
     def base_64_encode(self) -> "Baked":
         """Base64 is a notation for encoding arbitrary byte data using a 
@@ -175,6 +183,30 @@ class Core(object):
             self._holder = int(self._holder, 0)
         else:
             self._holder = int(self._remove_spaces(), 16)
+        return self
+
+    def str_to_hex(self) -> "Baked":
+        self._holder = binascii.hexlify(self._convert_to_bytes())
+        return self
+
+    def int_to_hex(self):
+        self._holder = format(self._convert_to_int(), "x")
+        return self
+
+    def binary_to_hex(self):
+        self._holder = binascii.hexlify(self._convert_to_bytes())
+        return self
+
+    def hex_to_binary(self):
+        self._holder = binascii.unhexlify(self._convert_to_bytes())
+        return self
+
+    def normalize_hex(self):
+        assert r"\x" not in self._holder, "Cannot normalize binary data"
+        delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
+        string = re.sub("|".join(delimiters), "", self._holder)
+        assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
+        self._holder = string
         return self
 
     def __str__(self):
