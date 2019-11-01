@@ -19,3 +19,21 @@ def test_encode_utf_16_be():
 
 def test_decode_utf_16_be():
     assert Chepy("c548b155").hex_to_str().decode_utf_16_be().o == '안녕' 
+
+def test_encode_utf_7():
+    assert Chepy("안녕").encode_utf_7().o.decode() == '+xUixVQ-' 
+
+def test_decode_utf_7():
+    assert Chepy("+xUixVQ-").decode_utf_7().o == '안녕' 
+
+def test_encode_cp500():
+    assert Chepy("hello").encode_cp500().to_hex().o.decode() == '8885939396' 
+
+def test_decode_cp500():
+    assert Chepy("8885939396").hex_to_str().decode_cp500().o == 'hello' 
+
+def test_encode_cp037():
+    assert Chepy("hello").encode_cp500().to_hex().o.decode() == '8885939396' 
+
+def test_decode_cp037():
+    assert Chepy("8885939396").hex_to_str().decode_cp500().o == 'hello' 

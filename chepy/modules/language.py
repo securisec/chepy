@@ -81,3 +81,71 @@ class Language(Core):
         """
         self._holder = self._convert_to_bytes().decode('utf_16_be')
         return self
+
+    def encode_utf_7(self, decode: bool=False):
+        """Encode string as UTF7. 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_str().encode('utf_7')
+        return self
+
+    def decode_utf_7(self, decode: bool=False):
+        """Decode string as UTF7. 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_bytes().decode('utf_7')
+        return self
+
+    def encode_cp500(self, decode: bool=False):
+        """Encode string as EBCDIC-CP-BE, EBCDIC-CP-CH, IBM500 or CP500. 
+        Western European languages. 
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_str().encode('cp500')
+        return self
+
+    def decode_cp500(self, decode: bool=False):
+        """Decode string as EBCDIC-CP-BE, EBCDIC-CP-CH, IBM500 or CP500. 
+        Western European languages.
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_bytes().decode('cp500')
+        return self
+
+    def encode_cp037(self, decode: bool=False):
+        """Encode IBM037, IBM039. English languages.
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_str().encode('cp037')
+        return self
+
+    def decode_cp037(self, decode: bool=False):
+        """Decode IBM037, IBM039. English languages
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = self._convert_to_bytes().decode('cp037')
+        return self
