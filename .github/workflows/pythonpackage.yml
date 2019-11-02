@@ -9,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8, pypy3]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v1
@@ -25,6 +25,11 @@ jobs:
       run: |
         pip install pytest
         pytest
+    - name: Test docs
+      run: |
+        pip install sphinx
+        cd docs
+        make clean html
 
   windows:
 
@@ -32,7 +37,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8, pypy3]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v1
@@ -48,6 +53,11 @@ jobs:
       run: |
         pip install pytest
         pytest
+    - name: Test docs
+      run: |
+        pip install sphinx
+        cd docs
+        make clean html
 
   osx:
 
@@ -55,7 +65,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8, pypy3]
+        python-version: [3.6, 3.7]
 
     steps:
     - uses: actions/checkout@v1
@@ -71,3 +81,8 @@ jobs:
       run: |
         pip install pytest
         pytest
+    - name: Test docs
+      run: |
+        pip install sphinx
+        cd docs
+        make clean html

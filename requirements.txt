@@ -7,3 +7,5 @@ fire
 crccheck
 regex
 emoji
+pyOpenSSL
+prompt_toolkit

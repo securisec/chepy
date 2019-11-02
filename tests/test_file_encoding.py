@@ -1,24 +1,26 @@
 from pathlib import Path
 from chepy import Chepy
 
+path = str(Path().absolute() / "tests/files/encoding")
+
 
 def test_read_file():
-    c = Chepy(str(Path().absolute() / "tests/encoding"), True)
+    c = Chepy(path, True)
     assert c.output[0:10] == "=0GDAqREMS"
 
 
 def test_rot_13():
-    c = Chepy(str(Path().absolute() / "tests/encoding"), True)
+    c = Chepy(path, True)
     assert c.rot_13().output[:10] == "=0TQNdERZF"
 
 
 def test_reverse():
-    c = Chepy(str(Path().absolute() / "tests/encoding"), True)
+    c = Chepy(path, True)
     assert c.reverse().output[0:10] == "E0SMERSADy"
 
 
 def test_flag():
-    c = Chepy(str(Path().absolute() / "tests/encoding"), True)
+    c = Chepy(path, True)
     assert (
         c.reverse()
         .rot_13()
