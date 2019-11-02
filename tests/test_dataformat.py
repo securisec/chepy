@@ -23,3 +23,17 @@ def test_to_hex():
 
 def test_hex_to_int():
     assert Chepy("0x123").hex_to_int().output == 291
+
+
+def test_url_encode():
+    assert (
+        Chepy("https://google.com/?lol=some data&a=1").url_encode(safe="/:").o
+        == "https://google.com/%3Flol%3Dsome+data%26a%3D1"
+    )
+
+
+def test_url_decode():
+    assert (
+        Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").url_decode().o
+        == "https://google.com/?lol=some data&a=1"
+    )

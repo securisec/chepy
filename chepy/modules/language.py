@@ -1,4 +1,5 @@
 import emoji
+import unicodedata
 from typing import List
 import regex as re
 
@@ -46,7 +47,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('utf_16_le', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "utf_16_le", errors="backslashreplace"
+        )
         return self
 
     def decode_utf_16_le(self) -> "Baked":
@@ -57,7 +60,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('utf_16_le')
+        self._holder = self._convert_to_bytes().decode("utf_16_le")
         return self
 
     def encode_utf_16_be(self) -> "Baked":
@@ -68,7 +71,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('utf_16_be', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "utf_16_be", errors="backslashreplace"
+        )
         return self
 
     def decode_utf_16_be(self) -> "Baked":
@@ -79,7 +84,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('utf_16_be')
+        self._holder = self._convert_to_bytes().decode("utf_16_be")
         return self
 
     def encode_utf_7(self) -> "Baked":
@@ -90,7 +95,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('utf_7', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("utf_7", errors="backslashreplace")
         return self
 
     def decode_utf_7(self) -> "Baked":
@@ -101,7 +106,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('utf_7')
+        self._holder = self._convert_to_bytes().decode("utf_7")
         return self
 
     def encode_cp500(self) -> "Baked":
@@ -113,7 +118,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp500', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp500", errors="backslashreplace")
         return self
 
     def decode_cp500(self) -> "Baked":
@@ -125,7 +130,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp500')
+        self._holder = self._convert_to_bytes().decode("cp500")
         return self
 
     def encode_cp037(self) -> "Baked":
@@ -136,7 +141,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp037', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp037", errors="backslashreplace")
         return self
 
     def decode_cp037(self) -> "Baked":
@@ -147,7 +152,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp037')
+        self._holder = self._convert_to_bytes().decode("cp037")
         return self
 
     def encode_cp874(self) -> "Baked":
@@ -158,7 +163,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp874', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp874", errors="backslashreplace")
         return self
 
     def decode_cp874(self) -> "Baked":
@@ -169,7 +174,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp874')
+        self._holder = self._convert_to_bytes().decode("cp874")
         return self
 
     def encode_cp932(self) -> "Baked":
@@ -180,7 +185,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp932', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp932", errors="backslashreplace")
         return self
 
     def decode_cp932(self) -> "Baked":
@@ -191,7 +196,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp932')
+        self._holder = self._convert_to_bytes().decode("cp932")
         return self
 
     def encode_gbk(self) -> "Baked":
@@ -202,7 +207,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('gbk', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("gbk", errors="backslashreplace")
         return self
 
     def decode_gbk(self) -> "Baked":
@@ -213,7 +218,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('gbk')
+        self._holder = self._convert_to_bytes().decode("gbk")
         return self
 
     def encode_gb2312(self) -> "Baked":
@@ -225,7 +230,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('gb2312', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "gb2312", errors="backslashreplace"
+        )
         return self
 
     def decode_gb2312(self) -> "Baked":
@@ -237,7 +244,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('gb2312')
+        self._holder = self._convert_to_bytes().decode("gb2312")
         return self
 
     def encode_cp949(self) -> "Baked":
@@ -248,7 +255,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp949', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp949", errors="backslashreplace")
         return self
 
     def decode_cp949(self) -> "Baked":
@@ -259,7 +266,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp949')
+        self._holder = self._convert_to_bytes().decode("cp949")
         return self
 
     def encode_cp950(self) -> "Baked":
@@ -270,7 +277,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp950', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode("cp950", errors="backslashreplace")
         return self
 
     def decode_cp950(self) -> "Baked":
@@ -281,7 +288,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp950')
+        self._holder = self._convert_to_bytes().decode("cp950")
         return self
 
     def encode_cp1250(self) -> "Baked":
@@ -292,7 +299,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1250', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1250", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1250(self) -> "Baked":
@@ -303,7 +312,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1250')
+        self._holder = self._convert_to_bytes().decode("cp1250")
         return self
 
     def encode_cp1251(self) -> "Baked":
@@ -314,7 +323,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1251', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1251", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1251(self) -> "Baked":
@@ -325,7 +336,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1251')
+        self._holder = self._convert_to_bytes().decode("cp1251")
         return self
 
     def encode_cp1252(self) -> "Baked":
@@ -336,7 +347,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1252', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1252", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1252(self) -> "Baked":
@@ -347,7 +360,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1252')
+        self._holder = self._convert_to_bytes().decode("cp1252")
         return self
 
     def encode_cp1253(self) -> "Baked":
@@ -358,7 +371,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1253', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1253", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1253(self) -> "Baked":
@@ -369,7 +384,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1253')
+        self._holder = self._convert_to_bytes().decode("cp1253")
         return self
 
     def encode_cp1254(self) -> "Baked":
@@ -380,7 +395,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1254', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1254", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1254(self) -> "Baked":
@@ -391,7 +408,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1254')
+        self._holder = self._convert_to_bytes().decode("cp1254")
         return self
 
     def encode_cp1255(self) -> "Baked":
@@ -402,7 +419,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1255', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1255", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1255(self) -> "Baked":
@@ -413,7 +432,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1255')
+        self._holder = self._convert_to_bytes().decode("cp1255")
         return self
 
     def encode_cp1256(self) -> "Baked":
@@ -424,7 +443,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1256', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1256", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1256(self) -> "Baked":
@@ -435,7 +456,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1256')
+        self._holder = self._convert_to_bytes().decode("cp1256")
         return self
 
     def encode_cp1257(self) -> "Baked":
@@ -446,7 +467,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1257', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1257", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1257(self) -> "Baked":
@@ -457,7 +480,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1257')
+        self._holder = self._convert_to_bytes().decode("cp1257")
         return self
 
     def encode_cp1258(self) -> "Baked":
@@ -468,7 +491,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('cp1258', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "cp1258", errors="backslashreplace"
+        )
         return self
 
     def decode_cp1258(self) -> "Baked":
@@ -479,9 +504,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('cp1258')
+        self._holder = self._convert_to_bytes().decode("cp1258")
         return self
-        
+
     def encode_iso8859_2(self) -> "Baked":
         """Encode ISO-8859-2 Latin 2 Central European (28592)
         
@@ -490,7 +515,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_2', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_2", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_2(self) -> "Baked":
@@ -501,7 +528,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_2')
+        self._holder = self._convert_to_bytes().decode("iso8859_2")
         return self
 
     def encode_iso8859_3(self) -> "Baked":
@@ -512,7 +539,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_3', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_3", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_3(self) -> "Baked":
@@ -523,7 +552,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_3')
+        self._holder = self._convert_to_bytes().decode("iso8859_3")
         return self
 
     def encode_iso8859_4(self) -> "Baked":
@@ -534,7 +563,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_4', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_4", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_4(self) -> "Baked":
@@ -545,7 +576,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_4')
+        self._holder = self._convert_to_bytes().decode("iso8859_4")
         return self
 
     def encode_iso8859_5(self) -> "Baked":
@@ -556,7 +587,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_5', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_5", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_5(self) -> "Baked":
@@ -567,7 +600,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_5')
+        self._holder = self._convert_to_bytes().decode("iso8859_5")
         return self
 
     def encode_iso8859_6(self) -> "Baked":
@@ -578,7 +611,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_6', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_6", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_6(self) -> "Baked":
@@ -589,7 +624,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_6')
+        self._holder = self._convert_to_bytes().decode("iso8859_6")
         return self
 
     def encode_iso8859_7(self) -> "Baked":
@@ -600,7 +635,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_7', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_7", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_7(self) -> "Baked":
@@ -611,7 +648,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_7')
+        self._holder = self._convert_to_bytes().decode("iso8859_7")
         return self
 
     def encode_iso8859_8(self) -> "Baked":
@@ -622,7 +659,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_8', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_8", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_8(self) -> "Baked":
@@ -633,7 +672,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_8')
+        self._holder = self._convert_to_bytes().decode("iso8859_8")
         return self
 
     def encode_iso8859_9(self) -> "Baked":
@@ -644,7 +683,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_9', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_9", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_9(self) -> "Baked":
@@ -655,7 +696,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_9')
+        self._holder = self._convert_to_bytes().decode("iso8859_9")
         return self
 
     def encode_iso8859_10(self) -> "Baked":
@@ -666,7 +707,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_10', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_10", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_10(self) -> "Baked":
@@ -677,7 +720,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_10')
+        self._holder = self._convert_to_bytes().decode("iso8859_10")
         return self
 
     def encode_iso8859_11(self) -> "Baked":
@@ -688,7 +731,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_11', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_11", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_11(self) -> "Baked":
@@ -699,7 +744,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_11')
+        self._holder = self._convert_to_bytes().decode("iso8859_11")
         return self
 
     def encode_iso8859_13(self) -> "Baked":
@@ -710,7 +755,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_13', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_13", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_13(self) -> "Baked":
@@ -721,7 +768,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_13')
+        self._holder = self._convert_to_bytes().decode("iso8859_13")
         return self
 
     def encode_iso8859_14(self) -> "Baked":
@@ -732,7 +779,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_14', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_14", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_14(self) -> "Baked":
@@ -743,7 +792,7 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_14')
+        self._holder = self._convert_to_bytes().decode("iso8859_14")
         return self
 
     def encode_iso8859_15(self) -> "Baked":
@@ -754,7 +803,9 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_str().encode('iso8859_15', errors='backslashreplace')
+        self._holder = self._convert_to_str().encode(
+            "iso8859_15", errors="backslashreplace"
+        )
         return self
 
     def decode_iso8859_15(self) -> "Baked":
@@ -765,5 +816,29 @@ class Language(Core):
         Baked
             The Baked object. 
         """
-        self._holder = self._convert_to_bytes().decode('iso8859_15')
+        self._holder = self._convert_to_bytes().decode("iso8859_15")
+        return self
+
+    def remove_diacritics(self) -> "Baked":
+        """Replaces accented characters with their latin character equivalent.
+        
+        Returns
+        -------
+        Baked
+            The Baked object.
+        """
+        self._holder = unicodedata.normalize("NFKD", self._convert_to_str()).encode(
+            "ascii", errors="ignore"
+        )
+        return self
+
+    def unicode_to_str(self) -> "Baked":
+        """Escape any \\u characters to its proper unicode representation
+        
+        Returns
+        -------
+        Baked
+            The Baked object.
+        """
+        self._holder = self._convert_to_bytes().decode('unicode-escape')
         return self

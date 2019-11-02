@@ -162,11 +162,21 @@ def test_decode_cp1257():
 
 
 def test_encode_cp1258():
-    assert Chepy("Chào").encode_cp1258().to_hex().o.decode() == "4368e06f"
+    assert (
+        Chepy("tạm biệt").encode_cp1258().to_hex().o.decode()
+        == "745c75316561316d2062695c753165633774"
+    )
 
 
 def test_decode_cp1258():
-    assert Chepy("4368e06f").hex_to_str().decode_cp1258().o == "Chào"
+    assert (
+        Chepy("745c75316561316d2062695c753165633774")
+        .hex_to_str()
+        .decode_cp1258()
+        .unicode_to_str()
+        .o
+        == "tạm biệt"
+    )
 
 
 def test_encode_iso8859_2():
@@ -293,4 +303,8 @@ def test_encode_iso8859_15():
 
 def test_decode_iso8859_15():
     assert Chepy("676172e76f6e").hex_to_str().decode_iso8859_15().o == "garçon"
+
+
+def test_remove_diacritics():
+    assert Chepy("François Chào").remove_diacritics().o.decode() == "Francois Chao"
 

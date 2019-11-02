@@ -4,16 +4,25 @@ from ..core import Core
 
 
 class Utils(Core):
-    def reverse(self) -> "Baked":
+    def reverse(self, count: int = 1) -> "Baked":
         """Reverses the string.
+
+        Parameters
+        ----------
+        count : int
+            Reverse by the number of characters indicated in count
 
         Returns
         -------
         Baked
             The Baked object. 
         """
-        self._holder = self._holder[::-1]
-        return self
+        if count == 1:
+            self._holder = self._holder[::-1]
+            return self
+        else:
+            self._holder = "".join([self._holder[x:x+count] for x in range(0,len(self._holder),count)][::-1])
+            return self
 
     def count_occurances(self, regex: str, case_sensitive: bool = False) -> "Baked":
         """Counts the number of times the provided string occurs in the input.
