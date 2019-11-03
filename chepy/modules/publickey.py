@@ -114,3 +114,20 @@ class Publickey(Core):
             _pyssl_crypto.FILETYPE_ASN1, cert_pem
         )
         return self
+
+    def der_hex_to_pem(self):
+        """Converts a hexadecimal DER (Distinguished Encoding Rules) 
+        string into PEM (Privacy Enhanced Mail) format.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        cert_pem = _pyssl_crypto.load_certificate(
+            _pyssl_crypto.FILETYPE_ASN1, self._holder
+        )
+        self._holder = _pyssl_crypto.dump_certificate(
+            _pyssl_crypto.FILETYPE_PEM, cert_pem
+        )
+        return self

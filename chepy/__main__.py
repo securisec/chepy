@@ -4,7 +4,9 @@ from chepy import Chepy
 
 def main():
     for method in dir(Chepy):
-        if not method.startswith("_"):
+        if not method.startswith("_") and not isinstance(
+            getattr(Chepy, method), property
+        ):
             fire.decorators._SetMetadata(
                 getattr(Chepy, method), fire.decorators.ACCEPTS_POSITIONAL_ARGS, False
             )

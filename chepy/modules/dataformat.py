@@ -2,6 +2,8 @@ import string
 import binascii
 import base64
 import base58
+import json
+import yaml
 import regex as re
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
@@ -24,7 +26,66 @@ class DataFormat(Core):
         Chepy
             The Chepy object. 
         """
+        assert isinstance(self._holder, list), "Data in state not a list"
         self._holder = join_by.join(self._holder)
+        return self
+
+    def json_to_dict(self):
+        """Convert a JSON string to a dict object
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        self._holder = json.loads(self._convert_to_str())
+        return self
+
+    def dict_to_json(self):
+        """Convert a dict object to a JSON string
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        assert isinstance(self._holder, dict), "Not a dict object"
+        self._holder = json.dumps(self._holder)
+        return self
+
+    def yaml_to_json(self, safe: bool = True):
+        """Convert yaml to a json string
+        
+        Parameters
+        ----------
+        safe : bool, optional
+            If only safe fields should be parsed, by default True
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        if safe:
+            self._holder = json.dumps(yaml.safe_load(self._holder))
+        else:
+            self._holder = json.dumps(yaml.load(self._holder))
+        return self
+
+    def json_to_yaml(self):
+        """Convert a json string to yaml structure
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        self._holder = yaml.dump(
+            json.loads(self._holder),
+            default_flow_style=False,
+            sort_keys=False,
+            allow_unicode=True,
+        )
         return self
 
     def base_58_encode(self):

@@ -9,3 +9,4 @@ regex
 emoji
 pyOpenSSL
 prompt_toolkit
+ua-parser

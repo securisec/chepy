@@ -67,3 +67,28 @@ def test_parse_x509_der_hex():
 def test_pem_to_der():
     assert Chepy(path, True).pem_to_der_hex().to_hex().o.decode()[0:6] == "308202"
 
+
+def test_der_hex_to_pem():
+    assert (
+        Chepy(str(Path().absolute() / "tests/files/test.der"), True)
+        .der_hex_to_pem()
+        .o.decode()
+        == """-----BEGIN CERTIFICATE-----
+MIICeTCCAeICCQDi5dgCpKMeHTANBgkqhkiG9w0BAQsFADCBgDELMAkGA1UEBhMC
+VVMxDDAKBgNVBAgMA2xvbDEMMAoGA1UEBwwDbnljMRIwEAYDVQQKDAlzZWN1cmlz
+ZWMxDjAMBgNVBAsMBWNvZGVyMRIwEAYDVQQDDAlzZWN1cmlzZWMxHTAbBgkqhkiG
+9w0BCQEWDm5vbmVAZW1haWwuY29tMB4XDTE5MTEwMjE1MjUwOFoXDTIwMTEwMTE1
+MjUwOFowgYAxCzAJBgNVBAYTAlVTMQwwCgYDVQQIDANsb2wxDDAKBgNVBAcMA255
+YzESMBAGA1UECgwJc2VjdXJpc2VjMQ4wDAYDVQQLDAVjb2RlcjESMBAGA1UEAwwJ
+c2VjdXJpc2VjMR0wGwYJKoZIhvcNAQkBFg5ub25lQGVtYWlsLmNvbTCBnzANBgkq
+hkiG9w0BAQEFAAOBjQAwgYkCgYEA1L6ceV3tvkHtMHI5vOwr+cjW/H0yINh9PYHy
++CS9MmrX12pe/m1FLapMUu5HgQZAKrtldccb3WiGQNprs/Wce1g8hmvD0pAXffij
+Q+vjvHVU3l+up1ocL6IPpxrQVz0bzpQ4sMRK0CdZgjf4y4HL188qMNgYGOZBgttF
+Xxoz41UCAwEAATANBgkqhkiG9w0BAQsFAAOBgQChhviBdift0P/j00TYxnPPNS58
+wQSFm54UNQ/vjM12yZ+C5c3268Vo8jSP7mI5R3wn6XztjUSXkDg5/3IL3kojti/h
+nyhBHx2QCVke7BxWw3HWkbZ/1BKl0HnCGyd5HDTuOtlBmTS+QrJoNpdsn0zq4fvc
+igbV1IJdKTBAiZzaOQ==
+-----END CERTIFICATE-----
+"""
+    )
+

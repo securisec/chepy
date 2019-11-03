@@ -153,6 +153,16 @@ class Core(object):
         """
         return None
 
+    def get_type(self) -> str:
+        """Get the type of the data in state
+        
+        Returns
+        -------
+        str
+            Type of the data in the state
+        """
+        return type(self._holder).__name__
+
     def web(self) -> None:  # place holder for documentation
         """Opens the current string in CyberChef on the browser as hex
         

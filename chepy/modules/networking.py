@@ -1,4 +1,5 @@
 import regex as re
+from ua_parser.user_agent_parser import Parse as _uap_parse
 from ..core import Core
 
 
@@ -55,4 +56,15 @@ class Networking(Core):
             The Chepy object. 
         """
         self._holder = re.sub(r"\[\.\]|\[\:\]", ".", self._convert_to_str())
+        return self
+
+    def parse_user_agent(self):
+        """Attempts to identify and categorise information contained in a user-agent string.
+        
+        Returns
+        -------
+        Chepy
+            The Chepy object.
+        """
+        self._holder = _uap_parse(self._convert_to_str())
         return self
