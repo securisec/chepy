@@ -7,7 +7,7 @@ from ..core import Core
 
 
 class Language(Core):
-    def unicode_languages(self, lang: str) -> List[str]:
+    def unicode_chrs_by_lang(self, lang: str) -> List[str]:
         """Detect characters from varios Unicode code point ids. Example 
         of languages are Common, Arabic, Armenian, Bengali, Bopomofo, Braille, 
         Buhid, Canadian_Aboriginal, Cherokee, Cyrillic, Devanagari, Ethiopic, 
@@ -27,7 +27,8 @@ class Language(Core):
         List[str]
             An array of string matches
         """
-        return re.findall(r"\p{" + lang + "}", self._convert_to_str())
+        self._holder = re.findall(r"\p{" + lang + "}", self._convert_to_str())
+        return self
 
     def find_emojis(self) -> List[str]:
         """Find emojis, symbols, pictographs, map symbols and flags

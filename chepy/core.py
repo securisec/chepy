@@ -52,6 +52,10 @@ class Baked(object):
             return str(self.holder)
         elif isinstance(self.holder, dict):
             return str(self.holder)
+        elif isinstance(self.holder, list):
+            return str(self.holder)
+        elif isinstance(self.holder, bool):
+            return str(self.holder)
         else:
             # todo check more types here
             raise NotImplementedError
@@ -64,6 +68,10 @@ class Baked(object):
         elif isinstance(self.holder, int):
             return str(self.holder).encode()
         elif isinstance(self.holder, dict):
+            return str(self.holder).encode()
+        elif isinstance(self.holder, list):
+            return str(self.holder).encode()
+        elif isinstance(self.holder, bool):
             return str(self.holder).encode()
         else:
             # todo check more types here
@@ -140,6 +148,10 @@ class Core(object):
             return str(self._holder).encode()
         elif isinstance(self.holder, dict):
             return str(self._holder).encode()
+        elif isinstance(self.holder, list):
+            return str(self._holder).encode()
+        elif isinstance(self.holder, bool):
+            return str(self._holder).encode()
         else:
             # todo check more types here
             raise NotImplementedError
@@ -155,6 +167,10 @@ class Core(object):
         elif isinstance(self._holder, int):
             return str(self._holder)
         elif isinstance(self.holder, dict):
+            return str(self._holder)
+        elif isinstance(self.holder, list):
+            return str(self._holder)
+        elif isinstance(self.holder, bool):
             return str(self._holder)
         else:
             # todo check more types here

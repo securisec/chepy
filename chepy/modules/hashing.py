@@ -16,19 +16,20 @@ from ..core import Core
 
 
 class Hashing(Core):
-    def identify_hash(self) -> dict:
+    def identify_hash(self) -> "Baked":
         """Tries to determine information about a given hash and suggests which 
         algorithm may have been used to generate it based on its length. 
         
         Returns
         -------
-        dict
-            Dictionary of hash name, hashcat and john the ripper types
+        Baked
+            The Baked object. 
         """
         hashes = []
         for h in hashid.HashID().identifyHash(self._convert_to_str()):
             hashes.append({"name": h.name, "hashcat": h.hashcat, "john": h.john})
-        return hashes
+        self._holder = hashes
+        return self
 
     def sha1(self) -> "Baked":
         """The SHA (Secure Hash Algorithm) hash functions were designed by the NSA. 
@@ -523,7 +524,7 @@ class Hashing(Core):
         self._holder = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
         return self
 
-    def bcrypt_compare(self, hash: str) -> bool:
+    def bcrypt_compare(self, hash: str) -> "Baked":
         """Tests whether the provided hash matches the given string at init.
         
         Parameters
@@ -533,16 +534,19 @@ class Hashing(Core):
         
         Returns
         -------
-        bool
-            True if it is a match, else False
+        Baked
+            The Baked object. 
         """
         try:
             if _crypto_bcrypt_check(self._convert_to_str(), hash) is None:
-                return True
+                self._holder = True
+                return self
             else:
-                return False
+                self._holder = False
+                return self
         except ValueError:
-            return False
+            self._holder = False
+            return self
 
     def scrypt_hash(
         self, salt: str = "", key_length: int = 64, N: int = 14, r: int = 8, p: int = 1

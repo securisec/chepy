@@ -11,6 +11,22 @@ from ..core import Core
 
 
 class DataFormat(Core):
+    def list_to_str(self, join_by=" "):
+        """Join an array by `join_by`
+        
+        Parameters
+        ----------
+        join_by : str, optional
+            String character to join by, by default ' '
+        
+        Returns
+        -------
+        Baked
+            The Baked object. 
+        """
+        self._holder = join_by.join(self._holder)
+        return self
+
     def base_58_encode(self) -> "Baked":
         """Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
