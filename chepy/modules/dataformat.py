@@ -21,13 +21,13 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = join_by.join(self._holder)
         return self
 
-    def base_58_encode(self) -> "Baked":
+    def base_58_encode(self):
         """Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property encodes raw data 
@@ -35,13 +35,13 @@ class DataFormat(Core):
 
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base58.b58encode(self._convert_to_bytes())
         return self
 
-    def base_58_decode(self) -> "Baked":
+    def base_58_decode(self):
         """Base58 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
@@ -49,13 +49,13 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base58.b58decode(self._holder)
         return self
 
-    def base_32_encode(self) -> "Baked":
+    def base_32_encode(self):
         """ Base32 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers. It uses a smaller set of characters than 
@@ -63,13 +63,13 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base64.b32encode(self._convert_to_bytes())
         return self
 
-    def base_32_decode(self) -> "Baked":
+    def base_32_decode(self):
         """ Base32 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers. It uses a smaller set of characters than 
@@ -77,24 +77,24 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base64.b32decode(self._holder)
         return self
 
-    def to_int(self) -> "Baked":
+    def to_int(self):
         """Converts the string representation of a number into an int
         
         Returns
         -------
-        Baked
-            The Baked object.
+        Chepy
+            The Chepy object.
         """
         self._holder = int(self._holder)
         return self
 
-    def base_64_encode(self) -> "Baked":
+    def base_64_encode(self):
         """Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property encodes raw data 
@@ -102,13 +102,13 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base64.b64encode(self._convert_to_bytes())
         return self
 
-    def base_64_decode(self) -> "Baked":
+    def base_64_decode(self):
         """Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
@@ -116,30 +116,30 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = base64.b64decode(self._holder)
         return self
 
-    def to_hex(self) -> "Baked":
+    def to_hex(self):
         """Converts a string to its hex representation
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = binascii.hexlify(self._convert_to_bytes())
         return self
 
-    def hex_to_int(self) -> "Baked":
+    def hex_to_int(self):
         """Converts hex into its intiger represantation
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         if self._convert_to_str().startswith("0x"):
             self._holder = int(self._holder, 0)
@@ -153,13 +153,13 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = binascii.unhexlify(self._convert_to_bytes())
         return self
 
-    def hex_to_str(self, ignore: bool = False) -> "Baked":
+    def hex_to_str(self, ignore: bool = False):
         """Decodes a hex string to ascii ignoring any decoding errors
         
         Parameters
@@ -169,8 +169,8 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         if ignore:
             self._holder = binascii.unhexlify(self._convert_to_bytes()).decode(
@@ -180,13 +180,13 @@ class DataFormat(Core):
             self._holder = binascii.unhexlify(self._convert_to_bytes())
         return self
 
-    def str_to_hex(self) -> "Baked":
+    def str_to_hex(self):
         """Converts a string to a hex string
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = binascii.hexlify(self._convert_to_bytes())
         return self
@@ -196,8 +196,8 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = format(self._convert_to_int(), "x")
         return self
@@ -207,8 +207,8 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = binascii.hexlify(self._convert_to_bytes())
         return self
@@ -219,8 +219,8 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         assert r"\x" not in self._holder, "Cannot normalize binary data"
         delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
@@ -229,7 +229,7 @@ class DataFormat(Core):
         self._holder = string
         return self
 
-    def string_from_hexdump(self) -> "Baked":
+    def string_from_hexdump(self):
         # TODO make new line aware \n \r\n \0a etc
         if self._is_bytes():
             data = self._holder.decode()
@@ -249,19 +249,19 @@ class DataFormat(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = _urllib_quote_plus(self._convert_to_str(), safe=safe)
         return self
 
-    def url_decode(self) -> "Baked":
+    def url_decode(self):
         """Converts URI/URL percent-encoded characters back to their raw values.
         
         Returns
         -------
-        Baked
-            A Baked object.
+        Chepy
+            A Chepy object.
         """
         self._holder = _urllib_unquote_plus(self._convert_to_str())
         return self

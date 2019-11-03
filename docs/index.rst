@@ -14,7 +14,6 @@ Chepy
    :caption: Contents:
 
    chepy.rst
-   baked.rst
 
 
 

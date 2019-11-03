@@ -4,7 +4,7 @@ from ..core import Core
 
 
 class Publickey(Core):
-    def parse_x509_pem(self) -> "Baked":
+    def parse_x509_pem(self):
         """X.509 is an ITU-T standard for a public key infrastructure (PKI) 
         and Privilege Management Infrastructure (PMI). It is commonly involved 
         with SSL/TLS security.<br><br>This operation displays the contents of 
@@ -12,8 +12,8 @@ class Publickey(Core):
         
         Returns
         -------
-        Baked
-            A Baked object. 
+        Chepy
+            A Chepy object. 
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_PEM, self._convert_to_str()
@@ -51,7 +51,7 @@ class Publickey(Core):
         self._holder = info
         return self
 
-    def parse_x509_der_hex(self) -> "Baked":
+    def parse_x509_der_hex(self):
         """X.509 is an ITU-T standard for a public key infrastructure (PKI) 
         and Privilege Management Infrastructure (PMI). It is commonly involved 
         with SSL/TLS security.<br><br>This operation displays the contents of 
@@ -59,8 +59,8 @@ class Publickey(Core):
         
         Returns
         -------
-        Baked
-            A Baked object. 
+        Chepy
+            A Chepy object. 
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
@@ -98,14 +98,14 @@ class Publickey(Core):
         self._holder = info
         return self
 
-    def pem_to_der_hex(self) -> "Baked":
+    def pem_to_der_hex(self):
         """Converts PEM (Privacy Enhanced Mail) format to a hexadecimal 
         DER (Distinguished Encoding Rules) string.
         
         Returns
         -------
-        Baked
-            The Baked object.
+        Chepy
+            The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_PEM, self._holder

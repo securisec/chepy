@@ -3,7 +3,7 @@ from ..core import Core
 
 
 class Networking(Core):
-    def defang_url(self) -> "Baked":
+    def defang_url(self):
         """Takes a Universal Resource Locator (URL) and 'Defangs' it; 
         meaning the URL becomes invalid, neutralising the risk of accidentally 
         clicking on a malicious link. This is often used when dealing with 
@@ -11,34 +11,34 @@ class Networking(Core):
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = re.sub(r"(^htt)", "hxx", self._convert_to_str())
         self._holder = re.sub(r"\.", "[.]", self._convert_to_str())
         return self
 
-    def refang_url(self) -> "Baked":
+    def refang_url(self):
         """Refangs a URL so that it is clickable
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = re.sub(r"(^hxx)", "htt", self._convert_to_str())
         self._holder = re.sub(r"\[\.\]", ".", self._convert_to_str())
         return self
 
-    def defang_ip(self) -> "Baked":
+    def defang_ip(self):
         """Takes a IPv4 or IPv6 address and 'Defangs' it, meaning the 
         IP becomes invalid, removing the risk of accidentally utilising 
         it as an IP address.
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         if ":" in self._convert_to_str():
             self._holder = re.sub(r":", "[:]", self._convert_to_str())
@@ -46,13 +46,13 @@ class Networking(Core):
             self._holder = re.sub(r"\.|:", "[.]", self._convert_to_str())
         return self
 
-    def refang_ip(self) -> "Baked":
+    def refang_ip(self):
         """Refangs an IP address
         
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         self._holder = re.sub(r"\[\.\]|\[\:\]", ".", self._convert_to_str())
         return self

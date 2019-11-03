@@ -4,7 +4,7 @@ from ..core import Core
 
 
 class Utils(Core):
-    def reverse(self, count: int = 1) -> "Baked":
+    def reverse(self, count: int = 1):
         """Reverses the string.
 
         Parameters
@@ -14,8 +14,8 @@ class Utils(Core):
 
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         if count == 1:
             self._holder = self._holder[::-1]
@@ -24,7 +24,7 @@ class Utils(Core):
             self._holder = "".join([self._holder[x:x+count] for x in range(0,len(self._holder),count)][::-1])
             return self
 
-    def count_occurances(self, regex: str, case_sensitive: bool = False) -> "Baked":
+    def count_occurances(self, regex: str, case_sensitive: bool = False):
         """Counts the number of times the provided string occurs in the input.
 
         Parameters
@@ -36,8 +36,8 @@ class Utils(Core):
 
         Returns
         -------
-        Baked
-            The Baked object. 
+        Chepy
+            The Chepy object. 
         """
         if case_sensitive:
             r = re.compile(regex)
