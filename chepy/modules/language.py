@@ -7,7 +7,7 @@ from ..core import Core
 
 
 class Language(Core):
-    def unicode_chrs_by_lang(self, lang: str) -> List[str]:
+    def unicode_chrs_by_lang(self, lang: str):
         """Detect characters from varios Unicode code point ids. Example 
         of languages are Common, Arabic, Armenian, Bengali, Bopomofo, Braille, 
         Buhid, Canadian_Aboriginal, Cherokee, Cyrillic, Devanagari, Ethiopic, 
@@ -24,21 +24,22 @@ class Language(Core):
         
         Returns
         -------
-        List[str]
-            An array of string matches
+        Chepy
+            The Chepy object.
         """
         self._holder = re.findall(r"\p{" + lang + "}", self._convert_to_str())
         return self
 
-    def find_emojis(self) -> List[str]:
+    def find_emojis(self):
         """Find emojis, symbols, pictographs, map symbols and flags
         
         Returns
         -------
-        List[str]
-            An array of matches
+        Chepy
+            The Chepy object.
         """
-        return emoji.get_emoji_regexp().findall(self._convert_to_str())
+        self._holder =  emoji.get_emoji_regexp().findall(self._convert_to_str())
+        return self
 
     def encode_utf_16_le(self):
         """Encode string as UTF16LE (1200). 

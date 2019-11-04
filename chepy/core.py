@@ -110,6 +110,17 @@ class Core(object):
         """
         return self._holder
 
+    def state(self) -> Any:
+        """Get the current state. Similar to `out()`, `output()` and `o`. 
+        Calling state and other complimentary 
+        
+        Returns
+        -------
+        Any
+            Current output.
+        """
+        return self._holder
+
     def out_as_str(self) -> str:
         """Returns the current value as a string
         

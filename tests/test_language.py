@@ -6,7 +6,7 @@ def test_unicode_crs_by_lang():
 
 
 def test_find_emojis():
-    assert len(Chepy("hello 😍 🇰🇷 🇺🇸").find_emojis()) == 3
+    assert len(Chepy("hello 😍 🇰🇷 🇺🇸").find_emojis().o) == 3
 
 
 def test_encode_utf_16_le():
