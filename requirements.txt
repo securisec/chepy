@@ -11,3 +11,4 @@ pyOpenSSL
 prompt_toolkit
 ua-parser
 PyYAML
+docstring-parser

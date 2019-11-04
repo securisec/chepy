@@ -82,10 +82,8 @@ class Core(object):
     def o(self):
         """Get the final output
         
-        Returns
-        -------
-        Any
-            Final output
+        Returns:
+            Any: Final output
         """
         return self._holder
 
@@ -93,94 +91,81 @@ class Core(object):
     def output(self):
         """Get the final output
         
-        Returns
-        -------
-        Any
-            Final output
+        Returns:
+            Any: Final output
         """
         return self._holder
 
     def out(self) -> Any:
         """Get the final output
         
-        Returns
-        -------
-        Any
-            Final output
+        Returns:
+            Any: Final output
         """
         return self._holder
 
     def state(self) -> Any:
-        """Get the current state. Similar to `out()`, `output()` and `o`. 
-        Calling state and other complimentary 
+        """Get the current state. 
         
-        Returns
-        -------
-        Any
-            Current output.
+        Similar to `out()`, `output()` and `o`. Calling state and other complimentary 
+        
+        Returns:
+            Any: Current output.
         """
         return self._holder
 
     def out_as_str(self) -> str:
-        """Returns the current value as a string
+        """Get current value as str
         
-        Returns
-        -------
-        str
-            Current value as a string
+        Returns:
+            str: Current value as a string
         """
         return self._convert_to_str()
 
     def out_as_bytes(self) -> bytes:
-        """Returns the current value as bytes
+        """Get current value as bytes
         
-        Returns
-        -------
-        bytes
-            Current value as bytes
+        Returns:
+            bytes: Current value as bytes
         """
         return self._convert_to_bytes()
 
     def copy_to_clipboard(self) -> None:
-        """Copy the final output to the clipboard. If an 
+        """Copy to clipboard
+        
+        Copy the final output to the clipboard. If an 
         error is raised, refer to the documentation on the error.
         
-        Returns
-        -------
-        None
-            Copies final output to the clipboard
+        Returns:
+            None: Copies final output to the clipboard
         """
         pyperclip.copy(self._holder)
         return None
 
     def copy(self) -> None:  # placeholder for documentation
-        """Copy the final output to the clipboard. If an 
+        """Copy to clipboard
+        
+        Copy the final output to the clipboard. If an 
         error is raised, refer to the documentation on the error.
         
-        Returns
-        -------
-        None
-            Copies final output to the clipboard
+        Returns:
+            None: Copies final output to the clipboard
         """
         return None
 
     def get_type(self) -> str:
         """Get the type of the data in state
         
-        Returns
-        -------
-        str
-            Type of the data in the state
+        Returns:
+            str: Type of the data in the state
         """
         return type(self._holder).__name__
 
     def web(self) -> None:  # place holder for documentation
         """Opens the current string in CyberChef on the browser as hex
         
-        Returns
-        -------
-        None
-            Opens the current data in CyberChef
+        Returns:
+            None: Opens the current data in CyberChef
         """
         return None
 

@@ -6,6 +6,14 @@ from ..core import Core
 
 class EncryptionEncoding(Core):
     def rotate(self, rotate_by: int):
+        """Rotate string by provided number
+        
+        Args:
+            rotate_by (int): Number to rotate by
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
         lc = string.ascii_lowercase
         uc = string.ascii_uppercase
         lookup = str.maketrans(
@@ -15,25 +23,25 @@ class EncryptionEncoding(Core):
         return self
 
     def rot_13(self):
-        """A simple caesar substitution cipher which rotates alphabet 
+        """ROT-13 encoding
+        
+        A simple caesar substitution cipher which rotates alphabet 
         characters by the specified amount (default 13).
         
-        Returns
-        -------
-        Chepy
-            The Chepy object. 
+        Returns:
+            Chepy: The Chepy object. 
         """
         self._holder = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
     def rot_47(self):
-        """A slightly more complex variation of a caesar cipher, which includes 
+        """ROT 47 encoding
+        
+        A slightly more complex variation of a caesar cipher, which includes 
         ASCII characters from 33 '!' to 126 '~'. Default rotation: 47.
         
-        Returns
-        -------
-        Chepy
-            The Chepy object. 
+        Returns:
+            Chepy: The Chepy object. 
         """
         x = []
         for i in range(len(self._holder)):

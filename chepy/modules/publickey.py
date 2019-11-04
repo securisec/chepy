@@ -5,15 +5,15 @@ from ..core import Core
 
 class Publickey(Core):
     def parse_x509_pem(self):
-        """X.509 is an ITU-T standard for a public key infrastructure (PKI) 
+        """Parse X509 cert in PEM format
+        
+        X.509 is an ITU-T standard for a public key infrastructure (PKI) 
         and Privilege Management Infrastructure (PMI). It is commonly involved 
         with SSL/TLS security.<br><br>This operation displays the contents of 
         a certificate in a human readable format, similar to the openssl command line tool.
         
-        Returns
-        -------
-        Chepy
-            A Chepy object. 
+        Returns:
+            Chepy: A Chepy object. 
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_PEM, self._convert_to_str()
@@ -52,15 +52,15 @@ class Publickey(Core):
         return self
 
     def parse_x509_der_hex(self):
-        """X.509 is an ITU-T standard for a public key infrastructure (PKI) 
+        """Parse X509 cert in DER format
+        
+        X.509 is an ITU-T standard for a public key infrastructure (PKI) 
         and Privilege Management Infrastructure (PMI). It is commonly involved 
         with SSL/TLS security.<br><br>This operation displays the contents of 
         a certificate in a human readable format, similar to the openssl command line tool.
         
-        Returns
-        -------
-        Chepy
-            A Chepy object. 
+        Returns:
+            Chepy: A Chepy object. 
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
@@ -99,13 +99,13 @@ class Publickey(Core):
         return self
 
     def pem_to_der_hex(self):
-        """Converts PEM (Privacy Enhanced Mail) format to a hexadecimal 
+        """Convert PEM cert to DER format
+        
+        Converts PEM (Privacy Enhanced Mail) format to a hexadecimal 
         DER (Distinguished Encoding Rules) string.
         
-        Returns
-        -------
-        Chepy
-            The Chepy object.
+        Returns:
+            Chepy: The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_PEM, self._holder
@@ -116,13 +116,13 @@ class Publickey(Core):
         return self
 
     def der_hex_to_pem(self):
-        """Converts a hexadecimal DER (Distinguished Encoding Rules) 
+        """Convert DER format to PEM cert.
+        
+        Converts a hexadecimal DER (Distinguished Encoding Rules) 
         string into PEM (Privacy Enhanced Mail) format.
         
-        Returns
-        -------
-        Chepy
-            The Chepy object.
+        Returns:
+            Chepy: The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_ASN1, self._holder

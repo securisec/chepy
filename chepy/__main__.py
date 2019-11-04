@@ -7,15 +7,28 @@ from tempfile import gettempdir
 from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
 from prompt_toolkit.validation import ValidationError, Validator
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.styles import Style
 from prompt_toolkit import PromptSession
 from chepy import Chepy
+from chepy.__version__ import __version__
 
-# todo theming of prompt
-# todo add docs to the completer
+# todo add docs to the completer, display_meta on select
 # todo add a bottom toolbar
 
 options = []
 chepy = dir(Chepy)
+
+
+def get_style():
+    return Style.from_dict(
+        {
+            "completion-menu.completion.current": "bg:#00aaaa #000000",
+            # "completion-menu.completion": "bg:#008888 #ffffff",
+            "completion-menu.completion fuzzymatch.outside": "fg:#000000",
+            'name': '#ffd700',
+            'file': '#00ff48',
+        }
+    )
 
 
 def get_options():
@@ -27,6 +40,14 @@ def get_options():
             args = inspect.getfullargspec(getattr(Chepy, method)).args
             options[method] = {"options": args[1:]}
     return options
+
+def prompt_message(args: ArgumentParser):
+    elements = [
+        ('class:name', '[Chepy {}] # '.format(__version__))
+    ]
+    if args.file:
+        elements.append(('class:file', 'File '))
+    return elements
 
 
 class CustomValidator(Validator):
@@ -76,7 +97,8 @@ class CustomCompleter(Completer):
 def main():
     parse = ArgumentParser()
     parse.add_argument("--data", required=True, dest="data")
-    parse.add_argument("--file", action="store_true", dest="file", default=False)
+    types = parse.add_mutually_exclusive_group()
+    types.add_argument("--file", action="store_true", dest="file", default=False)
     args = parse.parse_args()
 
     base_command = '--data "{data}" --is_file={file} '.format(
@@ -84,11 +106,11 @@ def main():
     )
 
     history_file = str(Path(gettempdir() + "/chepy"))
-    session = PromptSession(history=FileHistory(history_file))
+    session = PromptSession(history=FileHistory(history_file), style=get_style())
     try:
         while True:
             prompt = session.prompt(
-                "[Chepy] ",
+                prompt_message(args),
                 completer=FuzzyCompleter(CustomCompleter()),
                 validator=CustomValidator(),
             )
