@@ -104,6 +104,7 @@ class DataFormat(Core):
     
     def base_85_encode(self):
         """
+        
         Base85 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
@@ -117,6 +118,7 @@ class DataFormat(Core):
 
     def base_85_decode(self):
         """
+
         Base85 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
