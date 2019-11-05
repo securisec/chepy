@@ -28,7 +28,7 @@ class Hashing(Core):
         hashes = []
         for h in hashid.HashID().identifyHash(self._convert_to_str()):
             hashes.append({"name": h.name, "hashcat": h.hashcat, "john": h.john})
-        self._holder = hashes
+        self.state = hashes
         return self
 
     def sha1(self):
@@ -42,7 +42,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha1(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha1(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha2_256(self):
@@ -60,7 +60,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha256(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha256(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha2_512(self):
@@ -78,7 +78,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha512(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha512(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha2_512_truncate(self, truncate: int = 256):
@@ -101,7 +101,7 @@ class Hashing(Core):
         """
         assert truncate in [256, 224], "Valid truncates are 256, 224"
         h = SHA512.new(self._convert_to_bytes(), truncate=str(truncate))
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def sha2_384(self):
@@ -119,7 +119,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha384(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha384(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha2_224(self):
@@ -137,7 +137,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha224(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha224(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha3_512(self):
@@ -152,7 +152,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha3_256(self):
@@ -167,7 +167,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha3_384(self):
@@ -182,7 +182,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
         return self
 
     def sha3_224(self):
@@ -197,7 +197,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
+        self.state = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
         return self
 
     def md2(self):
@@ -213,7 +213,7 @@ class Hashing(Core):
         """
         h = MD2.new()
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def md4(self):
@@ -228,7 +228,7 @@ class Hashing(Core):
         """
         h = MD4.new()
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def md5(self):
@@ -245,7 +245,7 @@ class Hashing(Core):
         """
         h = MD5.new()
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def keccak_512(self):
@@ -261,7 +261,7 @@ class Hashing(Core):
         """
         h = keccak.new(digest_bits=512)
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def keccak_384(self):
@@ -277,7 +277,7 @@ class Hashing(Core):
         """
         h = keccak.new(digest_bits=384)
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def keccak_256(self):
@@ -293,7 +293,7 @@ class Hashing(Core):
         """
         h = keccak.new(digest_bits=256)
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def keccak_224(self):
@@ -309,7 +309,7 @@ class Hashing(Core):
         """
         h = keccak.new(digest_bits=224)
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def shake_256(self, size: int = 64):
@@ -326,7 +326,7 @@ class Hashing(Core):
         """
         h = SHAKE256.new()
         h.update(self._convert_to_bytes())
-        self._holder = binascii.hexlify(h.read(size))
+        self.state = binascii.hexlify(h.read(size))
         return self
 
     def shake_128(self, size: int = 64):
@@ -343,7 +343,7 @@ class Hashing(Core):
         """
         h = SHAKE128.new()
         h.update(self._convert_to_bytes())
-        self._holder = binascii.hexlify(h.read(size))
+        self.state = binascii.hexlify(h.read(size))
         return self
 
     def ripemd_160(self):
@@ -360,7 +360,7 @@ class Hashing(Core):
         """
         h = RIPEMD.new()
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def blake_2b(self, bits: int = 256, key: bytes = ""):
@@ -387,7 +387,7 @@ class Hashing(Core):
         ], "Valid bits are 512, 384, 256, 160, 128"
         h = BLAKE2b.new(digest_bits=bits, key=key.encode())
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def blake_2s(self, bits: int = 256, key: bytes = ""):
@@ -408,7 +408,7 @@ class Hashing(Core):
         assert bits in [256, 160, 128], "Valid bits are 256, 160, 128"
         h = BLAKE2s.new(digest_bits=bits, key=key.encode())
         h.update(self._convert_to_bytes())
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def crc8_checksum(self):
@@ -421,7 +421,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = Crc8().process(self._convert_to_bytes()).finalhex()
+        self.state = Crc8().process(self._convert_to_bytes()).finalhex()
         return self
 
     def crc16_checksum(self):
@@ -434,7 +434,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = CrcArc().process(self._convert_to_bytes()).finalhex()
+        self.state = CrcArc().process(self._convert_to_bytes()).finalhex()
         return self
 
     def crc32_checksum(self):
@@ -447,7 +447,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = Crc32().process(self._convert_to_bytes()).finalhex()
+        self.state = Crc32().process(self._convert_to_bytes()).finalhex()
         return self
 
     def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
@@ -490,7 +490,7 @@ class Hashing(Core):
                 "Currently supported digests are md5, sha1, sha256 and sha512"
             )
 
-        self._holder = h.hexdigest()
+        self.state = h.hexdigest()
         return self
 
     def bcrypt_hash(self, rounds: int = 10):
@@ -508,7 +508,7 @@ class Hashing(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
+        self.state = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
         return self
 
     def bcrypt_compare(self, hash: str):
@@ -524,13 +524,13 @@ class Hashing(Core):
         """
         try:
             if _crypto_bcrypt_check(self._convert_to_str(), hash) is None:
-                self._holder = True
+                self.state = True
                 return self
             else:
-                self._holder = False
+                self.state = False
                 return self
         except ValueError:
-            self._holder = False
+            self.state = False
             return self
 
     def scrypt_hash(
@@ -554,7 +554,7 @@ class Hashing(Core):
             Chepy: The Chepy object.
         """
         assert N < 32, "N must be less than 32"
-        self._holder = _crypto_scrypt(
+        self.state = _crypto_scrypt(
             self._convert_to_bytes(), salt=salt, key_len=key_length, N=2 ** N, r=r, p=p
         ).hex()
         return self

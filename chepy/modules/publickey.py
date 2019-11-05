@@ -48,7 +48,7 @@ class Publickey(Core):
             },
             "pubkey": {"bits": pubkey.bits()},
         }
-        self._holder = info
+        self.state = info
         return self
 
     def parse_x509_der_hex(self):
@@ -95,7 +95,7 @@ class Publickey(Core):
             },
             "pubkey": {"bits": pubkey.bits()},
         }
-        self._holder = info
+        self.state = info
         return self
 
     def pem_to_der_hex(self):
@@ -108,9 +108,9 @@ class Publickey(Core):
             Chepy: The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_PEM, self._holder
+            _pyssl_crypto.FILETYPE_PEM, self.state
         )
-        self._holder = _pyssl_crypto.dump_certificate(
+        self.state = _pyssl_crypto.dump_certificate(
             _pyssl_crypto.FILETYPE_ASN1, cert_pem
         )
         return self
@@ -125,9 +125,9 @@ class Publickey(Core):
             Chepy: The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_ASN1, self._holder
+            _pyssl_crypto.FILETYPE_ASN1, self.state
         )
-        self._holder = _pyssl_crypto.dump_certificate(
+        self.state = _pyssl_crypto.dump_certificate(
             _pyssl_crypto.FILETYPE_PEM, cert_pem
         )
         return self
