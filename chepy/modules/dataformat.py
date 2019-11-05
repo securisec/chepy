@@ -113,7 +113,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.a85encode(self._holder.encode())
+        self._holder = base64.a85encode(self._convert_to_bytes())
         return self
 
     def base_85_decode(self):
@@ -127,7 +127,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.a85decode(self._holder.encode())
+        self._holder = base64.a85decode(self._convert_to_bytes())
         return self
 
     def base_32_encode(self):
