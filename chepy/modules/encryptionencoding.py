@@ -21,7 +21,7 @@ class EncryptionEncoding(Core):
         lookup = str.maketrans(
             lc + uc, lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by]
         )
-        self._holder = self._holder.translate(lookup)
+        self.state = self.state.translate(lookup)
         return self
 
     def rot_13(self):
@@ -33,7 +33,7 @@ class EncryptionEncoding(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = codecs.encode(self._convert_to_str(), "rot_13")
+        self.state = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
     def rot_47(self):
@@ -46,13 +46,13 @@ class EncryptionEncoding(Core):
             Chepy: The Chepy object. 
         """
         x = []
-        for i in range(len(self._holder)):
-            j = ord(self._holder[i])
+        for i in range(len(self.state)):
+            j = ord(self.state[i])
             if j >= 33 and j <= 126:
                 x.append(chr(33 + ((j + 14) % 94)))
             else:
-                x.append(self._holder[i])
-        self._holder = "".join(x)
+                x.append(self.state[i])
+        self.state = "".join(x)
         return self
 
     def xor_by_hex(self, key: str):

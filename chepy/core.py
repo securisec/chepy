@@ -11,40 +11,40 @@ from typing import Any
 
 class Core(object):
     def __init__(self, data: str, is_file: bool = False):
-        self._holder = data
+        self.state = data
         self._is_file = is_file
 
         if self._is_file:
-            path = pathlib.Path(self._holder).expanduser().absolute()
+            path = pathlib.Path(self.state).expanduser().absolute()
             try:
                 with open(path, "r") as f:
-                    self._holder = f.read()
+                    self.state = f.read()
             except UnicodeDecodeError:
                 with open(path, "rb") as f:
-                    self._holder = f.read()
+                    self.state = f.read()
 
     def __str__(self):
         return self._convert_to_str()
 
     def _is_bytes(self):
-        return isinstance(self._holder, bytes)
+        return isinstance(self.state, bytes)
 
     def _is_str(self):
-        return isinstance(self._holder, str)
+        return isinstance(self.state, str)
 
     def _convert_to_bytes(self):
-        if isinstance(self._holder, bytes):
-            return self._holder
-        elif isinstance(self._holder, str):
-            return self._holder.encode()
-        elif isinstance(self._holder, int):
-            return str(self._holder).encode()
-        elif isinstance(self._holder, dict):
-            return str(self._holder).encode()
-        elif isinstance(self._holder, list):
-            return str(self._holder).encode()
-        elif isinstance(self._holder, bool):
-            return str(self._holder).encode()
+        if isinstance(self.state, bytes):
+            return self.state
+        elif isinstance(self.state, str):
+            return self.state.encode()
+        elif isinstance(self.state, int):
+            return str(self.state).encode()
+        elif isinstance(self.state, dict):
+            return str(self.state).encode()
+        elif isinstance(self.state, list):
+            return str(self.state).encode()
+        elif isinstance(self.state, bool):
+            return str(self.state).encode()
         else:
             # todo check more types here
             raise NotImplementedError
@@ -53,27 +53,27 @@ class Core(object):
         return bytearray(self._convert_to_bytes())
 
     def _convert_to_str(self):
-        if isinstance(self._holder, bytes):
-            return self._holder.decode()
-        elif isinstance(self._holder, str):
-            return self._holder
-        elif isinstance(self._holder, int):
-            return str(self._holder)
-        elif isinstance(self._holder, dict):
-            return str(self._holder)
-        elif isinstance(self._holder, list):
-            return str(self._holder)
-        elif isinstance(self._holder, bool):
-            return str(self._holder)
+        if isinstance(self.state, bytes):
+            return self.state.decode()
+        elif isinstance(self.state, str):
+            return self.state
+        elif isinstance(self.state, int):
+            return str(self.state)
+        elif isinstance(self.state, dict):
+            return str(self.state)
+        elif isinstance(self.state, list):
+            return str(self.state)
+        elif isinstance(self.state, bool):
+            return str(self.state)
         else:
             # todo check more types here
             raise NotImplementedError
 
     def _convert_to_int(self):
-        if isinstance(self._holder, int):
-            return self._holder
-        elif isinstance(self._holder, str) or isinstance(self._holder, bytes):
-            return int(self._holder)
+        if isinstance(self.state, int):
+            return self.state
+        elif isinstance(self.state, str) or isinstance(self.state, bytes):
+            return int(self.state)
         else:
             raise NotImplementedError
 
@@ -87,7 +87,7 @@ class Core(object):
         Returns:
             Any: Final output
         """
-        return self._holder
+        return self.state
 
     @property
     def output(self):
@@ -96,7 +96,7 @@ class Core(object):
         Returns:
             Any: Final output
         """
-        return self._holder
+        return self.state
 
     def out(self) -> Any:
         """Get the final output
@@ -104,17 +104,7 @@ class Core(object):
         Returns:
             Any: Final output
         """
-        return self._holder
-
-    def state(self) -> Any:
-        """Get the current state. 
-        
-        Similar to `out()`, `output()` and `o`. Calling state and other complimentary 
-        
-        Returns:
-            Any: Current output.
-        """
-        return self._holder
+        return self.state
 
     def out_as_str(self) -> str:
         """Get current value as str
@@ -162,7 +152,7 @@ class Core(object):
         Returns:
             str: Type of the data in the state
         """
-        return type(self._holder).__name__
+        return type(self.state).__name__
 
     def web(self) -> None:  # place holder for documentation
         """Opens the current string in CyberChef on the browser as hex
@@ -222,7 +212,7 @@ class Core(object):
         cookies = json2str(cookies)
         res = requests.request(
             method=method,
-            url=self._holder,
+            url=self.state,
             params=params,
             json=json,
             headers=headers,
@@ -233,7 +223,7 @@ class Core(object):
                 "Not a 200 status code {}".format(res.status_code)
             )
         else:
-            self._holder = res.text
+            self.state = res.text
         return self
 
     # def write_to_file(self, file_path: str, as_binary: bool = False) -> None:

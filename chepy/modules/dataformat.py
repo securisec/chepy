@@ -22,8 +22,8 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert isinstance(self._holder, list), "Data in state not a list"
-        self._holder = join_by.join(self._holder)
+        assert isinstance(self.state, list), "Data in state not a list"
+        self.state = join_by.join(self.state)
         return self
 
     def json_to_dict(self):
@@ -32,7 +32,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self._holder = json.loads(self._convert_to_str())
+        self.state = json.loads(self._convert_to_str())
         return self
 
     def dict_to_json(self):
@@ -41,8 +41,8 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        assert isinstance(self._holder, dict), "Not a dict object"
-        self._holder = json.dumps(self._holder)
+        assert isinstance(self.state, dict), "Not a dict object"
+        self.state = json.dumps(self.state)
         return self
 
     def yaml_to_json(self, safe: bool = True):
@@ -55,9 +55,9 @@ class DataFormat(Core):
             Chepy: The Chepy object.
         """
         if safe:
-            self._holder = json.dumps(yaml.safe_load(self._holder))
+            self.state = json.dumps(yaml.safe_load(self.state))
         else:
-            self._holder = json.dumps(yaml.load(self._holder))
+            self.state = json.dumps(yaml.load(self.state))
         return self
 
     def json_to_yaml(self):
@@ -66,8 +66,8 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self._holder = yaml.dump(
-            json.loads(self._holder),
+        self.state = yaml.dump(
+            json.loads(self.state),
             default_flow_style=False,
             sort_keys=False,
             allow_unicode=True,
@@ -85,7 +85,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base58.b58encode(self._convert_to_bytes())
+        self.state = base58.b58encode(self._convert_to_bytes())
         return self
 
     def base_58_decode(self):
@@ -99,7 +99,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base58.b58decode(self._holder)
+        self.state = base58.b58decode(self.state)
         return self
     
     def base_85_encode(self):
@@ -113,7 +113,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.a85encode(self._convert_to_bytes())
+        self.state = base64.a85encode(self._convert_to_bytes())
         return self
 
     def base_85_decode(self):
@@ -127,7 +127,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.a85decode(self._convert_to_bytes())
+        self.state = base64.a85decode(self._convert_to_bytes())
         return self
 
     def base_32_encode(self):
@@ -141,7 +141,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.b32encode(self._convert_to_bytes())
+        self.state = base64.b32encode(self._convert_to_bytes())
         return self
 
     def base_32_decode(self):
@@ -155,7 +155,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.b32decode(self._holder)
+        self.state = base64.b32decode(self.state)
         return self
 
     def to_int(self):
@@ -164,7 +164,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self._holder = int(self._holder)
+        self.state = int(self.state)
         return self
 
     def base_64_encode(self):
@@ -178,7 +178,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.b64encode(self._convert_to_bytes())
+        self.state = base64.b64encode(self._convert_to_bytes())
         return self
 
     def base_64_decode(self):
@@ -192,7 +192,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = base64.b64decode(self._holder)
+        self.state = base64.b64decode(self.state)
         return self
 
     def to_hex(self):
@@ -201,7 +201,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = binascii.hexlify(self._convert_to_bytes())
+        self.state = binascii.hexlify(self._convert_to_bytes())
         return self
 
     def hex_to_int(self):
@@ -211,9 +211,9 @@ class DataFormat(Core):
             Chepy: The Chepy object. 
         """
         if self._convert_to_str().startswith("0x"):
-            self._holder = int(self._holder, 0)
+            self.state = int(self.state, 0)
         else:
-            self._holder = int(self._remove_spaces(), 16)
+            self.state = int(self._remove_spaces(), 16)
         return self
 
     def hex_to_binary(self):
@@ -225,7 +225,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = binascii.unhexlify(self._convert_to_bytes())
+        self.state = binascii.unhexlify(self._convert_to_bytes())
         return self
 
     def hex_to_str(self, ignore: bool = False):
@@ -238,11 +238,11 @@ class DataFormat(Core):
             Chepy: The Chepy object. 
         """
         if ignore:
-            self._holder = binascii.unhexlify(self._convert_to_bytes()).decode(
+            self.state = binascii.unhexlify(self._convert_to_bytes()).decode(
                 errors="ignore"
             )
         else:
-            self._holder = binascii.unhexlify(self._convert_to_bytes())
+            self.state = binascii.unhexlify(self._convert_to_bytes())
         return self
 
     def str_to_hex(self):
@@ -251,7 +251,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = binascii.hexlify(self._convert_to_bytes())
+        self.state = binascii.hexlify(self._convert_to_bytes())
         return self
 
     def int_to_hex(self):
@@ -260,7 +260,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = format(self._convert_to_int(), "x")
+        self.state = format(self._convert_to_int(), "x")
         return self
 
     def binary_to_hex(self):
@@ -269,7 +269,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = binascii.hexlify(self._convert_to_bytes())
+        self.state = binascii.hexlify(self._convert_to_bytes())
         return self
 
     def normalize_hex(self):
@@ -281,20 +281,20 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert r"\x" not in self._holder, "Cannot normalize binary data"
+        assert r"\x" not in self.state, "Cannot normalize binary data"
         delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
-        string = re.sub("|".join(delimiters), "", self._holder)
+        string = re.sub("|".join(delimiters), "", self.state)
         assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
-        self._holder = string
+        self.state = string
         return self
 
     def string_from_hexdump(self):
         # TODO make new line aware \n \r\n \0a etc
         if self._is_bytes():
-            data = self._holder.decode()
+            data = self.state.decode()
         else:
-            data = self._holder
-        self._holder = "".join(re.findall(r"\|(.+)\|", data))
+            data = self.state
+        self.state = "".join(re.findall(r"\|(.+)\|", data))
         return self
 
     def url_encode(self, safe: str = ""):
@@ -309,7 +309,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = _urllib_quote_plus(self._convert_to_str(), safe=safe)
+        self.state = _urllib_quote_plus(self._convert_to_str(), safe=safe)
         return self
 
     def url_decode(self):
@@ -318,5 +318,5 @@ class DataFormat(Core):
         Returns:
             Chepy: A Chepy object.
         """
-        self._holder = _urllib_unquote_plus(self._convert_to_str())
+        self.state = _urllib_unquote_plus(self._convert_to_str())
         return self

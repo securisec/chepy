@@ -15,8 +15,8 @@ class Networking(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = re.sub(r"(^htt)", "hxx", self._convert_to_str())
-        self._holder = re.sub(r"\.", "[.]", self._convert_to_str())
+        self.state = re.sub(r"(^htt)", "hxx", self._convert_to_str())
+        self.state = re.sub(r"\.", "[.]", self._convert_to_str())
         return self
 
     def refang_url(self):
@@ -25,8 +25,8 @@ class Networking(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = re.sub(r"(^hxx)", "htt", self._convert_to_str())
-        self._holder = re.sub(r"\[\.\]", ".", self._convert_to_str())
+        self.state = re.sub(r"(^hxx)", "htt", self._convert_to_str())
+        self.state = re.sub(r"\[\.\]", ".", self._convert_to_str())
         return self
 
     def defang_ip(self):
@@ -40,9 +40,9 @@ class Networking(Core):
             Chepy: The Chepy object. 
         """
         if ":" in self._convert_to_str():
-            self._holder = re.sub(r":", "[:]", self._convert_to_str())
+            self.state = re.sub(r":", "[:]", self._convert_to_str())
         else:
-            self._holder = re.sub(r"\.|:", "[.]", self._convert_to_str())
+            self.state = re.sub(r"\.|:", "[.]", self._convert_to_str())
         return self
 
     def refang_ip(self):
@@ -51,7 +51,7 @@ class Networking(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self._holder = re.sub(r"\[\.\]|\[\:\]", ".", self._convert_to_str())
+        self.state = re.sub(r"\[\.\]|\[\:\]", ".", self._convert_to_str())
         return self
 
     def parse_user_agent(self):
@@ -62,5 +62,5 @@ class Networking(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self._holder = _uap_parse(self._convert_to_str())
+        self.state = _uap_parse(self._convert_to_str())
         return self

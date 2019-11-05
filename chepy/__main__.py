@@ -26,6 +26,7 @@ def get_style():
             "completion-menu.completion fuzzymatch.outside": "fg:#000000",
             "name": "#ffd700",
             "file": "#00ff48",
+            'rprompt': 'bg:#ff0066 #ffffff',
         }
     )
 
@@ -151,7 +152,7 @@ def main():
                         fire.decorators.ACCEPTS_POSITIONAL_ARGS,
                         False,
                     )
-            fire.Fire(Chepy, command=base_command)
+            fire_obj = fire.Fire(Chepy, command=base_command)
     except KeyboardInterrupt:
         print("OKBye")
         exit()
