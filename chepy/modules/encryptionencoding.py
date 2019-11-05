@@ -1,5 +1,7 @@
 import codecs
 import string
+import re
+from itertools import cycle
 
 from ..core import Core
 
@@ -52,3 +54,11 @@ class EncryptionEncoding(Core):
                 x.append(self._holder[i])
         self._holder = "".join(x)
         return self
+
+    def xor_by_hex(self, key: str):
+        """describe xor
+        """
+        assert re.search(r"[a-fA-F0-9]+", key), "Need a valid hex string"
+        key = codecs.decode(key, "hex")
+        self._holder = ''.join(chr(ord(a) ^ b) for (a, b) in zip(self._holder, cycle(key)))
+        return self._holder
