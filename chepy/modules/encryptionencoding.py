@@ -1,7 +1,9 @@
 import codecs
 import string
 import re
-from itertools import cycle
+import itertools
+import base64
+import binascii
 
 from ..core import Core
 
@@ -55,10 +57,20 @@ class EncryptionEncoding(Core):
         self.state = "".join(x)
         return self
 
-    def xor_by_hex(self, key: str):
-        """describe xor
+    def xor(self, key: str, key_type: str = "hex"):
+        """XOR cipher
+
+        Simple XOR cipher is a type of additive cipher based on logical operation xor.
+
+        Returns:
+            Chepy: The Chepy object. 
         """
-        assert re.search(r"[a-fA-F0-9]+", key), "Need a valid hex string"
+        assert re.search(r"[a-fA-F0-9]+", self.state), "Need a valid hex string"
+        assert key_type in ["utf", "hex", "base64"], "Need a valid key type"
+        if key_type == "utf":
+            key = binascii.hexlify(key.encode())
+        elif key_type == "base64":
+            key = binascii.hexlify(base64.b64decode(key.encode()))
         key = codecs.decode(key, "hex")
-        self._holder = ''.join(chr(ord(a) ^ b) for (a, b) in zip(self._holder, cycle(key)))
-        return self._holder
+        self.state = "".join(chr(ord(a) ^ b) for (a, b) in zip(self.state, itertools.cycle(key)))
+        return self
