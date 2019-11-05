@@ -101,6 +101,32 @@ class DataFormat(Core):
         """
         self._holder = base58.b58decode(self._holder)
         return self
+    
+    def base_85_encode(self):
+        """
+        Base85 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property decodes raw data 
+        into an ASCII Base58 string.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self._holder = base64.a85encode(self._holder.encode())
+        return self
+
+    def base_85_decode(self):
+        """
+        Base85 is a notation for encoding arbitrary byte data using a 
+        restricted set of symbols that can be conveniently used by humans 
+        and processed by computers.This property decodes raw data 
+        into an ASCII Base58 string.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self._holder = base64.a85decode(self._holder.encode())
+        return self
 
     def base_32_encode(self):
         """Encode as Base32
