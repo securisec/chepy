@@ -12,7 +12,7 @@ def test_xor_utf():
     assert Chepy("some data").xor("UD","utf").output == "&+8!u 404"
 
 def test_xor_base64():
-    assert Chepy("some data").xor("VUQ=","base64").output == "&+8!u 404"
+    assert Chepy("&+8!u 404").xor("VUQ=","base64").output == "some data"
     
 def test_xor_hex():
     assert Chepy("some data").xor("5544","hex").output == "&+8!u 404"

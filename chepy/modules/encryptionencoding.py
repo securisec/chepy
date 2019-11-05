@@ -58,9 +58,19 @@ class EncryptionEncoding(Core):
         return self
 
     def xor(self, key: str, key_type: str = "hex"):
-        """XOR cipher
+        """XOR state with a key
 
-        Simple XOR cipher is a type of additive cipher based on logical operation xor.
+        Simple XOR cipher is a type of additive cipher based on logical operation xor, which operates according to the following principles.
+
+        (A * B) + (!A * !B)
+
+        A  B  A XOR B
+        0  0     0
+        1  0     1
+        0  1     1
+        1  1     0
+
+        The main advantage of xor chipher is that the encyption is reversible with the same logical operation.
 
         Returns:
             Chepy: The Chepy object. 
