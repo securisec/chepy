@@ -686,7 +686,7 @@ class Language(Core):
         return self
 
     def remove_diacritics(self):
-        """Replaces accented characters with their latin character equivalent.
+        """Replaces accented characters latin character equivalent.
         
         Returns:
             Chepy: The Chepy object.

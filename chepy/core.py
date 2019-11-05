@@ -2,9 +2,11 @@ import base64
 import binascii
 import pathlib
 import webbrowser
+import json as pyjson
 import pyperclip
-from typing import Any
+import requests
 import regex as re
+from typing import Any
 
 
 class Core(object):
@@ -139,7 +141,7 @@ class Core(object):
         Returns:
             None: Copies final output to the clipboard
         """
-        pyperclip.copy(self._holder)
+        pyperclip.copy(self._convert_to_str())
         return None
 
     def copy(self) -> None:  # placeholder for documentation
@@ -151,6 +153,7 @@ class Core(object):
         Returns:
             None: Copies final output to the clipboard
         """
+        self.copy_to_clipboard()
         return None
 
     def get_type(self) -> str:
@@ -167,8 +170,72 @@ class Core(object):
         Returns:
             None: Opens the current data in CyberChef
         """
+        data = re.sub(
+            b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
+        )
+        url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')&input={}".format(
+            data.decode()
+        )
+        webbrowser.open_new_tab(url)
+        exit(0)
         return None
 
-    def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
-        # todo
-        raise NotImplementedError
+    def http_request(
+        self,
+        method: str = "GET",
+        params: dict = {},
+        json: dict = {},
+        headers: dict = {},
+        cookies: dict = {},
+    ):
+        """Get data from http request
+
+        Make a HTTP/S request and work with the data in Chepy. All request 
+        methods are supported; but some methods may not provide a response body. 
+        
+        Args:
+            method (str, optional): Request method. Defaults to 'GET'.
+            params (dict, optional): Query parameters. Defaults to {}.
+            json (dict, optional): JSON request payload. Defaults to {}.
+            headers (dict, optional): Headers for request. Defaults to {}.
+            cookies (dict, optional): Cookies for request. Defaults to {}.
+        
+        Raises:
+            NotImplementedError: If state is not a string or dictionary
+            requests.RequestException: If response status code is not 200
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        def json2str(obj):
+            if isinstance(obj, dict):
+                return obj
+            elif isinstance(obj, str):
+                return pyjson.loads(obj)
+            else:
+                raise NotImplementedError
+
+        params = json2str(params)
+        json = json2str(json)
+        headers = json2str(headers)
+        cookies = json2str(cookies)
+        res = requests.request(
+            method=method,
+            url=self._holder,
+            params=params,
+            json=json,
+            headers=headers,
+            cookies=cookies,
+        )
+        if res.status_code != 200:
+            raise requests.RequestException(
+                "Not a 200 status code {}".format(res.status_code)
+            )
+        else:
+            self._holder = res.text
+        return self
+
+    # def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
+    #     # todo
+    #     raise NotImplementedError

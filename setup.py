@@ -22,12 +22,12 @@ setup(
     name="chepy",
     version=__version__,
     author=__author__,
-    packages=find_packages(exclude=("tests")),
+    packages=find_packages(exclude=(["tests", "docs"])),
     install_requires=read_requirements(),
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
     python_requires=">=3.6",
-    entry_points={"console_scripts": ["chepy = chepy.__main__:main"]}
+    entry_points={"console_scripts": ["chepy = chepy.__main__:main"]},
 )
