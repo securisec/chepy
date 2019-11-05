@@ -2,8 +2,9 @@ import inspect
 import fire
 import regex as re
 from pathlib import Path
-from argparse import ArgumentParser
+import argparse
 from tempfile import gettempdir
+from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
 from prompt_toolkit.validation import ValidationError, Validator
 from prompt_toolkit.history import FileHistory
@@ -12,8 +13,6 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 
-# todo add docs to the completer, display_meta on select
-# todo add a bottom toolbar
 
 options = []
 chepy = dir(Chepy)
@@ -25,8 +24,8 @@ def get_style():
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion fuzzymatch.outside": "fg:#000000",
-            'name': '#ffd700',
-            'file': '#00ff48',
+            "name": "#ffd700",
+            "file": "#00ff48",
         }
     )
 
@@ -34,19 +33,38 @@ def get_style():
 def get_options():
     options = dict()
     for method in chepy:
-        if not method.startswith("_") and not isinstance(
-            getattr(Chepy, method), property
-        ):
-            args = inspect.getfullargspec(getattr(Chepy, method)).args
-            options[method] = {"options": args[1:]}
+        try:
+            attributes = getattr(Chepy, method)
+            if not method.startswith("_") and not isinstance(attributes, property):
+                args = inspect.getfullargspec(attributes).args
+                parsed_doc = _parse_doc(attributes.__doc__)
+                if len(args) == 1:
+                    options[method] = {
+                        "options": list(map(lambda d: {"flag": d, "meta": ""}, args[1:])),
+                        "meta": parsed_doc.short_description,
+                    }
+                else:
+                    options[method] = {
+                        "options": list(
+                            map(
+                                lambda d: {
+                                    "flag": d[1],
+                                    "meta": parsed_doc.params[d[0]].description,
+                                },
+                                enumerate(args[1:]),
+                            )
+                        ),
+                        "meta": parsed_doc.short_description,
+                    }
+        except:
+            continue
     return options
 
-def prompt_message(args: ArgumentParser):
-    elements = [
-        ('class:name', '[Chepy {}] # '.format(__version__))
-    ]
+
+def prompt_message(args: argparse.ArgumentParser):
+    elements = [("class:name", "[Chepy {}] # ".format(__version__))]
     if args.file:
-        elements.append(('class:file', 'File '))
+        elements.append(("class:file", "File "))
     return elements
 
 
@@ -74,7 +92,7 @@ class CustomCompleter(Completer):
         method_dict = get_options()
         word = document.get_word_before_cursor()
 
-        methods = list(method_dict.keys())
+        methods = list(method_dict.items())
 
         selected = document.text.split()
         if len(selected) > 0:
@@ -84,29 +102,37 @@ class CustomCompleter(Completer):
                 if current is not None:
                     has_options = method_dict.get(selected)["options"]
                     if has_options is not None:
-                        options = ["--{}".format(o) for o in has_options]
+                        options = [
+                            ("--{}".format(o["flag"]), {"meta": o["meta"]})
+                            for o in has_options
+                        ]
                         methods = options + methods
             else:
                 methods = options
 
         for m in methods:
-            if m.startswith(word):
-                yield Completion(m, start_position=-len(word))
+            if m[0].startswith(word):
+                meta = (
+                    m[1]["meta"] if isinstance(m[1], dict) and m[1].get("meta") else ""
+                )
+                yield Completion(m[0], start_position=-len(word), display_meta=meta)
 
 
 def main():
-    parse = ArgumentParser()
-    parse.add_argument("--data", required=True, dest="data")
+    parse = argparse.ArgumentParser()
     types = parse.add_mutually_exclusive_group()
     types.add_argument("--file", action="store_true", dest="file", default=False)
+    parse.add_argument("data", nargs=1)
     args = parse.parse_args()
 
     base_command = '--data "{data}" --is_file={file} '.format(
-        data=args.data, file=args.file
+        data="".join(args.data), file=args.file
     )
 
     history_file = str(Path(gettempdir() + "/chepy"))
-    session = PromptSession(history=FileHistory(history_file), style=get_style())
+    session = PromptSession(
+        history=FileHistory(history_file), style=get_style(), wrap_lines=True
+    )
     try:
         while True:
             prompt = session.prompt(

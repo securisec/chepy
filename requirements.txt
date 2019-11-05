@@ -12,3 +12,5 @@ prompt_toolkit
 ua-parser
 PyYAML
 docstring-parser
+requests
+pydash

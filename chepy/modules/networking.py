@@ -55,7 +55,9 @@ class Networking(Core):
         return self
 
     def parse_user_agent(self):
-        """Attempts to identify and categorise information contained in a user-agent string.
+        """Parse a User-Agent string.
+        
+        Attempts to identify and categorise information contained in a user-agent string.
         
         Returns:
             Chepy: The Chepy object.

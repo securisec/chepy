@@ -93,6 +93,9 @@ class Hashing(Core):
         are truncated versions of SHA-512, but the initial values are generated using the method 
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
+        Args:
+            truncate (int, optional): The bits to truncate by. Defaults to 256
+
         Returns:
             Chepy: The Chepy object. 
         """
