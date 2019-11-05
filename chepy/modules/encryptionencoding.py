@@ -1,5 +1,9 @@
 import codecs
 import string
+import re
+import itertools
+import base64
+import binascii
 
 from ..core import Core
 
@@ -51,4 +55,32 @@ class EncryptionEncoding(Core):
             else:
                 x.append(self.state[i])
         self.state = "".join(x)
+        return self
+
+    def xor(self, key: str, key_type: str = "hex"):
+        """XOR state with a key
+
+        Simple XOR cipher is a type of additive cipher based on logical operation xor, which operates according to the following principles.
+
+        (A * B) + (!A * !B)
+
+        A  B  A XOR B
+        0  0     0
+        1  0     1
+        0  1     1
+        1  1     0
+
+        The main advantage of xor chipher is that the encyption is reversible with the same logical operation.
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        assert re.search(r"[a-fA-F0-9]+", self.state), "Need a valid hex string"
+        assert key_type in ["utf", "hex", "base64"], "Need a valid key type"
+        if key_type == "utf":
+            key = binascii.hexlify(key.encode())
+        elif key_type == "base64":
+            key = binascii.hexlify(base64.b64decode(key.encode()))
+        key = codecs.decode(key, "hex")
+        self.state = "".join(chr(ord(a) ^ b) for (a, b) in zip(self.state, itertools.cycle(key)))
         return self
