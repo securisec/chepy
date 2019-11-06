@@ -31,3 +31,36 @@ def test_to_camel_case():
 def test_to_kebab_case():
     assert Chepy("Some data_test").to_kebab_case().o == "some-data-test"
 
+
+def test_remove_whitespace():
+    assert (
+        Chepy("some    long space\n\ttab space\flol").remove_whitespace().o
+        == "somelongspacetabspacelol"
+    )
+
+
+def test_swap_case():
+    assert Chepy("SoMe TeXt").swap_case().o == "sOmE tExT"
+
+
+def test_lower_case():
+    assert Chepy("HelLo WorLd").to_lower_case().o == "hello world"
+
+
+def test_regex_search():
+    assert (
+        len(Chepy("loLolololoL").regex_search("ol", ignore_case=True).str_to_list().o)
+        == 5
+    )
+
+
+def test_remove_nullbytes():
+    assert (
+        Chepy("./tests/files/hello", True)
+        .remove_nullbytes()
+        .binary_to_hex()
+        .o[0:4]
+        .decode()
+        == "cffa"
+    )
+

@@ -5,8 +5,10 @@ import webbrowser
 import json as pyjson
 import pyperclip
 import requests
-import regex as re
+import logging
 from typing import Any
+import regex as re
+from .modules.exeptions import PrintException
 
 
 class Core(object):
@@ -24,7 +26,14 @@ class Core(object):
                     self.state = f.read()
 
     def __str__(self):
-        return self._convert_to_str()
+        try:
+            return self._convert_to_str()
+        except UnicodeDecodeError:
+            logging.exception(
+                "\n\nCannot print current state. Either chain with "
+                "another method, or use one of the output methods "
+                "Example: .o, .output, .state or .out()\n\n"
+            )
 
     def _is_bytes(self):
         return isinstance(self.state, bytes)
@@ -76,9 +85,6 @@ class Core(object):
             return int(self.state)
         else:
             raise NotImplementedError
-
-    def _remove_spaces(self):
-        return re.sub(r"\s", "", self._convert_to_str())
 
     @property
     def o(self):
@@ -167,7 +173,6 @@ class Core(object):
             data.decode()
         )
         webbrowser.open_new_tab(url)
-        exit(0)
         return None
 
     def http_request(
@@ -185,7 +190,7 @@ class Core(object):
         
         Args:
             method (str, optional): Request method. Defaults to 'GET'.
-            params (dict, optional): Query parameters. Defaults to {}.
+            params (dict, optional): Query Args. Defaults to {}.
             json (dict, optional): JSON request payload. Defaults to {}.
             headers (dict, optional): Headers for request. Defaults to {}.
             cookies (dict, optional): Cookies for request. Defaults to {}.
@@ -226,6 +231,21 @@ class Core(object):
             self.state = res.text
         return self
 
-    # def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
-    #     # todo
-    #     raise NotImplementedError
+    def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
+        """Save the state to disk
+        
+        Args:
+            file_path (str): The file path to save in
+            as_binary (bool, optional): If file should be saved as a binary file. Defaults to False.
+        
+        Returns:
+            None: Returns None
+        """
+        path = pathlib.Path(file_path).expanduser().absolute()
+        if as_binary:
+            mode = "wb+"
+        else:
+            mode = "w+"
+        with open(str(path), mode) as f:
+            f.write(self.state)
+        return None

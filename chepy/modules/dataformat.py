@@ -16,7 +16,7 @@ class DataFormat(Core):
     def list_to_str(self, join_by=" "):
         """Join an array by `join_by`
         
-        Parameters:
+        Args:
             join_by (str, optional): String character to join by, by default ' '
         
         Returns:
@@ -24,6 +24,15 @@ class DataFormat(Core):
         """
         assert isinstance(self.state, list), "Data in state not a list"
         self.state = join_by.join(self.state)
+        return self
+
+    def str_to_list(self):
+        """Convert a string list to a list
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = json.loads(re.sub(r"'", '"', self._convert_to_str()))
         return self
 
     def json_to_dict(self):
@@ -48,7 +57,7 @@ class DataFormat(Core):
     def yaml_to_json(self, safe: bool = True):
         """Convert yaml to a json string
         
-        Parameters:
+        Args:
             safe (bool, optional): If only safe fields should be parsed, by default True
         
         Returns:
@@ -231,7 +240,7 @@ class DataFormat(Core):
     def hex_to_str(self, ignore: bool = False):
         """Decodes a hex string to ascii ignoring any decoding errors
         
-        Parameters:
+        Args:
             ignore (bool, optional): Ignore errors, by default False
         
         Returns:
@@ -288,7 +297,12 @@ class DataFormat(Core):
         self.state = string
         return self
 
-    def string_from_hexdump(self):
+    def hexdump_to_str(self):
+        """Extract a string from a hexdump
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
         # TODO make new line aware \n \r\n \0a etc
         if self._is_bytes():
             data = self.state.decode()
@@ -303,7 +317,7 @@ class DataFormat(Core):
         Encodes problematic characters into percent-encoding, 
         a format supported by URIs/URLs.
         
-        Parameters:
+        Args:
             safe (str, optional): String of characters that will not be encoded, by default ""
         
         Returns:

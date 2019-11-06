@@ -72,11 +72,14 @@ education: '4 GCSEs
 def test_base_58_decode():
     assert Chepy("2UDrs31qcWSPi").base_58_decode().output.decode() == "some data"
 
+
 def test_base_85_encode():
     assert Chepy("some data").base_85_encode().output.decode() == "F)Po,+Cno&@/"
 
+
 def test_base_85_decode():
     assert Chepy("F)Po,+Cno&@/").base_85_decode().output.decode() == "some data"
+
 
 def test_base_32_encode():
     assert Chepy("some data").base_32_encode().output.decode() == "ONXW2ZJAMRQXIYI="
@@ -110,3 +113,6 @@ def test_url_decode():
         Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").url_decode().o
         == "https://google.com/?lol=some data&a=1"
     )
+
+def test_to_list():
+    assert Chepy("[1,2,'lol', true]").str_to_list().o == [1,2,'lol', True]

@@ -1,3 +1,4 @@
+import sys
 import inspect
 import fire
 import regex as re
@@ -16,6 +17,7 @@ from chepy.__version__ import __version__
 
 options = []
 chepy = dir(Chepy)
+fire_obj = None
 
 
 def get_style():
@@ -23,10 +25,10 @@ def get_style():
         {
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
-            "completion-menu.completion fuzzymatch.outside": "fg:#000000",
+            "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
             "name": "#ffd700",
             "file": "#00ff48",
-            'rprompt': 'bg:#ff0066 #ffffff',
+            "rprompt": "fg:#00ff48",
         }
     )
 
@@ -41,8 +43,11 @@ def get_options():
                 parsed_doc = _parse_doc(attributes.__doc__)
                 if len(args) == 1:
                     options[method] = {
-                        "options": list(map(lambda d: {"flag": d, "meta": ""}, args[1:])),
+                        "options": list(
+                            map(lambda d: {"flag": d, "meta": ""}, args[1:])
+                        ),
                         "meta": parsed_doc.short_description,
+                        "returns": parsed_doc.returns.type_name,
                     }
                 else:
                     options[method] = {
@@ -56,6 +61,7 @@ def get_options():
                             )
                         ),
                         "meta": parsed_doc.short_description,
+                        "returns": parsed_doc.returns.type_name,
                     }
         except:
             continue
@@ -116,10 +122,22 @@ class CustomCompleter(Completer):
                 meta = (
                     m[1]["meta"] if isinstance(m[1], dict) and m[1].get("meta") else ""
                 )
-                yield Completion(m[0], start_position=-len(word), display_meta=meta)
+                not_chepy_obj = ""
+                try:
+                    if m[1]["returns"] != "Chepy":
+                        not_chepy_obj = "bg:#ffd700"
+                except:
+                    pass
+                yield Completion(
+                    m[0],
+                    start_position=-len(word),
+                    display_meta=meta,
+                    style=not_chepy_obj,
+                )
 
 
 def main():
+    global fire_obj
     parse = argparse.ArgumentParser()
     types = parse.add_mutually_exclusive_group()
     types.add_argument("--file", action="store_true", dest="file", default=False)
@@ -140,6 +158,7 @@ def main():
                 prompt_message(args),
                 completer=FuzzyCompleter(CustomCompleter()),
                 validator=CustomValidator(),
+                rprompt=type(fire_obj).__name__,
             )
             # command = re.findall(r'(?:".*?"|\S)+', prompt)
             base_command += " " + prompt

@@ -26,7 +26,7 @@ def test_flag():
         .rot_13()
         .base_64_decode()
         .base_32_decode()
-        .string_from_hexdump()
+        .hexdump_to_str()
         .output
         == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
     )

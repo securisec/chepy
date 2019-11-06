@@ -8,7 +8,7 @@ def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator
     """Creates all possible combinations from the `words` being passed. 
     Returns a generator. `length` controls the length of the permutations.
     
-    Parameters:
+    Args:
         words (List[Any]): List of strings.
         length (int, optional): Length of permutations. By default, it is the length of the `words` list
     
@@ -27,7 +27,7 @@ def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator
 def factordb(n: int) -> dict:
     """Query the factordb api and get primes if available
     
-    Parameters:
+    Args:
         n (int): n is the modulus for the public key and the private keys
     
     Returns:
