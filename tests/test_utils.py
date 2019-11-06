@@ -47,11 +47,8 @@ def test_lower_case():
     assert Chepy("HelLo WorLd").to_lower_case().o == "hello world"
 
 
-def test_regex_search():
-    assert (
-        len(Chepy("loLolololoL").regex_search("ol", ignore_case=True).str_to_list().o)
-        == 5
-    )
+def test_search():
+    assert len(Chepy("loLolololoL").search("ol", ignore_case=True).str_to_list().o) == 5
 
 
 def test_remove_nullbytes():
@@ -63,4 +60,3 @@ def test_remove_nullbytes():
         .decode()
         == "cffa"
     )
-

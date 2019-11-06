@@ -34,7 +34,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state =  emoji.get_emoji_regexp().findall(self._convert_to_str())
+        self.state = emoji.get_emoji_regexp().findall(self._convert_to_str())
         return self
 
     def encode_utf_16_le(self):
@@ -194,9 +194,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "gb2312", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("gb2312", errors="backslashreplace")
         return self
 
     def decode_gb2312(self):
@@ -251,9 +249,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1250", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1250", errors="backslashreplace")
         return self
 
     def decode_cp1250(self):
@@ -271,9 +267,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1251", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1251", errors="backslashreplace")
         return self
 
     def decode_cp1251(self):
@@ -291,9 +285,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1252", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1252", errors="backslashreplace")
         return self
 
     def decode_cp1252(self):
@@ -311,9 +303,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1253", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1253", errors="backslashreplace")
         return self
 
     def decode_cp1253(self):
@@ -331,9 +321,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1254", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1254", errors="backslashreplace")
         return self
 
     def decode_cp1254(self):
@@ -351,9 +339,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1255", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1255", errors="backslashreplace")
         return self
 
     def decode_cp1255(self):
@@ -371,9 +357,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1256", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1256", errors="backslashreplace")
         return self
 
     def decode_cp1256(self):
@@ -391,9 +375,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1257", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1257", errors="backslashreplace")
         return self
 
     def decode_cp1257(self):
@@ -411,9 +393,7 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_str().encode(
-            "cp1258", errors="backslashreplace"
-        )
+        self.state = self._convert_to_str().encode("cp1258", errors="backslashreplace")
         return self
 
     def decode_cp1258(self):
@@ -702,5 +682,5 @@ class Language(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self._convert_to_bytes().decode('unicode-escape')
+        self.state = self._convert_to_bytes().decode("unicode-escape")
         return self

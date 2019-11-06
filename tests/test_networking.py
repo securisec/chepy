@@ -37,4 +37,3 @@ def test_parse_user_agent():
         "device": {"family": "Other", "brand": None, "model": None},
         "string": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.10; rv:62.0) Gecko/20100101 Firefox/62.0",
     }
-

@@ -123,17 +123,22 @@ class CustomCompleter(Completer):
                     m[1]["meta"] if isinstance(m[1], dict) and m[1].get("meta") else ""
                 )
                 not_chepy_obj = ""
-                try:
+                if m[1].get("returns"):
                     if m[1]["returns"] != "Chepy":
                         not_chepy_obj = "bg:#ffd700"
-                except:
-                    pass
                 yield Completion(
                     m[0],
                     start_position=-len(word),
                     display_meta=meta,
                     style=not_chepy_obj,
                 )
+
+
+def get_current_type(obj):
+    if obj:
+        return type(obj).__name__
+    else:
+        return "Type of current state"
 
 
 def main():
@@ -158,7 +163,7 @@ def main():
                 prompt_message(args),
                 completer=FuzzyCompleter(CustomCompleter()),
                 validator=CustomValidator(),
-                rprompt=type(fire_obj).__name__,
+                rprompt=get_current_type(fire_obj),
             )
             # command = re.findall(r'(?:".*?"|\S)+', prompt)
             base_command += " " + prompt

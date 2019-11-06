@@ -57,7 +57,7 @@ class EncryptionEncoding(Core):
         self.state = "".join(x)
         return self
 
-    def xor(self, key: str, key_type: str = "hex"):
+    def xor(self, key: str, key_type: str = "hex", ascii: bool = False):
         """XOR state with a key
 
         Valid key formats are utf, hex and base64. Simple XOR cipher is a type 
@@ -78,26 +78,29 @@ class EncryptionEncoding(Core):
         Args:
             key (str): The key to xor by
             key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".
+            ascii (bool, optional): If the input is in ascii format
         
         Returns:
-            Chepy: The Chepy object.
+            Chepy: The Chepy object. 
         """
         assert key_type in [
             "utf",
             "hex",
             "base64",
-        ], "Valid key_keys are hex, utf and base64"
-        assert re.search(
-            r"[a-fA-F0-9]+", self._convert_to_str()
-        ), "Need a valid hex string"
+        ], "Valid key types are hex, utf and base64"
+
         if key_type == "utf":
             key = binascii.hexlify(key.encode())
         elif key_type == "base64":
             key = binascii.hexlify(base64.b64decode(key.encode()))
         key = codecs.decode(key, "hex")
-        xor = []
-        for a, b in zip(self._convert_to_str(), itertools.cycle(key)):
-            xor.append(chr(ord(a) ^ b))
-        self.state = "".join(xor)
+        xor = bytearray(b"")
+        if ascii:
+            for char, key_val in zip(self._convert_to_str(), itertools.cycle(key)):
+                xor.append(ord(char) ^ key_val)
+        else:
+            for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
+                xor.append(char ^ key_val)
+
+        self.state = xor
         return self
-        # TODO fix this method

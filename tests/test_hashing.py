@@ -180,4 +180,3 @@ def test_scrypt_hash():
         Chepy("abc").scrypt_hash(salt="", key_length=16).out()
         == "f352f3374cf4e344dde4108b96985248"
     )
-

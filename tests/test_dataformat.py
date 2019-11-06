@@ -101,6 +101,10 @@ def test_hex_to_int():
     assert Chepy("0x123").hex_to_int().output == 291
 
 
+def test_int_to_hex():
+    assert Chepy(101).int_to_hex().o == "65"
+
+
 def test_url_encode():
     assert (
         Chepy("https://google.com/?lol=some data&a=1").url_encode(safe="/:").o
@@ -114,5 +118,6 @@ def test_url_decode():
         == "https://google.com/?lol=some data&a=1"
     )
 
+
 def test_to_list():
-    assert Chepy("[1,2,'lol', true]").str_to_list().o == [1,2,'lol', True]
+    assert Chepy("[1,2,'lol', true]").str_to_list().o == [1, 2, "lol", True]

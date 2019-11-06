@@ -307,4 +307,3 @@ def test_decode_iso8859_15():
 
 def test_remove_diacritics():
     assert Chepy("François Chào").remove_diacritics().o.decode() == "Francois Chao"
-

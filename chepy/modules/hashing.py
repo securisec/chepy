@@ -558,4 +558,3 @@ class Hashing(Core):
             self._convert_to_bytes(), salt=salt, key_len=key_length, N=2 ** N, r=r, p=p
         ).hex()
         return self
-

@@ -110,7 +110,7 @@ class DataFormat(Core):
         """
         self.state = base58.b58decode(self.state)
         return self
-    
+
     def base_85_encode(self):
         """Encode as Base58
 
@@ -222,7 +222,7 @@ class DataFormat(Core):
         if self._convert_to_str().startswith("0x"):
             self.state = int(self.state, 0)
         else:
-            self.state = int(self._remove_spaces(), 16)
+            self.state = int(self.state, 16)
         return self
 
     def hex_to_binary(self):

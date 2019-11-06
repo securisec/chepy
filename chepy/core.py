@@ -54,6 +54,8 @@ class Core(object):
             return str(self.state).encode()
         elif isinstance(self.state, bool):
             return str(self.state).encode()
+        elif isinstance(self.state, bytearray):
+            return bytes(self.state)
         else:
             # todo check more types here
             raise NotImplementedError
@@ -74,6 +76,8 @@ class Core(object):
             return str(self.state)
         elif isinstance(self.state, bool):
             return str(self.state)
+        elif isinstance(self.state, bytearray):
+            return bytearray(self.state).decode()
         else:
             # todo check more types here
             raise NotImplementedError
