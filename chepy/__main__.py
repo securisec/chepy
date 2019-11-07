@@ -117,17 +117,17 @@ class CustomCompleter(Completer):
             else:
                 methods = options
 
-        for m in methods:
-            if m[0].startswith(word):
+        for method_name, method_docs in methods:
+            if method_name.startswith(word):
                 meta = (
-                    m[1]["meta"] if isinstance(m[1], dict) and m[1].get("meta") else ""
+                    method_docs["meta"] if isinstance(method_docs, dict) and method_docs.get("meta") else ""
                 )
                 not_chepy_obj = ""
-                if m[1].get("returns"):
-                    if m[1]["returns"] != "Chepy":
+                if method_docs.get("returns"):
+                    if method_docs["returns"] != "Chepy":
                         not_chepy_obj = "bg:#ffd700"
                 yield Completion(
-                    m[0],
+                    method_name,
                     start_position=-len(word),
                     display_meta=meta,
                     style=not_chepy_obj,
@@ -140,14 +140,16 @@ def get_current_type(obj):
     else:
         return "Type of current state"
 
-
-def main():
-    global fire_obj
+def parse_args(args):
     parse = argparse.ArgumentParser()
     types = parse.add_mutually_exclusive_group()
     types.add_argument("--file", action="store_true", dest="file", default=False)
     parse.add_argument("data", nargs=1)
-    args = parse.parse_args()
+    return parse.parse_args(args)
+
+def main():
+    global fire_obj
+    args = parse_args(sys.argv[1:])
 
     base_command = '--data "{data}" --is_file={file} '.format(
         data="".join(args.data), file=args.file

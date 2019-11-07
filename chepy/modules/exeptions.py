@@ -1,2 +1,0 @@
-class PrintException(Exception):
-    pass

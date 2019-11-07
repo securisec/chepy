@@ -14,3 +14,4 @@ PyYAML
 docstring-parser
 requests
 pydash
+colorama

@@ -205,3 +205,15 @@ class Utils(Core):
             flags += re.X
         self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
+
+    def split_by(self, pattern: str = '\n'):
+        """Split a string by the given pattern
+        
+        Args:
+            pattern (str, optional): Pattern to split by. Defaults to '\\n'.
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = re.split(pattern, self._convert_to_str())
+        return self

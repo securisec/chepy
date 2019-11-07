@@ -93,6 +93,8 @@ class EncryptionEncoding(Core):
             key = binascii.hexlify(key.encode())
         elif key_type == "base64":
             key = binascii.hexlify(base64.b64decode(key.encode()))
+        if isinstance(key, int):
+            key = str(key)
         key = codecs.decode(key, "hex")
         xor = bytearray(b"")
         if ascii:

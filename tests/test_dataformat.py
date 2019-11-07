@@ -121,3 +121,24 @@ def test_url_decode():
 
 def test_to_list():
     assert Chepy("[1,2,'lol', true]").str_to_list().o == [1, 2, "lol", True]
+
+
+def test_normalize_hex():
+    assert Chepy("41:42:CE").normalize_hex().o == "4142CE"
+    assert Chepy("0x410x420xce").normalize_hex().o == "4142ce"
+    assert (
+        Chepy("tests/files/hello", True).normalize_hex(True).o[0:6].decode() == "cffaed"
+    )
+
+
+def test_bytearray_to_str():
+    assert Chepy(bytearray("lolol", "utf")).bytearray_to_str().o == "lolol"
+
+
+def test_get_by_index():
+    assert Chepy([1, "a", True]).get_by_index(2).state == True
+
+
+def test_get_by_key():
+    assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == "data"
+

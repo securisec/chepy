@@ -8,7 +8,7 @@ import requests
 import logging
 from typing import Any
 import regex as re
-from .modules.exeptions import PrintException
+from .modules.exceptions import PrintException
 
 
 class Core(object):
@@ -23,17 +23,21 @@ class Core(object):
                     self.state = f.read()
             except UnicodeDecodeError:
                 with open(path, "rb") as f:
-                    self.state = f.read()
+                    self.state = bytearray(f.read())
 
     def __str__(self):
         try:
-            return self._convert_to_str()
-        except UnicodeDecodeError:
+            if isinstance(self.state, bytearray):
+                return 'bytearray in state'
+            else:
+                return self._convert_to_str()
+        except:
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
                 "another method, or use one of the output methods "
                 "Example: .o, .output, .state or .out()\n\n"
             )
+            return ''
 
     def _is_bytes(self):
         return isinstance(self.state, bytes)

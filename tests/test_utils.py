@@ -48,7 +48,10 @@ def test_lower_case():
 
 
 def test_search():
-    assert len(Chepy("loLolololoL").search("ol", ignore_case=True).str_to_list().o) == 5
+    assert (
+        len(Chepy("loLolololoL").regex_search("ol", ignore_case=True).str_to_list().o)
+        == 5
+    )
 
 
 def test_remove_nullbytes():
@@ -60,3 +63,7 @@ def test_remove_nullbytes():
         .decode()
         == "cffa"
     )
+
+
+def test_split_by():
+    assert len(Chepy("some lol random lolol data").split_by("lo").o) == 4

@@ -474,6 +474,8 @@ class Hashing(Core):
             key = key.encode()
         elif isinstance(key, bytes):
             key = key
+        elif isinstance(key, int):
+            key = bytes(key)
         else:
             raise TypeError("key has to be bytes")
 

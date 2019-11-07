@@ -125,7 +125,7 @@ class Publickey(Core):
             Chepy: The Chepy object.
         """
         cert_pem = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_ASN1, self.state
+            _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
         )
         self.state = _pyssl_crypto.dump_certificate(
             _pyssl_crypto.FILETYPE_PEM, cert_pem

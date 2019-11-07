@@ -281,21 +281,27 @@ class DataFormat(Core):
         self.state = binascii.hexlify(self._convert_to_bytes())
         return self
 
-    def normalize_hex(self):
+    def normalize_hex(self, is_bytearray=False):
         """Normalize a hex string
         
         Removes special encoding characters from a hex string like %, 
         0x, , :, ;, \\n and \\r\\n
+
+        Args:
+            is_bytearray (bool, optional): Set to True if state is a bytearray
         
         Returns:
             Chepy: The Chepy object. 
         """
-        assert r"\x" not in self.state, "Cannot normalize binary data"
-        delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
-        string = re.sub("|".join(delimiters), "", self.state)
-        assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
-        self.state = string
-        return self
+        if is_bytearray:
+            self.state = binascii.hexlify(bytearray(self.state))
+            return self
+        else:
+            delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
+            string = re.sub("|".join(delimiters), "", self.state)
+            # assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
+            self.state = string
+            return self
 
     def hexdump_to_str(self):
         """Extract a string from a hexdump
@@ -330,7 +336,53 @@ class DataFormat(Core):
         """Converts URI/URL percent-encoded characters back to their raw values.
         
         Returns:
-            Chepy: A Chepy object.
+            Chepy: The Chepy object.
         """
         self.state = _urllib_unquote_plus(self._convert_to_str())
         return self
+
+    def bytearray_to_str(self, encoding: str='utf8', errors: str='replace'):
+        """Convert a python bytearray to string
+        
+        Args:
+            encoding (str, optional): String encoding. Defaults to 'utf8'.
+            errors (str, optional): How errors should be handled. Defaults to replace. 
+        
+        Raises:
+            TypeError: If state is not a bytearray
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, bytearray):
+            self.state = self.state.decode(encoding, errors=errors)
+            return self
+        else:
+            raise TypeError('State is not a bytearray')
+
+    def get_by_index(self, index: int):
+        """Get an item by specifying an index
+        
+        Args:
+            index (int): Index number to get
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self.state[index]
+        return self
+
+    def get_by_key(self, key: str):
+        """Get an object from a dict by key
+        
+        Args:
+            key (str): A valid key
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, dict):
+            self.state = self.state.get(key)
+            return self
+        else:
+            raise TypeError('State is not a dictionary')
