@@ -2,6 +2,7 @@ import sys
 import inspect
 from docstring_parser import parse as _parse_doc
 from chepy import Chepy
+from chepy.modules.internal.cli import get_cli_options
 
 chepy = dir(Chepy)
 
@@ -40,3 +41,6 @@ def test_options():
             print("Error in method", method)
             raise
     return options
+
+def test_cli_options():
+    get_cli_options()

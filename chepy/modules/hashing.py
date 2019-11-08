@@ -450,7 +450,7 @@ class Hashing(Core):
         self.state = Crc32().process(self._convert_to_bytes()).finalhex()
         return self
 
-    def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
+    def hmac_hash(self, secret_key: bytes = b"", digest: str = "sha1"):
         """Get HMAC hash
         
         HMAC hash the state
@@ -459,7 +459,7 @@ class Hashing(Core):
         message authentication using cryptographic hash functions.
         
         Args:
-            key (bytes, optional): Starting key for the hash, by default b''
+            secret_key (bytes, optional): Starting secret_key for the hash, by default b''
             digest (str, optional): The digest type, by default "sha1". Possible values are 
                 md5, sha1, sha256 and sha512
         
@@ -467,26 +467,26 @@ class Hashing(Core):
             Chepy: The Chepy object. 
         
         Raises:
-            TypeError: If key is not in bytes
+            TypeError: If secret_key is not in bytes
             TypeError: If not a valid/allowed digest type
         """
-        if isinstance(key, str):
-            key = key.encode()
-        elif isinstance(key, bytes):
-            key = key
-        elif isinstance(key, int):
-            key = bytes(key)
+        if isinstance(secret_key, str):
+            secret_key = secret_key.encode()
+        elif isinstance(secret_key, bytes):
+            secret_key = secret_key
+        elif isinstance(secret_key, int):
+            secret_key = bytes(secret_key)
         else:
-            raise TypeError("key has to be bytes")
+            raise TypeError("secret_key has to be bytes")
 
         if digest == "md5":
-            h = hmac.new(key, self._convert_to_bytes(), hashlib.md5)
+            h = hmac.new(secret_key, self._convert_to_bytes(), hashlib.md5)
         elif digest == "sha1":
-            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha1)
+            h = hmac.new(secret_key, self._convert_to_bytes(), hashlib.sha1)
         elif digest == "sha256":
-            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha256)
+            h = hmac.new(secret_key, self._convert_to_bytes(), hashlib.sha256)
         elif digest == "sha512":
-            h = hmac.new(key, self._convert_to_bytes(), hashlib.sha512)
+            h = hmac.new(secret_key, self._convert_to_bytes(), hashlib.sha512)
         else:
             raise TypeError(
                 "Currently supported digests are md5, sha1, sha256 and sha512"

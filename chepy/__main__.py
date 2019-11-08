@@ -6,13 +6,20 @@ from pathlib import Path
 import argparse
 from tempfile import gettempdir
 from docstring_parser import parse as _parse_doc
-from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
+from prompt_toolkit.completion import (
+    Completer,
+    Completion,
+    FuzzyCompleter,
+    merge_completers,
+)
 from prompt_toolkit.validation import ValidationError, Validator
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.styles import Style
 from prompt_toolkit import PromptSession
+
 from chepy import Chepy
 from chepy.__version__ import __version__
+import chepy.modules.internal.cli as chepy_cli
 
 
 options = []
@@ -120,7 +127,9 @@ class CustomCompleter(Completer):
         for method_name, method_docs in methods:
             if method_name.startswith(word):
                 meta = (
-                    method_docs["meta"] if isinstance(method_docs, dict) and method_docs.get("meta") else ""
+                    method_docs["meta"]
+                    if isinstance(method_docs, dict) and method_docs.get("meta")
+                    else ""
                 )
                 not_chepy_obj = ""
                 if method_docs.get("returns"):
@@ -140,12 +149,14 @@ def get_current_type(obj):
     else:
         return "Type of current state"
 
+
 def parse_args(args):
     parse = argparse.ArgumentParser()
     types = parse.add_mutually_exclusive_group()
     types.add_argument("--file", action="store_true", dest="file", default=False)
     parse.add_argument("data", nargs=1)
     return parse.parse_args(args)
+
 
 def main():
     global fire_obj
@@ -163,22 +174,31 @@ def main():
         while True:
             prompt = session.prompt(
                 prompt_message(args),
-                completer=FuzzyCompleter(CustomCompleter()),
+                completer=FuzzyCompleter(
+                    merge_completers([CustomCompleter(), chepy_cli.CliCompleter()])
+                ),
                 validator=CustomValidator(),
                 rprompt=get_current_type(fire_obj),
             )
             # command = re.findall(r'(?:".*?"|\S)+', prompt)
             base_command += " " + prompt
-            for method in chepy:
-                if not method.startswith("_") and not isinstance(
-                    getattr(Chepy, method), property
-                ):
-                    fire.decorators._SetMetadata(
-                        getattr(Chepy, method),
-                        fire.decorators.ACCEPTS_POSITIONAL_ARGS,
-                        False,
-                    )
-            fire_obj = fire.Fire(Chepy, command=base_command)
+            base_command = re.sub(r"\scli_\w+", "", base_command)
+
+            # check and output any commands that start with cli_
+            if re.search(r"^cli_.+", prompt):
+                getattr(chepy_cli, prompt.split()[0])(fire_obj)
+
+            else:
+                for method in chepy:
+                    if not method.startswith("_") and not isinstance(
+                        getattr(Chepy, method), property
+                    ):
+                        fire.decorators._SetMetadata(
+                            getattr(Chepy, method),
+                            fire.decorators.ACCEPTS_POSITIONAL_ARGS,
+                            False,
+                        )
+                fire_obj = fire.Fire(Chepy, command=base_command)
     except KeyboardInterrupt:
         print("OKBye")
         exit()
