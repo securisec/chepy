@@ -105,6 +105,19 @@ def cli_state_type(fire: object):
         print(type(fire))
 
 
+def cli_type_attr(fire: object, attr: str):
+    """Get attributes from current state type
+    
+    Args:
+        fire (object): The fire object
+        attr (str): A valid attr name
+    """
+    if fire is not None and not isinstance(fire, Chepy):
+        print(getattr(fire, attr)())
+    else:
+        print('nope')
+
+
 def cli_exit(fire: object):
     """Exit the cli
     

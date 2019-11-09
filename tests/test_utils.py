@@ -67,3 +67,26 @@ def test_remove_nullbytes():
 
 def test_split_by():
     assert len(Chepy("some lol random lolol data").split_by("lo").o) == 4
+
+
+def test_unique():
+    assert len(Chepy('["a", "a", 1]').str_to_list().unique().o) == 2
+
+
+def test_sorted():
+    assert Chepy(["a", "b", "1", "2"]).sorted().o == ["1", "2", "a", "b"]
+
+
+def test_filter():
+    assert Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_to_list().filter_by(
+        "b"
+    ).o == [{"b": 2}, {"a": 1, "b": 3},]
+
+
+def test_slick():
+    assert Chepy("some data").slice(3, 6).o == "e d"
+
+
+def test_find_replace():
+    assert Chepy("some some data").find_replace(r"some\s", "data").o == "datadatadata"
+

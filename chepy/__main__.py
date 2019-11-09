@@ -111,7 +111,9 @@ class CustomCompleter(Completer):
         selected = document.text.split()
         if len(selected) > 0:
             selected = selected[-1]
-            if not selected.startswith("--"):
+            if selected.startswith("cli_"):
+                methods = options
+            elif not selected.startswith("--"):
                 current = method_dict.get(selected)
                 if current is not None:
                     has_options = method_dict.get(selected)["options"]
@@ -186,7 +188,14 @@ def main():
 
             # check and output any commands that start with cli_
             if re.search(r"^cli_.+", prompt):
-                getattr(chepy_cli, prompt.split()[0])(fire_obj)
+                cli_method = prompt.split()[0]
+                cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
+                if cli_args:
+                    getattr(chepy_cli, cli_method)(
+                        fire_obj, **{cli_args.group(1): cli_args.group(2)}
+                    )
+                else:
+                    getattr(chepy_cli, cli_method)(fire_obj)
 
             else:
                 for method in chepy:

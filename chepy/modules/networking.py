@@ -1,4 +1,6 @@
+import ipaddress
 import regex as re
+import urllib.parse as _py_urlparse
 from ua_parser.user_agent_parser import Parse as _uap_parse
 from ..core import Core
 
@@ -63,4 +65,40 @@ class Networking(Core):
             Chepy: The Chepy object.
         """
         self.state = _uap_parse(self._convert_to_str())
+        return self
+
+    def parse_uri(self):
+        """Parse a URI
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        parsed = _py_urlparse.urlparse(self._convert_to_str())
+        self.state = {
+            "scheme": parsed.scheme,
+            "location": parsed.netloc,
+            "path": parsed.path,
+            "params": parsed.params,
+            "query": _py_urlparse.parse_qs(parsed.query),
+            "fragment": parsed.fragment,
+        }
+        return self
+
+    def parse_ip_range(self):
+        """Enumerate IP address in a CIDR range
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = [str(i) for i in ipaddress.ip_network(self._convert_to_str(), strict=False).hosts()]
+        return self
+
+    def parse_ipv6(self):
+        """Get longhand and shorthand of IPv6
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        ip = ipaddress.ip_address(self._convert_to_str())
+        self.state = {'long': ip.exploded, 'short': ip.compressed}
         return self

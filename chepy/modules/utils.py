@@ -1,4 +1,5 @@
 import regex as re
+from typing import Any
 import pydash
 
 from ..core import Core
@@ -206,7 +207,7 @@ class Utils(Core):
         self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
 
-    def split_by(self, pattern: str = '\n'):
+    def split_by(self, pattern: str = "\n"):
         """Split a string by the given pattern
         
         Args:
@@ -216,4 +217,85 @@ class Utils(Core):
             Chepy: The Chepy object.
         """
         self.state = re.split(pattern, self._convert_to_str())
+        return self
+
+    def unique(self):
+        """Get an array of unique list items
+        
+        Raises:
+            TypeError: If state is not a list
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, list):
+            self.state = pydash.uniq(self.state)
+            return self
+        else:
+            raise TypeError("State is not a list")
+
+    def sorted(self, reverse: bool = False):
+        """Sort a list
+        
+        Args:
+            reverse (bool, optional): In reverse order. Defaults to False.
+        
+        Raises:
+            TypeError: If state is not list
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, (list)):
+            self.state = sorted(self.state)
+            return self
+        else:
+            raise TypeError("State is not a list")
+
+    def filter_by(self, predicate: Any = None):
+        """Filter a dict or list
+        
+        Args:
+            predicate (Any, optional): What to filter by. Defaults to None.
+        
+        Raises:
+            TypeError: If state is not a list or dict
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, (list, dict)):
+            self.state = pydash.filter_(self.state, predicate)
+            return self
+        else:
+            raise TypeError("State is not a list")
+
+    def slice(self, start: int = 0, end: int = None):
+        """Returns the specified slice
+        
+        Args:
+            start (int, optional): Start position. Defaults to 0.
+            end (int, optional): End position. Defaults to None.
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self.state[start:end]
+        return self
+
+    def find_replace(self, pattern: str, repl: str, ignore_case=True):
+        """Replace matched pattern with repln
+        
+        Args:
+            pattern (str): Pattern to search
+            repl (str): Pattern to match
+            ignore_case (bool, optional): Case insensitive. Defaults to True.
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        flags = 0
+        if ignore_case:
+            flags = re.IGNORECASE
+        self.state = re.sub(pattern, repl, self._convert_to_str(), flags=flags)
         return self
