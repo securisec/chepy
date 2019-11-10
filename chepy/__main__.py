@@ -33,7 +33,8 @@ def get_style():
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
-            "name": "#ffd700",
+            "name": "#00ffff",
+            "state_index": "#ffd700",
             "file": "#00ff48",
             "rprompt": "fg:#00ff48",
         }
@@ -75,10 +76,13 @@ def get_options():
     return options
 
 
-def prompt_message(args: argparse.ArgumentParser):
-    elements = [("class:name", "[Chepy {}] # ".format(__version__))]
-    if args.file:
-        elements.append(("class:file", "File "))
+def prompt_message(fire_obj):
+    elements = [("class:name", "[Chepy {version}] ".format(version=__version__))]
+    try:
+        elements.append(("class:state_index", str(fire_obj._current_index) + " "))
+    except AttributeError:
+        pass
+    elements.append(("class:name", "# "))
     return elements
 
 
@@ -155,8 +159,7 @@ def get_current_type(obj):
 def parse_args(args):
     parse = argparse.ArgumentParser()
     types = parse.add_mutually_exclusive_group()
-    types.add_argument("--file", action="store_true", dest="file", default=False)
-    parse.add_argument("data", nargs=1)
+    parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 
 
@@ -164,9 +167,7 @@ def main():
     global fire_obj
     args = parse_args(sys.argv[1:])
 
-    base_command = '--data "{data}" --is_file={file} '.format(
-        data="".join(args.data), file=args.file
-    )
+    args.data.append("-")
 
     history_file = str(Path(gettempdir() + "/chepy"))
     session = PromptSession(
@@ -175,7 +176,7 @@ def main():
     try:
         while True:
             prompt = session.prompt(
-                prompt_message(args),
+                prompt_message(fire_obj=fire_obj),
                 completer=FuzzyCompleter(
                     merge_completers([CustomCompleter(), chepy_cli.CliCompleter()])
                 ),
@@ -183,8 +184,6 @@ def main():
                 rprompt=get_current_type(fire_obj),
             )
             # command = re.findall(r'(?:".*?"|\S)+', prompt)
-            base_command += " " + prompt
-            base_command = re.sub(r"\scli_\w+", "", base_command)
 
             # check and output any commands that start with cli_
             if re.search(r"^cli_.+", prompt):
@@ -207,7 +206,11 @@ def main():
                             fire.decorators.ACCEPTS_POSITIONAL_ARGS,
                             False,
                         )
-                fire_obj = fire.Fire(Chepy, command=base_command)
+                args.data += prompt.split()
+                if args.data[-1] != "-":
+                    args.data.append("-")
+                print("args.data", args.data)
+                fire_obj = fire.Fire(Chepy, command=args.data)
     except KeyboardInterrupt:
         print("OKBye")
         exit()

@@ -272,6 +272,15 @@ class DataFormat(Core):
         self.state = format(self._convert_to_int(), "x")
         return self
 
+    def int_to_str(self):
+        """Converts an integer into a string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self._convert_to_str()
+        return self
+
     def binary_to_hex(self):
         """Converts binary data into a hex string
         
@@ -310,11 +319,7 @@ class DataFormat(Core):
             Chepy: The Chepy object.
         """
         # TODO make new line aware \n \r\n \0a etc
-        if self._is_bytes():
-            data = self.state.decode()
-        else:
-            data = self.state
-        self.state = "".join(re.findall(r"\|(.+)\|", data))
+        self.state = "".join(re.findall(r"\|(.+)\|", self._convert_to_str()))
         return self
 
     def url_encode(self, safe: str = ""):
@@ -341,7 +346,7 @@ class DataFormat(Core):
         self.state = _urllib_unquote_plus(self._convert_to_str())
         return self
 
-    def bytearray_to_str(self, encoding: str='utf8', errors: str='replace'):
+    def bytearray_to_str(self, encoding: str = "utf8", errors: str = "replace"):
         """Convert a python bytearray to string
         
         Args:
@@ -358,7 +363,7 @@ class DataFormat(Core):
             self.state = self.state.decode(encoding, errors=errors)
             return self
         else:
-            raise TypeError('State is not a bytearray')
+            raise TypeError("State is not a bytearray")
 
     def get_by_index(self, index: int):
         """Get an item by specifying an index
@@ -385,4 +390,5 @@ class DataFormat(Core):
             self.state = self.state.get(key)
             return self
         else:
-            raise TypeError('State is not a dictionary')
+            raise TypeError("State is not a dictionary")
+

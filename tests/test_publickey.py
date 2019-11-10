@@ -5,7 +5,7 @@ path = str(Path().absolute() / "tests/files/test.pem")
 
 
 def test_parse_x509_pem():
-    assert Chepy(path, True).parse_x509_pem().o == {
+    assert Chepy(path).load_file().parse_x509_pem().o == {
         "version": 0,
         "serial": 16349711528102141469,
         "algo": b"sha256WithRSAEncryption",
@@ -35,8 +35,8 @@ def test_parse_x509_pem():
 
 def test_parse_x509_der_hex():
     assert Chepy(
-        str(Path().absolute() / "tests/files/test.der"), True
-    ).parse_x509_der_hex().o == {
+        str(Path().absolute() / "tests/files/test.der")
+    ).load_file().parse_x509_der_hex().o == {
         "version": 0,
         "serial": 16349711528102141469,
         "algo": b"sha256WithRSAEncryption",
@@ -65,12 +65,12 @@ def test_parse_x509_der_hex():
 
 
 def test_pem_to_der():
-    assert Chepy(path, True).pem_to_der_hex().to_hex().o.decode()[0:6] == "308202"
+    assert Chepy(path).load_file().pem_to_der_hex().to_hex().o.decode()[0:6] == "308202"
 
 
 def test_der_hex_to_pem():
     assert (
-        Chepy(str(Path().absolute() / "tests/files/test.der"), True)
+        Chepy(str(Path().absolute() / "tests/files/test.der")).load_file()
         .der_hex_to_pem()
         .o.decode()
         == """-----BEGIN CERTIFICATE-----

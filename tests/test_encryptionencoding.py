@@ -23,7 +23,8 @@ def test_xor_hex():
 
 def test_xor_binary():
     assert (
-        Chepy("./tests/files/hello", True)
+        Chepy("./tests/files/hello")
+        .load_file()
         .to_hex()
         .xor("A", "utf")
         .to_hex()

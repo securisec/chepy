@@ -1,5 +1,6 @@
 import sys
 import inspect
+import fire
 from docstring_parser import parse as _parse_doc
 from chepy import Chepy
 from chepy.modules.internal.cli import get_cli_options
@@ -42,5 +43,24 @@ def test_options():
             raise
     return options
 
+
 def test_cli_options():
     get_cli_options()
+
+
+# todo
+def test_fire1():
+    assert fire.Fire(Chepy, command=["A", "-", "to_hex", "o"]) == b"41"
+
+
+def test_fire2():
+    assert (
+        fire.Fire(Chepy, command=["abc", "-", "hmac_hash", "--digest", "md5"]).o
+        == "dd2701993d29fdd0b032c233cec63403"
+    )
+
+
+def test_fire3():
+    fire_obj = fire.Fire(Chepy, command=["abc", "-", "hmac_hash", "--digest", "md5"])
+    assert type(fire_obj) == Chepy
+

@@ -12,23 +12,22 @@ from .modules.exceptions import PrintException
 
 
 class Core(object):
-    def __init__(self, data: str, is_file: bool = False):
-        self.state = data
-        self._is_file = is_file
+    def __init__(self, *data):
+        self.current_states = dict(list(enumerate(data)))
+        self._current_index = 0
 
-        if self._is_file:
-            path = pathlib.Path(self.state).expanduser().absolute()
-            try:
-                with open(path, "r") as f:
-                    self.state = f.read()
-            except UnicodeDecodeError:
-                with open(path, "rb") as f:
-                    self.state = bytearray(f.read())
+    @property
+    def state(self):
+        return self.current_states[self._current_index]
+
+    @state.setter
+    def state(self, val):
+        self.current_states[self._current_index] = val
 
     def __str__(self):
         try:
             if isinstance(self.state, bytearray):
-                return 'bytearray in state'
+                return "bytearray in state"
             else:
                 return self._convert_to_str()
         except:
@@ -37,13 +36,24 @@ class Core(object):
                 "another method, or use one of the output methods "
                 "Example: .o, .output, .state or .out()\n\n"
             )
-            return ''
+            return ""
 
-    def _is_bytes(self):
-        return isinstance(self.state, bytes)
-
-    def _is_str(self):
-        return isinstance(self.state, str)
+    def change_index(self, index: int):
+        """Change current state index
+        
+        Args:
+            index (int): Index of new state
+        
+        Raises:
+            TypeError: If specified index does not exist
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if index > len(self.current_states):
+            raise TypeError("Specified index does not exist")
+        self._current_index = index
+        return self
 
     def _convert_to_bytes(self):
         if isinstance(self.state, bytes):
@@ -237,6 +247,21 @@ class Core(object):
             )
         else:
             self.state = res.text
+        return self
+
+    def load_file(self):
+        """If a path is provided, read the file
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        path = pathlib.Path(self.state).expanduser().absolute()
+        try:
+            with open(path, "r") as f:
+                self.current_states[self._current_index] = f.read()
+        except UnicodeDecodeError:
+            with open(path, "rb") as f:
+                self.current_states[self._current_index] = bytearray(f.read())
         return self
 
     def write_to_file(self, file_path: str, as_binary: bool = False) -> None:

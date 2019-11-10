@@ -56,7 +56,8 @@ def test_search():
 
 def test_remove_nullbytes():
     assert (
-        Chepy("./tests/files/hello", True)
+        Chepy("./tests/files/hello")
+        .load_file()
         .remove_nullbytes()
         .binary_to_hex()
         .o[0:4]

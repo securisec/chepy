@@ -127,7 +127,8 @@ def test_normalize_hex():
     assert Chepy("41:42:CE").normalize_hex().o == "4142CE"
     assert Chepy("0x410x420xce").normalize_hex().o == "4142ce"
     assert (
-        Chepy("tests/files/hello", True).normalize_hex(True).o[0:6].decode() == "cffaed"
+        Chepy("tests/files/hello").load_file().normalize_hex(True).o[0:6].decode()
+        == "cffaed"
     )
 
 
@@ -142,3 +143,6 @@ def test_get_by_index():
 def test_get_by_key():
     assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == "data"
 
+
+def test_int_to_str():
+    assert Chepy(41).int_to_str().o == "41"

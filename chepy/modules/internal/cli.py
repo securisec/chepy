@@ -105,7 +105,33 @@ def cli_state_type(fire: object):
         print(type(fire))
 
 
-def cli_type_attr(fire: object, attr: str):
+def cli_get_state(fire: object, index: int):
+    """Change the current state
+    
+    Args:
+        fire (object): The fire object
+        index (int): The index for the state
+    """
+    if fire is not None and isinstance(fire, Chepy):
+        fire.change_index = index
+        print("State is now: ", fire.change_index)
+    else:
+        print(type(fire))
+
+
+def cli_show_states(fire: object):
+    """Change the current state
+    
+    Args:
+        fire (object): The fire object
+    """
+    if fire is not None and isinstance(fire, Chepy):
+        print(fire.current_states)
+    else:
+        print(type(fire))
+
+
+def cli_get_attr(fire: object, attr: str):
     """Get attributes from current state type
     
     Args:
@@ -115,7 +141,7 @@ def cli_type_attr(fire: object, attr: str):
     if fire is not None and not isinstance(fire, Chepy):
         print(getattr(fire, attr)())
     else:
-        print('nope')
+        print("nope")
 
 
 def cli_exit(fire: object):
@@ -125,3 +151,6 @@ def cli_exit(fire: object):
         fire (object): The fire object
     """
     exit()
+
+
+# todo add some colors to markers for cli function output
