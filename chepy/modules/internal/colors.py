@@ -1,5 +1,7 @@
 import sys
-from colorama import Fore
+from colorama import Fore, init
+
+init(convert=True)
 
 
 def Color_RED(s):

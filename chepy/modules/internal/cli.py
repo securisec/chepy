@@ -2,6 +2,9 @@ import sys
 import inspect
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.styles import Style
+from prompt_toolkit.formatted_text import FormattedText
 
 from chepy import Chepy
 
@@ -93,6 +96,11 @@ def get_cli_options():
     return options
 
 
+def print_in_colors(out):
+    style = Style.from_dict({"cli_out": "fg:#ffb4ad"})
+    print_formatted_text(FormattedText([("class:cli_out", str(out))]), style=style)
+
+
 def cli_state_type(fire: object):
     """Get the current state type
     
@@ -100,7 +108,7 @@ def cli_state_type(fire: object):
         fire (object): The fire object
     """
     if fire is not None and isinstance(fire, Chepy):
-        print(type(fire.state))
+        print_in_colors(type(fire.state))
     else:
         print(type(fire))
 
@@ -113,8 +121,7 @@ def cli_get_state(fire: object, index: int):
         index (int): The index for the state
     """
     if fire is not None and isinstance(fire, Chepy):
-        fire.change_index = index
-        print("State is now: ", fire.change_index)
+        print_in_colors(fire.states[int(0)])
     else:
         print(type(fire))
 
@@ -126,7 +133,7 @@ def cli_show_states(fire: object):
         fire (object): The fire object
     """
     if fire is not None and isinstance(fire, Chepy):
-        print(fire.current_states)
+        print_in_colors(fire.states)
     else:
         print(type(fire))
 
@@ -139,7 +146,7 @@ def cli_get_attr(fire: object, attr: str):
         attr (str): A valid attr name
     """
     if fire is not None and not isinstance(fire, Chepy):
-        print(getattr(fire, attr)())
+        print_in_colors(getattr(fire, attr)())
     else:
         print("nope")
 

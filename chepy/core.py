@@ -13,16 +13,16 @@ from .modules.exceptions import PrintException
 
 class Core(object):
     def __init__(self, *data):
-        self.current_states = dict(list(enumerate(data)))
+        self.states = dict(list(enumerate(data)))
         self._current_index = 0
 
     @property
     def state(self):
-        return self.current_states[self._current_index]
+        return self.states[self._current_index]
 
     @state.setter
     def state(self, val):
-        self.current_states[self._current_index] = val
+        self.states[self._current_index] = val
 
     def __str__(self):
         try:
@@ -38,8 +38,8 @@ class Core(object):
             )
             return ""
 
-    def change_index(self, index: int):
-        """Change current state index
+    def change_state(self, index: int):
+        """Change current state by index
         
         Args:
             index (int): Index of new state
@@ -50,7 +50,7 @@ class Core(object):
         Returns:
             Chepy: The Chepy object.
         """
-        if index > len(self.current_states):
+        if index > len(self.states):
             raise TypeError("Specified index does not exist")
         self._current_index = index
         return self
@@ -258,10 +258,10 @@ class Core(object):
         path = pathlib.Path(self.state).expanduser().absolute()
         try:
             with open(path, "r") as f:
-                self.current_states[self._current_index] = f.read()
+                self.states[self._current_index] = f.read()
         except UnicodeDecodeError:
             with open(path, "rb") as f:
-                self.current_states[self._current_index] = bytearray(f.read())
+                self.states[self._current_index] = bytearray(f.read())
         return self
 
     def write_to_file(self, file_path: str, as_binary: bool = False) -> None:

@@ -1,9 +1,10 @@
 import codecs
 import string
-import re
 import itertools
 import base64
 import binascii
+import jwt
+import regex as re
 
 from ..core import Core
 
@@ -105,4 +106,28 @@ class EncryptionEncoding(Core):
                 xor.append(char ^ key_val)
 
         self.state = xor
+        return self
+
+    def jwt_decode(self):
+        """Decode a JWT token. Does not verify
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = jwt.decode(self._convert_to_str(), verify=False)
+        return self
+
+    def jwt_verify(self, secret: str, algorithm: list = ["HS256"]):
+        """Verify JWT token
+        
+        Args:
+            secret (str): Secret key for token
+            algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"]
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = jwt.decode(
+            self._convert_to_str(), key=secret, algorithms=algorithm
+        )
         return self

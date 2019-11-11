@@ -91,3 +91,15 @@ def test_slick():
 def test_find_replace():
     assert Chepy("some some data").find_replace(r"some\s", "data").o == "datadatadata"
 
+
+def test_escape_string():
+    assert Chepy("$ome' d@ta").escape_string().o == "\\$ome'\\ d@ta"
+
+
+def test_unescape_string():
+    assert Chepy("\\$ome' d@ta").unescape_string().o == "$ome' d@ta"
+
+
+def test_color_hex_to_rgb():
+    assert Chepy("ffb4ad").color_hex_to_rgb().o == (255, 180, 173)
+

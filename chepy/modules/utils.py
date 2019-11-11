@@ -299,3 +299,32 @@ class Utils(Core):
             flags = re.IGNORECASE
         self.state = re.sub(pattern, repl, self._convert_to_str(), flags=flags)
         return self
+
+    def escape_string(self):
+        """Escape all special characters in a string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.escape(self._convert_to_str())
+        return self
+
+    def unescape_string(self):
+        """Unescape \\ from a string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.sub(r"\\", "", self._convert_to_str())
+        return self
+
+    def color_hex_to_rgb(self):
+        """Convert hex color to rgb
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = tuple(
+            int(self._convert_to_str().strip("#")[i : i + 2], 16) for i in (0, 2, 4)
+        )
+        return self

@@ -31,3 +31,33 @@ def test_xor_binary():
         .o.decode()[0:6]
         == "222727"
     )
+
+
+def test_jwt_decode():
+    assert (
+        Chepy(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmF\
+            tZSI6IkFtYXppbmcgSGF4eDByIiwiZXhwIjoiMTQ2NjI3MDcyMiIsImFkbWluIjp0\
+                cnVlfQ.UL9Pz5HbaMdZCV9cS9OcpccjrlkcmLovL2A2aiKiAOY"
+        )
+        .jwt_decode()
+        .o
+        == {
+            "sub": "1234567890",
+            "name": "Amazing Haxx0r",
+            "exp": "1466270722",
+            "admin": True,
+        }
+    )
+
+
+def test_jwt_verify():
+    assert (
+        Chepy(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb21lIjoicGF5bG9hZCJ9.4twFt5N\
+            iznN84AWoo1d7KO1T_yoc0Z6XOpOVswacPZg"
+        )
+        .jwt_verify("secret")
+        .o
+        == {"some": "payload"}
+    )

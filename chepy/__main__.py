@@ -79,7 +79,15 @@ def get_options():
 def prompt_message(fire_obj):
     elements = [("class:name", "[Chepy {version}] ".format(version=__version__))]
     try:
-        elements.append(("class:state_index", str(fire_obj._current_index) + " "))
+        elements.append(
+            (
+                "class:state_index",
+                str(fire_obj._current_index)
+                + "/"
+                + str(len(fire_obj.current_states) - 1)
+                + " ",
+            )
+        )
     except AttributeError:
         pass
     elements.append(("class:name", "# "))
@@ -166,8 +174,9 @@ def parse_args(args):
 def main():
     global fire_obj
     args = parse_args(sys.argv[1:])
+    args_data = args.data
 
-    args.data.append("-")
+    args_data.append("-")
 
     history_file = str(Path(gettempdir() + "/chepy"))
     session = PromptSession(
@@ -206,11 +215,10 @@ def main():
                             fire.decorators.ACCEPTS_POSITIONAL_ARGS,
                             False,
                         )
-                args.data += prompt.split()
-                if args.data[-1] != "-":
-                    args.data.append("-")
-                print("args.data", args.data)
-                fire_obj = fire.Fire(Chepy, command=args.data)
+                args_data += prompt.split()
+                if args_data[-1] != "-":
+                    args_data.append("-")
+                fire_obj = fire.Fire(Chepy, command=args_data)
     except KeyboardInterrupt:
         print("OKBye")
         exit()

@@ -16,3 +16,4 @@ requests
 pydash
 colorama
 decorator
+pyjwt
