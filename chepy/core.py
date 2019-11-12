@@ -6,7 +6,8 @@ import json as pyjson
 import pyperclip
 import requests
 import logging
-from typing import Any
+import inspect
+from typing import Any, Tuple, List, Union
 import regex as re
 from .modules.exceptions import PrintException
 
@@ -37,6 +38,64 @@ class Core(object):
                 "Example: .o, .output, .state or .out()\n\n"
             )
             return ""
+
+    def fork(self, methods: List[Tuple[Union[str, object], dict]]):
+        """Run multiple methods on all available states
+        
+        Args:
+            methods (List[Tuple[Union[str, object], dict]]): Method names in a list
+                of tuples.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            This method takes an array of method names and their args as an list of 
+            tuples; the first value of the tuple is the method name as either a string, 
+            or as an object, and the second value is a ditionary of arguments. 
+
+            >>> from chepy import Chepy
+            >>> c = Chepy("some", "data")
+            >>> c.fork([("to_hex",), ("hmac_hash", {"secret_key": "key"})])
+            >>> # this is how to use fork methods with a string
+            >>> c.fork([(c.to_hex,), (c.hmac_hash, {"secret_key": "key"})])
+            >>> # This is how to use fork using methods
+            >>> print(c.states)
+            {0: 'e46dfcf050c0a0d135b73856ab8e3298f9cc4105', 1: '1863d1542629590e3838543cbe3bf6a4f7c706ff'}
+        """
+        for i in self.states:
+            self.change_state(i)
+            for method in methods:
+                if type(method[0]).__name__ == "method":
+                    method_name = method[0].__name__
+                elif isinstance(method[0], str):
+                    method_name = method[0]
+                if len(method) > 1:
+                    self.states[i] = getattr(self, method_name)(**method[1]).o
+                else:
+                    self.states[i] = getattr(self, method_name)().o
+        return self
+
+    def create_state(self):
+        """Create a new empty state
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.states[len(self.states)] = {}
+        return self
+
+    def copy_state(self, index: int):
+        """Copy the current state to a new state
+        
+        Args:
+            index (int): Index of new state
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.states[index] = self.states.get(self._current_index)
+        return self
 
     def change_state(self, index: int):
         """Change current state by index

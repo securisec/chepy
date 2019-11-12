@@ -54,19 +54,13 @@ class DataFormat(Core):
         self.state = json.dumps(self.state)
         return self
 
-    def yaml_to_json(self, safe: bool = True):
+    def yaml_to_json(self):
         """Convert yaml to a json string
-        
-        Args:
-            safe (bool, optional): If only safe fields should be parsed, by default True
         
         Returns:
             Chepy: The Chepy object.
         """
-        if safe:
-            self.state = json.dumps(yaml.safe_load(self.state))
-        else:
-            self.state = json.dumps(yaml.load(self.state))
+        self.state = json.dumps(yaml.safe_load(self.state))
         return self
 
     def json_to_yaml(self):
