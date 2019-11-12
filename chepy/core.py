@@ -55,6 +55,39 @@ class Core(object):
         self._current_index = index
         return self
 
+    def subsection(self, pattern: str, group: int = 0):
+        """Choose a subsection from current state as string 
+
+        The preceeding methods will only run on the subsection and 
+        not the original state. Group capture is supported. 
+        
+        Args:
+            pattern (str): Pattern to match.
+            group (int, optional): Group to match. Defaults to 0.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.search(pattern, self._convert_to_str()).group(group)
+        return self
+
+    def get_state(self, index: int) -> Any:
+        """Returns the value of the specified state. 
+
+        This method does not chain with other methods of Chepy
+        
+        Args:
+            index (int): The index of the state
+        
+        Returns:
+            Any: Any value that is in the specified state
+        """
+        return self.states.get(index)
+
+    # def fork_state(self):
+    #     # todo run methods on all states
+    #     pass
+
     def _convert_to_bytes(self):
         if isinstance(self.state, bytes):
             return self.state

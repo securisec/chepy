@@ -43,11 +43,21 @@ def test_jwt_decode():
         .jwt_decode()
         .o
         == {
-            "sub": "1234567890",
-            "name": "Amazing Haxx0r",
-            "exp": "1466270722",
-            "admin": True,
+            "payload": {
+                "sub": "1234567890",
+                "name": "Amazing Haxx0r",
+                "exp": "1466270722",
+                "admin": True,
+            },
+            "header": {"alg": "HS256", "typ": "JWT"},
         }
+    )
+
+
+def test_jwt_sign():
+    assert (
+        Chepy({"some": "payload"}).jwt_sign("secret", "HS512").o.decode()
+        == "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
     )
 
 

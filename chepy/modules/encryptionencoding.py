@@ -4,6 +4,8 @@ import itertools
 import base64
 import binascii
 import jwt
+import pathlib
+import json
 import regex as re
 
 from ..core import Core
@@ -114,7 +116,10 @@ class EncryptionEncoding(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = jwt.decode(self._convert_to_str(), verify=False)
+        self.state = {
+            "payload": jwt.decode(self._convert_to_str(), verify=False),
+            "header": jwt.get_unverified_header(self._convert_to_str()),
+        }
         return self
 
     def jwt_verify(self, secret: str, algorithm: list = ["HS256"]):
@@ -131,3 +136,54 @@ class EncryptionEncoding(Core):
             self._convert_to_str(), key=secret, algorithms=algorithm
         )
         return self
+
+    def jwt_sign(self, secret: str, algorithms: str = "HS256"):
+        """Sign a json/dict object in JWT
+        
+        Args:
+            secret (str): Secret to sign with
+            algorithms (str, optional): Signing algorithm. Defaults to "HS256".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if isinstance(self.state, dict):
+            data = self.state
+        elif isinstance(self.state, str):
+            data = json.loads(self.state)
+        self.state = jwt.encode(data, key=secret, algorithm=algorithms)
+        return self
+
+    def jwt_bruteforce(
+        self, wordlist: str, b64_encode: bool = False, algorithm: list = ["HS256"]
+    ):
+        """Brute force JWT token secret
+
+        This method will use the provided wordlist to try and bruteforce the 
+        verification.
+        
+        Args:
+            wordlist (str): Path to a wordlist
+            b64_encode (bool, optional): Encoded the words in base64. Defaults to False.
+            algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"].
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        with open(pathlib.Path(wordlist).expanduser().absolute()) as words:
+            for word in words:
+                try:
+                    word = word.strip()
+                    if b64_encode:
+                        word = base64.b64encode(word)
+                    j = jwt.decode(self._convert_to_str(), word, algorithms=algorithm)
+                    self.state = {
+                        "paylod": j,
+                        "header": jwt.get_unverified_header(self._convert_to_str()),
+                        "secret": word,
+                    }
+                    return self
+                except jwt.InvalidSignatureError:
+                    continue
+            else:
+                return self
