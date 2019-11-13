@@ -17,3 +17,5 @@ pydash
 colorama
 decorator
 pyjwt
+parsel
+jsonpath-rw

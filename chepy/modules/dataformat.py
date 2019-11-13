@@ -359,30 +359,3 @@ class DataFormat(Core):
         else:
             raise TypeError("State is not a bytearray")
 
-    def get_by_index(self, index: int):
-        """Get an item by specifying an index
-        
-        Args:
-            index (int): Index number to get
-        
-        Returns:
-            Chepy: The Chepy object.
-        """
-        self.state = self.state[index]
-        return self
-
-    def get_by_key(self, key: str):
-        """Get an object from a dict by key
-        
-        Args:
-            key (str): A valid key
-        
-        Returns:
-            Chepy: The Chepy object.
-        """
-        if isinstance(self.state, dict):
-            self.state = self.state.get(key)
-            return self
-        else:
-            raise TypeError("State is not a dictionary")
-

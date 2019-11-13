@@ -51,3 +51,7 @@ def test_load_buffer():
     c = Chepy("A").save_buffer(0).to_hex().save_buffer(0)
     assert c.buffers[0] == b"41"
 
+
+def test_http_request():
+    assert Chepy("https://example.com").http_request().get_by_key("status").o == 200
+

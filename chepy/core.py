@@ -116,7 +116,7 @@ class Core(object):
         self._current_index = index
         return self
 
-    def save_buffer(self, index: int):
+    def save_buffer(self, index: int = None):
         """Save current state in a buffer 
 
         Buffers are temporary holding areas for anything that is in the state. 
@@ -125,12 +125,15 @@ class Core(object):
         the state. 
         
         Args:
-            index (int): The index to save the state in
+            index (int, optional): The index to save the state in, defaults to next index if None
         
         Returns:
             Chepy: The Chepy object. 
         """
-        self.buffers[index] = self.state
+        if index is not None:
+            self.buffers[index] = self.state
+        else:
+            self.buffers[len(self.buffers)] = self.state
         return self
 
     def load_buffer(self, index: int):
@@ -269,6 +272,33 @@ class Core(object):
         """
         return self._convert_to_bytes()
 
+    def get_by_index(self, index: int):
+        """Get an item by specifying an index
+        
+        Args:
+            index (int): Index number to get
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self.state[index]
+        return self
+
+    def get_by_key(self, key: str):
+        """Get an object from a dict by key
+        
+        Args:
+            key (str): A valid key
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(self.state, dict):
+            self.state = self.state.get(key)
+            return self
+        else:
+            raise TypeError("State is not a dictionary")
+
     def copy_to_clipboard(self) -> None:
         """Copy to clipboard
         
@@ -320,7 +350,7 @@ class Core(object):
         self,
         method: str = "GET",
         params: dict = {},
-        json: dict = {},
+        json: dict = None,
         headers: dict = {},
         cookies: dict = {},
     ):
@@ -332,7 +362,7 @@ class Core(object):
         Args:
             method (str, optional): Request method. Defaults to 'GET'.
             params (dict, optional): Query Args. Defaults to {}.
-            json (dict, optional): JSON request payload. Defaults to {}.
+            json (dict, optional): Request payload. Defaults to None.
             headers (dict, optional): Headers for request. Defaults to {}.
             cookies (dict, optional): Cookies for request. Defaults to {}.
         
@@ -353,7 +383,6 @@ class Core(object):
                 raise NotImplementedError
 
         params = json2str(params)
-        json = json2str(json)
         headers = json2str(headers)
         cookies = json2str(cookies)
         res = requests.request(
@@ -364,12 +393,11 @@ class Core(object):
             headers=headers,
             cookies=cookies,
         )
-        if res.status_code != 200:
-            raise requests.RequestException(
-                "Not a 200 status code {}".format(res.status_code)
-            )
-        else:
-            self.state = res.text
+        self.state = {
+            "body": res.text,
+            "status": res.status_code,
+            "headers": res.headers,
+        }
         return self
 
     def load_file(self):

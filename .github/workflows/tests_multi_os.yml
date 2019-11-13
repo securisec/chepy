@@ -24,7 +24,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest --disable-pytest-warnings
     - name: Test docs
       run: |
         pip install sphinx
@@ -52,7 +52,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest --disable-pytest-warnings
     - name: Test docs
       run: |
         pip install sphinx
@@ -80,7 +80,7 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        pytest --disable-pytest-warnings
     - name: Test docs
       run: |
         pip install sphinx

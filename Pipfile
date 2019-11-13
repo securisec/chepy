@@ -1,0 +1,32 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pyperclip = "==1.6.5"
+hexdump = "==3.3"
+hashid = "==3.1.4"
+base58 = "==1.0.3"
+pycryptodome = "==3.9.0"
+fire = "==0.2.1"
+crccheck = "==0.6"
+regex = "==2019.8.19"
+emoji = "==0.5.4"
+pyopenssl = "==19.0.0"
+ua-parser = "==0.8.0"
+pyyaml = "==5.1.2"
+docstring-parser = "==0.3"
+requests = "==2.22.0"
+requests-toolbelt = "==0.9.1"
+pydash = "==4.7.5"
+colorama = "==0.3.9"
+decorator = "==4.4.0"
+pyjwt = "==1.7.1"
+parsel = "==1.5.2"
+jsonpath-rw = "==1.4.0"
+
+[requires]
+python_version = "3.7"

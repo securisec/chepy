@@ -33,10 +33,16 @@ def get_style():
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
-            "name": "#00ffff",
+            "name1": "#00ffff bold",
+            "name2": "#ff0000 bold",
+            "name3": "#ffd700 bold",
             "state_index": "#ffd700",
             "file": "#00ff48",
             "rprompt": "fg:#00ff48",
+            "bottom-toolbar": "#000000",
+            "bt_version": "bg:#00ff48",
+            "bt_states": "bg:#60cdd5",
+            "bt_buffers": "bg:#ea9972",
         }
     )
 
@@ -77,7 +83,7 @@ def get_options():
 
 
 def prompt_message(fire_obj):
-    elements = [("class:name", "[Chepy {version}] ".format(version=__version__))]
+    elements = [("class:name1", ">"), ("class:name2", ">"), ("class:name3", ">")]
     try:
         elements.append(
             (
@@ -90,8 +96,22 @@ def prompt_message(fire_obj):
         )
     except AttributeError:
         pass
-    elements.append(("class:name", "# "))
+    elements.append(("class:name", " "))
     return elements
+
+
+def bottom_toolbar(fire_obj):
+    states = len(fire_obj.states) - 1 if fire_obj is not None else 0
+    current_state = fire_obj._current_index if fire_obj is not None else 0
+    buffers = len(fire_obj.buffers) if fire_obj is not None else 0
+    return [
+        ("class:bt_version", "Chepy: {} ".format(__version__)),
+        (
+            "class:bt_states",
+            "States: {current}/{total} ".format(current=current_state, total=states),
+        ),
+        ("class:bt_buffers", "Buffers: {total} ".format(total=buffers)),
+    ]
 
 
 class CustomValidator(Validator):
@@ -186,6 +206,7 @@ def main():
         while True:
             prompt = session.prompt(
                 prompt_message(fire_obj=fire_obj),
+                bottom_toolbar=bottom_toolbar(fire_obj),
                 completer=FuzzyCompleter(
                     merge_completers([CustomCompleter(), chepy_cli.CliCompleter()])
                 ),
