@@ -14,7 +14,7 @@ Chepy
    :caption: Contents:
 
    chepy.rst
-
+   cli.rst
 
 
 Indices and tables

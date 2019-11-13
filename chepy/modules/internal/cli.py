@@ -1,5 +1,6 @@
 import sys
 import inspect
+from pprint import pformat
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import print_formatted_text
@@ -126,14 +127,34 @@ def cli_get_state(fire: object, index: int):
         print(type(fire))
 
 
-def cli_show_states(fire: object):
+def cli_show_states(fire: object, pretty: bool = False):
     """Change the current state
     
     Args:
         fire (object): The fire object
+        pretty (bool): Pretty print output. Defaults to False
     """
     if fire is not None and isinstance(fire, Chepy):
-        print_in_colors(fire.states)
+        if pretty:
+            print_in_colors(pformat(fire.states))
+        else:
+            print_in_colors(fire.states)
+    else:
+        print(type(fire))
+
+
+def cli_show_buffers(fire: object, pretty: bool = False):
+    """Show all current buffers
+    
+    Args:
+        fire (object): The fire object
+        pretty (bool): Pretty print output. Defaults to False
+    """
+    if fire is not None and isinstance(fire, Chepy):
+        if pretty:
+            print_in_colors(pformat(fire.buffers))
+        else:
+            print_in_colors(fire.buffers)
     else:
         print(type(fire))
 

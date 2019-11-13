@@ -7,8 +7,9 @@ import pyperclip
 import requests
 import logging
 import inspect
-from typing import Any, Tuple, List, Union
 import regex as re
+from typing import Any, Tuple, List, Union
+
 from .modules.exceptions import PrintException
 
 
@@ -16,6 +17,7 @@ class Core(object):
     def __init__(self, *data):
         self.states = dict(list(enumerate(data)))
         self._current_index = 0
+        self.buffers = dict()
 
     @property
     def state(self):
@@ -112,6 +114,35 @@ class Core(object):
         if index > len(self.states):
             raise TypeError("Specified index does not exist")
         self._current_index = index
+        return self
+
+    def save_buffer(self, index: int):
+        """Save current state in a buffer 
+
+        Buffers are temporary holding areas for anything that is in the state. 
+        The state can change, but the buffer does not. Can be chained with other 
+        methods. Use in conjunction with `load_buffer` to load buffer back into 
+        the state. 
+        
+        Args:
+            index (int): The index to save the state in
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.buffers[index] = self.state
+        return self
+
+    def load_buffer(self, index: int):
+        """Load the specified buffer into state
+        
+        Args:
+            index (int): Index key of an existing buffer
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self.buffers[index]
         return self
 
     def subsection(self, pattern: str, group: int = 0):
