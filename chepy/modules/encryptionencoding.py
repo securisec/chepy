@@ -8,6 +8,10 @@ import pathlib
 import json
 import regex as re
 
+from Crypto.Util.Padding import pad, unpad
+from Crypto.Cipher import ARC4
+from Crypto.Cipher import DES, DES3, AES
+
 from ..core import Core
 
 
@@ -187,3 +191,392 @@ class EncryptionEncoding(Core):
                     continue
             else:
                 return self
+
+    def rc4_encrypt(self, key: str, hex_key: bool = False):
+        """Encrypt raw state with RC4
+        
+        Args:
+            key (str): Secret key
+            hex_key (bool, optional): If key is in hex. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if hex_key:
+            key = binascii.unhexlify(key)
+        if isinstance(key, str):
+            key = key.encode()
+        cipher = ARC4.new(key)
+        self.state = binascii.hexlify(cipher.encrypt(self._convert_to_bytes()))
+        return self
+
+    def rc4_decrypt(self, key: str, hex_key: bool = False):
+        """Decrypt raw state with RC4
+        
+        Args:
+            key (str): Secret key
+            hex_key (bool, optional): If key is in hex. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if hex_key:
+            key = binascii.unhexlify(key)
+        if isinstance(key, str):
+            key = key.encode()
+        cipher = ARC4.new(key)
+        self.state = cipher.decrypt(self._convert_to_bytes())
+        return self
+
+    def des_encrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Encrypt raw state with DES
+
+        DES is a previously dominant algorithm for encryption, and was published 
+        as an official U.S. Federal Information Processing Standard (FIPS). It is 
+        now considered to be insecure due to its small key size. DES uses a key 
+        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes. 
+        You can generate a password-based key using one of the KDF operations. 
+        The Initialization Vector should be 8 bytes long. If not entered, it will 
+        default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '0000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = DES.new(key, mode=DES.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "ECB":
+            cipher = DES.new(key, mode=DES.MODE_ECB)
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "CTR":
+            cipher = DES.new(key, mode=DES.MODE_CTR, nonce=b"")
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+        elif mode == "OFB":
+            cipher = DES.new(key, mode=DES.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+
+    def des_decrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Decrypt raw state encrypted with DES. 
+
+        DES is a previously dominant algorithm for encryption, and was published 
+        as an official U.S. Federal Information Processing Standard (FIPS). It is 
+        now considered to be insecure due to its small key size. DES uses a key 
+        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes. 
+        You can generate a password-based key using one of the KDF operations. 
+        The Initialization Vector should be 8 bytes long. If not entered, it will 
+        default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '0000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = DES.new(key, mode=DES.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "ECB":
+            cipher = DES.new(key, mode=DES.MODE_ECB)
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "CTR":
+            cipher = DES.new(key, mode=DES.MODE_CTR, nonce=b"")
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "OFB":
+            cipher = DES.new(key, mode=DES.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+
+    def triple_des_encrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Encrypt raw state with Triple DES
+
+        Triple DES applies DES three times to each block to increase key size. Key: 
+        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length 
+        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one 
+        of the KDF operations. IV: The Initialization Vector should be 8 bytes long. 
+        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB 
+        mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '0000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "ECB":
+            cipher = DES3.new(key, mode=DES3.MODE_ECB)
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "CTR":
+            cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+        elif mode == "OFB":
+            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+
+    def triple_des_decrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Decrypt raw state encrypted with DES. 
+
+        Triple DES applies DES three times to each block to increase key size. Key: 
+        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length 
+        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one 
+        of the KDF operations. IV: The Initialization Vector should be 8 bytes long. 
+        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB 
+        mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '0000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "ECB":
+            cipher = DES3.new(key, mode=DES3.MODE_ECB)
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "CTR":
+            cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "OFB":
+            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+
+    def aes_encrypt(
+        self,
+        key: str,
+        iv: str = "00000000000000000000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Encrypt raw state with AES
+
+        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing 
+        Standard (FIPS). It was selected after a 5-year process where 15 competing 
+        designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
+        be used based on the size of the 
+        key:
+            16 bytes = AES-128
+            24 bytes = AES-192
+            32 bytes = AES-256
+        You can generate a password-based key using one of the KDF operations. 
+        IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
+        default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '00000000000000000000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = AES.new(key, mode=AES.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 16)))
+            return self
+        elif mode == "ECB":
+            cipher = AES.new(key, mode=AES.MODE_ECB)
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 16)))
+            return self
+        elif mode == "CTR":
+            cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+        elif mode == "GCM":
+            cipher = AES.new(
+                key,
+                mode=AES.MODE_GCM,
+                nonce=binascii.unhexlify("00000000000000000000000000000000"),
+            )
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+        elif mode == "OFB":
+            cipher = AES.new(key, mode=AES.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+
+    def aes_decrypt(
+        self,
+        key: str,
+        iv: str = "00000000000000000000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Decrypt raw state encrypted with DES. 
+
+        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing 
+        Standard (FIPS). It was selected after a 5-year process where 15 competing 
+        designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
+        be used based on the size of the 
+        key:
+            16 bytes = AES-128
+            24 bytes = AES-192
+            32 bytes = AES-256
+        You can generate a password-based key using one of the KDF operations. 
+        IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
+        default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '00000000000000000000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = AES.new(key, mode=AES.MODE_CBC, iv=binascii.unhexlify(iv))
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            return self
+        elif mode == "ECB":
+            cipher = AES.new(key, mode=AES.MODE_ECB)
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            return self
+        elif mode == "CTR":
+            cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "GCM":
+            cipher = AES.new(
+                key,
+                mode=AES.MODE_GCM,
+                nonce=binascii.unhexlify("00000000000000000000000000000000"),
+            )
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "OFB":
+            cipher = AES.new(key, mode=AES.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+

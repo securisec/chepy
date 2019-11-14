@@ -55,3 +55,13 @@ def test_load_buffer():
 def test_http_request():
     assert Chepy("https://example.com").http_request().get_by_key("status").o == 200
 
+
+def test_delete_state():
+    assert Chepy("lol").create_state().delete_state(1).states == {0: "lol"}
+
+
+def test_delete_buffer():
+    assert Chepy("lol").save_buffer().save_buffer().delete_buffer(0).states == {
+        0: "lol"
+    }
+

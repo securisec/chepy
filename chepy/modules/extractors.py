@@ -171,7 +171,7 @@ class Extractors(Core):
     def jpath_selector(self, query: str):
         """Query JSON with jpath query
 
-        `Reference<https://goessner.net/articles/JsonPath/index.html#e2>`__
+        `Reference <https://goessner.net/articles/JsonPath/index.html#e2>`__
         
         Args:
             query (str): Query. For reference, see the help

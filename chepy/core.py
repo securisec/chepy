@@ -116,6 +116,21 @@ class Core(object):
         self._current_index = index
         return self
 
+    def delete_state(self, index: int):
+        """Delete a state specified by the index
+        
+        Args:
+            index (int): Index of state
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        try:
+            del self.states[index]
+        except KeyError:
+            logging.warning("{} does not exist".format(index))
+        return self
+
     def save_buffer(self, index: int = None):
         """Save current state in a buffer 
 
@@ -146,6 +161,21 @@ class Core(object):
             Chepy: The Chepy object. 
         """
         self.state = self.buffers[index]
+        return self
+
+    def delete_buffer(self, index: int):
+        """Delete a buffer item
+        
+        Args:
+            index (int): Key of buffer item
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        try:
+            del self.buffers[index]
+        except KeyError:
+            logging.warning("{} does not exist".format(index))
         return self
 
     def subsection(self, pattern: str, group: int = 0):
