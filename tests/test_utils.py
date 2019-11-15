@@ -49,7 +49,12 @@ def test_lower_case():
 
 def test_search():
     assert (
-        len(Chepy("loLolololoL").regex_search("ol", ignore_case=True).str_to_list().o)
+        len(
+            Chepy("loLolololoL")
+            .regex_search("ol", ignore_case=True)
+            .str_list_to_list()
+            .o
+        )
         == 5
     )
 
@@ -71,7 +76,7 @@ def test_split_by():
 
 
 def test_unique():
-    assert len(Chepy('["a", "a", 1]').str_to_list().unique().o) == 2
+    assert len(Chepy('["a", "a", 1]').str_list_to_list().unique().o) == 2
 
 
 def test_sorted():
@@ -79,9 +84,9 @@ def test_sorted():
 
 
 def test_filter():
-    assert Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_to_list().filter_by(
+    assert Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_by(
         "b"
-    ).o == [{"b": 2}, {"a": 1, "b": 3},]
+    ).o == [{"b": 2}, {"a": 1, "b": 3}]
 
 
 def test_slick():

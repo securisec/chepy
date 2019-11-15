@@ -246,3 +246,53 @@ def test_aes_decrypt():
         == b"some data"
     )
 
+
+def test_blowfish_encrypt():
+    assert (
+        Chepy("some data").blowfish_encrypt("password").o
+        == b"d9b0a79853f13960fcee3cae16e27884"
+    )
+    assert (
+        Chepy("some data").blowfish_encrypt("password", mode="ECB").o
+        == b"d9b0a79853f139603951bff96c3d0dd5"
+    )
+    assert (
+        Chepy("some data").blowfish_encrypt("password", mode="CTR").o
+        == b"82bdcb75a4d655c63a"
+    )
+    assert (
+        Chepy("some data").blowfish_encrypt("password", mode="OFB").o
+        == b"82bdcb75a4d655c6f0"
+    )
+
+
+
+def test_blowfish_decrypt():
+    assert (
+        Chepy("d9b0a79853f13960fcee3cae16e27884")
+        .hex_to_str()
+        .blowfish_decrypt("password")
+        .o
+        == b"some data"
+    )
+    assert (
+        Chepy("d9b0a79853f139603951bff96c3d0dd5")
+        .hex_to_str()
+        .blowfish_decrypt("password", mode="ECB")
+        .o
+        == b"some data"
+    )
+    assert (
+        Chepy("82bdcb75a4d655c63a")
+        .hex_to_str()
+        .blowfish_decrypt("password", mode="CTR")
+        .o
+        == b"some data"
+    )
+    assert (
+        Chepy("82bdcb75a4d655c6f0")
+        .hex_to_str()
+        .blowfish_decrypt("password", mode="OFB")
+        .o
+        == b"some data"
+    )

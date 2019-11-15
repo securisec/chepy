@@ -43,6 +43,7 @@ def get_style():
             "bt_version": "bg:#00ff48",
             "bt_states": "bg:#60cdd5",
             "bt_buffers": "bg:#ea9972",
+            "bt_type": "bg:#ffd700",
         }
     )
 
@@ -101,17 +102,21 @@ def prompt_message(fire_obj):
 
 
 def bottom_toolbar(fire_obj):
-    states = len(fire_obj.states) - 1 if fire_obj is not None else 0
-    current_state = fire_obj._current_index if fire_obj is not None else 0
-    buffers = len(fire_obj.buffers) if fire_obj is not None else 0
-    return [
-        ("class:bt_version", "Chepy: {} ".format(__version__)),
-        (
-            "class:bt_states",
-            "States: {current}/{total} ".format(current=current_state, total=states),
-        ),
-        ("class:bt_buffers", "Buffers: {total} ".format(total=buffers)),
-    ]
+    if isinstance(fire_obj, Chepy):
+        states = len(fire_obj.states) - 1 if fire_obj is not None else 0
+        current_state = fire_obj._current_index if fire_obj is not None else 0
+        buffers = len(fire_obj.buffers) if fire_obj is not None else 0
+        return [
+            ("class:bt_version", "Chepy: {} ".format(__version__)),
+            (
+                "class:bt_states",
+                " States: {current}/{total} ".format(
+                    current=current_state, total=states
+                ),
+            ),
+            ("class:bt_buffers", " Buffers: {total} ".format(total=buffers)),
+            ("class:bt_type", " State: {} ".format(type(fire_obj.state).__name__)),
+        ]
 
 
 class CustomValidator(Validator):

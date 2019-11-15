@@ -1,5 +1,7 @@
 from OpenSSL import crypto as _pyssl_crypto
 from OpenSSL._util import lib as _pyssl_cryptolib
+from Crypto.PublicKey import RSA
+
 from ..core import Core
 
 
@@ -9,7 +11,7 @@ class Publickey(Core):
         
         X.509 is an ITU-T standard for a public key infrastructure (PKI) 
         and Privilege Management Infrastructure (PMI). It is commonly involved 
-        with SSL/TLS security.<br><br>This operation displays the contents of 
+        with SSL/TLS security. This operation displays the contents of 
         a certificate in a human readable format, similar to the openssl command line tool.
         
         Returns:
@@ -130,4 +132,31 @@ class Publickey(Core):
         self.state = _pyssl_crypto.dump_certificate(
             _pyssl_crypto.FILETYPE_PEM, cert_pem
         )
+        return self
+
+    def parse_public_pem(self):
+        """Parse pubkey PEM to get n and e
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        key = RSA.importKey(self.state)
+        self.state = {"n": key.n, "e": key.e}
+        return self
+
+    def parse_private_pem(self):
+        """Parse private key PEM
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        key = RSA.importKey(self.state)
+        self.state = {
+            "d": key.d,
+            "e": key.e,
+            "n": key.n,
+            "p": key.p,
+            "q": key.q,
+            "u": key.u,
+        }
         return self

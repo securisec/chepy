@@ -26,13 +26,25 @@ class DataFormat(Core):
         self.state = join_by.join(self.state)
         return self
 
-    def str_to_list(self):
+    def str_list_to_list(self):
         """Convert a string list to a list
         
         Returns:
             Chepy: The Chepy object.
         """
         self.state = json.loads(re.sub(r"'", '"', self._convert_to_str()))
+        return self
+
+    def join_list(self, by: str):
+        """Join a list with specified character
+        
+        Args:
+            by (str): What to join with
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = by.join(self.state)
         return self
 
     def json_to_dict(self):
@@ -359,3 +371,84 @@ class DataFormat(Core):
         else:
             raise TypeError("State is not a bytearray")
 
+    def str_to_list(self):
+        """Convert string to list
+
+        Converts the string in state to an array of individual characyers
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = list(self._convert_to_str())
+        return self
+
+    def to_charcode(self, escape_char: str = ""):
+        """Convert a string to a list of unicode charcode
+
+        Converts text to its unicode character code equivalent.
+        e.g. Γειά σου becomes 0393 03b5 03b9 03ac 20 03c3 03bf 03c5
+
+        Args:
+            escape_char (str, optional): Charcater to prepend with. Example \\u, u etc. 
+                Defaults to ''
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(
+            "{escape}{hex:02x}".format(escape=escape_char, hex=ord(x))
+            for x in list(self._convert_to_str())
+        )
+        return self
+
+    def from_charcode(self, prefix: str = ""):
+        """Convert array of unicode chars to string
+        
+        Args:
+            prefix (str, optional): Any prefix for the charcode. Ex: \\u or u. Defaults to "".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        out = []
+        for c in self.state:
+            c = re.sub(prefix, "", c)
+            out.append(chr(int(c, 16)))
+        self.state = out
+        return self
+
+    def to_decimal(self):
+        """Convert charactes to decimal
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = list(ord(s) for s in list(self._convert_to_str()))
+        return self
+
+    def from_decimal(self):
+        """Convert a list of decimal numbers to string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(chr(s) for s in self.state)
+        return self
+
+    def to_binary(self):
+        """Convert string characters to binary
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = list(format(ord(s), '08b') for s in list(self._convert_to_str()))
+        return self
+
+    def from_binary(self):
+        """Convert a list of binary numbers to string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(chr(int(s, 2)) for s in self.state)
+        return self

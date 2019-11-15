@@ -120,7 +120,7 @@ def test_url_decode():
 
 
 def test_to_list():
-    assert Chepy("[1,2,'lol', true]").str_to_list().o == [1, 2, "lol", True]
+    assert Chepy("[1,2,'lol', true]").str_list_to_list().o == [1, 2, "lol", True]
 
 
 def test_normalize_hex():
@@ -144,5 +144,38 @@ def test_get_by_key():
     assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == "data"
 
 
+def test_str_to_list():
+    assert Chepy("abc").str_to_list().o == ["a", "b", "c"]
+
+
 def test_int_to_str():
     assert Chepy(41).int_to_str().o == "41"
+
+
+def test_to_charcode():
+    assert Chepy("aㅎ").to_charcode().o == ["61", "314e"]
+
+
+def test_from_charcode():
+    assert Chepy(["314e", "61", "20", "41"]).from_charcode().o == ["ㅎ", "a", " ", "A"]
+
+
+def test_to_decimal():
+    assert Chepy("aㅎ").to_decimal().o == [97, 12622]
+
+
+def test_from_decimal():
+    assert Chepy([12622]).from_decimal().o == ["ㅎ"]
+
+
+def test_to_binary():
+    assert Chepy("abc").to_binary().o == ["01100001", "01100010", "01100011"]
+
+
+def test_from_binary():
+    assert Chepy(["01100001", "01100010", "01100011"]).from_binary().o == [
+        "a",
+        "b",
+        "c",
+    ]
+

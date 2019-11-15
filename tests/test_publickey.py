@@ -70,7 +70,8 @@ def test_pem_to_der():
 
 def test_der_hex_to_pem():
     assert (
-        Chepy(str(Path().absolute() / "tests/files/test.der")).load_file()
+        Chepy(str(Path().absolute() / "tests/files/test.der"))
+        .load_file()
         .der_hex_to_pem()
         .o.decode()
         == """-----BEGIN CERTIFICATE-----
@@ -91,3 +92,22 @@ igbV1IJdKTBAiZzaOQ==
 -----END CERTIFICATE-----
 """
     )
+
+
+def test_parse_public():
+    assert (
+        Chepy("tests/files/public.pem").load_file().parse_public_pem().get_by_key("e").o
+        == 65537
+    )
+
+
+def test_parse_private():
+    assert (
+        Chepy("tests/files/private.pem")
+        .load_file()
+        .parse_private_pem()
+        .get_by_key("p")
+        .o
+        == 12567061504848007717323266435513666403545525206525105210732583342352560503165028238964437465562703567713719610893680829859726382850796095548144718531640607
+    )
+

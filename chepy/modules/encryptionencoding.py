@@ -11,6 +11,7 @@ import regex as re
 from Crypto.Util.Padding import pad, unpad
 from Crypto.Cipher import ARC4
 from Crypto.Cipher import DES, DES3, AES
+from Crypto.Cipher import Blowfish
 
 from ..core import Core
 
@@ -577,6 +578,120 @@ class EncryptionEncoding(Core):
             return self
         elif mode == "OFB":
             cipher = AES.new(key, mode=AES.MODE_OFB, iv=binascii.unhexlify(iv))
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+
+    def blowfish_encrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Encrypt raw state with Blowfish
+
+        Blowfish is a symmetric-key block cipher designed in 1993 by 
+        Bruce Schneier and included in a large number of cipher suites 
+        and encryption products. AES now receives more attention.
+        IV: The Initialization Vector should be 8 bytes long.
+
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '0000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = Blowfish.new(
+                key, mode=Blowfish.MODE_CBC, iv=binascii.unhexlify(iv)
+            )
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "ECB":
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_ECB)
+            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            return self
+        elif mode == "CTR":
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+        elif mode == "OFB":
+            cipher = Blowfish.new(
+                key, mode=Blowfish.MODE_OFB, iv=binascii.unhexlify(iv)
+            )
+            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            return self
+
+    def blowfish_decrypt(
+        self,
+        key: str,
+        iv: str = "0000000000000000",
+        mode: str = "CBC",
+        hex_key: bool = False,
+    ):
+        """Encrypt raw state with Blowfish
+
+        Blowfish is a symmetric-key block cipher designed in 1993 by 
+        Bruce Schneier and included in a large number of cipher suites 
+        and encryption products. AES now receives more attention.
+        IV: The Initialization Vector should be 8 bytes long.
+        
+        Args:
+            key (str): The secret key
+            iv (str, optional): IV for certain modes only. Show be a hex string
+                . Defaults to '00000000000000000000000000000000'.
+            mode (str, optional): Encryption mode. Defaults to 'CBC'.
+            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def to_hex(s):
+            return binascii.hexlify(s)
+
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+
+        if mode == "CBC":
+            cipher = Blowfish.new(
+                key, mode=Blowfish.MODE_CBC, iv=binascii.unhexlify(iv)
+            )
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "ECB":
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_ECB)
+            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "CTR":
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "OFB":
+            cipher = Blowfish.new(
+                key, mode=Blowfish.MODE_OFB, iv=binascii.unhexlify(iv)
+            )
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 

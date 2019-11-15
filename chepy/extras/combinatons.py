@@ -1,7 +1,5 @@
 import itertools
-import json
-from urllib.request import urlopen
-from typing import List, Iterator, Any
+from typing import List, Any, Iterator
 
 
 def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator[tuple]:
@@ -24,16 +22,11 @@ def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator
             yield subset
 
 
-def factordb(n: int) -> dict:
-    """Query the factordb api and get primes if available
-    
-    Args:
-        n (int): n is the modulus for the public key and the private keys
+def all_hex_chars() -> list:
+    """Returns an array of all the hex characters
     
     Returns:
-        dict: response from api as a dictionary. None if status code is not 200
+        list: List of all hex characters
     """
-    res = urlopen("http://factordb.com/api/?query={}".format(str(n)))
-    if res.status != 200:
-        return None
-    return json.loads(res.read().decode())
+    return list("{:02x}".format(x) for x in range(0, 256))
+

@@ -25,11 +25,6 @@ jobs:
       run: |
         pip install pytest
         pytest --disable-pytest-warnings
-    - name: Test docs
-      run: |
-        pip install sphinx
-        cd docs
-        make clean html
 
   windows:
 
@@ -53,11 +48,6 @@ jobs:
       run: |
         pip install pytest
         pytest --disable-pytest-warnings
-    - name: Test docs
-      run: |
-        pip install sphinx
-        cd docs
-        make clean html
 
   osx:
 
@@ -81,8 +71,3 @@ jobs:
       run: |
         pip install pytest
         pytest --disable-pytest-warnings
-    - name: Test docs
-      run: |
-        pip install sphinx
-        cd docs
-        make clean html
