@@ -13,10 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}} #required
-        file: ./coverage.xml #optional
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
@@ -29,3 +25,7 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy tests/
+    - uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}} #required
+        file: ./coverage.xml #optional
