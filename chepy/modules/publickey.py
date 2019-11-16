@@ -100,6 +100,20 @@ class Publickey(Core):
         self.state = info
         return self
 
+    def public_from_x509(self):
+        """Get public key from x509 certificate
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        crtObj = _pyssl_crypto.load_certificate(_pyssl_crypto.FILETYPE_PEM, self.state)
+        pubKeyObject = crtObj.get_pubkey()
+        pubKeyString = _pyssl_crypto.dump_publickey(
+            _pyssl_crypto.FILETYPE_PEM, pubKeyObject
+        )
+        self.state = pubKeyString
+        return self
+
     def pem_to_der_hex(self):
         """Convert PEM cert to DER format
         

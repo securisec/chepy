@@ -69,28 +69,28 @@ education: '4 GCSEs
     )
 
 
-def test_base_58_decode():
-    assert Chepy("2UDrs31qcWSPi").base_58_decode().output.decode() == "some data"
+def test_base58_decode():
+    assert Chepy("2UDrs31qcWSPi").base58_decode().output.decode() == "some data"
 
 
-def test_base_85_encode():
-    assert Chepy("some data").base_85_encode().output.decode() == "F)Po,+Cno&@/"
+def test_base85_encode():
+    assert Chepy("some data").base85_encode().output.decode() == "F)Po,+Cno&@/"
 
 
-def test_base_85_decode():
-    assert Chepy("F)Po,+Cno&@/").base_85_decode().output.decode() == "some data"
+def test_base85_decode():
+    assert Chepy("F)Po,+Cno&@/").base85_decode().output.decode() == "some data"
 
 
-def test_base_32_encode():
-    assert Chepy("some data").base_32_encode().output.decode() == "ONXW2ZJAMRQXIYI="
+def test_base32_encode():
+    assert Chepy("some data").base32_encode().output.decode() == "ONXW2ZJAMRQXIYI="
 
 
-def test_base_64_encode():
-    assert Chepy("some data").base_64_encode().output.decode() == "c29tZSBkYXRh"
+def test_base64_encode():
+    assert Chepy("some data").base64_encode().output.decode() == "c29tZSBkYXRh"
 
 
-def test_base_58_encode():
-    assert Chepy("some data").base_58_encode().output.decode() == "2UDrs31qcWSPi"
+def test_base58_encode():
+    assert Chepy("some data").base58_encode().output.decode() == "2UDrs31qcWSPi"
 
 
 def test_to_hex():
@@ -178,4 +178,26 @@ def test_from_binary():
         "b",
         "c",
     ]
+
+
+def test_to_octal():
+    assert Chepy("abㅎ").to_octal().o == ["141", "142", "30516"]
+
+
+def test_from_octral():
+    assert Chepy(["141", "142", "30516"]).from_octal().o == ["a", "b", "ㅎ"]
+
+
+def test_html_encode():
+    assert (
+        Chepy('https://google.com&a="lol"').to_html_entity().o
+        == "https://google.com&amp;a=&quot;lol&quot;"
+    )
+
+
+def test_html_decode():
+    assert (
+        Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
+        == 'https://google.com&a="lol"'
+    )
 

@@ -10,8 +10,10 @@ before_install:
   - python -V
   - pip -V
   - pip install -e .
-  - pip install pytest bandit
+  - pip install pytest bandit sphinx
   - pip install -e .
 script:
   - pytest -v
-  - bandit --recursive chepy/ --skip B101,B413,B303,B310,B112
+  - bandit --recursive chepy/ --skip B101,B413,B303,B310,B112,B304
+  - cd docs/
+  - make clean html

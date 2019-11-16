@@ -1,8 +1,9 @@
 import string
 import binascii
 import base64
-import base58
 import json
+import html
+import base58
 import yaml
 import regex as re
 from urllib.parse import quote_plus as _urllib_quote_plus
@@ -89,7 +90,7 @@ class DataFormat(Core):
         )
         return self
 
-    def base_58_encode(self):
+    def base58_encode(self):
         """Encode as Base58
         
         Base58 is a notation for encoding arbitrary byte data using a 
@@ -103,7 +104,7 @@ class DataFormat(Core):
         self.state = base58.b58encode(self._convert_to_bytes())
         return self
 
-    def base_58_decode(self):
+    def base58_decode(self):
         """Decode as Base58
         
         Base58 is a notation for encoding arbitrary byte data using a 
@@ -117,7 +118,7 @@ class DataFormat(Core):
         self.state = base58.b58decode(self.state)
         return self
 
-    def base_85_encode(self):
+    def base85_encode(self):
         """Encode as Base58
 
         Base85 is a notation for encoding arbitrary byte data using a 
@@ -131,7 +132,7 @@ class DataFormat(Core):
         self.state = base64.a85encode(self._convert_to_bytes())
         return self
 
-    def base_85_decode(self):
+    def base85_decode(self):
         """Decode as Base85
 
         Base85 is a notation for encoding arbitrary byte data using a 
@@ -145,7 +146,7 @@ class DataFormat(Core):
         self.state = base64.a85decode(self._convert_to_bytes())
         return self
 
-    def base_32_encode(self):
+    def base32_encode(self):
         """Encode as Base32
         
         Base32 is a notation for encoding arbitrary byte data using a 
@@ -159,7 +160,7 @@ class DataFormat(Core):
         self.state = base64.b32encode(self._convert_to_bytes())
         return self
 
-    def base_32_decode(self):
+    def base32_decode(self):
         """Decode as Base32
         
         Base32 is a notation for encoding arbitrary byte data using a 
@@ -182,7 +183,7 @@ class DataFormat(Core):
         self.state = int(self.state)
         return self
 
-    def base_64_encode(self):
+    def base64_encode(self):
         """Encode as Base64
         
         Base64 is a notation for encoding arbitrary byte data using a 
@@ -196,7 +197,7 @@ class DataFormat(Core):
         self.state = base64.b64encode(self._convert_to_bytes())
         return self
 
-    def base_64_decode(self):
+    def base64_decode(self):
         """Decode as Base64
         
         Base64 is a notation for encoding arbitrary byte data using a 
@@ -441,7 +442,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = list(format(ord(s), '08b') for s in list(self._convert_to_str()))
+        self.state = list(format(ord(s), "08b") for s in list(self._convert_to_str()))
         return self
 
     def from_binary(self):
@@ -451,4 +452,44 @@ class DataFormat(Core):
             Chepy: The Chepy object. 
         """
         self.state = list(chr(int(s, 2)) for s in self.state)
+        return self
+
+    def to_octal(self):
+        """Convert string characters to octal
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = list(format(ord(s), "0o") for s in list(self._convert_to_str()))
+        return self
+
+    def from_octal(self):
+        """Convert a list of octal numbers to string
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(chr(int(str(s), 8)) for s in self.state)
+        return self
+
+    def to_html_entity(self):
+        """Encode html entities
+
+        Encode special html characters like & > < etc
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = html.escape(self._convert_to_str())
+        return self
+
+    def from_html_entity(self):
+        """Decode html entities
+
+        Decode special html characters like & > < etc
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = html.unescape(self._convert_to_str())
         return self
