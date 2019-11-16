@@ -460,10 +460,12 @@ class EncryptionEncoding(Core):
         Standard (FIPS). It was selected after a 5-year process where 15 competing 
         designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
         be used based on the size of the 
+        
         key:
             16 bytes = AES-128
             24 bytes = AES-192
             32 bytes = AES-256
+        
         You can generate a password-based key using one of the KDF operations. 
         IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
@@ -527,10 +529,12 @@ class EncryptionEncoding(Core):
         Standard (FIPS). It was selected after a 5-year process where 15 competing 
         designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
         be used based on the size of the 
+        
         key:
             16 bytes = AES-128
             24 bytes = AES-192
             32 bytes = AES-256
+        
         You can generate a password-based key using one of the KDF operations. 
         IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.

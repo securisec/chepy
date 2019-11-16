@@ -15,6 +15,8 @@ Chepy
 
    chepy.rst
    cli.rst
+   modules.rst
+   extras.rst
 
 
 Indices and tables

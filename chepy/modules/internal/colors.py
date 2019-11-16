@@ -4,84 +4,228 @@ from colorama import Fore, init
 init(convert=True)
 
 
-def Color_RED(s):
+def RED(s: str) -> str:
+    """Red color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import RED
+        >>> print(RED("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.RED + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_RED(s):
+def LIGHT_RED(s: str) -> str:
+    """Light red color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+    
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_RED
+        >>> print(LIGHT_RED("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTRED_EX + s + Fore.RESET
     else:
         return s
 
 
-def Color_BLUE(s):
+def BLUE(s: str) -> str:
+    """Blue color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import BLUE
+        >>> print(BLUE("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.BLUE + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_BLUE(s):
+def LIGHT_BLUE(s: str) -> str:
+    """Light blue color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_BLUE
+        >>> print(LIGHT_BLUE("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTBLUE_EX + s + Fore.RESET
     else:
         return s
 
 
-def Color_CYAN(s):
+def CYAN(s: str) -> str:
+    """Cyan color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import CYAN
+        >>> print(CYAN("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.CYAN + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_CYAN(s):
+def LIGHT_CYAN(s: str) -> str:
+    """Light cyan color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_CYAN
+        >>> print(LIGHT_CYAN("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTCYAN_EX + s + Fore.RESET
     else:
         return s
 
 
-def Color_GREEN(s):
+def GREEN(s: str) -> str:
+    """Green color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import GREEN
+        >>> print(GREEN("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.GREEN + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_GREEN(s):
+def LIGHT_GREEN(s: str) -> str:
+    """Light green color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_GREEN
+        >>> print(LIGHT_GREEN("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTGREEN_EX + s + Fore.RESET
     else:
         return s
 
 
-def Color_YELLOW(s):
+def YELLOW(s: str) -> str:
+    """Yellow color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import YELLOW
+        >>> print(YELLOW("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.YELLOW + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_YELLOW(s):
+def LIGHT_YELLOW(s: str) -> str:
+    """Light yellow color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_YELLOW
+        >>> print(LIGHT_YELLOW("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTYELLOW_EX + s + Fore.RESET
     else:
         return s
 
 
-def Color_MAGENTA(s):
+def MAGENTA(s: str) -> str:
+    """Magenta color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import MAGENTA
+        >>> print(MAGENTA("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.MAGENTA + s + Fore.RESET
     else:
         return s
 
 
-def Color_LIGHT_MAGENTA(s):
+def LIGHT_MAGENTA(s: str) -> str:
+    """Light magenta color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+
+    Examples:
+        >>> from chepy.modules.internal.colors import LIGHT_MAGENTA
+        >>> print(LIGHT_MAGENTA("some string"))
+    """
     if sys.stdout.isatty():
         return Fore.LIGHTMAGENTA_EX + s + Fore.RESET
     else:
