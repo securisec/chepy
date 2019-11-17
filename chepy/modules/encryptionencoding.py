@@ -14,6 +14,7 @@ from Crypto.Cipher import DES, DES3, AES
 from Crypto.Cipher import Blowfish
 
 from ..core import Core
+from ..extras.combinatons import hex_chars
 
 
 class EncryptionEncoding(Core):
@@ -60,7 +61,7 @@ class EncryptionEncoding(Core):
             j = ord(self.state[i])
             if j >= 33 and j <= 126:
                 x.append(chr(33 + ((j + 14) % 94)))
-            else:
+            else:  # pragma: no cover
                 x.append(self.state[i])
         self.state = "".join(x)
         return self
@@ -97,12 +98,12 @@ class EncryptionEncoding(Core):
             "base64",
         ], "Valid key types are hex, utf and base64"
 
+        if isinstance(key, int):
+            key = str(key)
         if key_type == "utf":
             key = binascii.hexlify(key.encode())
         elif key_type == "base64":
             key = binascii.hexlify(base64.b64decode(key.encode()))
-        if isinstance(key, int):
-            key = str(key)
         key = codecs.decode(key, "hex")
         xor = bytearray(b"")
         if ascii:
@@ -113,6 +114,29 @@ class EncryptionEncoding(Core):
                 xor.append(char ^ key_val)
 
         self.state = xor
+        return self
+
+    def xor_bruteforce(self, length: int = 100):
+        """Brute force single byte xor
+
+        For multibyte xor bruteforce, use chepy.extras.crypto_extras.xor_bruteforce_multi 
+        function
+        
+        Args:
+            length (int, optional): How to bytes to bruteforce. Defaults to 100.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        original = self.state
+        found = {}
+        keys = hex_chars()
+        self.state = original[:length]
+        for key in keys:
+            self.xor(key)
+            found[key] = self.state
+            self.state = original[:length]
+        self.state = found
         return self
 
     def jwt_decode(self):
@@ -179,7 +203,7 @@ class EncryptionEncoding(Core):
             for word in words:
                 try:
                     word = word.strip()
-                    if b64_encode:
+                    if b64_encode:  # pragma: no cover
                         word = base64.b64encode(word)
                     j = jwt.decode(self._convert_to_str(), word, algorithms=algorithm)
                     self.state = {
@@ -190,7 +214,7 @@ class EncryptionEncoding(Core):
                     return self
                 except jwt.InvalidSignatureError:
                     continue
-            else:
+            else:  # pragma: no cover
                 return self
 
     def rc4_encrypt(self, key: str, hex_key: bool = False):
@@ -312,9 +336,6 @@ class EncryptionEncoding(Core):
             Chepy: The Chepy object. 
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
         if isinstance(key, str):
@@ -419,9 +440,6 @@ class EncryptionEncoding(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-
-        def to_hex(s):
-            return binascii.hexlify(s)
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
@@ -550,9 +568,6 @@ class EncryptionEncoding(Core):
             Chepy: The Chepy object. 
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
         if isinstance(key, str):
@@ -667,9 +682,6 @@ class EncryptionEncoding(Core):
         Returns:
             Chepy: The Chepy object. 
         """
-
-        def to_hex(s):
-            return binascii.hexlify(s)
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 

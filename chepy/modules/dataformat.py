@@ -2,6 +2,7 @@ import string
 import binascii
 import base64
 import json
+import codecs
 import html
 import base58
 import yaml
@@ -11,6 +12,7 @@ from urllib.parse import unquote_plus as _urllib_unquote_plus
 from typing import Any
 
 from ..core import Core
+from chepy.modules.internal.constants import Encoding
 
 
 class DataFormat(Core):
@@ -369,7 +371,7 @@ class DataFormat(Core):
         if isinstance(self.state, bytearray):
             self.state = self.state.decode(encoding, errors=errors)
             return self
-        else:
+        else:  # pragma: no cover
             raise TypeError("State is not a bytearray")
 
     def str_to_list(self):
@@ -492,4 +494,90 @@ class DataFormat(Core):
             Chepy: The Chepy object. 
         """
         self.state = html.unescape(self._convert_to_str())
+        return self
+
+    def to_punycode(self):
+        """Encode to punycode
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self._convert_to_str().encode("punycode")
+        return self
+
+    def from_punycode(self):
+        """Decode to punycode
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self._convert_to_bytes().decode("punycode")
+        return self
+
+    def encode_bruteforce(self):
+        """Bruteforce the various encoding for a string
+
+        Enumerates all supported text encodings for the input, 
+        allowing you to quickly spot the correct one.
+        `Reference <https://docs.python.org/2.4/lib/standard-encodings.html>`__
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        data = self._convert_to_str()
+        final = dict()
+        for enc in Encoding.py_encodings:
+            final[enc] = data.encode(enc, errors="backslashreplace")
+
+        for text_enc in Encoding.py_text_encodings:
+            try:
+                final[text_enc] = codecs.encode(data, text_enc)
+            except TypeError:
+                final[text_enc] = codecs.encode(data.encode(), text_enc)
+            except UnicodeEncodeError:
+                try:
+                    final[text_enc] = codecs.encode(
+                        data, text_enc, errors="backslashreplace"
+                    )
+                except TypeError:  # pragma: no cover
+                    final[text_enc] = codecs.encode(
+                        data.encode(), text_enc, errors="backslashreplace"
+                    )
+        self.state = final
+        return self
+
+    def decode_bruteforce(self):
+        """Bruteforce the various decoding for a string
+
+        Enumerates all supported text encodings for the input, 
+        allowing you to quickly spot the correct one.
+        `Reference <https://docs.python.org/2.4/lib/standard-encodings.html>`__
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        data = self._convert_to_bytes()
+        final = dict()
+        for enc in Encoding.py_encodings:
+            final[enc] = data.decode(enc, errors="backslashreplace")
+
+        for text_enc in Encoding.py_text_encodings:
+            try:
+                final[text_enc] = codecs.decode(
+                    data, text_enc, errors="backslashreplace"
+                )
+            except UnicodeDecodeError:  # pragma: no cover
+                final[text_enc] = codecs.decode(
+                    data.decode(), text_enc, errors="backslashreplace"
+                )
+            except AssertionError:
+                final[text_enc] = ""
+                continue
+            except UnicodeError:
+                final[text_enc] = ""
+                continue
+            except TypeError:
+                final[text_enc] = ""
+                continue
+        self.state = final
         return self

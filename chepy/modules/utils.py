@@ -231,7 +231,7 @@ class Utils(Core):
         if isinstance(self.state, list):
             self.state = pydash.uniq(self.state)
             return self
-        else:
+        else: # pragma: no cover
             raise TypeError("State is not a list")
 
     def sorted(self, reverse: bool = False):
@@ -249,7 +249,7 @@ class Utils(Core):
         if isinstance(self.state, (list)):
             self.state = sorted(self.state)
             return self
-        else:
+        else: # pragma: no cover
             raise TypeError("State is not a list")
 
     def filter_by(self, predicate: Any = None):
@@ -267,7 +267,7 @@ class Utils(Core):
         if isinstance(self.state, (list, dict)):
             self.state = pydash.filter_(self.state, predicate)
             return self
-        else:
+        else: # pragma: no cover
             raise TypeError("State is not a list")
 
     def slice(self, start: int = 0, end: int = None):

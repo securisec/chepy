@@ -474,9 +474,9 @@ class Hashing(Core):
             key = key.encode()
         elif isinstance(key, bytes):
             key = key
-        elif isinstance(key, int):
+        elif isinstance(key, int):  # pragma: no cover
             key = bytes(key)
-        else:
+        else:  # pragma: no cover
             raise TypeError("key has to be bytes")
 
         if digest == "md5":
@@ -487,7 +487,7 @@ class Hashing(Core):
             h = hmac.new(key, self._convert_to_bytes(), hashlib.sha256)
         elif digest == "sha512":
             h = hmac.new(key, self._convert_to_bytes(), hashlib.sha512)
-        else:
+        else:  # pragma: no cover
             raise TypeError(
                 "Currently supported digests are md5, sha1, sha256 and sha512"
             )
@@ -528,10 +528,10 @@ class Hashing(Core):
             if _crypto_bcrypt_check(self._convert_to_str(), hash) is None:
                 self.state = True
                 return self
-            else:
+            else:  # pragma: no cover
                 self.state = False
                 return self
-        except ValueError:
+        except ValueError:  # pragma: no cover
             self.state = False
             return self
 

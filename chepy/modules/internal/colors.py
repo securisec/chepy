@@ -4,7 +4,7 @@ from colorama import Fore, init
 init(convert=True)
 
 
-def RED(s: str) -> str:
+def RED(s: str) -> str:  # pragma: no cover
     """Red color string if tty
     
     Args:
@@ -23,7 +23,7 @@ def RED(s: str) -> str:
         return s
 
 
-def LIGHT_RED(s: str) -> str:
+def LIGHT_RED(s: str) -> str:  # pragma: no cover
     """Light red color string if tty
     
     Args:
@@ -42,7 +42,7 @@ def LIGHT_RED(s: str) -> str:
         return s
 
 
-def BLUE(s: str) -> str:
+def BLUE(s: str) -> str:  # pragma: no cover
     """Blue color string if tty
     
     Args:
@@ -61,7 +61,7 @@ def BLUE(s: str) -> str:
         return s
 
 
-def LIGHT_BLUE(s: str) -> str:
+def LIGHT_BLUE(s: str) -> str:  # pragma: no cover
     """Light blue color string if tty
     
     Args:
@@ -80,7 +80,7 @@ def LIGHT_BLUE(s: str) -> str:
         return s
 
 
-def CYAN(s: str) -> str:
+def CYAN(s: str) -> str:  # pragma: no cover
     """Cyan color string if tty
     
     Args:
@@ -99,7 +99,7 @@ def CYAN(s: str) -> str:
         return s
 
 
-def LIGHT_CYAN(s: str) -> str:
+def LIGHT_CYAN(s: str) -> str:  # pragma: no cover
     """Light cyan color string if tty
     
     Args:
@@ -118,7 +118,7 @@ def LIGHT_CYAN(s: str) -> str:
         return s
 
 
-def GREEN(s: str) -> str:
+def GREEN(s: str) -> str:  # pragma: no cover
     """Green color string if tty
     
     Args:
@@ -137,7 +137,7 @@ def GREEN(s: str) -> str:
         return s
 
 
-def LIGHT_GREEN(s: str) -> str:
+def LIGHT_GREEN(s: str) -> str:  # pragma: no cover
     """Light green color string if tty
     
     Args:
@@ -156,7 +156,7 @@ def LIGHT_GREEN(s: str) -> str:
         return s
 
 
-def YELLOW(s: str) -> str:
+def YELLOW(s: str) -> str:  # pragma: no cover
     """Yellow color string if tty
     
     Args:
@@ -175,7 +175,7 @@ def YELLOW(s: str) -> str:
         return s
 
 
-def LIGHT_YELLOW(s: str) -> str:
+def LIGHT_YELLOW(s: str) -> str:  # pragma: no cover
     """Light yellow color string if tty
     
     Args:
@@ -194,7 +194,7 @@ def LIGHT_YELLOW(s: str) -> str:
         return s
 
 
-def MAGENTA(s: str) -> str:
+def MAGENTA(s: str) -> str:  # pragma: no cover
     """Magenta color string if tty
     
     Args:
@@ -213,7 +213,7 @@ def MAGENTA(s: str) -> str:
         return s
 
 
-def LIGHT_MAGENTA(s: str) -> str:
+def LIGHT_MAGENTA(s: str) -> str:  # pragma: no cover
     """Light magenta color string if tty
     
     Args:

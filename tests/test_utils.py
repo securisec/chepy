@@ -14,10 +14,18 @@ def test_count_occurances():
         Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").output
         == 2
     )
+    assert (
+        Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja")
+        .count_occurances("ja", True)
+        .output
+        == 1
+    )
 
 
 def test_to_uppercase():
     assert Chepy("some String").to_upper_case(by="word").o == "Some String"
+    assert Chepy("some String").to_upper_case(by="sentence").o == "Some string"
+    assert Chepy("some String").to_upper_case(by="all").o == "SOME STRING"
 
 
 def test_to_snake_case():
@@ -26,6 +34,7 @@ def test_to_snake_case():
 
 def test_to_camel_case():
     assert Chepy("some Data_test").to_camel_case().o == "someDataTest"
+    assert Chepy("some Data_test").to_camel_case(ignore_space=True).o == "some DataTest"
 
 
 def test_to_kebab_case():
@@ -52,6 +61,22 @@ def test_search():
         len(
             Chepy("loLolololoL")
             .regex_search("ol", ignore_case=True)
+            .str_list_to_list()
+            .o
+        )
+        == 5
+    )
+    assert (
+        len(
+            Chepy("loLolololoL")
+            .regex_search(
+                "ol",
+                ignore_case=True,
+                multiline=True,
+                dotall=True,
+                unicode=True,
+                extended=True,
+            )
             .str_list_to_list()
             .o
         )

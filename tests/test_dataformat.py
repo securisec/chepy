@@ -99,10 +99,20 @@ def test_to_hex():
 
 def test_hex_to_int():
     assert Chepy("0x123").hex_to_int().output == 291
+    assert Chepy("123").hex_to_int().output == 291
+
+
+def test_hex_to_binary():
+    assert Chepy("ab00").hex_to_binary().o == b"\xab\x00"
 
 
 def test_int_to_hex():
     assert Chepy(101).int_to_hex().o == "65"
+
+
+def test_hex_to_str():
+    assert Chepy("4100").hex_to_str().o == b"A\x00"
+    assert Chepy("4100").hex_to_str(ignore=True).o == "A\x00"
 
 
 def test_url_encode():
@@ -121,6 +131,18 @@ def test_url_decode():
 
 def test_to_list():
     assert Chepy("[1,2,'lol', true]").str_list_to_list().o == [1, 2, "lol", True]
+
+
+def test_list_to_str():
+    assert Chepy(["a", "b", "c"]).list_to_str(",").o == "a,b,c"
+
+
+def test_join_list():
+    assert Chepy(["a", "b", "c"]).join_list(":").o == "a:b:c"
+
+
+def test_to_int():
+    assert Chepy("1").to_int().o == 1
 
 
 def test_normalize_hex():
@@ -199,5 +221,27 @@ def test_html_decode():
     assert (
         Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
         == 'https://google.com&a="lol"'
+    )
+
+
+def test_to_punycode():
+    assert Chepy(b"mnchen-3ya").from_punycode().o == "münchen"
+
+
+def test_from_punycode():
+    assert Chepy("münchen").to_punycode().o == b"mnchen-3ya"
+
+
+def test_encode_bruteforce():
+    assert (
+        Chepy("münchen한").encode_bruteforce().get_by_key("ascii").o
+        == b"m\\xfcnchen\\ud55c"
+    )
+
+
+def test_decode_bruteforce():
+    assert (
+        Chepy("m\xfcnchen\ud55c").decode_bruteforce().get_by_key("utf_8").o
+        == "münchen한"
     )
 

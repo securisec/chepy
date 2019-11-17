@@ -31,6 +31,23 @@ def test_xor_binary():
         .o.decode()[0:6]
         == "222727"
     )
+    assert (
+        Chepy("./tests/files/hello").load_file().xor(41, "utf").to_hex().o.decode()[0:6]
+        == "fbcbd9"
+    )
+    assert (
+        Chepy("./tests/files/hello")
+        .xor(key=41, key_type="utf", ascii=True)
+        .to_hex()
+        .o.decode()[0:6]
+        == "1a1e40"
+    )
+
+
+def test_xor_bruteforce():
+    assert Chepy(
+        b"\x85\x88\x81\x81\x82\xcd\x9a\x82\x9f\x81\x89"
+    ).xor_bruteforce().get_by_key("ed").o == bytearray(b"hello world")
 
 
 def test_jwt_decode():
@@ -59,6 +76,10 @@ def test_jwt_sign():
         Chepy({"some": "payload"}).jwt_sign("secret", "HS512").o.decode()
         == "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
     )
+    assert (
+        Chepy('{"some": "payload"}').jwt_sign("secret", "HS512").o.decode()
+        == "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
+    )
 
 
 def test_jwt_verify():
@@ -70,6 +91,18 @@ def test_jwt_verify():
         .jwt_verify("secret")
         .o
         == {"some": "payload"}
+    )
+
+
+def test_jwt_bruteforce():
+    assert (
+        Chepy(
+            b"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.bqxXg9VwcbXKoiWtp-osd0WKPX307RjcN7EuXbdq-CE"
+        )
+        .jwt_bruteforce("tests/files/wordlist.txt")
+        .get_by_key("secret")
+        .o
+        == "secret"
     )
 
 
@@ -96,6 +129,10 @@ def test_rc4_decrypt():
 
 def test_des_encrypt():
     assert (
+        Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).o
+        == b"1ee5cb52954b211d1acd6e79c598baac"
+    )
+    assert (
         Chepy("some data").des_encrypt("password").o
         == b"1ee5cb52954b211d1acd6e79c598baac"
     )
@@ -115,6 +152,14 @@ def test_des_encrypt():
 
 def test_triple_des_encrypt():
     assert (
+        Chepy("some data")
+        .triple_des_encrypt(
+            "7375706572207365637265742070617373776f7264202121", hex_key=True
+        )
+        .o
+        == b"f8b27a0d8c837edce87dd13a1ab41f96"
+    )
+    assert (
         Chepy("some data").triple_des_encrypt("super secret password !!").o
         == b"f8b27a0d8c837edce87dd13a1ab41f96"
     )
@@ -133,6 +178,12 @@ def test_triple_des_encrypt():
 
 
 def test_aes_encrypt():
+    assert (
+        Chepy("some data")
+        .aes_encrypt("7365637265742070617373776f726421", hex_key=True)
+        .o
+        == b"5fb8c186394fc399849b89d3b6605fa3"
+    )
     assert (
         Chepy("some data").aes_encrypt("secret password!").o
         == b"5fb8c186394fc399849b89d3b6605fa3"
@@ -157,6 +208,13 @@ def test_aes_encrypt():
 
 def test_des_decrypt():
     assert (
+        Chepy("1ee5cb52954b211d1acd6e79c598baac")
+        .hex_to_str()
+        .des_decrypt("70617373776f7264", hex_key=True)
+        .o
+        == b"some data"
+    )
+    assert (
         Chepy("1ee5cb52954b211d1acd6e79c598baac").hex_to_str().des_decrypt("password").o
         == b"some data"
     )
@@ -178,6 +236,15 @@ def test_des_decrypt():
 
 
 def test_triple_des_decrypt():
+    assert (
+        Chepy("f8b27a0d8c837edce87dd13a1ab41f96")
+        .hex_to_str()
+        .triple_des_decrypt(
+            "7375706572207365637265742070617373776f7264202121", hex_key=True
+        )
+        .o
+        == b"some data"
+    )
     assert (
         Chepy("f8b27a0d8c837edce87dd13a1ab41f96")
         .hex_to_str()
@@ -208,8 +275,14 @@ def test_triple_des_decrypt():
     )
 
 
-
 def test_aes_decrypt():
+    assert (
+        Chepy("5fb8c186394fc399849b89d3b6605fa3")
+        .hex_to_str()
+        .aes_decrypt("7365637265742070617373776f726421", hex_key=True)
+        .o
+        == b"some data"
+    )
     assert (
         Chepy("5fb8c186394fc399849b89d3b6605fa3")
         .hex_to_str()
@@ -249,6 +322,10 @@ def test_aes_decrypt():
 
 def test_blowfish_encrypt():
     assert (
+        Chepy("some data").blowfish_encrypt("70617373776f7264", hex_key=True).o
+        == b"d9b0a79853f13960fcee3cae16e27884"
+    )
+    assert (
         Chepy("some data").blowfish_encrypt("password").o
         == b"d9b0a79853f13960fcee3cae16e27884"
     )
@@ -266,8 +343,14 @@ def test_blowfish_encrypt():
     )
 
 
-
 def test_blowfish_decrypt():
+    assert (
+        Chepy("d9b0a79853f13960fcee3cae16e27884")
+        .hex_to_str()
+        .blowfish_decrypt("70617373776f7264", hex_key=True)
+        .o
+        == b"some data"
+    )
     assert (
         Chepy("d9b0a79853f13960fcee3cae16e27884")
         .hex_to_str()

@@ -163,6 +163,18 @@ def test_hmac_hash():
     assert (
         Chepy("abc").hmac_hash("", "md5").output == "dd2701993d29fdd0b032c233cec63403"
     )
+    assert (
+        Chepy("abc").hmac_hash("", "sha1").output
+        == "9b4a918f398d74d3e367970aba3cbe54e4d2b5d9"
+    )
+    assert (
+        Chepy("abc").hmac_hash("", "sha256").output
+        == "fd7adb152c05ef80dccf50a1fa4c05d5a3ec6da95575fc312ae7c5d091836351"
+    )
+    assert (
+        Chepy("abc").hmac_hash("", "sha512").output
+        == "29689f6b79a8dd686068c2eeae97fd8769ad3ba65cb5381f838358a8045a358ee3ba1739c689c7805e31734fb6072f87261d1256995370d55725cba00d10bdd0"
+    )
 
 
 def test_bcrypt_hash():

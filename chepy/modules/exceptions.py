@@ -5,7 +5,7 @@ from chepy.modules.internal.colors import RED
 
 
 @decorator
-def exception_handler(func, *args, **kwargs):
+def exception_handler(func, *args, **kwargs):  # pragma: no cover
     try:
         return func(*args, **kwargs)
     except Exception as e:

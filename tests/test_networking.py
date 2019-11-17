@@ -17,6 +17,7 @@ def test_refang_url():
 
 def test_defang_ip():
     assert Chepy("2001:4860:4860::8844").defang_ip().o == "2001[:]4860[:]4860[:][:]8844"
+    assert Chepy("127.0.0.1").defang_ip().o == "127[.]0[.]0[.]1"
 
 
 def test_refang_ip():

@@ -1,2 +1,2 @@
-__version__ = "0.0.1"
-__author__ = "Hapsida @securisec"
+__version__ = "0.0.1" # pragma: no cover
+__author__ = "Hapsida @securisec" # pragma: no cover

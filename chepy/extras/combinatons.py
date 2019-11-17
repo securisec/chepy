@@ -2,7 +2,7 @@ import itertools
 from typing import List, Any, Iterator
 
 
-def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator[tuple]:
+def generate_combo(words: List[Any], length: int = None) -> Iterator[tuple]:
     """Creates all possible combinations from the `words` being passed. 
     Returns a generator. `length` controls the length of the permutations.
     
@@ -22,7 +22,7 @@ def all_combinations_from_list(words: List[Any], length: int = None) -> Iterator
             yield subset
 
 
-def all_hex_chars() -> list:
+def hex_chars() -> list:
     """Returns an array of all the hex characters
     
     Returns:
