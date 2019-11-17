@@ -581,3 +581,24 @@ class DataFormat(Core):
                 continue
         self.state = final
         return self
+
+    def to_braille(self):
+        """Convery text to six-dot braille symbols
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        chars = dict(zip(Encoding.asciichars, Encoding.brailles))
+        self.state = "".join(list(chars.get(c.lower()) for c in self.state))
+        return self
+
+    def from_braille(self):
+        """Convery text to six-dot braille symbols
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        chars = dict(zip(Encoding.brailles, Encoding.asciichars))
+        self.state = "".join(list(chars.get(c.lower()) for c in self.state))
+        return self
+

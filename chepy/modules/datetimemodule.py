@@ -13,7 +13,7 @@ class DateTime(Core):
         self.state = datetime.fromtimestamp(self._convert_to_int()).strftime("%c")
         return self
 
-    def to_unix_ts(self):
+    def to_unix_ts(self): # pragma: no cover
         """Convert datetime string to unix ts
 
         The format for the string is %a %b %d %H:%M:%S %Y, which is equivalent to 

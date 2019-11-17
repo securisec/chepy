@@ -1,3 +1,4 @@
+import os
 from chepy import Chepy
 
 
@@ -50,6 +51,7 @@ def test_save_buffer():
 def test_load_buffer():
     c = Chepy("A").save_buffer(0).to_hex().save_buffer(0)
     assert c.buffers[0] == b"41"
+    assert c.load_buffer(0).state == b"41"
 
 
 def test_http_request():
@@ -65,3 +67,52 @@ def test_delete_buffer():
         0: "lol"
     }
 
+
+def test___str__():
+    assert str(Chepy("abc")) == "abc"
+    assert str(Chepy(bytearray(b"abc"))) == "bytearray in state"
+
+
+def test_convert_to_bytes():
+    assert Chepy(b"A")._convert_to_bytes() == b"A"
+    assert Chepy("A")._convert_to_bytes() == b"A"
+    assert Chepy(1)._convert_to_bytes() == b"1"
+    assert Chepy({"a": "b"})._convert_to_bytes() == b"{'a': 'b'}"
+    assert Chepy(["a"])._convert_to_bytes() == b"['a']"
+    assert Chepy(True)._convert_to_bytes() == b"True"
+    assert Chepy(bytearray("a", 'utf8'))._convert_to_bytes() == b"a"
+    assert str(Chepy(bytearray(b"abc"))) == "bytearray in state"
+
+
+def test_convert_to_str():
+    assert Chepy(b"A")._convert_to_str() == "A"
+    assert Chepy("A")._convert_to_str() == "A"
+    assert Chepy(1)._convert_to_str() == "1"
+    assert Chepy({"a": "b"})._convert_to_str() == "{'a': 'b'}"
+    assert Chepy(["a"])._convert_to_str() == "['a']"
+    assert Chepy(True)._convert_to_str() == "True"
+    assert Chepy(bytearray("a", 'utf8'))._convert_to_str() == "a"
+
+def test_convert_to_bytearray():
+    assert Chepy('a')._convert_to_bytearray() == bytearray(b'a')
+
+def test_out_as_str():
+    assert Chepy(b'a').out_as_str() == 'a'
+    assert Chepy('a').out_as_str() == 'a'
+
+def test_out_as_bytes():
+    assert Chepy(b'a').out_as_bytes() == b'a'
+    assert Chepy('a').out_as_bytes() == b'a'
+
+
+def test_get_type():
+    assert Chepy('a').get_type() == 'str'
+
+def test_write_to_file():
+    Chepy(b'\x41').write_to_file('.test', as_binary=True)
+    with open('/tmp/a', 'r') as f:
+        assert f.read() == 'A'
+    Chepy('A').write_to_file('.test')
+    with open('/tmp/a', 'r') as f:
+        assert f.read() == 'A'
+    os.remove('.test')

@@ -104,7 +104,7 @@ class EncryptionEncoding(Core):
             key = binascii.hexlify(key.encode())
         elif key_type == "base64":
             key = binascii.hexlify(base64.b64decode(key.encode()))
-        key = codecs.decode(key, "hex")
+        key = binascii.unhexlify(key)
         xor = bytearray(b"")
         if ascii:
             for char, key_val in zip(self._convert_to_str(), itertools.cycle(key)):

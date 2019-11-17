@@ -33,7 +33,7 @@ class Core(object):
                 return "bytearray in state"
             else:
                 return self._convert_to_str()
-        except:
+        except:  # pragma: no cover
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
                 "another method, or use one of the output methods "
@@ -111,7 +111,7 @@ class Core(object):
         Returns:
             Chepy: The Chepy object.
         """
-        if index > len(self.states):
+        if index > len(self.states):  # pragma: no cover
             raise TypeError("Specified index does not exist")
         self._current_index = index
         return self
@@ -127,7 +127,7 @@ class Core(object):
         """
         try:
             del self.states[index]
-        except KeyError:
+        except KeyError:  # pragma: no cover
             logging.warning("{} does not exist".format(index))
         return self
 
@@ -174,7 +174,7 @@ class Core(object):
         """
         try:
             del self.buffers[index]
-        except KeyError:
+        except KeyError:  # pragma: no cover
             logging.warning("{} does not exist".format(index))
         return self
 
@@ -207,10 +207,6 @@ class Core(object):
         """
         return self.states.get(index)
 
-    # def fork_state(self):
-    #     # todo run methods on all states
-    #     pass
-
     def _convert_to_bytes(self):
         if isinstance(self.state, bytes):
             return self.state
@@ -222,11 +218,11 @@ class Core(object):
             return str(self.state).encode()
         elif isinstance(self.state, list):
             return str(self.state).encode()
-        elif isinstance(self.state, bool):
+        elif isinstance(self.state, bool):  # pragma: no cover
             return str(self.state).encode()
         elif isinstance(self.state, bytearray):
             return bytes(self.state)
-        else:
+        else:  # pragma: no cover
             # todo check more types here
             raise NotImplementedError
 
@@ -244,11 +240,11 @@ class Core(object):
             return str(self.state)
         elif isinstance(self.state, list):
             return str(self.state)
-        elif isinstance(self.state, bool):
+        elif isinstance(self.state, bool):  # pragma: no cover
             return str(self.state)
         elif isinstance(self.state, bytearray):
             return bytearray(self.state).decode()
-        else:
+        else:  # pragma: no cover
             # todo check more types here
             raise NotImplementedError
 
@@ -257,7 +253,7 @@ class Core(object):
             return self.state
         elif isinstance(self.state, str) or isinstance(self.state, bytes):
             return int(self.state)
-        else:
+        else:  # pragma: no cover
             raise NotImplementedError
 
     @property
@@ -326,10 +322,10 @@ class Core(object):
         if isinstance(self.state, dict):
             self.state = self.state.get(key)
             return self
-        else:
+        else:  # pragma: no cover
             raise TypeError("State is not a dictionary")
 
-    def copy_to_clipboard(self) -> None:
+    def copy_to_clipboard(self) -> None:  # pragma: no cover
         """Copy to clipboard
         
         Copy the final output to the clipboard. If an 
@@ -341,7 +337,7 @@ class Core(object):
         pyperclip.copy(self._convert_to_str())
         return None
 
-    def copy(self) -> None:  # placeholder for documentation
+    def copy(self) -> None:  # pragma: no cover
         """Copy to clipboard
         
         Copy the final output to the clipboard. If an 
@@ -361,7 +357,7 @@ class Core(object):
         """
         return type(self.state).__name__
 
-    def web(self) -> None:  # place holder for documentation
+    def web(self) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
         
         Returns:
@@ -404,7 +400,7 @@ class Core(object):
             Chepy: The Chepy object.
         """
 
-        def json2str(obj):
+        def json2str(obj):  # pragma: no cover
             if isinstance(obj, dict):
                 return obj
             elif isinstance(obj, str):

@@ -245,3 +245,11 @@ def test_decode_bruteforce():
         == "münchen한"
     )
 
+
+def test_to_braille():
+    assert Chepy("secret message").to_braille().o == "⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑"
+
+
+def test_from_braille():
+    assert Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o == "secret message"
+

@@ -1,0 +1,8 @@
+[run]
+omit = 
+    chepy/__main__.py
+    chepy/modules/internal/cli.py
+
+
+[report]
+fail_under = 100

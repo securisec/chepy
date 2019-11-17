@@ -1,9 +1,13 @@
 import json
+from typing import Iterator, Dict
 from urllib.request import urlopen
 from Crypto.PublicKey import RSA
 
+from .combinatons import generate_combo, hex_chars
+from chepy import Chepy
 
-def factordb(n: int) -> dict:
+
+def factordb(n: int) -> dict:  # pragma: no cover
     """Query the factordb api and get primes if available
     
     Args:
@@ -20,7 +24,7 @@ def factordb(n: int) -> dict:
 
 def construct_private_key(
     n: int, e: int, d: int, format: str = "PEM", passphrase: str = None
-) -> str:
+) -> str:  # pragma: no cover
     """Construct a private key given n, e and d
     
     Args:
@@ -39,3 +43,31 @@ def construct_private_key(
     )
     priv = RSA.construct((n, e, d))
     return priv.export_key(format=format, passphrase=passphrase)
+
+
+def xor_bruteforce_multi(
+    data: str, min: int = 0, max: int = None
+) -> Iterator[Dict[str, str]]:
+    """Bruteforce multibyte xor encryption. For faster results, use pypy3. 
+    It is important to set the min and max values if the key size is known.
+    
+    Args:
+        data (str): XORed data
+        min (int, optional): Minimum key length. Default will start at 1 byte
+            . Defaults to 0.
+        max (int, optional): Maximum key length. Maximum value is 257 bytes. Defaults to None.
+    
+    Returns:
+        Iterator[Dict[str, str]]: [description]
+    
+    Yields:
+        Iterator[Dict[str, str]]: A generator which contains a dictionary with the 
+            keys: `key` and `out`
+    """
+    for key in generate_combo(
+        hex_chars(), min_length=min, max_length=max, join_by=""
+    ):  # pragma: no cover
+        yield {
+            "key": key,
+            "out": Chepy(data).xor(key).bytearray_to_str(errors="backslashreplace").o,
+        }
