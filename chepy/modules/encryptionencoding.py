@@ -5,7 +5,7 @@ import base64
 import binascii
 import jwt
 import pathlib
-import json
+import ujson
 import regex as re
 
 from Crypto.Util.Padding import pad, unpad
@@ -179,7 +179,7 @@ class EncryptionEncoding(Core):
         if isinstance(self.state, dict):
             data = self.state
         elif isinstance(self.state, str):
-            data = json.loads(self.state)
+            data = ujson.loads(self.state)
         self.state = jwt.encode(data, key=secret, algorithm=algorithms)
         return self
 

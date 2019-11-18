@@ -1,4 +1,4 @@
-import json
+import ujson
 from typing import Iterator, Dict
 from urllib.request import urlopen
 from Crypto.PublicKey import RSA
@@ -19,7 +19,7 @@ def factordb(n: int) -> dict:  # pragma: no cover
     res = urlopen("http://factordb.com/api/?query={}".format(str(n)))
     if res.status != 200:
         return None
-    return json.loads(res.read().decode())
+    return ujson.loads(res.read().decode())
 
 
 def construct_private_key(

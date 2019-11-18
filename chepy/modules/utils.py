@@ -1,8 +1,10 @@
+import difflib
 import regex as re
 from typing import Any
 import pydash
 
 from ..core import Core
+import chepy.modules.internal.colors as _int_colors
 
 
 class Utils(Core):
@@ -231,7 +233,7 @@ class Utils(Core):
         if isinstance(self.state, list):
             self.state = pydash.uniq(self.state)
             return self
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise TypeError("State is not a list")
 
     def sorted(self, reverse: bool = False):
@@ -249,7 +251,7 @@ class Utils(Core):
         if isinstance(self.state, (list)):
             self.state = sorted(self.state)
             return self
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise TypeError("State is not a list")
 
     def filter_by(self, predicate: Any = None):
@@ -267,7 +269,7 @@ class Utils(Core):
         if isinstance(self.state, (list, dict)):
             self.state = pydash.filter_(self.state, predicate)
             return self
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise TypeError("State is not a list")
 
     def slice(self, start: int = 0, end: int = None):
@@ -327,4 +329,58 @@ class Utils(Core):
         self.state = tuple(
             int(self._convert_to_str().strip("#")[i : i + 2], 16) for i in (0, 2, 4)
         )
+        return self
+
+    def diff(self, state: int = None, buffer: int = None, colors: bool = False):
+        """Diff state with another state or buffer
+        
+        Args:
+            state (int, optional): Index of state to compare against. Defaults to None.
+            buffer (int, optional): Index of buffer to compare against. Defaults to None.
+            colors (int, optional): Show colored diff. Defaults to False.
+        
+        Raises:
+            TypeError: If both state and buffer is set to True.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("first string", "First $trin")
+            >>> # there are two states
+            >>> c.diff(state=1) # this will diff state 0 with state 1
+            {F->f}irst {-$}strin{+g}
+            >>> # optionally set colors=True in the diff method to see colored output
+        """
+        if state is not None and buffer is None:
+            data = self.states.get(state)
+        elif state is None and buffer is not None:
+            data = self.buffers.get(buffer)
+        else:  # pragma: no cover
+            raise TypeError("Only select a state or a buffer to diff against")
+
+        matcher = difflib.SequenceMatcher(None, data, self.state)
+
+        def process_tag(tag, i1, i2, j1, j2):  # pragma: no cover
+            if tag == "replace":
+                if colors:
+                    return _int_colors.BLUE(matcher.b[j1:j2])
+                else:
+                    return "{" + matcher.a[i1:i2] + "->" + matcher.b[j1:j2] + "}"
+            if tag == "delete":
+                if colors:
+                    return _int_colors.RED(matcher.a[i1:i2])
+                else:
+                    return "{-" + matcher.a[i1:i2] + "}"
+            if tag == "equal":
+                return matcher.a[i1:i2]
+            if tag == "insert":
+                if colors:
+                    return _int_colors.GREEN(matcher.b[j1:j2])
+                else:
+                    return "{+" + matcher.b[j1:j2] + "}"
+                return "{+" + matcher.b[j1:j2] + "}"
+            assert False, "Unknown tag %r" % tag
+
+        self.state = "".join(process_tag(*t) for t in matcher.get_opcodes())
         return self

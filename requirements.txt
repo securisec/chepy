@@ -19,3 +19,4 @@ decorator
 pyjwt
 parsel
 jsonpath-rw
+ujson

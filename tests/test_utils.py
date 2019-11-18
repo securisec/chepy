@@ -133,3 +133,18 @@ def test_unescape_string():
 def test_color_hex_to_rgb():
     assert Chepy("ffb4ad").color_hex_to_rgb().o == (255, 180, 173)
 
+
+def test_diff():
+    c = Chepy("a long sentence haha").save_buffer().to_upper_case(by="word")
+    c.state += " hehe"
+    c.find_replace("lo", "").diff(buffer=0)
+    assert c.o == "{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
+    d = (
+        Chepy("a long sentence haha", "a long sentence haha")
+        .save_buffer()
+        .to_upper_case(by="word")
+    )
+    d.state += " hehe"
+    d.find_replace("lo", "").diff(state=1)
+    assert d.o == "{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
+

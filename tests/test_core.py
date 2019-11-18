@@ -11,9 +11,9 @@ def test_states():
     assert state2 == b"4242"
 
 
-def test_subsection():
-    assert Chepy("some data").subsection("s(ome)", 1).o == "ome"
-    assert Chepy("some data").subsection("s(ome)").o == "some"
+def test_substring():
+    assert Chepy("some data").substring("s(ome)", 1).o == "ome"
+    assert Chepy("some data").substring("s(ome)").o == "some"
 
 
 def test_get_state():
@@ -110,9 +110,9 @@ def test_get_type():
 
 def test_write_to_file():
     Chepy(b'\x41').write_to_file('.test', as_binary=True)
-    with open('/tmp/a', 'r') as f:
+    with open('.test', 'r') as f:
         assert f.read() == 'A'
     Chepy('A').write_to_file('.test')
-    with open('/tmp/a', 'r') as f:
+    with open('.test', 'r') as f:
         assert f.read() == 'A'
     os.remove('.test')

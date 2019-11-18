@@ -23,6 +23,6 @@ jobs:
         pip install .
     - name: Test docs
       run: |
-        pip install sphinx
+        pip install sphinx recommonmark
         cd docs
         make clean html

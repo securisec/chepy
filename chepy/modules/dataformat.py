@@ -1,10 +1,10 @@
 import string
 import binascii
 import base64
-import json
 import codecs
 import html
 import base58
+import ujson
 import yaml
 import regex as re
 from urllib.parse import quote_plus as _urllib_quote_plus
@@ -35,7 +35,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = json.loads(re.sub(r"'", '"', self._convert_to_str()))
+        self.state = ujson.loads(re.sub(r"'", '"', self._convert_to_str()))
         return self
 
     def join_list(self, by: str):
@@ -56,7 +56,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = json.loads(self._convert_to_str())
+        self.state = ujson.loads(self._convert_to_str())
         return self
 
     def dict_to_json(self):
@@ -66,7 +66,7 @@ class DataFormat(Core):
             Chepy: The Chepy object.
         """
         assert isinstance(self.state, dict), "Not a dict object"
-        self.state = json.dumps(self.state)
+        self.state = ujson.dumps(self.state)
         return self
 
     def yaml_to_json(self):
@@ -75,7 +75,7 @@ class DataFormat(Core):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = json.dumps(yaml.safe_load(self.state))
+        self.state = ujson.dumps(yaml.safe_load(self.state))
         return self
 
     def json_to_yaml(self):
@@ -85,7 +85,7 @@ class DataFormat(Core):
             Chepy: The Chepy object.
         """
         self.state = yaml.dump(
-            json.loads(self.state),
+            ujson.loads(self.state),
             default_flow_style=False,
             sort_keys=False,
             allow_unicode=True,
@@ -185,32 +185,61 @@ class DataFormat(Core):
         self.state = int(self.state)
         return self
 
-    def base64_encode(self):
+    def base64_encode(self, custom: str = None):
         """Encode as Base64
         
         Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property encodes raw data 
         into an ASCII Base64 string.
+
+        Args:
+            custom (str, optional): Provide a custom charset to base64 with
         
         Returns:
             Chepy: The Chepy object. 
+        
+        Examples:
+            >>> # To use a custom character set, use:
+            >>> custom = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            >>> Chepy("Some data").base64_encode(custom=custom).o
+            b'IqxhNG/YMLFV'
         """
-        self.state = base64.b64encode(self._convert_to_bytes())
+        if custom is not None:
+            x = base64.b64encode(self._convert_to_bytes())
+            std_base64chars = (
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+            )
+            self.state = bytes(
+                str(x)[2:-1].translate(str(x)[2:-1].maketrans(std_base64chars, custom)),
+                "utf-8",
+            )
+        else:
+            self.state = base64.b64encode(self._convert_to_bytes())
         return self
 
-    def base64_decode(self):
+    def base64_decode(self, custom: str = None):
         """Decode as Base64
-        
+
         Base64 is a notation for encoding arbitrary byte data using a 
         restricted set of symbols that can be conveniently used by humans 
         and processed by computers.This property decodes raw data 
         into an ASCII Base64 string.
+
+        Args:
+            custom (str, optional): Provide a custom charset to base64 with
         
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = base64.b64decode(self.state)
+        if custom is not None:
+            std_base64chars = (
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+            )
+            c = self._convert_to_str().translate(str.maketrans(custom, std_base64chars))
+            self.state = base64.b64decode(c.encode())
+        else:
+            self.state = base64.b64decode(self._convert_to_bytes())
         return self
 
     def to_hex(self):

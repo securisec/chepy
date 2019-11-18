@@ -2,7 +2,6 @@ import base64
 import binascii
 import pathlib
 import webbrowser
-import json as pyjson
 import pyperclip
 import requests
 import logging
@@ -178,10 +177,10 @@ class Core(object):
             logging.warning("{} does not exist".format(index))
         return self
 
-    def subsection(self, pattern: str, group: int = 0):
-        """Choose a subsection from current state as string 
+    def substring(self, pattern: str, group: int = 0):
+        """Choose a substring from current state as string 
 
-        The preceeding methods will only run on the subsection and 
+        The preceeding methods will only run on the substring and 
         not the original state. Group capture is supported. 
         
         Args:
@@ -404,7 +403,7 @@ class Core(object):
             if isinstance(obj, dict):
                 return obj
             elif isinstance(obj, str):
-                return pyjson.loads(obj)
+                return json.loads(obj)
             else:
                 raise NotImplementedError
 

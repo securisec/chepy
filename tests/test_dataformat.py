@@ -4,7 +4,7 @@ from chepy import Chepy
 def test_dict_to_json():
     assert (
         Chepy({"some": "data", "a": ["list", 1, True]}).dict_to_json().o
-        == '{"some": "data", "a": ["list", 1, true]}'
+        == '{"some":"data","a":["list",1,true]}'
     )
 
 
@@ -37,7 +37,7 @@ education: |
 """
     assert (
         Chepy(data).yaml_to_json().o
-        == '{"name": "Martin D\'vloper", "job": "Developer", "skill": "Elite", "employed": true, "foods": ["Apple", "Orange", "Strawberry", "Mango"], "languages": {"perl": "Elite", "python": "Elite", "pascal": "Lame"}, "education": "4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
+        == '{"name":"Martin D\'vloper","job":"Developer","skill":"Elite","employed":true,"foods":["Apple","Orange","Strawberry","Mango"],"languages":{"perl":"Elite","python":"Elite","pascal":"Lame"},"education":"4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
     )
 
 
@@ -87,6 +87,26 @@ def test_base32_encode():
 
 def test_base64_encode():
     assert Chepy("some data").base64_encode().output.decode() == "c29tZSBkYXRh"
+    assert (
+        Chepy("some random? data")
+        .base64_encode(
+            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        )
+        .o
+        == b"QqxhNG/mMKtYPqoz64FVR42="
+    )
+
+
+def test_base64_decode():
+    assert Chepy("c29tZSByYW5kb20/IGRhdGE=").base64_decode().o == b"some random? data"
+    assert (
+        Chepy("QqxhNG/mMKtYPqoz64FVR42=")
+        .base64_decode(
+            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        )
+        .o
+        == b"some random? data"
+    )
 
 
 def test_base58_encode():

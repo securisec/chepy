@@ -32,8 +32,8 @@ DateTime
 .. autoclass:: chepy.modules.datetimemodule.DateTime
     :members:
         
-AritmeticLogic
-""""""""""""""
+EncryptionEncoding
+""""""""""""""""""
 .. autoclass:: chepy.modules.encryptionencoding.EncryptionEncoding
     :members:
         

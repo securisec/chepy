@@ -1,7 +1,7 @@
 import sys
 from colorama import Fore, init
 
-init(convert=True)
+# init(convert=True)
 
 
 def RED(s: str) -> str:  # pragma: no cover
@@ -55,10 +55,10 @@ def BLUE(s: str) -> str:  # pragma: no cover
         >>> from chepy.modules.internal.colors import BLUE
         >>> print(BLUE("some string"))
     """
-    if sys.stdout.isatty():
-        return Fore.BLUE + s + Fore.RESET
-    else:
-        return s
+    # if sys.stdout.isatty():
+    return Fore.BLUE + s + Fore.RESET
+    # else:
+    #     return s
 
 
 def LIGHT_BLUE(s: str) -> str:  # pragma: no cover
