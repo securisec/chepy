@@ -191,7 +191,7 @@ def get_current_type(obj):
 
 def parse_args(args):
     parse = argparse.ArgumentParser()
-    types = parse.add_mutually_exclusive_group()
+    parse.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
     parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 

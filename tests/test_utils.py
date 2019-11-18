@@ -22,40 +22,6 @@ def test_count_occurances():
     )
 
 
-def test_to_uppercase():
-    assert Chepy("some String").to_upper_case(by="word").o == "Some String"
-    assert Chepy("some String").to_upper_case(by="sentence").o == "Some string"
-    assert Chepy("some String").to_upper_case(by="all").o == "SOME STRING"
-
-
-def test_to_snake_case():
-    assert Chepy("helloWorld").to_snake_case().o == "hello_world"
-
-
-def test_to_camel_case():
-    assert Chepy("some Data_test").to_camel_case().o == "someDataTest"
-    assert Chepy("some Data_test").to_camel_case(ignore_space=True).o == "some DataTest"
-
-
-def test_to_kebab_case():
-    assert Chepy("Some data_test").to_kebab_case().o == "some-data-test"
-
-
-def test_remove_whitespace():
-    assert (
-        Chepy("some    long space\n\ttab space\flol").remove_whitespace().o
-        == "somelongspacetabspacelol"
-    )
-
-
-def test_swap_case():
-    assert Chepy("SoMe TeXt").swap_case().o == "sOmE tExT"
-
-
-def test_lower_case():
-    assert Chepy("HelLo WorLd").to_lower_case().o == "hello world"
-
-
 def test_search():
     assert (
         len(
@@ -114,7 +80,7 @@ def test_filter():
     ).o == [{"b": 2}, {"a": 1, "b": 3}]
 
 
-def test_slick():
+def test_slice():
     assert Chepy("some data").slice(3, 6).o == "e d"
 
 

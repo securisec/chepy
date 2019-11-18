@@ -11,6 +11,8 @@ from typing import Any, Tuple, List, Union
 
 from .modules.exceptions import PrintException
 
+logging.getLogger().setLevel(logging.INFO)
+
 
 class Core(object):
     def __init__(self, *data):
@@ -32,6 +34,10 @@ class Core(object):
                 return "bytearray in state"
             else:
                 return self._convert_to_str()
+        except UnicodeDecodeError:  # pragma: no cover
+            return (
+                "Could not convert to str. Use o, output or out() to access the values"
+            )
         except:  # pragma: no cover
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
@@ -457,4 +463,5 @@ class Core(object):
             mode = "w+"
         with open(str(path), mode) as f:
             f.write(self.state)
+        logging.info("File written to {}".format(file_path))
         return None

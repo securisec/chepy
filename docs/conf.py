@@ -45,6 +45,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 html_theme = "alabaster"
+html_logo = "../logo.png"
 
 html_theme_options = {"fixed_sidebar": True}
 

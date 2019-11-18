@@ -28,6 +28,7 @@ pyjwt = "==1.7.1"
 parsel = "==1.5.2"
 jsonpath-rw = "==1.4.0"
 ujson = "==1.35"
+phpserialize = "*"
 
 [requires]
 python_version = "3.7"

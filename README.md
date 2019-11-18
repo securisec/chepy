@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="150px">
+
 ![](https://github.com/securisec/chepy/workflows/docs/badge.svg)
 ![](https://github.com/securisec/chepy/workflows/bandit/badge.svg)
 ![](https://github.com/securisec/chepy/workflows/pytest/badge.svg)
