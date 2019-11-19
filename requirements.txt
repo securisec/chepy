@@ -20,3 +20,4 @@ pyjwt
 parsel
 jsonpath-rw
 ujson
+phpserialize

@@ -18,6 +18,16 @@ from ..extras.combinatons import hex_chars
 
 
 class EncryptionEncoding(Core):
+    """This class handles most operations related to various encryption 
+    related operations. This class inherits the Core class, and all the 
+    methods are also available from the Chepy class
+    
+    Examples:
+        >>> from chepy import Chepy
+        or
+        >>> from chepy.modules.encryptionencoding import EncryptionEncoding
+    """
+
     def rotate(self, rotate_by: int):
         """Rotate string by provided number
         
@@ -91,6 +101,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("secret").xor(key="secret", key_type="utf").to_hex()
+            000000000000
         """
         assert key_type in [
             "utf",
@@ -126,7 +140,21 @@ class EncryptionEncoding(Core):
             length (int, optional): How to bytes to bruteforce. Defaults to 100.
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy("pf`qfw").xor_bruteforce()
+            {'00': bytearray(b'pf`qfw'),
+            '01': bytearray(b'qgapgv'),
+            '02': bytearray(b'rdbsdu'),
+            '03': bytearray(b'secret'), # here is our secret xored with the hex key 03
+            '04': bytearray(b'tbdubs'),
+            '05': bytearray(b'ucetcr'),
+            ...}
+            >>> c.get_by_key("03").bytearray_to_str()
+            secret
+            >>> c.xor("03").bytearray_to_str()
+            pf`qfw
         """
         original = self.state
         found = {}
