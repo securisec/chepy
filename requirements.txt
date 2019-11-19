@@ -21,3 +21,4 @@ parsel
 jsonpath-rw
 ujson
 phpserialize
+pycipher

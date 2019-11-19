@@ -379,3 +379,28 @@ def test_blowfish_decrypt():
         .o
         == b"some data"
     )
+
+
+def test_vigener_encode():
+    assert Chepy("secret").vigenere_encode("secret").o == "KIEIIM"
+
+
+def test_vigenere_decode():
+    assert Chepy("KIEIIM").vigenere_decode("secret").o == "SECRET"
+
+
+def test_affin_encode():
+    assert Chepy("secret").affine_encode().o == "TFDSFU"
+
+
+def test_affine_decode():
+    assert Chepy("TFDSFU").affine_decode().o == "SECRET"
+
+
+def test_atbash_encode():
+    assert Chepy("secret").atbash_encode().o == "hvxivg".upper()
+
+
+def test_atbash_decode():
+    assert Chepy("hvxivg").atbash_decode().o == "secret".upper()
+

@@ -6,6 +6,7 @@ import binascii
 import jwt
 import pathlib
 import ujson
+import pycipher
 import regex as re
 
 from Crypto.Util.Padding import pad, unpad
@@ -738,4 +739,72 @@ class EncryptionEncoding(Core):
             )
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
+
+    def vigenere_encode(self, key: str):
+        """Encode with Vigenere ciper
+        
+        Args:
+            key (str): The secret key
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Vigenere(key=key).encipher(self._convert_to_str())
+        return self
+
+    def vigenere_decode(self, key: str):
+        """Decode Vigenere ciper
+        
+        Args:
+            key (str): The secret key
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Vigenere(key=key).decipher(self._convert_to_str())
+        return self
+
+    def affine_encode(self, a: int = 1, b: int = 1):
+        """Encode with Affine ciper
+        
+        Args:
+            a (int): Multiplier value
+            b (int): Additive value
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Affine(a=a, b=b).encipher(self._convert_to_str())
+        return self
+
+    def affine_decode(self, a: int = 1, b: int = 1):
+        """Decode Affine ciper
+        
+        Args:
+            a (int): Multiplier value
+            b (int): Additive value
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Affine(a=a, b=b).decipher(self._convert_to_str())
+        return self
+
+    def atbash_encode(self):
+        """Encode with Atbash ciper
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)
+        return self
+
+    def atbash_decode(self):
+        """Decode Atbash ciper
+        
+        Returns:
+            Chepy: The Chepy oject. 
+        """
+        self.state = pycipher.Atbash().decipher(self._convert_to_str(), keep_punct=True)
+        return self
 
