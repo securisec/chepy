@@ -4,7 +4,6 @@ import fire
 import regex as re
 from pathlib import Path
 import argparse
-from tempfile import gettempdir
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import (
     Completer,
@@ -14,14 +13,16 @@ from prompt_toolkit.completion import (
 )
 from prompt_toolkit.validation import ValidationError, Validator
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.styles import Style
 from prompt_toolkit import PromptSession
 
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
+from .conf import Config
 
-
+config = Config()
 options = []
 chepy = dir(Chepy)
 fire_obj = None
@@ -191,7 +192,9 @@ def get_current_type(obj):
 
 def parse_args(args):
     parse = argparse.ArgumentParser()
-    parse.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
+    parse.add_argument(
+        "-v", "--version", action="version", version="%(prog)s " + __version__
+    )
     parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 
@@ -203,9 +206,12 @@ def main():
 
     args_data.append("-")
 
-    history_file = str(Path(gettempdir() + "/chepy"))
+    history_file = config.history_path
     session = PromptSession(
-        history=FileHistory(history_file), style=get_style(), wrap_lines=True
+        history=FileHistory(history_file),
+        style=get_style(),
+        wrap_lines=True,
+        auto_suggest=AutoSuggestFromHistory(),
     )
     try:
         while True:

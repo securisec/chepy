@@ -1,5 +1,5 @@
-Welcome to chepy's documentation!
-=================================
+Chepy documentation!
+====================
 
 Chepy
 =====

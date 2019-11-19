@@ -1,8 +1,27 @@
 # pylint: disable=undefined-variable
 from setuptools import setup, find_packages
 from os import path
+from shutil import copy
+from pathlib import Path
+from configparser import ConfigParser
 
+# create .chefy dir in home and move base conf file if it does not exist
+home = Path.home()
+chepy_dir = Path(home / ".chepy")
+chepy_conf = Path(chepy_dir / "chepy.conf")
+rc_path = Path("chepy.conf").absolute()
 
+Path(chepy_dir).mkdir(exist_ok=True)
+# Chepy default configs
+config = ConfigParser()
+config.read(str(rc_path))
+config["Cli"]["HistoryPath"] = str(chepy_dir / "chepy_history")
+# if file already exists, do not overwrite it
+if not chepy_conf.exists():
+    with open(str(chepy_conf), "w") as f:
+        config.write(f)
+
+# get version and author information
 with open("chepy/__version__.py", "r") as f:
     exec(f.read())
 
