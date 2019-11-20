@@ -316,3 +316,39 @@ class Utils(Core):
 
         self.state = "".join(process_tag(*t) for t in matcher.get_opcodes())
         return self
+
+    def pad(self, width: int, direction: str = "left", char: str = " "):
+        """Pad string with a character
+        
+        Args:
+            width (int): Total length of string. The padding is calculated from 
+                the length of state minus width.
+            direction (str, optional): Padding direction. left or right. Defaults to 'left'.
+            char (str, optional): Char to fill with. Defaults to ' '.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("lol").pad(5, char="a")
+            lol # this is because "lol" is len 3, and padding is 5 - 2, which is 2, so no 
+            padding is added
+            >>> c = Chepy("lol").pad(8, char="a")
+            lolaa # 8 - 3 so the output is padded for 5 chars
+            >>> c = Chepy("lol").pad(8, direction="right", char="a")
+            aalol
+        """
+        assert direction in [
+            "left",
+            "right",
+        ], "Direction has to be either left or right"
+        if direction == "left":
+            self.state = self._convert_to_str().ljust(
+                width - len(self._convert_to_str()), char
+            )
+        elif direction == "right":
+            self.state = self._convert_to_str().rjust(
+                width - len(self._convert_to_str()), char
+            )
+        return self
+

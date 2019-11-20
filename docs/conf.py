@@ -12,8 +12,15 @@
 #
 import os
 import sys
+from recommonmark.transform import AutoStructify
 
 sys.path.insert(0, os.path.abspath("."))
+
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'enable_eval_rst': True,
+            }, True)
+    app.add_transform(AutoStructify)
 
 
 # -- Project information -----------------------------------------------------

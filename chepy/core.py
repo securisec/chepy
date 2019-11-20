@@ -6,6 +6,9 @@ import pyperclip
 import requests
 import logging
 import inspect
+import jsonpickle
+import ujson
+import io
 import regex as re
 from typing import Any, Tuple, List, Union
 
@@ -15,6 +18,24 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 class Core(object):
+    """The `Core` class for Chepy is primarily used as an interface 
+    for all the current modules/classes in Chepy, or for plugin development. 
+    The `Core` class is what provides the various attributes like **states**, 
+    **buffers**, etc and is required to use and extend Chepy.
+    
+    Args:
+        \*data (tuple): The core class takes arbitrary number of arguments as \*args.
+
+    Attributes:
+        states (dict): Contains all the current states. Each arg passed to 
+            the Core class will be considered a state.
+        buffers (dict): Contains all the current buffers if a buffer is saved. 
+        state (Any): The data in the current state. The state changes each time a 
+            Chepy method is called. 
+    
+    Returns:
+        Chepy: The Chepy object. 
+    """
     def __init__(self, *data):
         self.states = dict(list(enumerate(data)))
         self._current_index = 0
@@ -45,6 +66,29 @@ class Core(object):
                 "Example: .o, .output, .state or .out()\n\n"
             )
             return ""
+
+    def _pickle_class(self, obj: Any) -> Any:
+        """This method takes another object as an argument and 
+        pickels that into a json object using jsonpickel. The 
+        return value is a dictionary
+        
+        Args:
+            obj (Any): Any object
+        
+        Returns:
+            Any: unpickeled JSON as a python object. 
+        """
+        return ujson.loads(jsonpickle.encode(obj, unpicklable=True))
+
+    def _load_as_file(self) -> object:
+        """This method is used when a function or a method expects 
+        a file path to load a file. Instead of passing a file path, 
+        this method allows passing an io.BytesIO object instead.
+        
+        Returns:
+            object: io.BytesIO object
+        """
+        return io.BytesIO(self._convert_to_bytes())
 
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
@@ -81,6 +125,29 @@ class Core(object):
                     self.states[i] = getattr(self, method_name)(**method[1]).o
                 else:
                     self.states[i] = getattr(self, method_name)().o
+        return self
+
+    def set_state(self, data: Any):
+        """Set any arbitrary values in the current state
+
+        This method is simply changing the value of the instantiated 
+        state with an arbitrary value. 
+        
+        Args:
+            data (Any): Any data type
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("some data")
+            >>> print(c.state)
+            some data
+            >>> c.set_state("New data")
+            >>> print(c.state)
+            New data
+        """
+        self.state = data
         return self
 
     def create_state(self):
@@ -164,6 +231,20 @@ class Core(object):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("A").save_buffer()
+            >>> # this saves the current value of state to a new buffer
+            >>> c.to_hex()
+            >>> # operate on a state, in this case, convert to hex.
+            >>> c.state
+            "41"
+            >>> c.buffers
+            {0: "A"}
+            >>> c.load_buffer(0)
+            >>> # loads the content of the buffer back into the current state. 
+            >>> c.state
+            "A"
         """
         self.state = self.buffers[index]
         return self
@@ -212,7 +293,16 @@ class Core(object):
         """
         return self.states.get(index)
 
-    def _convert_to_bytes(self):
+    def _convert_to_bytes(self) -> None:
+        """This method is used to coerce the curret object in 
+        the state variable into a string. The method should be 
+        called inside any method that operates on a string object 
+        instead of calling `self.state` directly to avoid errors. 
+        
+        Raises:
+            NotImplementedError: If type coercian isnt available 
+                for the current state type.
+        """
         if isinstance(self.state, bytes):
             return self.state
         elif isinstance(self.state, str):
@@ -232,9 +322,21 @@ class Core(object):
             raise NotImplementedError
 
     def _convert_to_bytearray(self):
+        """Attempts to coerce the current state into a 
+        `bytesarray` object
+        """
         return bytearray(self._convert_to_bytes())
 
     def _convert_to_str(self):
+        """This method is used to coerce the curret object in 
+        the state variable into bytes. The method should be 
+        called inside any method that operates on a bytes object 
+        instead of calling `self.state` directly to avoid errors. 
+        
+        Raises:
+            NotImplementedError: If type coercian isnt available 
+                for the current state type.
+        """
         if isinstance(self.state, bytes):
             return self.state.decode()
         elif isinstance(self.state, str):
@@ -254,6 +356,15 @@ class Core(object):
             raise NotImplementedError
 
     def _convert_to_int(self):
+        """This method is used to coerce the curret object in 
+        the state variable into an int. The method should be 
+        called inside any method that operates on a int types 
+        instead of calling `self.state` directly to avoid errors. 
+        
+        Raises:
+            NotImplementedError: If type coercian isnt available 
+                for the current state type.
+        """
         if isinstance(self.state, int):
             return self.state
         elif isinstance(self.state, str) or isinstance(self.state, bytes):
@@ -436,6 +547,11 @@ class Core(object):
         
         Returns:
             Chepy: The Chepy object. 
+        
+        Examples:
+            >>> c = Chepy("/path/to/file")
+            >>> # at the moment, the state only contains the string "/path/to/file"
+            >>> c.load_file() # this will load the file content into the state
         """
         path = pathlib.Path(self.state).expanduser().absolute()
         try:
@@ -444,6 +560,17 @@ class Core(object):
         except UnicodeDecodeError:
             with open(path, "rb") as f:
                 self.states[self._current_index] = bytearray(f.read())
+        return self
+
+    def read_file(self):
+        """If a path is provided, read the file 
+
+        Alias of `load_file`.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.load_file()
         return self
 
     def write_to_file(self, file_path: str, as_binary: bool = False) -> None:

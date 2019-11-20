@@ -114,3 +114,8 @@ def test_diff():
     d.find_replace("lo", "").diff(state=1)
     assert d.o == "{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
 
+
+def test_pad():
+    assert Chepy("lol").pad(7, char="a").o == "lola"
+    assert Chepy("lol").pad(7, direction="right", char="a").o == "alol"
+
