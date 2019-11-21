@@ -1,8 +1,6 @@
 <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="150px">
 
-![](https://github.com/securisec/chepy/workflows/docs/badge.svg)
-![](https://github.com/securisec/chepy/workflows/bandit/badge.svg)
-![](https://github.com/securisec/chepy/workflows/pytest/badge.svg)
+![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
 [![codecov](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
 
 [![Read the Docs](https://img.shields.io/readthedocs/chepy.svg)](http://chepy.readthedocs.io/en/latest/)

@@ -59,9 +59,8 @@ class Core(object):
             else:
                 return self._convert_to_str()
         except UnicodeDecodeError:  # pragma: no cover
-            return (
-                "Could not convert to str. Use o, output or out() to access the values"
-            )
+            return "Could not convert to str, but the data exists in the states \
+                    Use o, output or out() to access the values"
         except:  # pragma: no cover
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
@@ -524,7 +523,7 @@ class Core(object):
     ):
         """Get data from http request
 
-        Make a HTTP/S request and work with the data in Chepy. All request 
+        Make a HTTP/S request and work with the data in Chepy. Most common http 
         methods are supported; but some methods may not provide a response body. 
         
         Args:
@@ -539,7 +538,26 @@ class Core(object):
             requests.RequestException: If response status code is not 200
         
         Returns:
-            Chepy: The Chepy object.
+            Chepy: A dictionary containing body, status and headers. The Chepy object.
+
+        Examples:
+            By default, this methed with make a GET request, But supports most 
+            common methods. 
+            
+                >>> c = Chepy("http://example.com").http_request()
+                >>> c.get_by_key("headers")
+
+            This method can also be used to make more complex requests by specifying 
+            headers, cookies, body data etc.
+
+                >>> c = Chepy("https://en4qpftrmznwq.x.pipedream.net")
+                >>> c.http_request(
+                >>>    method="POST", 
+                >>>    headers={"My-header": "some header"}, 
+                >>>    json={"some": "data"}
+                >>> )
+                >>> print(c.get_by_key("body"))
+                {"success": true}
         """
 
         def json2str(obj):  # pragma: no cover
@@ -600,7 +618,7 @@ class Core(object):
         return self
 
     def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
-        """Save the state to disk
+        """Save the state to disk. Return None.
         
         Args:
             file_path (str): The file path to save in.
@@ -608,6 +626,11 @@ class Core(object):
         
         Returns:
             None: Returns None
+
+        Examples:
+            >>> c = Chepy("some data").write_to_file('/some/path/file', as_binary=True)
+            >>> # use the alias
+            >>> c = Chepy("some data").write('/some/path/file', as_binary=True)
         """
         if as_binary:
             mode = "wb+"

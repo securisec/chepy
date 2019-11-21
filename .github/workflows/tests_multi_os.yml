@@ -1,4 +1,4 @@
-name: pytest
+name: tests
 
 on: [push]
 
@@ -23,8 +23,21 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest --disable-pytest-warnings
+        pip install pytest pytest-cov
+        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+    - name: Test with bandit
+      run: |
+        pip install bandit
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+    - name: Test docs
+      run: |
+        pip install sphinx recommonmark
+        make -C docs/ clean html
+    - name: Upload to codecov
+      uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
 
   windows:
 
@@ -46,8 +59,21 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest --disable-pytest-warnings
+        pip install pytest pytest-cov
+        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+    - name: Test with bandit
+      run: |
+        pip install bandit
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+    - name: Test docs
+      run: |
+        pip install sphinx recommonmark
+        make -C docs/ clean html
+    - name: Upload to codecov
+      uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
 
   osx:
 
@@ -69,5 +95,18 @@ jobs:
         pip install .
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest --disable-pytest-warnings
+        pip install pytest pytest-cov
+        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+    - name: Test with bandit
+      run: |
+        pip install bandit
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+    - name: Test docs
+      run: |
+        pip install sphinx recommonmark
+        make -C docs/ clean html
+    - name: Upload to codecov
+      uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml

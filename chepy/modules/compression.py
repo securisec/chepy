@@ -1,4 +1,6 @@
 import io
+import bz2
+import gzip
 import zipfile
 from ..core import Core
 
@@ -87,9 +89,68 @@ class Compression(Core):
             >>> c = Chepy("some data").create_zip_file()
             >>> c.write("/some/path/file.zip", as_binary=True)
         """
-        data = io.BytesIO()
-        z = zipfile.ZipFile(data, mode="w", compression=zipfile.ZIP_DEFLATED)
+        mf = io.BytesIO()
+        z = zipfile.ZipFile(mf, mode="w", compression=zipfile.ZIP_DEFLATED)
         z.writestr(file_name, self.state)
         z.close()
-        self.state = data.getvalue()
+        self.state = mf.getvalue()
+        return self
+
+    def gzip_compress(self, file_name: str = None):
+        """Create a gz archive with data from state
+        
+        Args:
+            file_name (str, optional): File name for file inside zip archive. 
+                Defaults to None.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("some data").gzip_compress()
+            >>> c.write("/some/path/file.zip", as_binary=True)
+        """
+        mf = io.BytesIO()
+        g = gzip.GzipFile(filename=file_name, mode="w", fileobj=mf)
+        g.write(self._convert_to_bytes())
+        g.close()
+        self.state = mf.getvalue()
+        return self
+
+    def gzip_decompress(self):
+        """Decompress a gzip archive
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = gzip.decompress(self._convert_to_bytes())
+        return self
+
+    def bzip_compress(self):
+        """Compress the state into bz2 archive
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("some data").bzip_compress()
+            b'BZh91AY&SY\\x9f\\xe2\\xaa\\x9d\\x00\\x00\\x03...
+
+            We can now write this as a bz2 file with
+            >>> c.write("/path/to/file.bz2", as_binary=True)
+        """
+        mf = io.BytesIO()
+        b = bz2.BZ2File(mf, mode="w")
+        b.write(self._convert_to_bytes())
+        b.close()
+        self.state = mf.getvalue()
+        return self
+
+    def bzip_decompress(self):
+        """Decompress a bz2 archive
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = bz2.decompress(self._convert_to_bytes())
         return self
