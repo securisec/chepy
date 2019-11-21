@@ -1,6 +1,10 @@
 Extras
 ======
 
+Bruteforce
+""""""""""
+.. automodule:: chepy.extras.bruteforce
+    :members:
 
 Combinations
 """"""""""""

@@ -36,10 +36,13 @@ class Core(object):
     Returns:
         Chepy: The Chepy object. 
     """
+
     def __init__(self, *data):
         self.states = dict(list(enumerate(data)))
         self._current_index = 0
         self.buffers = dict()
+        #: Alias for `write_to_file`
+        self.write = self.write_to_file
 
     @property
     def state(self):
@@ -89,6 +92,29 @@ class Core(object):
             object: io.BytesIO object
         """
         return io.BytesIO(self._convert_to_bytes())
+
+    def _abs_path(self, path: str) -> str:
+        """Returns the absolute path by expanding home dir
+        
+        Args:
+            path (str): Path to expand
+        
+        Returns:
+            str: Expanded absolute path
+        """
+        return str(pathlib.Path(path).expanduser().absolute())
+
+    def _info_logger(self, data: str) -> None:
+        """Just a binding for logger.info
+        
+        Args:
+            data (str): Message to log
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        logging.info(data)
+        return None
 
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
@@ -577,18 +603,17 @@ class Core(object):
         """Save the state to disk
         
         Args:
-            file_path (str): The file path to save in
+            file_path (str): The file path to save in.
             as_binary (bool, optional): If file should be saved as a binary file. Defaults to False.
         
         Returns:
             None: Returns None
         """
-        path = pathlib.Path(file_path).expanduser().absolute()
         if as_binary:
             mode = "wb+"
         else:
             mode = "w+"
-        with open(str(path), mode) as f:
+        with open(str(self._abs_path(file_path)), mode) as f:
             f.write(self.state)
-        logging.info("File written to {}".format(file_path))
+        self._info_logger("File written to {}".format(self._abs_path(file_path)))
         return None
