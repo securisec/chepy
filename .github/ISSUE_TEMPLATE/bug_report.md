@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. Do keep in mind that Chepy is attempting to provide functionality that a web app does, which makes it difficult at times to work with certain types of user input. 
 
 **To Reproduce**
 Provide sufficient detail to reproduce the bug. Make sure to provide link to file, and data required to reproduce.

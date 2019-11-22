@@ -124,3 +124,8 @@ def test_write_to_file():
     with open(".test", "r") as f:
         assert f.read() == "A"
     os.remove(".test")
+
+
+def test_load_dir():
+    assert len(Chepy("tests/files/").load_dir().states) >= 10
+

@@ -244,11 +244,11 @@ def test_html_decode():
     )
 
 
-def test_to_punycode():
+def test_from_punycode():
     assert Chepy(b"mnchen-3ya").from_punycode().o == "münchen"
 
 
-def test_from_punycode():
+def test_to_punycode():
     assert Chepy("münchen").to_punycode().o == b"mnchen-3ya"
 
 

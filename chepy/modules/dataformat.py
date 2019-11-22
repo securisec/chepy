@@ -24,6 +24,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(["a", "b", "c"]).list_to_str(",").o
+            "a,b,c"
         """
         assert isinstance(self.state, list), "Data in state not a list"
         self.state = join_by.join(self.state)
@@ -34,6 +38,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("[1,2,'lol', true]").str_list_to_list().o
+            [1, 2, "lol", True]
         """
         self.state = ujson.loads(re.sub(r"'", '"', self._convert_to_str()))
         return self
@@ -46,6 +54,9 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+        Examples:
+            >>> Chepy(["a", "b", "c"]).join_list(":").o
+            "a:b:c"
         """
         self.state = by.join(self.state)
         return self
@@ -55,6 +66,13 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy('{"some": "data", "a": ["list", 1, true]}').json_to_dict().o
+            {
+                "some": "data",
+                "a": ["list", 1, True],
+            }
         """
         self.state = ujson.loads(self._convert_to_str())
         return self
@@ -64,6 +82,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy({"some": "data", "a": ["list", 1, True]}).dict_to_json().o
+            '{"some":"data","a":["list",1,true]}'
         """
         assert isinstance(self.state, dict), "Not a dict object"
         self.state = ujson.dumps(self.state)
@@ -102,6 +124,10 @@ class DataFormat(Core):
 
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").base58_encode().output.decode()
+            "2UDrs31qcWSPi"
         """
         self.state = base58.b58encode(self._convert_to_bytes())
         return self
@@ -116,6 +142,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("2UDrs31qcWSPi").base58_decode().output.decode()
+            "some data"
         """
         self.state = base58.b58decode(self.state)
         return self
@@ -130,6 +160,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").base85_encode().output.decode()
+            "F)Po,+Cno&@/"
         """
         self.state = base64.a85encode(self._convert_to_bytes())
         return self
@@ -144,6 +178,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("F)Po,+Cno&@/").base85_decode().output.decode()
+            "some data"
         """
         self.state = base64.a85decode(self._convert_to_bytes())
         return self
@@ -158,6 +196,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").base32_encode().output.decode()
+            "ONXW2ZJAMRQXIYI="
         """
         self.state = base64.b32encode(self._convert_to_bytes())
         return self
@@ -181,6 +223,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("1").to_int().o
+            1
         """
         self.state = int(self.state)
         return self
@@ -231,6 +277,13 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            Base64 decode using a custom string
+            >>> c = Chepy("QqxhNG/mMKtYPqoz64FVR42=")
+            >>> c.base64_decode(custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            >>> c.out()
+            b"some random? data"
         """
         if custom is not None:
             std_base64chars = (
@@ -247,6 +300,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("AAA").to_hex().out().decode()
+            "414141"
         """
         self.state = binascii.hexlify(self._convert_to_bytes())
         return self
@@ -256,6 +313,17 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            Chepy works with hex characters that start with a 0x
+
+            >>> Chepy("0x123").hex_to_int().output
+            291
+            
+            Without 0x in the hex
+
+            >>> Chepy("123").hex_to_int().output
+            291
         """
         if self._convert_to_str().startswith("0x"):
             self.state = int(self.state, 0)
@@ -271,6 +339,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("ab00").hex_to_binary().o
+            b"\\xab\\x00"
         """
         self.state = binascii.unhexlify(self._convert_to_bytes())
         return self
@@ -282,7 +354,12 @@ class DataFormat(Core):
             ignore (bool, optional): Ignore errors, by default False
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
+
+        Examples:
+            To ignore UnicodeDecode errors, set ignore to True
+            >>> Chepy("4100").hex_to_str(ignore=True).o
+            "A\x00" 
         """
         if ignore:
             self.state = binascii.unhexlify(self._convert_to_bytes()).decode(
@@ -306,6 +383,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(101).int_to_hex().o
+            "65"
         """
         self.state = format(self._convert_to_int(), "x")
         return self
@@ -339,6 +420,12 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("41:42:CE").normalize_hex().o
+            "4142CE"
+            >>> Chepy("0x410x420xce").normalize_hex().o
+            "4142ce"
         """
         if is_bytearray:
             self.state = binascii.hexlify(bytearray(self.state))
@@ -371,6 +458,12 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            Url encode while specifying save characters
+
+            >>> Chepy("https://google.com/?lol=some data&a=1").url_encode(safe="/:").o
+            "https://google.com/%3Flol%3Dsome+data%26a%3D1"
         """
         self.state = _urllib_quote_plus(self._convert_to_str(), safe=safe)
         return self
@@ -380,6 +473,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").url_decode().o
+            "https://google.com/?lol=some data&a=1"
         """
         self.state = _urllib_unquote_plus(self._convert_to_str())
         return self
@@ -396,6 +493,10 @@ class DataFormat(Core):
 
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy(bytearray("lolol", "utf")).bytearray_to_str().o
+            "lolol"
         """
         if isinstance(self.state, bytearray):
             self.state = self.state.decode(encoding, errors=errors)
@@ -410,6 +511,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("abc").str_to_list().o
+            ["a", "b", "c"]
         """
         self.state = list(self._convert_to_str())
         return self
@@ -426,6 +531,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+        
+        Examples:
+            >>> Chepy("aㅎ").to_charcode().o
+            ["61", "314e"]
         """
         self.state = list(
             "{escape}{hex:02x}".format(escape=escape_char, hex=ord(x))
@@ -441,6 +550,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(["314e", "61", "20", "41"]).from_charcode().o
+            ["ㅎ", "a", " ", "A"]
         """
         out = []
         for c in self.state:
@@ -454,6 +567,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("aㅎ").to_decimal().o
+            [97, 12622]
         """
         self.state = list(ord(s) for s in list(self._convert_to_str()))
         return self
@@ -463,6 +580,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy([12622]).from_decimal().o
+            ["ㅎ"]
         """
         self.state = list(chr(s) for s in self.state)
         return self
@@ -472,6 +593,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("abc").to_binary().o
+            ["01100001", "01100010", "01100011"]
         """
         self.state = list(format(ord(s), "08b") for s in list(self._convert_to_str()))
         return self
@@ -481,6 +606,14 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(["01100001", "01100010", "01100011"]).from_binary().o
+            [
+                "a",
+                "b",
+                "c",
+            ]
         """
         self.state = list(chr(int(s, 2)) for s in self.state)
         return self
@@ -490,6 +623,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("abㅎ").to_octal().o
+            ["141", "142", "30516"]
         """
         self.state = list(format(ord(s), "0o") for s in list(self._convert_to_str()))
         return self
@@ -499,6 +636,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(["141", "142", "30516"]).from_octal().o
+            ["a", "b", "ㅎ"]
         """
         self.state = list(chr(int(str(s), 8)) for s in self.state)
         return self
@@ -510,6 +651,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy('https://google.com&a="lol"').to_html_entity().o
+            "https://google.com&amp;a=&quot;lol&quot;"
         """
         self.state = html.escape(self._convert_to_str())
         return self
@@ -521,6 +666,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
+            'https://google.com&a="lol"'
         """
         self.state = html.unescape(self._convert_to_str())
         return self
@@ -530,6 +679,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("münchen").to_punycode().o
+            b"mnchen-3ya"
         """
         self.state = self._convert_to_str().encode("punycode")
         return self
@@ -539,6 +692,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(b"mnchen-3ya").from_punycode().o
+            "münchen"
         """
         self.state = self._convert_to_bytes().decode("punycode")
         return self
@@ -552,6 +709,16 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("münchen한").encode_bruteforce()
+            {
+                'ascii': b'm\\xfcnchen\\ud55c',
+                'base64_codec': b'bcO8bmNoZW7tlZw=\\n',
+                'big5': b'm\\xfcnchen\\ud55c',
+                'big5hkscs': b'm\\x88\\xa2nchen\\ud55c',
+                ...
+            }
         """
         data = self._convert_to_str()
         final = dict()
@@ -584,6 +751,16 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("m\\xfcnchen\\ud55c").decode_bruteforce()
+            {
+                ...
+                'unicode_escape': 'münchen한',
+                'utf_16': '屭晸湣档湥畜㕤挵',
+                'utf_16_be': '浜硦据捨敮屵搵㕣',
+                ...
+            }
         """
         data = self._convert_to_bytes()
         final = dict()
@@ -616,6 +793,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("secret message").to_braille().o
+            "⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑"
         """
         chars = dict(zip(Encoding.asciichars, Encoding.brailles))
         self.state = "".join(list(chars.get(c.lower()) for c in self.state))
@@ -626,6 +807,10 @@ class DataFormat(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o
+            "secret message"
         """
         chars = dict(zip(Encoding.brailles, Encoding.asciichars))
         self.state = "".join(list(chars.get(c.lower()) for c in self.state))

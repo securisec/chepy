@@ -586,6 +586,22 @@ class Core(object):
         }
         return self
 
+    def load_dir(self, pattern: str = "*"):
+        """Load all file paths in a directory
+        
+        Args:
+            pattern (str, optional): File pattern to match. Defaults to "*".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.states = {
+            x[0]: str(x[1])
+            for x in enumerate(pathlib.Path(self.state).glob(pattern))
+            if x[1].is_file()
+        }
+        return self
+
     def load_file(self):
         """If a path is provided, read the file
         

@@ -1,9 +1,55 @@
 import io
-from PIL import Image
+from PIL import Image, ImageFilter, ImageOps
 from ..core import Core
 
 
 class Multimedia(Core):
+    """The `Multimedia` class is used predominantly to handle image and 
+    audio file processing. All the methods within the `Multimedia` class 
+    are available in the main **Chepy** class. For coverage, it is important 
+    to understand that this class will sometimes coerce non RGBA to RGB and 
+    RGB to RGBA formats.
+    
+    Examples:
+        To use the Multimedia class as a standalone, import with
+        
+        >>> from chepy.modules.multimedia import Multimedia
+        >>> m = Multimedia("/path/to/image.png").load_file()
+        This will load the image as bytes into Chepy.
+
+        Advanced example using the Multimedia class. We will take 
+        our loaded image, convert it split out the RGB color channels, 
+        get the blue image, blur it and finally write it to disk. 
+
+        >>> from chepy.modules.multimedia import Multimedia
+        >>> m = Multimedia("/path/to/image.png").load_file()
+        >>> m.split_color_channels("png")
+        {'red': '...', 'blue': '...', 'green': '...'}
+        >>> m.get_by_key("blue")
+        b"...PNG..."
+        >>> m.blur_image("png")
+        >>> m.write("/path/to/file.png", as_binary=True)
+
+        This whole operation can be done in one line also.
+
+        >>> from chepy.modules.multimedia import Multimedia
+        >>> m = Multimedia("/path/to/image.png").load_file().split_color_channels("png").get_by_key("blue").blur_image().write("/path/to/file.png", as_binary=True)
+    """
+
+    def _force_rgba(self, image):  # pragma: no cover
+        if image.mode != "RGBA":
+            new = image.convert("RGBA")
+            return new
+        else:
+            return image
+
+    def _force_rgb(self, image):  # pragma: no cover
+        if image.mode != "RGB":
+            new = image.convert("RGB")
+            return new
+        else:
+            return image
+
     def resize_image(
         self,
         width: int,
@@ -50,51 +96,60 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
-    def split_color_channels(self):
+    def split_color_channels(self, extension: str):
         """Split an image into its red, green and blue channels
+
+        Args:
+            extension (str): File extension of loaded image
         
         Returns:
             Chepy: The Chepy object. 
 
         Examples:
-            Write the red image to disk in this example
+            Write the blue image to disk in this example
 
             >>> c = Chepy("logo.png").load_file()
-            >>> c.split_color_channels()
+            >>> c.split_color_channels("png")
             {'red': b'...', 'green': b'...', 'blue': b'...'}
             >>> c.get_by_key("blue").write("/path/to/file.png", as_binary=True)
         """
         hold = {}
         image = Image.open(self._load_as_file())
+        image = self._force_rgba(image)
         data = image.getdata()
 
-        red = [(d[0], 0, 0) for d in data]
-        green = [(0, d[1], 0) for d in data]
-        blue = [(0, 0, d[2]) for d in data]
+        red = []
+        green = []
+        blue = []
+        for d in data:
+            red.append((d[0], 0, 0))
+            green.append((0, d[1], 0))
+            blue.append((0, 0, d[2]))
 
         red_fh = io.BytesIO()
         image.putdata(red)
-        image.save(red_fh, "png")
+        image.save(red_fh, extension)
         hold["red"] = red_fh.getvalue()
 
         green_fh = io.BytesIO()
         image.putdata(green)
-        image.save(green_fh, "png")
+        image.save(green_fh, extension)
         hold["green"] = green_fh.getvalue()
 
         blue_fh = io.BytesIO()
         image.putdata(blue)
-        image.save(blue_fh, "png")
+        image.save(blue_fh, extension)
         hold["blue"] = blue_fh.getvalue()
 
         self.state = hold
         return self
 
-    def rotate_image(self, rotate_by: int):
+    def rotate_image(self, rotate_by: int, extension: str):
         """Rotate an image
         
         Args:
             rotate_by (int): Roate by degrees
+            extension (str): File extension of loaded image
         
         Returns:
             Chepy: The Chepy object. 
@@ -102,12 +157,85 @@ class Multimedia(Core):
         Examples:
             To flip an image horizontally, we can:
 
-            >>> c = Chepy("logo.png").load_file().rotate_image(180)
+            >>> c = Chepy("logo.png").load_file().rotate_image(180, "png")
             >>> c.write('/path/to/file.png', as_binary=True)
         """
         image = Image.open(self._load_as_file())
         fh = io.BytesIO()
-        rotated = image.rotate(70)
-        rotated.save(fh, "png")
+        rotated = image.rotate(rotate_by)
+        rotated.save(fh, extension)
         self.state = fh.getvalue()
         return self
+
+    def blur_image(self, extension: str, gaussian: bool = False, radius: int = 2):
+        """Blur an image
+        
+        Args:
+            extension (str): File extension of loaded image
+            gaussian (bool, optional): If Gaussian blur is to be applied. Defaults to False.
+            radius (int, optional): Radius for Gaussian blur. Defaults to 2.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("logo.png").load_file().blur_image("png")
+            >>> >>> c.write('/path/to/file.png', as_binary=True)
+
+            To apply Gaussian blur, use:
+
+            >>> c = Chepy("logo.png").load_file()
+            >>> c.blur_image(extension="png", gaussian=True, radius=4)
+            >>> >>> c.write('/path/to/file.png', as_binary=True)
+        """
+        image = Image.open(self._load_as_file())
+        fh = io.BytesIO()
+        if gaussian:
+            blurred = image.filter(ImageFilter.GaussianBlur(radius=radius))
+        else:
+            blurred = image.filter(ImageFilter.BLUR)
+        blurred.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def grayscale_image(self, extension: str):
+        """Grayscale an image
+        
+        Args:
+            extension (str): File extension of loaded image
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("logo.png").load_file().grayscale_image("png")
+            >>> >>> c.write('/path/to/file.png', as_binary=True)
+        """
+        image = Image.open(self._load_as_file())
+        fh = io.BytesIO()
+        gray = image.convert("LA")
+        gray.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def invert_image(self, extension: str):
+        """Invert the colors of the image
+        
+        Args:
+            extension (str): File extension of loaded image
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("logo.png").load_file().invert_image("png")
+            >>> >>> c.write('/path/to/file.png', as_binary=True)
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgb(image)
+        fh = io.BytesIO()
+        inverted = ImageOps.invert(image)
+        inverted.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
