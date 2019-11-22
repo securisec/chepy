@@ -54,7 +54,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "alabaster"
 html_logo = "../logo.png"
 
-html_theme_options = {"fixed_sidebar": True}
+html_theme_options = {"fixed_sidebar": False}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

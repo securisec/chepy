@@ -75,6 +75,11 @@ class CodeTidy(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy('a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}')
+            >>> c.php_deserialize()
+            {1: b'elem 1', 2: b'elem 2', 3: b' elem 3'}
         """
         self.state = phpserialize.loads(self._convert_to_bytes())
         return self
@@ -87,8 +92,28 @@ class CodeTidy(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            Uppercase by word
+
+            >>> Chepy("some String").to_upper_case(by="word").o
+            "Some String"
+            
+            Uppercase by sentence
+
+            >>> Chepy("some String").to_upper_case(by="sentence").o
+            "Some string"
+            
+            Uppercase all
+
+            >>> Chepy("some String").to_upper_case(by="all").o
+            "SOME STRING"
         """
-        assert by in ["all", "word", "sentence"]
+        assert by in [
+            "all",
+            "word",
+            "sentence",
+        ], "Valid options are all, word and sentence"
         if by == "all":
             self.state = self._convert_to_str().upper()
         elif by == "word":
@@ -104,6 +129,10 @@ class CodeTidy(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("HelLo WorLd").to_lower_case().o
+            "hello world"
         """
         self.state = self._convert_to_str().lower()
         return self
@@ -116,6 +145,10 @@ class CodeTidy(Core):
 
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("helloWorld").to_snake_case().o
+            "hello_world"
         """
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", self._convert_to_str())
         self.state = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
@@ -132,6 +165,14 @@ class CodeTidy(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("some Data_test").to_camel_case().o
+            "someDataTest"
+            
+            To ignore space, we can set the `ignore_space` to True
+            >>> Chepy("some Data_test").to_camel_case(ignore_space=True).o
+            "some DataTest"
         """
         if ignore_space:
             r = re.compile(r"_.|\-.")
@@ -148,6 +189,10 @@ class CodeTidy(Core):
 
         Returns:
             Chepy: The Chepy object.
+
+        Examples:  
+            >>> Chepy("Some data_test").to_kebab_case().o
+            "some-data-test"
         """
         self.state = pydash.kebab_case(self._convert_to_str())
         return self
@@ -157,6 +202,10 @@ class CodeTidy(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("SoMe TeXt").swap_case().o
+            "sOmE tExT"
         """
         self.state = pydash.swap_case(self._convert_to_str())
         return self

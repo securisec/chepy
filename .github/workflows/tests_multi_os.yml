@@ -69,12 +69,7 @@ jobs:
       run: |
         pip install sphinx recommonmark
         make -C docs/ clean html
-    - name: Upload to codecov
-      uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ./coverage.xml
-
+        
   osx:
 
     runs-on: macOS-latest
@@ -105,8 +100,3 @@ jobs:
       run: |
         pip install sphinx recommonmark
         make -C docs/ clean html
-    - name: Upload to codecov
-      uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ./coverage.xml

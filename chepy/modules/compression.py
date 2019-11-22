@@ -1,6 +1,7 @@
 import io
 import bz2
 import gzip
+import zlib
 import zipfile
 from ..core import Core
 
@@ -153,4 +154,25 @@ class Compression(Core):
             Chepy: The Chepy object. 
         """
         self.state = bz2.decompress(self._convert_to_bytes())
+        return self
+
+    def zlib_compress(self, level: int = 9):
+        """Compress using zlib
+        
+        Args:
+            level (int, optional): Level of compression. 0-9. Defaults to 9.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = zlib.compress(self._convert_to_bytes(), level=level)
+        return self
+
+    def zlib_decompress(self):
+        """Zlib decompression
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = zlib.decompress(self._convert_to_bytes())
         return self
