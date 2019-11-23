@@ -25,6 +25,7 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        coverage report -m
     - name: Test with bandit
       run: |
         pip install bandit
@@ -61,6 +62,7 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        coverage report -m
     - name: Test with bandit
       run: |
         pip install bandit
@@ -92,6 +94,7 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        coverage report -m
     - name: Test with bandit
       run: |
         pip install bandit

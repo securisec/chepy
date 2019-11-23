@@ -1,6 +1,7 @@
 [run]
 omit = 
     chepy/__main__.py
+    chepy/conf.py
     chepy/modules/internal/cli.py
 
 
