@@ -1,5 +1,6 @@
 import io
-from PIL import Image, ImageFilter, ImageOps
+from typing import List, Tuple
+from PIL import Image, ImageFilter, ImageOps, ImageDraw
 from ..core import Core
 
 
@@ -54,7 +55,7 @@ class Multimedia(Core):
         self,
         width: int,
         height: int,
-        extension: str,
+        extension: str = "png",
         resample: str = "nearest",
         quality: int = 100,
     ):
@@ -64,7 +65,7 @@ class Multimedia(Core):
             Core ([type]): [description]
             width (int): Width in pixels
             height (int): Height in pixels
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
             resample (str, optional): Resample rate. Defaults to "nearest".
             quality (int, optional): Quality of output. Defaults to 100.
         
@@ -96,11 +97,11 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
-    def split_color_channels(self, extension: str):
+    def split_color_channels(self, extension: str = "png"):
         """Split an image into its red, green and blue channels
 
         Args:
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
             Chepy: The Chepy object. 
@@ -144,12 +145,12 @@ class Multimedia(Core):
         self.state = hold
         return self
 
-    def rotate_image(self, rotate_by: int, extension: str):
+    def rotate_image(self, rotate_by: int, extension: str = "png"):
         """Rotate an image
         
         Args:
             rotate_by (int): Roate by degrees
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
             Chepy: The Chepy object. 
@@ -167,11 +168,13 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
-    def blur_image(self, extension: str, gaussian: bool = False, radius: int = 2):
+    def blur_image(
+        self, extension: str = "png", gaussian: bool = False, radius: int = 2
+    ):
         """Blur an image
         
         Args:
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
             gaussian (bool, optional): If Gaussian blur is to be applied. Defaults to False.
             radius (int, optional): Radius for Gaussian blur. Defaults to 2.
         
@@ -198,11 +201,11 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
-    def grayscale_image(self, extension: str):
+    def grayscale_image(self, extension: str = "png"):
         """Grayscale an image
         
         Args:
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
             Chepy: The Chepy object. 
@@ -218,11 +221,11 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
-    def invert_image(self, extension: str):
+    def invert_image(self, extension: str = "png"):
         """Invert the colors of the image
         
         Args:
-            extension (str): File extension of loaded image
+            extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
             Chepy: The Chepy object. 
@@ -239,3 +242,164 @@ class Multimedia(Core):
         self.state = fh.getvalue()
         return self
 
+    def image_opacity(self, level: int, extension: str = "png"):
+        """Change the opacity of an image
+        
+        Args:
+            level (int): Level of opacity. Half is 128
+            extension (str, optional): File extension of loaded image. Defaults to png
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgba(image)
+        fh = io.BytesIO()
+        image.putalpha(level)
+        image.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def image_to_asciiart(
+        self,
+        art_width: int = 120,
+        chars: List[str] = ["B", "S", "#", "&", "@", "$", "%", "*", "!", ":", "."],
+    ):  # pragma: no cover
+        """Convert image to ascii art
+
+        `Reference: <https://dev.to/anuragrana/generating-ascii-art-from-colored-image-using-python-4ace>`__
+        
+        Args:
+            art_width (int, optional): Width of the ascii art. Higher values 
+                show more details. Defaults to 120.
+            chars (List[str], optional): A list of chars to build the ascii art with
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("pythonlogo.png").load_file()
+            >>> c.image_to_asciiart().o
+            .::.:..................................................:.::.
+            .::......................................................::.
+            :.......................&SSSSSSSSSS!.......................:
+            ...................*SSSSSSSSSSSSSSSSSSSS....................
+            ..................SSSS$@SSSSSSSSSSSSSSSSSS..................
+            .................:SSS....SSSSSSSSSSSSSSSSSS.................
+            .................:SSS....SSSSSSSSSSSSSSSSSS.................
+            .................:SSSSSSSSSSSSSSSSSSSSSSSSS.................
+            ..................SSSSSSSSSSSSSSSSSSSSSSSSS.................
+            ..............................SSSSSSSSSSSSS.*****!..........
+            ........SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.*********.......
+            ......SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.**********......
+            .....SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.***********.....
+            .....SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS..************....
+            ....SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS..************....
+            ....SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS...*************....
+            ....SSSSSSSSSSSSSSSS.....................***************....
+            ....SSSSSSSSSSSSS....***********************************....
+            ....SSSSSSSSSSSS...*************************************....
+            .....SSSSSSSSSSS..**************************************....
+            .....SSSSSSSSSSS..*************************************.....
+            ......SSSSSSSSSS..************************************......
+            .......SSSSSSSSS..**********************************!.......
+            ..........SSSSSS..************..............................
+            ..................*************************.................
+            ..................*************************.................
+            ..................******************...****.................
+            ..................*****************.....***.................
+            ..................******************:.****..................
+            ....................*********************...................
+            :.......................!***********:......................:
+            .::......................................................::.
+            .::.:..................................................:.::.
+        """
+        img = Image.open(self._load_as_file())
+
+        width, height = img.size
+        aspect_ratio = height / width
+        new_width = art_width
+        new_height = aspect_ratio * new_width * 0.55
+        img = img.resize((new_width, int(new_height)))
+        img = img.convert("L")
+
+        pixels = img.getdata()
+
+        new_pixels = [chars[pixel // 25] for pixel in pixels]
+        new_pixels = "".join(new_pixels)
+
+        new_pixels_count = len(new_pixels)
+        ascii_image = [
+            new_pixels[index : index + new_width]
+            for index in range(0, new_pixels_count, new_width)
+        ]
+        self.state = "\n".join(ascii_image)
+        return self
+
+    def convert_image(self, format_to: str):
+        """Change image format. 
+
+        Example, convert png to jpeg
+        
+        Args:
+            format_to (str): A valid image format extension
+        
+        Returns:
+            Chepy: The Chepy object
+
+        Examples:
+            For example, to change a png image to a jpeg image, and save it:
+
+            >>> c = Chepy("logo.png").load_file().convert_image("jpeg")
+            b'\\xff\\xd8\\xff\\xe0...'
+            >>> c.write("/path/to/file.jpeg", as_binary=True)
+        """
+        image = Image.open(self._load_as_file())
+        fh = io.BytesIO()
+
+        if image.mode != "RGB":
+            new = image.convert("RGB")
+        else:  # pragma: no cover
+            new = image
+
+        formatted = new.save(fh, format_to)
+        self.state = fh.getvalue()
+        return self
+
+    def image_add_text(
+        self,
+        text: str,
+        extension: str = "png",
+        coordinates: Tuple[int, int] = (0, 0),
+        color: Tuple[int, int, int] = (0, 0, 0),
+    ):
+        """Add text to an image
+        
+        Args:
+            text (str): Text to add
+            extension (str, optional): File extension of loaded image. Defaults to png
+            coordinates (Tuple[int, int], optional): Coordinates of image where to add text. 
+                Defaults to (0, 0).
+            color (Tuple[int, int, int], optional): Color of text. 
+                Defaults to (0, 0, 0) which is black.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("logo.png").load_file().image_add_text("some text")
+            b'\\xff\\xd8\\xff\\xe0...'
+            >>> c.write("/path/to/file.jpeg", as_binary=True)
+        """
+        image = Image.open(self._load_as_file())
+        fh = io.BytesIO()
+
+        if image.mode != "RGB":
+            new = image.convert("RGB")
+        else:  # pragma: no cover
+            new = image
+
+        ImageDraw.Draw(new).text(coordinates, text, color)
+        formatted = new.save(fh, extension)
+        self.state = fh.getvalue()
+        return self

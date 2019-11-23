@@ -37,6 +37,12 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            In this example, we will rotate by 20
+
+            >>> Chepy("some data").rotate(20).output
+            "migy xunu"
         """
         lc = string.ascii_lowercase
         uc = string.ascii_uppercase
@@ -66,6 +72,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some").rot_47().output
+            "D@>6"
         """
         x = []
         for i in range(len(self.state)):
@@ -255,6 +265,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").rc4_encrypt("736563726574", hex_key=True).o
+            b"9e59bf79a2c0b7d253"
         """
         if hex_key:
             key = binascii.unhexlify(key)
@@ -273,6 +287,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("9e59bf79a2c0b7d253").hex_to_str().rc4_decrypt("secret").o
+            b"some data"
         """
         if hex_key:
             key = binascii.unhexlify(key)
@@ -308,6 +326,15 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).o
+            b"1ee5cb52954b211d1acd6e79c598baac"
+
+            To encrypt using a differnt mode
+
+            >>> Chepy("some data").des_encrypt("password", mode="CTR").o
+            b"0b7399049b0267d93d"
         """
 
         def to_hex(s):
@@ -363,6 +390,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("1ee5cb52954b211d1acd6e79c598baac").hex_to_str().des_decrypt("password").o
+            b"some data"
         """
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
@@ -414,6 +445,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").triple_des_encrypt("super secret password !!", mode="ECB").o
+            b"f8b27a0d8c837edc8fb00ea85f502fb4"
         """
 
         def to_hex(s):
@@ -468,6 +503,13 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("f8b27a0d8c837edce87dd13a1ab41f96")
+            >>> c.hex_to_str()
+            >>> c.triple_des_decrypt("super secret password !!")
+            >>> c.o
+            b"some data"
         """
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
@@ -526,6 +568,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").aes_encrypt("secret password!", mode="ECB").o
+            b"5fb8c186394fc399849b89d3b6605fa3"
         """
 
         def to_hex(s):
@@ -595,6 +641,13 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("5fb8c186394fc399849b89d3b6605fa3")
+            >>> c.hex_to_str()
+            >>> c.aes_decrypt("7365637265742070617373776f726421", hex_key=True)
+            >>> c.o
+            b"some data"
         """
 
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
@@ -652,6 +705,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some data").blowfish_encrypt("password", mode="ECB").o
+            b"d9b0a79853f139603951bff96c3d0dd5"
         """
 
         def to_hex(s):
@@ -710,6 +767,13 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("d9b0a79853f13960fcee3cae16e27884")
+            >>> c.hex_to_str()
+            >>> c.blowfish_decrypt("password")
+            >>> c.o
+            b"some data"
         """
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
@@ -748,6 +812,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("secret").vigenere_encode("secret").o
+            "KIEIIM"
         """
         self.state = pycipher.Vigenere(key=key).encipher(self._convert_to_str())
         return self
@@ -760,6 +828,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("KIEIIM").vigenere_decode("secret").o
+            "SECRET"
         """
         self.state = pycipher.Vigenere(key=key).decipher(self._convert_to_str())
         return self
@@ -773,6 +845,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("secret").affine_encode().o
+            "TFDSFU"
         """
         self.state = pycipher.Affine(a=a, b=b).encipher(self._convert_to_str())
         return self
@@ -786,6 +862,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("TFDSFU").affine_decode().o
+            "SECRET"
         """
         self.state = pycipher.Affine(a=a, b=b).decipher(self._convert_to_str())
         return self
@@ -795,6 +875,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("secret").atbash_encode().o
+            "HVXIVG"
         """
         self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)
         return self
@@ -804,6 +888,10 @@ class EncryptionEncoding(Core):
         
         Returns:
             Chepy: The Chepy oject. 
+
+        Examples:
+            >>> Chepy("hvxivg").atbash_decode().o
+            "SECRET"
         """
         self.state = pycipher.Atbash().decipher(self._convert_to_str(), keep_punct=True)
         return self

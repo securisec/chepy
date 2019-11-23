@@ -16,6 +16,25 @@ class Publickey(Core):
         
         Returns:
             Chepy: A Chepy object. 
+
+        Examples:
+            >>> Chepy(path).load_file().parse_x509_pem().o
+            {
+                "version": 0,
+                ...
+                "after": b"20201101152508Z",
+                "issuer": {
+                    "C": "US",
+                    ...
+                    "email": "none@email.com",
+                },
+                "subject": {
+                    "C": "US",
+                    ...
+                    "email": "none@email.com",
+                },
+                "pubkey": {"bits": 1024},
+            }
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_PEM, self._convert_to_str()
@@ -139,6 +158,20 @@ class Publickey(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy(str(Path().absolute() / "tests/files/test.der"))
+            >>> c.load_file()
+            >>> c.der_hex_to_pem()
+            >>> c.o.decode()
+            -----BEGIN CERTIFICATE-----
+            MIICeTCCAeICCQDi5dgCpKMeHTANBgkqhkiG9w0BAQsFADCBgDELMAkGA1UEBhMC
+            VVMxDDAKBgNVBAgMA2xvbDEMMAoGA1UEBwwDbnljMRIwEAYDVQQKDAlzZWN1cmlz
+            ...
+            wQSFm54UNQ/vjM12yZ+C5c3268Vo8jSP7mI5R3wn6XztjUSXkDg5/3IL3kojti/h
+            nyhBHx2QCVke7BxWw3HWkbZ/1BKl0HnCGyd5HDTuOtlBmTS+QrJoNpdsn0zq4fvc
+            igbV1IJdKTBAiZzaOQ==
+            -----END CERTIFICATE-----
         """
         cert_pem = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
@@ -153,6 +186,10 @@ class Publickey(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/public.pem").load_file().parse_public_pem().get_by_key("e").o
+            65537
         """
         key = RSA.importKey(self.state)
         self.state = {"n": key.n, "e": key.e}

@@ -9,11 +9,15 @@ class DateTime(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("1573426649").from_unix_ts()
+            "Sun Nov 10 17:57:29 2019"
         """
         self.state = datetime.fromtimestamp(self._convert_to_int()).strftime("%c")
         return self
 
-    def to_unix_ts(self): # pragma: no cover
+    def to_unix_ts(self):  # pragma: no cover
         """Convert datetime string to unix ts
 
         The format for the string is %a %b %d %H:%M:%S %Y, which is equivalent to 
@@ -21,6 +25,10 @@ class DateTime(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("Sun Nov 10 17:57:29 2019").to_unix_ts()
+            "1573426649"
         """
         self.state = int(
             time.mktime(time.strptime(self._convert_to_str(), "%a %b %d %H:%M:%S %Y"))

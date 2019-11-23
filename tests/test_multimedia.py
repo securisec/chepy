@@ -44,7 +44,27 @@ def test_blur_image():
     assert c1 != c2
     assert c1 != c3
 
+
 def test_invert_image():
     c1 = Chepy("logo.png").load_file().o
     c2 = Chepy("logo.png").load_file().invert_image("png").o
     assert c1 != c2
+
+
+def test_image_opacity():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_opacity(10, "png").o
+    assert c1 != c2
+
+
+def test_image_add_text():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_add_text("some text").o
+    assert c1 != c2
+
+
+def test_convert_image():
+    assert (
+        Chepy("logo.png").load_file().convert_image("jpeg").to_hex().o[0:6] == b"ffd8ff"
+    )
+

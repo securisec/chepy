@@ -15,6 +15,18 @@ class Extractors(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/hello").load_file().extract_strings().o
+            [
+                b'__PAGEZERO',
+                b'__TEXT',
+                b'__text',
+                b'__TEXT',
+                b'__stubs',
+                b'__TEXT',
+                ...
+            ]
         """
         pattern = b"[^\x00-\x1F\x7F-\xFF]{" + str(length).encode() + b",}"
         self.state = re.findall(pattern, self._convert_to_bytes())
@@ -54,6 +66,12 @@ class Extractors(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            Sometimes, the state is in a binary format, and not readable. In this case 
+            set the binary flag to True.
+
+            >>> Chepy("tests/files/test.der").load_file().extract_email(is_binary=True).o
         """
         pattern = b"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if is_binary:
@@ -148,6 +166,14 @@ class Extractors(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("http://example.com")
+            >>> c.http_request()
+            >>> c.xpath_selector("//title/text()")
+            >>> c.get_by_index(0)
+            >>> c.o
+            "Example Domain"
         """
         self.state = (
             Selector(self._convert_to_str(), namespaces=namespaces)
@@ -164,6 +190,14 @@ class Extractors(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("http://example.com")
+            >>> c.http_request()
+            >>> c.css_selector("title")
+            >>> c.get_by_index(0)
+            >>> c.o
+            "<title>Example Domain</title>"
         """
         self.state = Selector(self._convert_to_str()).css(query).getall()
         return self
@@ -178,6 +212,14 @@ class Extractors(Core):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("tests/files/test.json")
+            >>> c.load_file()
+            >>> c.jpath_selector("[*].name.first")
+            >>> c.get_by_index(2)
+            >>> c.o
+            "Long"
         """
         self.state = list(
             j.value

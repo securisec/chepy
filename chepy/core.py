@@ -59,8 +59,7 @@ class Core(object):
             else:
                 return self._convert_to_str()
         except UnicodeDecodeError:  # pragma: no cover
-            return "Could not convert to str, but the data exists in the states \
-                    Use o, output or out() to access the values"
+            return "Could not convert to str, but the data exists in the states. Use o, output or out() to access the values"
         except:  # pragma: no cover
             logging.exception(
                 "\n\nCannot print current state. Either chain with "

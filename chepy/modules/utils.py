@@ -16,6 +16,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("abcdefg").reverse().output
+            "gfedcba"
         """
         if count == 1:
             self.state = self.state[::-1]
@@ -38,7 +42,11 @@ class Utils(Core):
             case_sensitive (bool, optional): If search should be case insensitive, by default False
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").output
+            2
         """
         if case_sensitive:
             r = re.compile(regex)
@@ -112,6 +120,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy("loLolololoL")
+            >>> c.regex_search("ol", ignore_case=True)
         """
         flags = 0
         if ignore_case:
@@ -165,6 +177,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy(["a", "b", "1", "2"]).sorted().o
+            ["1", "2", "a", "b"]
         """
         if isinstance(self.state, (list)):
             self.state = sorted(self.state)
@@ -183,6 +199,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_by("b").o
+            [{"b": 2}, {"a": 1, "b": 3}]
         """
         if isinstance(self.state, (list, dict)):
             self.state = pydash.filter_(self.state, predicate)
@@ -199,6 +219,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("some data").slice(3, 6).o
+            "e d"
         """
         self.state = self.state[start:end]
         return self
@@ -213,6 +237,10 @@ class Utils(Core):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("some some data").find_replace(r"some\s", "data").o
+            "datadatadata"
         """
         flags = 0
         if ignore_case:
@@ -224,7 +252,11 @@ class Utils(Core):
         """Escape all special characters in a string
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("\\$ome' d@ta").unescape_string().o
+            "$ome' d@ta"
         """
         self.state = re.escape(self._convert_to_str())
         return self
@@ -233,7 +265,7 @@ class Utils(Core):
         """Unescape \\ from a string
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.sub(r"\\", "", self._convert_to_str())
         return self
@@ -242,7 +274,7 @@ class Utils(Core):
         """Convert hex color to rgb
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = tuple(
             int(self._convert_to_str().strip("#")[i : i + 2], 16) for i in (0, 2, 4)
@@ -327,7 +359,7 @@ class Utils(Core):
             char (str, optional): Char to fill with. Defaults to ' '.
         
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("lol").pad(5, char="a")
