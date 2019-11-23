@@ -3,10 +3,10 @@ import pydash
 import phpserialize
 import regex as re
 from lxml import etree
-from ..core import Core
+from ..core import ChepyCore
 
 
-class CodeTidy(Core):
+class CodeTidy(ChepyCore):
     def minify_json(self):
         """Minify JSON string
         

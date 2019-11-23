@@ -1,10 +1,10 @@
 import io
 from typing import List, Tuple
 from PIL import Image, ImageFilter, ImageOps, ImageDraw
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Multimedia(Core):
+class Multimedia(ChepyCore):
     """The `Multimedia` class is used predominantly to handle image and 
     audio file processing. All the methods within the `Multimedia` class 
     are available in the main **Chepy** class. For coverage, it is important 
@@ -62,7 +62,7 @@ class Multimedia(Core):
         """Resize an image. 
         
         Args:
-            Core ([type]): [description]
+            ChepyCore ([type]): [description]
             width (int): Width in pixels
             height (int): Height in pixels
             extension (str, optional): File extension of loaded image. Defaults to png

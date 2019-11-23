@@ -2,10 +2,10 @@ from OpenSSL import crypto as _pyssl_crypto
 from OpenSSL._util import lib as _pyssl_cryptolib
 from Crypto.PublicKey import RSA
 
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Publickey(Core):
+class Publickey(ChepyCore):
     def parse_x509_pem(self):
         """Parse X509 cert in PEM format
         

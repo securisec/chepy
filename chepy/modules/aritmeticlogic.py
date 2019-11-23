@@ -1,5 +1,5 @@
-from ..core import Core
+from ..core import ChepyCore
 
 
-class AritmeticLogic(Core):
+class AritmeticLogic(ChepyCore):
     pass

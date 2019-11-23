@@ -25,7 +25,7 @@ Commit messages should always have proper flair indicating the changes. The firs
 
 - 🔅 A new feature has been added. This could be tests files, new arguments etc.
 - ℹ️ An update has been made to an existing feature
-- 🧨 A major refactor has taken place. This could be anything in the Cli or Core classes.
+- 🧨 A major refactor has taken place. This could be anything in the Cli or ChepyCore classes.
 - 🐍 A new python dependency has been added
 - ✅ New method has been added
 - 📚 Added new documentation

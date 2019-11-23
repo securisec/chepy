@@ -12,10 +12,10 @@ from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
 from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
 from crccheck.crc import CrcArc, Crc32, Crc8
 
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Hashing(Core):
+class Hashing(ChepyCore):
     def identify_hash(self):
         """Identify hash type
         

@@ -14,6 +14,10 @@ from .modules.other import Other
 from .modules.publickey import Publickey
 from .modules.utils import Utils
 
+from .conf import Config
+
+_plugins = Config().load_plugins()
+
 
 class Chepy(
     AritmeticLogic,
@@ -31,5 +35,6 @@ class Chepy(
     Other,
     Publickey,
     Utils,
+    *_plugins
 ):
     pass

@@ -26,6 +26,7 @@ config = Config()
 options = []
 chepy = dir(Chepy)
 fire_obj = None
+errors = []
 
 
 def get_style():
@@ -45,11 +46,13 @@ def get_style():
             "bt_states": "bg:#60cdd5",
             "bt_buffers": "bg:#ea9972",
             "bt_type": "bg:#ffd700",
+            "bt_errors": "bg:#ff0000",
         }
     )
 
 
 def get_options():
+    global errors
     options = dict()
     for method in chepy:
         try:
@@ -80,6 +83,8 @@ def get_options():
                         "returns": parsed_doc.returns.type_name,
                     }
         except:
+            e_type, e_msg, e_traceback = sys.exc_info()
+            errors.append((e_type.__name__, "Error parsing options in:", method))
             continue
     return options
 
@@ -103,6 +108,7 @@ def prompt_message(fire_obj):
 
 
 def bottom_toolbar(fire_obj):
+    global errors
     if isinstance(fire_obj, Chepy):
         states = len(fire_obj.states) - 1 if fire_obj is not None else 0
         current_state = fire_obj._current_index if fire_obj is not None else 0
@@ -117,6 +123,7 @@ def bottom_toolbar(fire_obj):
             ),
             ("class:bt_buffers", " Buffers: {total} ".format(total=buffers)),
             ("class:bt_type", " State: {} ".format(type(fire_obj.state).__name__)),
+            ("class:bt_errors", " Errors: {} ".format(len(errors))),
         ]
 
 
@@ -230,7 +237,9 @@ def main():
             if re.search(r"^cli_.+", prompt):
                 cli_method = prompt.split()[0]
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
-                if cli_args:
+                if cli_method == "cli_show_errors":
+                    getattr(chepy_cli, "cli_show_errors")(errors)
+                elif cli_args:
                     getattr(chepy_cli, cli_method)(
                         fire_obj, **{cli_args.group(1): cli_args.group(2)}
                     )

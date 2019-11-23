@@ -20,6 +20,10 @@ def test_zip_extract_one():
     )
 
 
+def test_zip_list_files():
+    assert len(Chepy("tests/files/test.zip").load_file().zip_list_files().o) == 2
+
+
 def test_zip_extract_all():
     assert (
         Chepy("tests/files/test.zip")

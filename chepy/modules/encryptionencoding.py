@@ -14,13 +14,13 @@ from Crypto.Cipher import ARC4
 from Crypto.Cipher import DES, DES3, AES
 from Crypto.Cipher import Blowfish
 
-from ..core import Core
+from ..core import ChepyCore
 from ..extras.combinatons import hex_chars
 
 
-class EncryptionEncoding(Core):
+class EncryptionEncoding(ChepyCore):
     """This class handles most operations related to various encryption 
-    related operations. This class inherits the Core class, and all the 
+    related operations. This class inherits the ChepyCore class, and all the 
     methods are also available from the Chepy class
     
     Examples:

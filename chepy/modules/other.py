@@ -1,9 +1,9 @@
 from uuid import uuid4
 
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Other(Core):
+class Other(ChepyCore):
     def generate_uuid(self) -> str:
         """Generate v4 UUID
 

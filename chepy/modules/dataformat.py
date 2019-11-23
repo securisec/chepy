@@ -11,11 +11,11 @@ from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 from typing import Any
 
-from ..core import Core
+from ..core import ChepyCore
 from chepy.modules.internal.constants import Encoding
 
 
-class DataFormat(Core):
+class DataFormat(ChepyCore):
     def list_to_str(self, join_by=" "):
         """Join an array by `join_by`
         

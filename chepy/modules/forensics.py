@@ -1,5 +1,5 @@
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Forensics(Core):
+class Forensics(ChepyCore):
     pass

@@ -24,6 +24,7 @@ Placeholder
    core.md
    modules.rst
    extras.rst
+   plugins.md
    pullrequest.md
 
 

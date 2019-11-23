@@ -17,10 +17,10 @@ from .modules.exceptions import PrintException
 logging.getLogger().setLevel(logging.INFO)
 
 
-class Core(object):
-    """The `Core` class for Chepy is primarily used as an interface 
+class ChepyCore(object):
+    """The `ChepyCore` class for Chepy is primarily used as an interface 
     for all the current modules/classes in Chepy, or for plugin development. 
-    The `Core` class is what provides the various attributes like **states**, 
+    The `ChepyCore` class is what provides the various attributes like **states**, 
     **buffers**, etc and is required to use and extend Chepy.
     
     Args:
@@ -28,7 +28,7 @@ class Core(object):
 
     Attributes:
         states (dict): Contains all the current states. Each arg passed to 
-            the Core class will be considered a state.
+            the ChepyCore class will be considered a state.
         buffers (dict): Contains all the current buffers if a buffer is saved. 
         state (Any): The data in the current state. The state changes each time a 
             Chepy method is called. 

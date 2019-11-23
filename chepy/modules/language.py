@@ -3,10 +3,10 @@ import unicodedata
 from typing import List
 import regex as re
 
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Language(Core):
+class Language(ChepyCore):
     def unicode_chrs_by_lang(self, lang: str):
         """Detect language specific characters
         

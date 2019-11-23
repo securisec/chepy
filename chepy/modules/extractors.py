@@ -3,10 +3,10 @@ import regex as re
 import jsonpath_rw
 from urllib.parse import urlparse as _pyurlparse
 from parsel import Selector
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Extractors(Core):
+class Extractors(ChepyCore):
     def extract_strings(self, length: int = 4):
         """Extract strings from state
         

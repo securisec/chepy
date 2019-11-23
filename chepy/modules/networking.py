@@ -2,10 +2,10 @@ import ipaddress
 import regex as re
 import urllib.parse as _py_urlparse
 from ua_parser.user_agent_parser import Parse as _uap_parse
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Networking(Core):
+class Networking(ChepyCore):
     def defang_url(self):
         """Make a URL harmless
         

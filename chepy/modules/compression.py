@@ -3,10 +3,10 @@ import bz2
 import gzip
 import zlib
 import zipfile
-from ..core import Core
+from ..core import ChepyCore
 
 
-class Compression(Core):
+class Compression(ChepyCore):
     def zip_info(self):
         """Gets various information about a zip file 
 
@@ -30,12 +30,27 @@ class Compression(Core):
                 self._pickle_class(z.infolist()),
             )
         )
+        z.close()
+        return self
+
+    def zip_list_files(self):
+        """Get a list of files inside the zip archive
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some.zip").load_file().zip_list_files().o
+            ['somefile', 'some_dir/some_file'...]
+        """
+        with zipfile.ZipFile(self._load_as_file()) as z:
+            self.state = list(i.filename for i in z.infolist())
         return self
 
     def unzip_one(self, file: str, password: str = None):
         """Unzip one file from zipfile
 
-        Use zip_info to get all the filenames within the zip archive
+        Use zip_list_files to get all the filenames within the zip archive
         
         Args:
             file (str): Path of file inside the archive
@@ -47,7 +62,7 @@ class Compression(Core):
         Examples:
             >>> c = Chepy("/path/to/zip.zip").load_file()
             >>> c.zip_info()
-            [{...filename: "somefile.txt"...}]
+            ['somefile.txt', 'some_dir/some_file'...]
             >>> c.unzip_one("somefile.txt")
             b"Hello World!"
         """
@@ -55,6 +70,7 @@ class Compression(Core):
         if password is not None:
             z.setpassword(password.encode())
         self.state = z.read(file)
+        z.close()
         return self
 
     def unzip_all(self, password: str = None):
@@ -75,6 +91,7 @@ class Compression(Core):
         if password is not None:
             z.setpassword(password.encode())
         self.state = list(z.read(f) for f in z.infolist())
+        z.close()
         return self
 
     def create_zip_file(self, file_name: str):

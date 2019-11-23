@@ -3,11 +3,11 @@ import regex as re
 from typing import Any
 import pydash
 
-from ..core import Core
+from ..core import ChepyCore
 import chepy.modules.internal.colors as _int_colors
 
 
-class Utils(Core):
+class Utils(ChepyCore):
     def reverse(self, count: int = 1):
         """Reverses a string
         

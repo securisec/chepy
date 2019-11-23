@@ -1,9 +1,9 @@
 import time
 from datetime import datetime
-from ..core import Core
+from ..core import ChepyCore
 
 
-class DateTime(Core):
+class DateTime(ChepyCore):
     def from_unix_ts(self):
         """Convert UNIX timestamp to datetime
         

@@ -1,6 +1,6 @@
 import sys
 import inspect
-from pprint import pformat
+from pprint import pformat, pprint
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import print_formatted_text
@@ -170,6 +170,12 @@ def cli_get_attr(fire: object, attr: str):
         print_in_colors(getattr(fire, attr)())
     else:
         print("nope")
+
+
+def cli_show_errors(errors):
+    """Show the errors messages if any
+    """
+    pprint(errors)
 
 
 def cli_exit(fire: object):
