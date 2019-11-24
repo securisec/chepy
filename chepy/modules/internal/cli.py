@@ -119,7 +119,7 @@ def cli_get_state(fire: object, index: int):
     
     Args:
         fire (object): The fire object
-        index (int): The index for the state
+        index (int): Required. The index for the state
     """
     if fire is not None and isinstance(fire, Chepy):
         print_in_colors(fire.states[int(0)])
@@ -164,10 +164,22 @@ def cli_get_attr(fire: object, attr: str):
     
     Args:
         fire (object): The fire object
-        attr (str): A valid attr name
+        attr (str): Required. A valid attr name
     """
     if fire is not None and not isinstance(fire, Chepy):
         print_in_colors(getattr(fire, attr)())
+    else:
+        print("nope")
+
+
+def cli_pretty_print(fire: object):
+    """Pretty print the current state
+    
+    Args:
+        fire (object): The fire object
+    """
+    if fire is not None and isinstance(fire, Chepy):
+        print_in_colors(pformat(fire.state))
     else:
         print("nope")
 
@@ -185,6 +197,3 @@ def cli_exit(fire: object):
         fire (object): The fire object
     """
     exit()
-
-
-# todo add some colors to markers for cli function output

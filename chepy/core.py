@@ -117,9 +117,12 @@ class ChepyCore(object):
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
         
+        Method names in a list of tuples. If using in the cli, 
+        this should not contain any spaces.
+
         Args:
-            methods (List[Tuple[Union[str, object], dict]]): Method names in a list
-                of tuples.
+            methods (List[Tuple[Union[str, object], dict]]): Required. 
+                List of tuples
         
         Returns:
             Chepy: The Chepy object. 
@@ -127,7 +130,9 @@ class ChepyCore(object):
         Examples:
             This method takes an array of method names and their args as an list of 
             tuples; the first value of the tuple is the method name as either a string, 
-            or as an object, and the second value is a ditionary of arguments. 
+            or as an object, and the second value is a ditionary of arguments. The keys of 
+            in the dictionary are method argument names, while the values are argument 
+            values.
 
             >>> from chepy import Chepy
             >>> c = Chepy("some", "data")
@@ -510,8 +515,11 @@ class ChepyCore(object):
         self.copy_to_clipboard()
         return None
 
-    def web(self) -> None:  # pragma: no cover
+    def web(self, magic: bool = False) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
+
+        Args:
+            magic (bool, optional): Start with the magic method in CyberChef
         
         Returns:
             None: Opens the current data in CyberChef
@@ -519,9 +527,14 @@ class ChepyCore(object):
         data = re.sub(
             b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
         )
-        url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')&input={}".format(
-            data.decode()
-        )
+        if magic:
+            url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
+                data.decode()
+            )
+        else:
+            url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')&input={}".format(
+                data.decode()
+            )
         webbrowser.open_new_tab(url)
         return None
 

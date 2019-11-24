@@ -15,6 +15,7 @@ from Crypto.Cipher import DES, DES3, AES
 from Crypto.Cipher import Blowfish
 
 from ..core import ChepyCore
+from .internal.constants import EncryptionConsts
 from ..extras.combinatons import hex_chars
 
 
@@ -28,6 +29,19 @@ class EncryptionEncoding(ChepyCore):
         or
         >>> from chepy.modules.encryptionencoding import EncryptionEncoding
     """
+
+    def _convert_key(self, key, iv, hex_key, hex_iv):  # pragma: no cover
+        if isinstance(key, str):
+            key = key.encode()
+        if hex_key:
+            key = binascii.unhexlify(key)
+        if isinstance(iv, str):
+            iv = iv.encode()
+        if hex_iv:
+            iv = binascii.unhexlify(iv)
+        else:
+            iv = binascii.unhexlify(binascii.hexlify(iv))
+        return key, iv
 
     def rotate(self, rotate_by: int):
         """Rotate string by provided number
@@ -306,6 +320,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Encrypt raw state with DES
 
@@ -319,10 +334,10 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '0000000000000000'.
+            iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -342,13 +357,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = DES.new(key, mode=DES.MODE_CBC, iv=binascii.unhexlify(iv))
+            cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
             self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
             return self
         elif mode == "ECB":
@@ -360,7 +372,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
         elif mode == "OFB":
-            cipher = DES.new(key, mode=DES.MODE_OFB, iv=binascii.unhexlify(iv))
+            cipher = DES.new(key, mode=DES.MODE_OFB, iv=iv)
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
 
@@ -370,6 +382,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Decrypt raw state encrypted with DES. 
 
@@ -383,10 +396,10 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '0000000000000000'.
+            iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -398,13 +411,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = DES.new(key, mode=DES.MODE_CBC, iv=binascii.unhexlify(iv))
+            cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
             self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
@@ -416,7 +426,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
-            cipher = DES.new(key, mode=DES.MODE_OFB, iv=binascii.unhexlify(iv))
+            cipher = DES.new(key, mode=DES.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
@@ -426,6 +436,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Encrypt raw state with Triple DES
 
@@ -438,10 +449,10 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '0000000000000000'.
+            iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -456,13 +467,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=binascii.unhexlify(iv))
+            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
             self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
             return self
         elif mode == "ECB":
@@ -474,7 +482,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
         elif mode == "OFB":
-            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=binascii.unhexlify(iv))
+            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=iv)
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
 
@@ -484,6 +492,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Decrypt raw state encrypted with DES. 
 
@@ -496,10 +505,10 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '0000000000000000'.
+            iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -514,13 +523,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=binascii.unhexlify(iv))
+            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
             self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
@@ -532,7 +538,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
-            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=binascii.unhexlify(iv))
+            cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
@@ -542,6 +548,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "00000000000000000000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Encrypt raw state with AES
 
@@ -561,10 +568,11 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '00000000000000000000000000000000'.
+            iv (str, optional): IV for certain modes only. 
+                Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -574,27 +582,21 @@ class EncryptionEncoding(ChepyCore):
             b"5fb8c186394fc399849b89d3b6605fa3"
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = AES.new(key, mode=AES.MODE_CBC, iv=binascii.unhexlify(iv))
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 16)))
+            cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 16))
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 16)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 16))
             return self
         elif mode == "CTR":
             cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "GCM":
             cipher = AES.new(
@@ -602,11 +604,11 @@ class EncryptionEncoding(ChepyCore):
                 mode=AES.MODE_GCM,
                 nonce=binascii.unhexlify("00000000000000000000000000000000"),
             )
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
-            cipher = AES.new(key, mode=AES.MODE_OFB, iv=binascii.unhexlify(iv))
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            cipher = AES.new(key, mode=AES.MODE_OFB, iv=iv)
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
 
     def aes_decrypt(
@@ -615,6 +617,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "00000000000000000000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Decrypt raw state encrypted with DES. 
 
@@ -634,10 +637,11 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '00000000000000000000000000000000'.
+            iv (str, optional): IV for certain modes only. 
+                Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -652,13 +656,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = AES.new(key, mode=AES.MODE_CBC, iv=binascii.unhexlify(iv))
+            cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
             self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 16)
             return self
         elif mode == "ECB":
@@ -678,7 +679,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
-            cipher = AES.new(key, mode=AES.MODE_OFB, iv=binascii.unhexlify(iv))
+            cipher = AES.new(key, mode=AES.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
@@ -688,6 +689,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Encrypt raw state with Blowfish
 
@@ -698,10 +700,10 @@ class EncryptionEncoding(ChepyCore):
 
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '0000000000000000'.
+            iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -716,15 +718,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = Blowfish.new(
-                key, mode=Blowfish.MODE_CBC, iv=binascii.unhexlify(iv)
-            )
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
             self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
             return self
         elif mode == "ECB":
@@ -738,9 +735,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
         elif mode == "OFB":
-            cipher = Blowfish.new(
-                key, mode=Blowfish.MODE_OFB, iv=binascii.unhexlify(iv)
-            )
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_OFB, iv=iv)
             self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
             return self
 
@@ -750,6 +745,7 @@ class EncryptionEncoding(ChepyCore):
         iv: str = "0000000000000000",
         mode: str = "CBC",
         hex_key: bool = False,
+        hex_iv: bool = True,
     ):
         """Encrypt raw state with Blowfish
 
@@ -760,10 +756,11 @@ class EncryptionEncoding(ChepyCore):
         
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. Show be a hex string
-                . Defaults to '00000000000000000000000000000000'.
+            iv (str, optional): IV for certain modes only. 
+                Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
+            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
         
         Returns:
             Chepy: The Chepy object. 
@@ -778,15 +775,10 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-        if isinstance(key, str):
-            key = key.encode()
-        if hex_key:
-            key = binascii.unhexlify(key)
+        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
-            cipher = Blowfish.new(
-                key, mode=Blowfish.MODE_CBC, iv=binascii.unhexlify(iv)
-            )
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
             self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
@@ -798,9 +790,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
-            cipher = Blowfish.new(
-                key, mode=Blowfish.MODE_OFB, iv=binascii.unhexlify(iv)
-            )
+            cipher = Blowfish.new(key, mode=Blowfish.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
@@ -896,3 +886,68 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Atbash().decipher(self._convert_to_str(), keep_punct=True)
         return self
 
+    def to_morse_code(
+        self,
+        dot: str = ".",
+        dash: str = "-",
+        letter_delim: str = " ",
+        word_delim: str = "\n",
+    ):
+        """Encode string to morse code
+        
+        Args:
+            dot (str, optional): The char for dot. Defaults to ".".
+            dash (str, optional): The char for dash. Defaults to "-".
+            letter_delim (str, optional): Letter delimiter. Defaults to " ".
+            word_delim (str, optional): Word delimiter. Defaults to "\\n".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        encode = ""
+        morse_code_dict = EncryptionConsts.MORSE_CODE_DICT
+        for k, v in morse_code_dict.items():
+            morse_code_dict[k] = v.replace(".", dot).replace("-", dash)
+        for word in self._convert_to_str().split():
+            for w in word:
+                encode += morse_code_dict.get(w.upper()) + letter_delim
+            encode += word_delim
+        self.state = encode
+        return self
+
+    def from_morse_code(
+        self,
+        dot: str = ".",
+        dash: str = "-",
+        letter_delim: str = " ",
+        word_delim: str = "\n",
+    ):
+        """Decode morse code
+        
+        Args:
+            dot (str, optional): The char for dot. Defaults to ".".
+            dash (str, optional): The char for dash. Defaults to "-".
+            letter_delim (str, optional): Letter delimiter. Defaults to " ".
+            word_delim (str, optional): Word delimiter. Defaults to "\\n".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        decode = ""
+        morse_code_dict = EncryptionConsts.MORSE_CODE_DICT
+        for k, v in morse_code_dict.items():
+            morse_code_dict[k] = v.replace(".", dot).replace("-", dash)
+
+        morse_code_dict = {value: key for key, value in morse_code_dict.items()}
+
+        for chars in self._convert_to_str().split(letter_delim):
+            if word_delim in chars:
+                print("here", chars)
+                chars = re.sub(word_delim, "", chars, re.I)
+                print(chars)
+                if morse_code_dict.get(chars) is not None:
+                    decode += " " + morse_code_dict.get(chars)
+            else:
+                decode += morse_code_dict.get(chars)
+        self.state = decode
+        return self

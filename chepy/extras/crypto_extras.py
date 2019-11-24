@@ -46,7 +46,7 @@ def construct_private_key(
 
 
 def xor_bruteforce_multi(
-    data: str, min: int = 0, max: int = None
+    data: str, min: int = 0, max: int = None, errors: str = "backslashreplace"
 ) -> Iterator[Dict[str, str]]:
     """Bruteforce multibyte xor encryption. For faster results, use pypy3. 
     It is important to set the min and max values if the key size is known.
@@ -56,6 +56,8 @@ def xor_bruteforce_multi(
         min (int, optional): Minimum key length. Default will start at 1 byte
             . Defaults to 0.
         max (int, optional): Maximum key length. Maximum value is 257 bytes. Defaults to None.
+        errors (str, optional): How should the errors be handled? Defaults to backslashreplace.
+            Valid options are replace, ignore, backslashreplace
     
     Returns:
         Iterator[Dict[str, str]]: [description]
@@ -69,5 +71,5 @@ def xor_bruteforce_multi(
     ):  # pragma: no cover
         yield {
             "key": key,
-            "out": Chepy(data).xor(key).bytearray_to_str(errors="backslashreplace").o,
+            "out": Chepy(data).xor(key).bytearray_to_str(errors=errors).o,
         }

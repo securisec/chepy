@@ -48,7 +48,6 @@ def test_cli_options():
     get_cli_options()
 
 
-# todo
 def test_fire1():
     assert fire.Fire(Chepy, command=["A", "-", "to_hex", "o"]) == b"41"
 

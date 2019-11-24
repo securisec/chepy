@@ -181,27 +181,28 @@ def test_aes_encrypt():
     assert (
         Chepy("some data")
         .aes_encrypt("7365637265742070617373776f726421", hex_key=True)
+        .to_hex()
         .o
         == b"5fb8c186394fc399849b89d3b6605fa3"
     )
     assert (
-        Chepy("some data").aes_encrypt("secret password!").o
+        Chepy("some data").aes_encrypt("secret password!").to_hex().o
         == b"5fb8c186394fc399849b89d3b6605fa3"
     )
     assert (
-        Chepy("some data").aes_encrypt("secret password!", mode="ECB").o
+        Chepy("some data").aes_encrypt("secret password!", mode="ECB").to_hex().o
         == b"5fb8c186394fc399849b89d3b6605fa3"
     )
     assert (
-        Chepy("some data").aes_encrypt("secret password!", mode="CTR").o
+        Chepy("some data").aes_encrypt("secret password!", mode="CTR").to_hex().o
         == b"4ab2b4f72e9d92960b"
     )
     assert (
-        Chepy("some data").aes_encrypt("secret password!", mode="GCM").o
+        Chepy("some data").aes_encrypt("secret password!", mode="GCM").to_hex().o
         == b"97a6227556b2be0763"
     )
     assert (
-        Chepy("some data").aes_encrypt("secret password!", mode="OFB").o
+        Chepy("some data").aes_encrypt("secret password!", mode="OFB").to_hex().o
         == b"4ab2b4f72e9d92960b"
     )
 
@@ -403,4 +404,18 @@ def test_atbash_encode():
 
 def test_atbash_decode():
     assert Chepy("hvxivg").atbash_decode().o == "secret".upper()
+
+
+def test_to_morse_code():
+    assert (
+        Chepy("hello world").to_morse_code(word_delim="/").o
+        == ".... . .-.. .-.. --- /.-- --- .-. .-.. -.. /"
+    )
+
+
+def test_from_morse_code():
+    assert (
+        Chepy(".... . .-.. .-.. --- \n.-- --- .-. .-.. -..").from_morse_code().o
+        == "HELLO WORLD"
+    )
 

@@ -44,7 +44,7 @@ def get_style():
             "bottom-toolbar": "#000000",
             "bt_version": "bg:#00ff48",
             "bt_states": "bg:#60cdd5",
-            "bt_buffers": "bg:#ea9972",
+            "bt_buffers": "bg:#ff00ff",
             "bt_type": "bg:#ffd700",
             "bt_errors": "bg:#ff0000",
         }
