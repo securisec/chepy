@@ -20,7 +20,7 @@ class Language(ChepyCore):
         but other code points should work also.
         
         Args:
-            lang (str): A string value identifying the language. 
+            lang (str): Required. A string value identifying the language. 
         
         Returns:
             Chepy: The Chepy object.

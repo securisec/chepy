@@ -112,10 +112,6 @@ def test_out_as_bytes():
     assert Chepy("a").out_as_bytes() == b"a"
 
 
-def test_get_type():
-    assert Chepy("a").get_type() == "str"
-
-
 def test_write_to_file():
     Chepy(b"\x41").write_to_file(".test", as_binary=True)
     with open(".test", "r") as f:

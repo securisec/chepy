@@ -9,9 +9,54 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/securisec/chepy)
 
 
-# chepy
+# Chepy
 
-Placeholder
+![Solving a CTF with Chepy](https://raw.githubusercontent.com/securisec/chepy/master/docs/assets/ctf.gif)
+
+Chepy is a python library with a handy cli that is aimed to mirror some of the capabilities of [CyberChef](https://gchq.github.io/CyberChef/). A reasonable amount of effort was put behind Chepy to make it compatible to the various functionalities that CyberChef offers, all in a pure Pythonic manner. There are some key advantages and disadvantages that Chepy has over Cyberchef. The Cyberchef concept of _stacking_ different modules is kept alive in Chepy.
+
+## Docs
+[Refer to the docs for full usage information](http://chepy.readthedocs.io/en/latest/)
+
+## Installation
+Chepy can be installed in a few ways.
+
+### Pypi
+```bash
+pip3 install chepy
+```
+
+### Git
+```bash
+git clone https://github.com/securisec/chepy.git
+cd chepy
+pip3 install -e .
+# I use -e here so that if I update later with git pull, I dont have it install it again (unless dependencies have changed)
+```
+
+#### Pipenv
+```
+git clone https://github.com/securisec/chepy.git
+cd chepy
+pipenv install
+```
+
+## Chepy vs Cyberchef
+
+#### Advantages
+- Chepy is pure python with a supporting and accessible python api
+- Chepy has a CLI
+- Chepy CLI has full autocompletion. 
+- Extendable via plugins
+- Infinitely scalable as it can leverage the full Python library.
+- Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
+- The Chepy python library is significantly faster than the Cyberchef Node library.
+- Works with HTTP/S requests without CORS issues.
+
+#### Disadvantages
+- Chepy is not a web app (at least for now).
+- Chepy does not offer every single thing that Cyberchef does
+
 
 
 ```eval_rst
@@ -19,8 +64,10 @@ Placeholder
    :maxdepth: 3
    :caption: Contents:
 
-   chepy.md
+   usage.md
+   examples.md
    cli.rst
+   chepy.md
    core.md
    modules.rst
    extras.rst

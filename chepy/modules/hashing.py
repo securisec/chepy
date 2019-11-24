@@ -557,7 +557,7 @@ class Hashing(ChepyCore):
         Tests whether the provided hash matches the given string at init.
         
         Args:
-            hash (str): brypt hash
+            hash (str): Required. brypt hash
         
         Returns:
             Chepy: The Chepy object. 

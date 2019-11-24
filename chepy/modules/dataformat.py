@@ -50,7 +50,7 @@ class DataFormat(ChepyCore):
         """Join a list with specified character
         
         Args:
-            by (str): What to join with
+            by (str): Required. What to join with
         
         Returns:
             Chepy: The Chepy object. 

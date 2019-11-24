@@ -161,7 +161,7 @@ class Extractors(ChepyCore):
         """Extract data using valid xpath selectors
         
         Args:
-            query (str): Xpath query
+            query (str): Required. Xpath query
             namespaces (str, optional): Namespace. Applies for XML data. Defaults to None.
         
         Returns:
@@ -186,7 +186,7 @@ class Extractors(ChepyCore):
         """Extract data using valid CSS selectors
         
         Args:
-            query (str): CSS query
+            query (str): Required. CSS query
         
         Returns:
             Chepy: The Chepy object. 
@@ -208,7 +208,7 @@ class Extractors(ChepyCore):
         `Reference <https://goessner.net/articles/JsonPath/index.html#e2>`__
         
         Args:
-            query (str): Query. For reference, see the help
+            query (str): Required. Query. For reference, see the help
         
         Returns:
             Chepy: The Chepy object. 

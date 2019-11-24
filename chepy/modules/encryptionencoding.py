@@ -33,7 +33,7 @@ class EncryptionEncoding(ChepyCore):
         """Rotate string by provided number
         
         Args:
-            rotate_by (int): Number to rotate by
+            rotate_by (int): Required. Number to rotate by
         
         Returns:
             Chepy: The Chepy object.
@@ -106,7 +106,7 @@ class EncryptionEncoding(ChepyCore):
         he same logical operation.
         
         Args:
-            key (str): The key to xor by
+            key (str): Required. The key to xor by
             key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".
             ascii (bool, optional): If the input is in ascii format
         
@@ -194,7 +194,7 @@ class EncryptionEncoding(ChepyCore):
         """Verify JWT token
         
         Args:
-            secret (str): Secret key for token
+            secret (str): Required. Secret key for token
             algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"]
         
         Returns:
@@ -209,7 +209,7 @@ class EncryptionEncoding(ChepyCore):
         """Sign a json/dict object in JWT
         
         Args:
-            secret (str): Secret to sign with
+            secret (str): Required. Secret to sign with
             algorithms (str, optional): Signing algorithm. Defaults to "HS256".
         
         Returns:
@@ -231,7 +231,7 @@ class EncryptionEncoding(ChepyCore):
         verification.
         
         Args:
-            wordlist (str): Path to a wordlist
+            wordlist (str): Required. Path to a wordlist
             b64_encode (bool, optional): Encoded the words in base64. Defaults to False.
             algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"].
         
@@ -260,7 +260,7 @@ class EncryptionEncoding(ChepyCore):
         """Encrypt raw state with RC4
         
         Args:
-            key (str): Secret key
+            key (str): Required. Secret key
             hex_key (bool, optional): If key is in hex. Defaults to False.
         
         Returns:
@@ -282,7 +282,7 @@ class EncryptionEncoding(ChepyCore):
         """Decrypt raw state with RC4
         
         Args:
-            key (str): Secret key
+            key (str): Required. Secret key
             hex_key (bool, optional): If key is in hex. Defaults to False.
         
         Returns:
@@ -318,7 +318,7 @@ class EncryptionEncoding(ChepyCore):
         default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -382,7 +382,7 @@ class EncryptionEncoding(ChepyCore):
         default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -437,7 +437,7 @@ class EncryptionEncoding(ChepyCore):
         mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -495,7 +495,7 @@ class EncryptionEncoding(ChepyCore):
         mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -560,7 +560,7 @@ class EncryptionEncoding(ChepyCore):
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -633,7 +633,7 @@ class EncryptionEncoding(ChepyCore):
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -697,7 +697,7 @@ class EncryptionEncoding(ChepyCore):
         IV: The Initialization Vector should be 8 bytes long.
 
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -759,7 +759,7 @@ class EncryptionEncoding(ChepyCore):
         IV: The Initialization Vector should be 8 bytes long.
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Show be a hex string
                 . Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
@@ -808,7 +808,7 @@ class EncryptionEncoding(ChepyCore):
         """Encode with Vigenere ciper
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
         
         Returns:
             Chepy: The Chepy oject. 
@@ -824,7 +824,7 @@ class EncryptionEncoding(ChepyCore):
         """Decode Vigenere ciper
         
         Args:
-            key (str): The secret key
+            key (str): Required. The secret key
         
         Returns:
             Chepy: The Chepy oject. 
@@ -840,8 +840,8 @@ class EncryptionEncoding(ChepyCore):
         """Encode with Affine ciper
         
         Args:
-            a (int): Multiplier value
-            b (int): Additive value
+            a (int, optional): Multiplier value. Defaults to 1
+            b (int, optional): Additive value. Defaults to 1
         
         Returns:
             Chepy: The Chepy oject. 
@@ -857,8 +857,8 @@ class EncryptionEncoding(ChepyCore):
         """Decode Affine ciper
         
         Args:
-            a (int): Multiplier value
-            b (int): Additive value
+            a (int, optional): Multiplier value. Defaults to 1
+            b (int, optional): Additive value. Defaults to 1
         
         Returns:
             Chepy: The Chepy oject. 

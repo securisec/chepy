@@ -38,7 +38,7 @@ class Utils(ChepyCore):
         Counts the number of times the provided string occurs.
 
         Args:
-            regex (str): Regex string to search for
+            regex (str): Required. Regex string to search for
             case_sensitive (bool, optional): If search should be case insensitive, by default False
 
         Returns:
@@ -111,7 +111,7 @@ class Utils(ChepyCore):
         """Regex search on current data
         
         Args:
-            pattern (str): The regex pattern to search by
+            pattern (str): Required. The regex pattern to search by
             ignore_case (bool, optional): Set case insentive flag. Defaults to False.
             multiline (bool, optional): ^/$ match start/end. Defaults to False.
             dotall (bool, optional): `.` matches newline. Defaults to False.
@@ -231,8 +231,8 @@ class Utils(ChepyCore):
         """Replace matched pattern with repln
         
         Args:
-            pattern (str): Pattern to search
-            repl (str): Pattern to match
+            pattern (str): Required. Pattern to search
+            repl (str): Required. Pattern to match
             ignore_case (bool, optional): Case insensitive. Defaults to True.
         
         Returns:
@@ -353,7 +353,7 @@ class Utils(ChepyCore):
         """Pad string with a character
         
         Args:
-            width (int): Total length of string. The padding is calculated from 
+            width (int): Required. Total length of string. The padding is calculated from 
                 the length of state minus width.
             direction (str, optional): Padding direction. left or right. Defaults to 'left'.
             char (str, optional): Char to fill with. Defaults to ' '.

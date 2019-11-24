@@ -197,6 +197,27 @@ class ChepyCore(object):
 
     def change_state(self, index: int):
         """Change current state by index
+
+        Same behaviour as switch_state
+        
+        Args:
+            index (int): Index of new state
+        
+        Raises:
+            TypeError: If specified index does not exist
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if index > len(self.states):  # pragma: no cover
+            raise TypeError("Specified index does not exist")
+        self._current_index = index
+        return self
+
+    def switch_state(self, index: int):  # pragma: no cover
+        """Switch current state by index
+
+        Same behaviour as change_state
         
         Args:
             index (int): Index of new state
@@ -489,14 +510,6 @@ class ChepyCore(object):
         self.copy_to_clipboard()
         return None
 
-    def get_type(self) -> str:
-        """Get the type of the data in state
-        
-        Returns:
-            str: Type of the data in the state
-        """
-        return type(self.state).__name__
-
     def web(self) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
         
@@ -652,6 +665,23 @@ class ChepyCore(object):
         else:
             mode = "w+"
         with open(str(self._abs_path(file_path)), mode) as f:
+            f.write(self.state)
+        self._info_logger("File written to {}".format(self._abs_path(file_path)))
+        return None
+
+    def write_binary(self, file_path: str) -> None:  # pragma: no cover
+        """Save the state to disk. Return None.
+        
+        Args:
+            file_path (str): The file path to save in.
+        
+        Returns:
+            None: Returns None
+
+        Examples:
+            >>> c = Chepy("some data").write_binary('/some/path/file')
+        """
+        with open(str(self._abs_path(file_path)), "wb+") as f:
             f.write(self.state)
         self._info_logger("File written to {}".format(self._abs_path(file_path)))
         return None

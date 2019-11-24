@@ -53,7 +53,7 @@ class Compression(ChepyCore):
         Use zip_list_files to get all the filenames within the zip archive
         
         Args:
-            file (str): Path of file inside the archive
+            file (str): Required. Path of file inside the archive
             password (str, optional): Password if zip is encrypted. Defaults to None.
         
         Returns:

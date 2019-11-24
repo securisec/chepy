@@ -62,9 +62,8 @@ class Multimedia(ChepyCore):
         """Resize an image. 
         
         Args:
-            ChepyCore ([type]): [description]
-            width (int): Width in pixels
-            height (int): Height in pixels
+            width (int): Required. Width in pixels
+            height (int): Required. Height in pixels
             extension (str, optional): File extension of loaded image. Defaults to png
             resample (str, optional): Resample rate. Defaults to "nearest".
             quality (int, optional): Quality of output. Defaults to 100.
@@ -149,7 +148,7 @@ class Multimedia(ChepyCore):
         """Rotate an image
         
         Args:
-            rotate_by (int): Roate by degrees
+            rotate_by (int): Required. Roate by degrees
             extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
@@ -246,7 +245,7 @@ class Multimedia(ChepyCore):
         """Change the opacity of an image
         
         Args:
-            level (int): Level of opacity. Half is 128
+            level (int): Required. Level of opacity. Half is 128
             extension (str, optional): File extension of loaded image. Defaults to png
         
         Returns:
@@ -342,7 +341,7 @@ class Multimedia(ChepyCore):
         Example, convert png to jpeg
         
         Args:
-            format_to (str): A valid image format extension
+            format_to (str): Required. A valid image format extension
         
         Returns:
             Chepy: The Chepy object
@@ -376,7 +375,7 @@ class Multimedia(ChepyCore):
         """Add text to an image
         
         Args:
-            text (str): Text to add
+            text (str): Required. Text to add
             extension (str, optional): File extension of loaded image. Defaults to png
             coordinates (Tuple[int, int], optional): Coordinates of image where to add text. 
                 Defaults to (0, 0).
