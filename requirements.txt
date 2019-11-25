@@ -19,7 +19,6 @@ pyjwt
 pyOpenSSL
 pyperclip
 PyYAML
-pyzbar
 regex
 requests
 ua-parser

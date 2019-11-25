@@ -1,6 +1,3 @@
-from io import BytesIO
-from pyzbar.pyzbar import decode as _pyzbar_decode
-from PIL import Image
 from uuid import uuid4
 
 from ..core import ChepyCore
@@ -24,14 +21,14 @@ class Other(ChepyCore):
         self.state = str(uuid4())
         return self
 
-    def decode_qr(self):  # pragma: no cover
-        """Decode a qr code
+    # def decode_qr(self):  # pragma: no cover
+    #     """Decode a qr code
 
-        This method does require zbar to be installed in the system
+    #     This method does require zbar to be installed in the system
         
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        data = Image.open(self._load_as_file())
-        self.state = list(map(lambda x: x.data, _pyzbar_decode(data)))
-        return self
+    #     Returns:
+    #         Chepy: The Chepy object. 
+    #     """
+    #     data = Image.open(self._load_as_file())
+    #     self.state = list(map(lambda x: x.data, _pyzbar_decode(data)))
+    #     return self
