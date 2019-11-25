@@ -189,6 +189,16 @@ def cli_show_errors(errors):
     """
     pprint(errors)
 
+def cli_go_back():
+    """Go back one step
+    """
+    pass
+
+def cli_delete_history():
+    """Delete local history file
+    """
+    pass
+
 
 def cli_exit(fire: object):
     """Exit the cli

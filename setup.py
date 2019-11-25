@@ -15,7 +15,9 @@ Path(chepy_dir).mkdir(exist_ok=True)
 # Chepy default configs
 config = ConfigParser()
 config.read(str(rc_path))
+# history file
 config["Cli"]["HistoryPath"] = str(chepy_dir / "chepy_history")
+Path(str(chepy_dir / "chepy_history")).touch(exist_ok=True)
 # if file already exists, do not overwrite it
 if not chepy_conf.exists():
     with open(str(chepy_conf), "w") as f:

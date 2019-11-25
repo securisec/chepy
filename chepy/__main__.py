@@ -20,6 +20,7 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
+from chepy.modules.internal.colors import RED, YELLOW
 from .conf import Config
 
 config = Config()
@@ -208,6 +209,8 @@ def parse_args(args):
 
 def main():
     global fire_obj
+    last_command = []
+
     args = parse_args(sys.argv[1:])
     args_data = args.data
 
@@ -231,7 +234,6 @@ def main():
                 validator=CustomValidator(),
                 rprompt=get_current_type(fire_obj),
             )
-            # command = re.findall(r'(?:".*?"|\S)+', prompt)
 
             # check and output any commands that start with cli_
             if re.search(r"^cli_.+", prompt):
@@ -239,6 +241,10 @@ def main():
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
                 if cli_method == "cli_show_errors":
                     getattr(chepy_cli, "cli_show_errors")(errors)
+                elif cli_method == "cli_go_back":
+                    args_data = args_data[: -len(last_command + ["-"])]
+                elif cli_method == 'cli_delete_history':
+                    Path(config.history_path).unlink()
                 elif cli_args:
                     getattr(chepy_cli, cli_method)(
                         fire_obj, **{cli_args.group(1): cli_args.group(2)}
@@ -259,7 +265,15 @@ def main():
                 args_data += prompt.split()
                 if args_data[-1] != "-":
                     args_data.append("-")
-                fire_obj = fire.Fire(Chepy, command=args_data)
+                try:
+                    last_command = prompt.split() + ["-"]
+                    fire_obj = fire.Fire(Chepy, command=args_data)
+                except:
+                    # go back to last working arg
+                    e_type, e_msg, e_traceback = sys.exc_info()
+                    print(RED(e_type.__name__), YELLOW(e_msg.__str__()))
+                    args_data = args_data[: -len(last_command)]
+                    continue
     except KeyboardInterrupt:
         print("OKBye")
         exit()

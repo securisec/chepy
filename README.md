@@ -56,6 +56,7 @@ pipenv install
 #### Disadvantages
 - Chepy is not a web app (at least for now).
 - Chepy does not offer every single thing that Cyberchef does
+- Chepy does not have the `magic` method (at the moment)
 
 
 

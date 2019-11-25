@@ -1,6 +1,6 @@
 import io
 from typing import List, Tuple
-from PIL import Image, ImageFilter, ImageOps, ImageDraw
+from PIL import Image, ImageFilter, ImageOps, ImageDraw, ImageEnhance
 from ..core import ChepyCore
 
 
@@ -256,6 +256,78 @@ class Multimedia(ChepyCore):
         fh = io.BytesIO()
         image.putalpha(level)
         image.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def image_contrast(self, factor: int, extension: str = "png"):
+        """Change image contrast
+        
+        Args:
+            factor (int): Factor to increase the contrast by
+            extension (str, optional): File extension of loaded image. Defaults to "png"
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgb(image)
+        fh = io.BytesIO()
+        enhanced = ImageEnhance.Contrast(image).enhance(factor)
+        enhanced.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def image_brightness(self, factor: int, extension: str = "png"):
+        """Change image brightness
+        
+        Args:
+            factor (int): Factor to increase the brightness by
+            extension (str, optional): File extension of loaded image. Defaults to "png"
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgb(image)
+        fh = io.BytesIO()
+        enhanced = ImageEnhance.Brightness(image).enhance(factor)
+        enhanced.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def image_sharpness(self, factor: int, extension: str = "png"):
+        """Change image sharpness
+        
+        Args:
+            factor (int): Factor to increase the sharpness by
+            extension (str, optional): File extension of loaded image. Defaults to "png"
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgb(image)
+        fh = io.BytesIO()
+        enhanced = ImageEnhance.Sharpness(image).enhance(factor)
+        enhanced.save(fh, extension)
+        self.state = fh.getvalue()
+        return self
+
+    def image_color(self, factor: int, extension: str = "png"):
+        """Change image color
+        
+        Args:
+            factor (int): Factor to increase the color by
+            extension (str, optional): File extension of loaded image. Defaults to "png"
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        image = Image.open(self._load_as_file())
+        image = self._force_rgb(image)
+        fh = io.BytesIO()
+        enhanced = ImageEnhance.Color(image).enhance(factor)
+        enhanced.save(fh, extension)
         self.state = fh.getvalue()
         return self
 

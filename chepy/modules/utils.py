@@ -139,16 +139,22 @@ class Utils(ChepyCore):
         self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
 
-    def split_by(self, pattern: str = "\n"):
+    def split_by(self, pattern: str = "\n", trim=True):
         """Split a string by the given pattern
         
         Args:
             pattern (str, optional): Pattern to split by. Defaults to '\\n'.
+            time (bool, optional): Trim whitespace after split. Defaults to True
         
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = re.split(pattern, self._convert_to_str())
+        if trim:
+            self.state = list(
+                map(pydash.trim, re.split(pattern, self._convert_to_str()))
+            )
+        else:
+            self.state = re.split(pattern, self._convert_to_str())
         return self
 
     def unique(self):

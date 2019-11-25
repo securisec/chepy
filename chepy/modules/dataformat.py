@@ -46,11 +46,11 @@ class DataFormat(ChepyCore):
         self.state = ujson.loads(re.sub(r"'", '"', self._convert_to_str()))
         return self
 
-    def join_list(self, by: str):
+    def join_list(self, by: str=""):
         """Join a list with specified character
         
         Args:
-            by (str): Required. What to join with
+            by (str): What to join with. Defaults to ""
         
         Returns:
             Chepy: The Chepy object. 
@@ -585,7 +585,7 @@ class DataFormat(ChepyCore):
             >>> Chepy([12622]).from_decimal().o
             ["ㅎ"]
         """
-        self.state = list(chr(s) for s in self.state)
+        self.state = list(chr(int(s)) for s in self.state)
         return self
 
     def to_binary(self):

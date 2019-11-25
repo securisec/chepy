@@ -57,6 +57,34 @@ def test_image_opacity():
     assert c1 != c2
 
 
+
+def test_image_contrast():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_contrast(10, "png").o
+    assert c1 != c2
+
+
+
+def test_image_brightness():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_brightness(10, "png").o
+    assert c1 != c2
+
+
+
+def test_image_sharpness():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_sharpness(10, "png").o
+    assert c1 != c2
+
+
+
+def test_image_color():
+    c1 = Chepy("logo.png").load_file().o
+    c2 = Chepy("logo.png").load_file().image_color(10, "png").o
+    assert c1 != c2
+
+
 def test_image_add_text():
     c1 = Chepy("logo.png").load_file().o
     c2 = Chepy("logo.png").load_file().image_add_text("some text").o

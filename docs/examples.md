@@ -209,3 +209,25 @@ pprint(c.states)
 ```
 
 [![asciicast](https://asciinema.org/a/dXFIwHUuNLTPb7z0CTzHiTrBV.svg)](https://asciinema.org/a/dXFIwHUuNLTPb7z0CTzHiTrBV)
+
+
+## Derbycon CTF 2019
+
+#### Script
+```python
+from chepy import Chepy
+
+c = (
+    Chepy("eJyzMNdRMDQwBBEWOgqWlkCGIZhnCRU3NdBRMDODyZtD1RiAtZlARAwNzQDKrwzB")
+    .base64_decode()
+    .zlib_decompress()
+    .split_by(", ")
+    .from_decimal()
+    .join_list("")
+)
+print(c.o)
+>>> Welcome2Blackhat
+```
+
+#### Cli
+[![asciicast](https://asciinema.org/a/9pVrwFx6G5VT0D2fDFQO0ZyhT.svg)](https://asciinema.org/a/9pVrwFx6G5VT0D2fDFQO0ZyhT)
