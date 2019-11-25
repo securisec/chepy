@@ -273,3 +273,7 @@ def test_to_braille():
 def test_from_braille():
     assert Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o == "secret message"
 
+
+def test_trim():
+    assert Chepy("\nlol ").trim().o == "lol"
+

@@ -29,6 +29,8 @@ project = "chepy"
 copyright = "2019, Hapsida @securisec"
 author = "Hapsida @securisec"
 
+master_doc = 'index'
+
 
 # -- General configuration ---------------------------------------------------
 

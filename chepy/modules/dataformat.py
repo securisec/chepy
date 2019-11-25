@@ -816,3 +816,12 @@ class DataFormat(ChepyCore):
         self.state = "".join(list(chars.get(c.lower()) for c in self.state))
         return self
 
+    def trim(self):
+        """Trim string. Removes whitespaces
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self._convert_to_str().strip()
+        return self
+

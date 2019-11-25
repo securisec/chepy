@@ -1,12 +1,14 @@
 <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="150px">
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
+[![Travis Status](https://img.shields.io/travis/securisec/chepy.svg?label=Travis&logo=travis&branch=master)](https://travis-ci.com/securisec/chepy)
 [![codecov](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
 
 [![Read the Docs](https://img.shields.io/readthedocs/chepy.svg)](http://chepy.readthedocs.io/en/latest/)
 [![PyPI](https://img.shields.io/pypi/v/chepy.svg)](https://pypi.python.org/pypi/chepy)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/securisec/chepy)
+![PyPI - License](https://img.shields.io/pypi/l/chepy)
 
 
 # Chepy
@@ -14,6 +16,8 @@
 ![Solving a CTF with Chepy](https://raw.githubusercontent.com/securisec/chepy/master/docs/assets/ctf.gif)
 
 Chepy is a python library with a handy cli that is aimed to mirror some of the capabilities of [CyberChef](https://gchq.github.io/CyberChef/). A reasonable amount of effort was put behind Chepy to make it compatible to the various functionalities that CyberChef offers, all in a pure Pythonic manner. There are some key advantages and disadvantages that Chepy has over Cyberchef. The Cyberchef concept of _stacking_ different modules is kept alive in Chepy.
+
+There is still a long way to go for Chepy as it does not offer every single ability of Cyberchef.
 
 ## Docs
 [Refer to the docs for full usage information](http://chepy.readthedocs.io/en/latest/)
