@@ -1,14 +1,14 @@
 <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="150px">
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
-[![Travis Status](https://img.shields.io/travis/securisec/chepy.svg?label=Travis&logo=travis&branch=master)](https://travis-ci.com/securisec/chepy)
-[![codecov](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
+[![](https://img.shields.io/travis/securisec/chepy.svg?label=Travis&logo=travis&branch=master)](https://travis-ci.com/securisec/chepy)
+[![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
 
-[![Read the Docs](https://img.shields.io/readthedocs/chepy.svg)](http://chepy.readthedocs.io/en/latest/)
-[![PyPI](https://img.shields.io/pypi/v/chepy.svg)](https://pypi.python.org/pypi/chepy)
+[![](https://img.shields.io/readthedocs/chepy.svg?logo=read-the-docs&label=Docs)](http://chepy.readthedocs.io/en/latest/)
+[![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/securisec/chepy)
-![PyPI - License](https://img.shields.io/pypi/l/chepy)
+[![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
+![](https://img.shields.io/pypi/l/chepy?label=license)
 
 
 # Chepy
