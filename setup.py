@@ -41,6 +41,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     name="chepy",
+    license="GPL",
     version=__version__,
     author=__author__,
     packages=find_packages(exclude=(["tests", "docs"])),

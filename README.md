@@ -8,7 +8,7 @@
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
 
 [![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
-![](https://img.shields.io/pypi/l/chepy?label=license)
+![](https://img.shields.io/github/license/securisec/chepy?label=License)
 
 
 # Chepy
