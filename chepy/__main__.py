@@ -3,6 +3,7 @@ import inspect
 import fire
 import regex as re
 import argparse
+import subprocess
 from pathlib import Path
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import (
@@ -239,7 +240,7 @@ def main():
 
             # check and output any commands that start with cli_
             if re.match(r"^\!", prompt):
-                getattr(chepy_cli, "cli_shell")(re.sub(r"^\!\s?", "", prompt))
+                print(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt)))
             elif re.search(r"^cli_.+", prompt):
                 cli_method = prompt.split()[0]
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)

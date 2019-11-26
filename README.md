@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="150px">
+<img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="300px">
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
 [![](https://img.shields.io/travis/securisec/chepy.svg?label=Travis&logo=travis&branch=master)](https://travis-ci.com/securisec/chepy)
@@ -27,7 +27,8 @@ There is still a long way to go for Chepy as it does not offer every single abil
 [For all usage and examples, see the docs.](http://chepy.readthedocs.io/en/latest/)
 
 Chepy has a stacking mechanism similar to Cyberchef. For example, this in Cyberchef:
-![](https://raw.githubusercontent.com/securisec/chepy/master/logo.png)
+
+<img src="https://raw.githubusercontent.com/securisec/chepy/master/docs/assets/cc_encoding.png" width=400px>
 
 This is equivalent to 
 

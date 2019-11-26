@@ -192,16 +192,6 @@ def cli_show_errors(errors):
     pprint(errors)
 
 
-def cli_shell(command: str):
-    """Execute a system command in the cli
-    
-    Args:
-        command (str): Command to execute
-    """
-    out = getoutput(command)
-    print(out)
-
-
 def cli_go_back():
     """Go back one step
     """
