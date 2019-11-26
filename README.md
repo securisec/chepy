@@ -9,6 +9,7 @@
 
 [![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
 ![](https://img.shields.io/github/license/securisec/chepy?label=License)
+[![](https://badges.gitter.im/chepy_/community.svg)](https://gitter.im/chepy_/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
 # Chepy
@@ -21,6 +22,32 @@ There is still a long way to go for Chepy as it does not offer every single abil
 
 ## Docs
 [Refer to the docs for full usage information](http://chepy.readthedocs.io/en/latest/)
+
+## Example
+[For all usage and examples, see the docs.](http://chepy.readthedocs.io/en/latest/)
+
+Chepy has a stacking mechanism similar to Cyberchef. For example, this in Cyberchef:
+![](https://raw.githubusercontent.com/securisec/chepy/master/logo.png)
+
+This is equivalent to 
+
+```python
+from chepy import Chepy
+
+file_path = "/tmp/demo/encoding"
+
+print(
+    Chepy(file_path)
+    .load_file()
+    .reverse()
+    .rot_13()
+    .base64_decode()
+    .base32_decode()
+    .hexdump_to_str()
+    .o
+)
+
+```
 
 ## Installation
 Chepy can be installed in a few ways.
@@ -43,6 +70,11 @@ pip3 install -e .
 git clone https://github.com/securisec/chepy.git
 cd chepy
 pipenv install
+```
+
+#### Docker
+```bash
+docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]
 ```
 
 ## Chepy vs Cyberchef

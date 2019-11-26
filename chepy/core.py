@@ -43,6 +43,10 @@ class ChepyCore(object):
         self.buffers = dict()
         #: Alias for `write_to_file`
         self.write = self.write_to_file
+        #: Alias for `out`
+        self.bake = self.out
+        #: Alias for `web`
+        self.cyberchef = self.web
 
     @property
     def state(self):

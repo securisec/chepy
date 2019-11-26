@@ -1,6 +1,8 @@
 import sys
 import inspect
 from pprint import pformat, pprint
+from subprocess import getoutput
+
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import print_formatted_text
@@ -189,10 +191,22 @@ def cli_show_errors(errors):
     """
     pprint(errors)
 
+
+def cli_shell(command: str):
+    """Execute a system command in the cli
+    
+    Args:
+        command (str): Command to execute
+    """
+    out = getoutput(command)
+    print(out)
+
+
 def cli_go_back():
     """Go back one step
     """
     pass
+
 
 def cli_delete_history():
     """Delete local history file

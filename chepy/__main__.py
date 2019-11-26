@@ -2,8 +2,8 @@ import sys
 import inspect
 import fire
 import regex as re
-from pathlib import Path
 import argparse
+from pathlib import Path
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import (
     Completer,
@@ -131,7 +131,9 @@ def bottom_toolbar(fire_obj):
 class CustomValidator(Validator):
     def validate(self, document):
         text = document.text.split()
-        if len(text) > 1:
+        if document.text.startswith("!"):
+            pass
+        elif len(text) > 1:
             if not text[-2].startswith("--"):
                 if (
                     not re.search(r"\"|'", text[-1])
@@ -236,14 +238,16 @@ def main():
             )
 
             # check and output any commands that start with cli_
-            if re.search(r"^cli_.+", prompt):
+            if re.match(r"^\!", prompt):
+                getattr(chepy_cli, "cli_shell")(re.sub(r"^\!\s?", "", prompt))
+            elif re.search(r"^cli_.+", prompt):
                 cli_method = prompt.split()[0]
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
                 if cli_method == "cli_show_errors":
                     getattr(chepy_cli, "cli_show_errors")(errors)
                 elif cli_method == "cli_go_back":
                     args_data = args_data[: -len(last_command + ["-"])]
-                elif cli_method == 'cli_delete_history':
+                elif cli_method == "cli_delete_history":
                     Path(config.history_path).unlink()
                 elif cli_args:
                     getattr(chepy_cli, cli_method)(

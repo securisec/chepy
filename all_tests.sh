@@ -14,7 +14,7 @@ function check_test {
 check_test pytest --disable-pytest-warnings --cov=chepy --cov-config=.coveragerc tests/
 
 # bandit
-check_test bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+check_test bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
 
 # docs
 check_test make -C docs/ clean html

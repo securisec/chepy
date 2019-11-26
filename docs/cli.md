@@ -26,6 +26,14 @@ This same behavior is replicated in the Chepy cli.
 ### Cli only methods
 For completeness sake everything is document here, but the only functions that are callable from the CLI are functions that start with `cli_`. 
 
+### Cli shell commands
+It is possible to run shell commands from the cli py starting the command with a `!`. 
+
+```bash
+>>> !ls -la | grep py
+```
+This will run the following command inside the Chepy cli
+
 ```eval_rst
 .. automodule:: chepy.modules.internal.cli
     :members:

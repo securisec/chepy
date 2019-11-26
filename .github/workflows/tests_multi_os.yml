@@ -29,7 +29,7 @@ jobs:
     - name: Test with bandit
       run: |
         pip install bandit
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
     - name: Test docs
       run: |
         pip install sphinx recommonmark
@@ -66,7 +66,7 @@ jobs:
     - name: Test with bandit
       run: |
         pip install bandit
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
     - name: Test docs
       run: |
         pip install sphinx recommonmark
@@ -98,7 +98,7 @@ jobs:
     - name: Test with bandit
       run: |
         pip install bandit
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
     - name: Test docs
       run: |
         pip install sphinx recommonmark
