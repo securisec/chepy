@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "chepy"
+version = "1.0.3"
+description = ""
+authors = ["Hapsida @securisec"]
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+base58 = "=1.0.3"
+colorama = "=0.4.1"
+crccheck = "=0.6"
+docstring-parser = "=0.3"
+emoji = "=0.5.4"
+fire = "=0.2.1"
+hashid = "=3.1.4"
+hexdump = "=3.3"
+jsonpath-rw = "=1.4.0"
+jsonpickle = "=1.2"
+parsel = "=1.5.2"
+phpserialize = "=1.3"
+Pillow = "=6.2.1"
+prompt_toolkit = "=2.0.10"
+pycipher = "=0.5.2"
+pycryptodome = "=3.9.4"
+pydash = "=4.7.6"
+pyjwt = "=1.7.1"
+pyOpenSSL = "=19.0.0"
+pyperclip = "=1.7.0"
+PyYAML = "=5.1.2"
+regex = "=2019.11.1"
+requests = "=2.22.0"
+requests-toolbelt = "=0.9.1"
+ua-parser = "=0.8.0"
+ujson = "=1.35"
+pycparser = "=2.18"
+certifi = "=2019.6.16"
+cffi = "=1.11.5"
+idna = "=2.7"
+six = "=1.12.0"
+urllib3 = "=1.25.3"
+lxml = "=4.4.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

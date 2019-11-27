@@ -120,3 +120,11 @@ def test_pad():
     assert Chepy("lol").pad(7, char="a").o == "lola"
     assert Chepy("lol").pad(7, direction="right", char="a").o == "alol"
 
+
+def test_count():
+    assert Chepy("some text").count().get_by_key("t").o == 2
+
+
+def test_set():
+    assert len(Chepy("some text").set().o) == 7
+

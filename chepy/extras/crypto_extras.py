@@ -60,7 +60,7 @@ def xor_bruteforce_multi(
             Valid options are replace, ignore, backslashreplace
     
     Returns:
-        Iterator[Dict[str, str]]: [description]
+        Iterator[Dict[str, str]]: A dictionary where key is key, and value is xored data
     
     Yields:
         Iterator[Dict[str, str]]: A generator which contains a dictionary with the 

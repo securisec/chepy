@@ -73,6 +73,13 @@ cd chepy
 pipenv install
 ```
 
+#### Poetry
+```
+git clone https://github.com/securisec/chepy.git
+cd chepy
+poetry install
+```
+
 #### Docker
 ```bash
 docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]

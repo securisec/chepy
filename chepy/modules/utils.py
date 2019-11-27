@@ -390,3 +390,21 @@ class Utils(ChepyCore):
             )
         return self
 
+    def count(self):
+        """Count anything
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = pydash.count_by(self.state)
+        return self
+
+    def set(self):
+        """Get an array of unique values
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(set(self.state))
+        return self
+

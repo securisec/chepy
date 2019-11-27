@@ -15,3 +15,8 @@ Crypto
 """"""
 .. automodule:: chepy.extras.crypto_extras
     :members:
+
+Misc
+""""
+.. automodule:: chepy.extras.misc
+    :members:
