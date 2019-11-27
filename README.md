@@ -73,12 +73,6 @@ cd chepy
 pipenv install
 ```
 
-#### Poetry
-```
-git clone https://github.com/securisec/chepy.git
-cd chepy
-poetry install
-```
 
 #### Docker
 ```bash
