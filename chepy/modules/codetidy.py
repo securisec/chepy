@@ -3,10 +3,11 @@ import pydash
 import phpserialize
 import regex as re
 from lxml import etree
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class CodeTidy(ChepyCore):
+    @ChepyDecorators.call_stack
     def minify_json(self):
         """Minify JSON string
         
@@ -20,6 +21,7 @@ class CodeTidy(ChepyCore):
         self.state = ujson.dumps(ujson.loads(self._convert_to_str()))
         return self
 
+    @ChepyDecorators.call_stack
     def beautify_json(self, indent: int = 2):
         """Beautify minified JSON
         
@@ -36,6 +38,7 @@ class CodeTidy(ChepyCore):
         self.state = ujson.dumps(ujson.loads(self._convert_to_str()), indent=indent)
         return self
 
+    @ChepyDecorators.call_stack
     def minify_xml(self):
         """Minify XML string
         
@@ -52,6 +55,7 @@ class CodeTidy(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def beautify_xml(self):
         """Beautify compressed XML
         
@@ -68,6 +72,7 @@ class CodeTidy(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def php_deserialize(self):
         """Deserialize php to dict
         
@@ -84,6 +89,7 @@ class CodeTidy(ChepyCore):
         self.state = phpserialize.loads(self._convert_to_bytes())
         return self
 
+    @ChepyDecorators.call_stack
     def to_upper_case(self, by: str = "all"):
         """Convert string to uppercase
         
@@ -122,6 +128,7 @@ class CodeTidy(ChepyCore):
             self.state = self._convert_to_str().capitalize()
         return self
 
+    @ChepyDecorators.call_stack
     def to_lower_case(self):
         """Convert string to lowercase
 
@@ -137,6 +144,7 @@ class CodeTidy(ChepyCore):
         self.state = self._convert_to_str().lower()
         return self
 
+    @ChepyDecorators.call_stack
     def to_snake_case(self):
         """Convert string to snake case
 
@@ -154,6 +162,7 @@ class CodeTidy(ChepyCore):
         self.state = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
         return self
 
+    @ChepyDecorators.call_stack
     def to_camel_case(self, ignore_space: bool = False):
         """Convert string to camel case
         
@@ -181,6 +190,7 @@ class CodeTidy(ChepyCore):
         self.state = r.sub(lambda x: x.group()[1].upper(), self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def to_kebab_case(self):
         """Convert string to kebab case
 
@@ -197,6 +207,7 @@ class CodeTidy(ChepyCore):
         self.state = pydash.kebab_case(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def swap_case(self):
         """Swap case in a string
         

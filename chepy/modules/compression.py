@@ -3,10 +3,11 @@ import bz2
 import gzip
 import zlib
 import zipfile
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Compression(ChepyCore):
+    @ChepyDecorators.call_stack
     def zip_info(self):
         """Gets various information about a zip file 
 
@@ -33,6 +34,7 @@ class Compression(ChepyCore):
         z.close()
         return self
 
+    @ChepyDecorators.call_stack
     def zip_list_files(self):
         """Get a list of files inside the zip archive
         
@@ -47,6 +49,7 @@ class Compression(ChepyCore):
             self.state = list(i.filename for i in z.infolist())
         return self
 
+    @ChepyDecorators.call_stack
     def unzip_one(self, file: str, password: str = None):
         """Unzip one file from zipfile
 
@@ -73,6 +76,7 @@ class Compression(ChepyCore):
         z.close()
         return self
 
+    @ChepyDecorators.call_stack
     def unzip_all(self, password: str = None):
         """Unzip all files from zipfile into the state
         
@@ -94,6 +98,7 @@ class Compression(ChepyCore):
         z.close()
         return self
 
+    @ChepyDecorators.call_stack
     def create_zip_file(self, file_name: str):
         """Create a zip archive with data from state
         
@@ -114,6 +119,7 @@ class Compression(ChepyCore):
         self.state = mf.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def gzip_compress(self, file_name: str = None):
         """Create a gz archive with data from state
         
@@ -135,6 +141,7 @@ class Compression(ChepyCore):
         self.state = mf.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def gzip_decompress(self):
         """Decompress a gzip archive
         
@@ -144,6 +151,7 @@ class Compression(ChepyCore):
         self.state = gzip.decompress(self._convert_to_bytes())
         return self
 
+    @ChepyDecorators.call_stack
     def bzip_compress(self):
         """Compress the state into bz2 archive
         
@@ -164,6 +172,7 @@ class Compression(ChepyCore):
         self.state = mf.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def bzip_decompress(self):
         """Decompress a bz2 archive
         
@@ -173,6 +182,7 @@ class Compression(ChepyCore):
         self.state = bz2.decompress(self._convert_to_bytes())
         return self
 
+    @ChepyDecorators.call_stack
     def zlib_compress(self, level: int = 9):
         """Compress using zlib
         
@@ -189,6 +199,7 @@ class Compression(ChepyCore):
         self.state = zlib.compress(self._convert_to_bytes(), level=level)
         return self
 
+    @ChepyDecorators.call_stack
     def zlib_decompress(self):
         """Zlib decompression
         

@@ -1,7 +1,7 @@
 import io
 from typing import List, Tuple
 from PIL import Image, ImageFilter, ImageOps, ImageDraw, ImageEnhance
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Multimedia(ChepyCore):
@@ -51,6 +51,7 @@ class Multimedia(ChepyCore):
         else:
             return image
 
+    @ChepyDecorators.call_stack
     def resize_image(
         self,
         width: int,
@@ -96,6 +97,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def split_color_channels(self, extension: str = "png"):
         """Split an image into its red, green and blue channels
 
@@ -144,6 +146,7 @@ class Multimedia(ChepyCore):
         self.state = hold
         return self
 
+    @ChepyDecorators.call_stack
     def rotate_image(self, rotate_by: int, extension: str = "png"):
         """Rotate an image
         
@@ -167,6 +170,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def blur_image(
         self, extension: str = "png", gaussian: bool = False, radius: int = 2
     ):
@@ -200,6 +204,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def grayscale_image(self, extension: str = "png"):
         """Grayscale an image
         
@@ -220,6 +225,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def invert_image(self, extension: str = "png"):
         """Invert the colors of the image
         
@@ -241,6 +247,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_opacity(self, level: int, extension: str = "png"):
         """Change the opacity of an image
         
@@ -259,6 +266,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_contrast(self, factor: int, extension: str = "png"):
         """Change image contrast
         
@@ -277,6 +285,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_brightness(self, factor: int, extension: str = "png"):
         """Change image brightness
         
@@ -295,6 +304,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_sharpness(self, factor: int, extension: str = "png"):
         """Change image sharpness
         
@@ -313,6 +323,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_color(self, factor: int, extension: str = "png"):
         """Change image color
         
@@ -331,6 +342,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_to_asciiart(
         self,
         art_width: int = 120,
@@ -407,6 +419,7 @@ class Multimedia(ChepyCore):
         self.state = "\n".join(ascii_image)
         return self
 
+    @ChepyDecorators.call_stack
     def convert_image(self, format_to: str):
         """Change image format. 
 
@@ -437,6 +450,7 @@ class Multimedia(ChepyCore):
         self.state = fh.getvalue()
         return self
 
+    @ChepyDecorators.call_stack
     def image_add_text(
         self,
         text: str,

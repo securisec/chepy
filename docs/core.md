@@ -11,7 +11,7 @@ self.state = binasii.unhexlify(self._convert_to_bytes())
 This will ensure that the correct data type is being used at all times.
 
 ```eval_rst
-.. autoclass:: chepy.core.ChepyCore
+.. automodule:: chepy.core
     :members:
     :undoc-members:
     :private-members:

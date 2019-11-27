@@ -1,4 +1,4 @@
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Forensics(ChepyCore):

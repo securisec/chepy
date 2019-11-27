@@ -1,8 +1,9 @@
 import binascii
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class AritmeticLogic(ChepyCore):
+    @ChepyDecorators.call_stack
     def str_bit_shift_right(self, amount: int):
         """Bit shift string right
         

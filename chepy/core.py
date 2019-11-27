@@ -10,6 +10,7 @@ import jsonpickle
 import ujson
 import io
 import regex as re
+from decorator import decorator
 from typing import Any, Tuple, List, Union
 
 from .modules.exceptions import PrintException
@@ -47,6 +48,8 @@ class ChepyCore(object):
         self.bake = self.out
         #: Alias for `web`
         self.cyberchef = self.web
+        #: Holds all the methods that are called/chanined and their args
+        self._stack = list()
 
     @property
     def state(self):
@@ -702,3 +705,26 @@ class ChepyCore(object):
             f.write(self.state)
         self._info_logger("File written to {}".format(self._abs_path(file_path)))
         return None
+
+
+class ChepyDecorators(object):
+    @staticmethod
+    @decorator
+    def call_stack(func, *args, **kwargs):
+        """This decorator is used to get the method name and 
+        arguments and save it to self.stack. The data from 
+        self.stack is predominantly used to save recepies. 
+        """
+        func_sig = dict()
+        func_self = args[0]
+        func_sig["function"] = func.__name__
+
+        bound_args = inspect.signature(func).bind(*args, **kwargs)
+        bound_args.apply_defaults()
+
+        func_arguments = dict(bound_args.arguments)
+        del func_arguments["self"]
+        func_sig["args"] = func_arguments
+        func_self._stack.append(func_sig)
+
+        return func(*args, **kwargs)

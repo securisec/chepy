@@ -3,10 +3,11 @@ import regex as re
 import jsonpath_rw
 from urllib.parse import urlparse as _pyurlparse
 from parsel import Selector
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Extractors(ChepyCore):
+    @ChepyDecorators.call_stack
     def extract_strings(self, length: int = 4):
         """Extract strings from state
         
@@ -32,6 +33,7 @@ class Extractors(ChepyCore):
         self.state = re.findall(pattern, self._convert_to_bytes())
         return self
 
+    @ChepyDecorators.call_stack
     def extract_ips(self, invalid: bool = False, is_binary: bool = False):
         """Extract ipv4 and ipv6 addresses
         
@@ -57,6 +59,7 @@ class Extractors(ChepyCore):
         self.state = matched
         return self
 
+    @ChepyDecorators.call_stack
     def extract_email(self, is_binary: bool = False):
         """Extract email
 
@@ -87,6 +90,7 @@ class Extractors(ChepyCore):
         self.state = matched
         return self
 
+    @ChepyDecorators.call_stack
     def extract_mac_address(self, is_binary: bool = False):
         """Extract MAC addresses
 
@@ -111,6 +115,7 @@ class Extractors(ChepyCore):
         self.state = matched
         return self
 
+    @ChepyDecorators.call_stack
     def extract_urls(self, is_binary: bool = False):
         """Extract urls including http, file, ssh and ftp
 
@@ -135,6 +140,7 @@ class Extractors(ChepyCore):
         self.state = matched
         return self
 
+    @ChepyDecorators.call_stack
     def extract_domains(self, is_binary: bool = False):
         """Extract domains
 
@@ -157,6 +163,7 @@ class Extractors(ChepyCore):
         self.state = matched
         return self
 
+    @ChepyDecorators.call_stack
     def xpath_selector(self, query: str, namespaces: str = None):
         """Extract data using valid xpath selectors
         
@@ -182,6 +189,7 @@ class Extractors(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def css_selector(self, query: str):
         """Extract data using valid CSS selectors
         
@@ -202,6 +210,7 @@ class Extractors(ChepyCore):
         self.state = Selector(self._convert_to_str()).css(query).getall()
         return self
 
+    @ChepyDecorators.call_stack
     def jpath_selector(self, query: str):
         """Query JSON with jpath query
 

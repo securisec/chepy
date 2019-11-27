@@ -12,10 +12,11 @@ from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
 from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
 from crccheck.crc import CrcArc, Crc32, Crc8
 
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Hashing(ChepyCore):
+    @ChepyDecorators.call_stack
     def identify_hash(self):
         """Identify hash type
         
@@ -41,6 +42,7 @@ class Hashing(ChepyCore):
         self.state = hashes
         return self
 
+    @ChepyDecorators.call_stack
     def sha1(self):
         """Get SHA1 hash
         
@@ -59,6 +61,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha1(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha2_256(self):
         """Get SHA2-256 hash
         
@@ -81,6 +84,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha256(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha2_512(self):
         """Get SHA2-512 hash
         
@@ -99,6 +103,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha512(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha2_512_truncate(self, truncate: int = 256):
         """Get SHA2-512/bits hash
         
@@ -122,6 +127,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha2_384(self):
         """Get SHA2-384 hash
         
@@ -140,6 +146,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha384(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha2_224(self):
         """Get SHA2-224 hash
         
@@ -162,6 +169,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha224(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha3_512(self):
         """Get SHA3-512 hash
         
@@ -177,6 +185,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha3_256(self):
         """Get SHA3-256 hash
         
@@ -192,6 +201,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha3_384(self):
         """Get SHA3-384 hash
         
@@ -207,6 +217,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def sha3_224(self):
         """Get SHA2-224 hash
         
@@ -222,6 +233,7 @@ class Hashing(ChepyCore):
         self.state = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def md2(self):
         """Get MD2 hash
         
@@ -238,6 +250,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def md4(self):
         """Get MD4 hash
         
@@ -253,6 +266,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def md5(self):
         """Get MD5 hash
         
@@ -274,6 +288,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def keccak_512(self):
         """Get KECCAK-512 hash
         
@@ -290,6 +305,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def keccak_384(self):
         """Get KECCAK-384 hash
         
@@ -306,6 +322,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def keccak_256(self):
         """Get KECCAK-256 hash
         
@@ -322,6 +339,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def keccak_224(self):
         """Get KECCAK-224 hash
         
@@ -338,6 +356,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def shake_256(self, size: int = 64):
         """Get Shake-256 hash
         
@@ -355,6 +374,7 @@ class Hashing(ChepyCore):
         self.state = binascii.hexlify(h.read(size))
         return self
 
+    @ChepyDecorators.call_stack
     def shake_128(self, size: int = 64):
         """Get Shake-128 hash
         
@@ -372,6 +392,7 @@ class Hashing(ChepyCore):
         self.state = binascii.hexlify(h.read(size))
         return self
 
+    @ChepyDecorators.call_stack
     def ripemd_160(self):
         """Get RIPEMD-160 hash
         
@@ -389,6 +410,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def blake_2b(self, bits: int = 256, key: bytes = ""):
         """Get Balke-2b hash
         
@@ -420,6 +442,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def blake_2s(self, bits: int = 256, key: bytes = ""):
         """Get Blake-2s hash
         
@@ -445,6 +468,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def crc8_checksum(self):
         """Get CRC8 checksum
         
@@ -458,6 +482,7 @@ class Hashing(ChepyCore):
         self.state = Crc8().process(self._convert_to_bytes()).finalhex()
         return self
 
+    @ChepyDecorators.call_stack
     def crc16_checksum(self):
         """Get CRC16 checksum
         
@@ -471,6 +496,7 @@ class Hashing(ChepyCore):
         self.state = CrcArc().process(self._convert_to_bytes()).finalhex()
         return self
 
+    @ChepyDecorators.call_stack
     def crc32_checksum(self):
         """Get CRC32 checksum
         
@@ -488,6 +514,7 @@ class Hashing(ChepyCore):
         self.state = Crc32().process(self._convert_to_bytes()).finalhex()
         return self
 
+    @ChepyDecorators.call_stack
     def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
         """Get HMAC hash
         
@@ -533,6 +560,7 @@ class Hashing(ChepyCore):
         self.state = h.hexdigest()
         return self
 
+    @ChepyDecorators.call_stack
     def bcrypt_hash(self, rounds: int = 10):
         """Get Bcrypt hash
         
@@ -551,6 +579,7 @@ class Hashing(ChepyCore):
         self.state = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
         return self
 
+    @ChepyDecorators.call_stack
     def bcrypt_compare(self, hash: str):
         """Compare Bcrypt hash
         
@@ -578,6 +607,7 @@ class Hashing(ChepyCore):
             self.state = False
             return self
 
+    @ChepyDecorators.call_stack
     def scrypt_hash(
         self, salt: str = "", key_length: int = 64, N: int = 14, r: int = 8, p: int = 1
     ):

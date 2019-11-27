@@ -129,23 +129,23 @@ def test_rc4_decrypt():
 
 def test_des_encrypt():
     assert (
-        Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).o
+        Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).to_hex().o
         == b"1ee5cb52954b211d1acd6e79c598baac"
     )
     assert (
-        Chepy("some data").des_encrypt("password").o
+        Chepy("some data").des_encrypt("password").to_hex().o
         == b"1ee5cb52954b211d1acd6e79c598baac"
     )
     assert (
-        Chepy("some data").des_encrypt("password", mode="ECB").o
+        Chepy("some data").des_encrypt("password", mode="ECB").to_hex().o
         == b"1ee5cb52954b211da5b1a0072da15156"
     )
     assert (
-        Chepy("some data").des_encrypt("password", mode="CTR").o
+        Chepy("some data").des_encrypt("password", mode="CTR").to_hex().o
         == b"0b7399049b0267d93d"
     )
     assert (
-        Chepy("some data").des_encrypt("password", mode="OFB").o
+        Chepy("some data").des_encrypt("password", mode="OFB").to_hex().o
         == b"0b7399049b0267d9a9"
     )
 
@@ -156,23 +156,33 @@ def test_triple_des_encrypt():
         .triple_des_encrypt(
             "7375706572207365637265742070617373776f7264202121", hex_key=True
         )
+        .to_hex()
         .o
         == b"f8b27a0d8c837edce87dd13a1ab41f96"
     )
     assert (
-        Chepy("some data").triple_des_encrypt("super secret password !!").o
+        Chepy("some data").triple_des_encrypt("super secret password !!").to_hex().o
         == b"f8b27a0d8c837edce87dd13a1ab41f96"
     )
     assert (
-        Chepy("some data").triple_des_encrypt("super secret password !!", mode="ECB").o
+        Chepy("some data")
+        .triple_des_encrypt("super secret password !!", mode="ECB")
+        .to_hex()
+        .o
         == b"f8b27a0d8c837edc8fb00ea85f502fb4"
     )
     assert (
-        Chepy("some data").triple_des_encrypt("super secret password !!", mode="CTR").o
+        Chepy("some data")
+        .triple_des_encrypt("super secret password !!", mode="CTR")
+        .to_hex()
+        .o
         == b"51710aefbd5bbb5b40"
     )
     assert (
-        Chepy("some data").triple_des_encrypt("super secret password !!", mode="OFB").o
+        Chepy("some data")
+        .triple_des_encrypt("super secret password !!", mode="OFB")
+        .to_hex()
+        .o
         == b"51710aefbd5bbb5bf9"
     )
 
@@ -323,23 +333,23 @@ def test_aes_decrypt():
 
 def test_blowfish_encrypt():
     assert (
-        Chepy("some data").blowfish_encrypt("70617373776f7264", hex_key=True).o
+        Chepy("some data").blowfish_encrypt("70617373776f7264", hex_key=True).to_hex().o
         == b"d9b0a79853f13960fcee3cae16e27884"
     )
     assert (
-        Chepy("some data").blowfish_encrypt("password").o
+        Chepy("some data").blowfish_encrypt("password").to_hex().o
         == b"d9b0a79853f13960fcee3cae16e27884"
     )
     assert (
-        Chepy("some data").blowfish_encrypt("password", mode="ECB").o
+        Chepy("some data").blowfish_encrypt("password", mode="ECB").to_hex().o
         == b"d9b0a79853f139603951bff96c3d0dd5"
     )
     assert (
-        Chepy("some data").blowfish_encrypt("password", mode="CTR").o
+        Chepy("some data").blowfish_encrypt("password", mode="CTR").to_hex().o
         == b"82bdcb75a4d655c63a"
     )
     assert (
-        Chepy("some data").blowfish_encrypt("password", mode="OFB").o
+        Chepy("some data").blowfish_encrypt("password", mode="OFB").to_hex().o
         == b"82bdcb75a4d655c6f0"
     )
 

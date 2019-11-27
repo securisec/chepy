@@ -1,9 +1,10 @@
 from uuid import uuid4
 
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Other(ChepyCore):
+    @ChepyDecorators.call_stack
     def generate_uuid(self) -> str:
         """Generate v4 UUID
 
@@ -25,9 +26,9 @@ class Other(ChepyCore):
     #     """Decode a qr code
 
     #     This method does require zbar to be installed in the system
-        
+
     #     Returns:
-    #         Chepy: The Chepy object. 
+    #         Chepy: The Chepy object.
     #     """
     #     data = Image.open(self._load_as_file())
     #     self.state = list(map(lambda x: x.data, _pyzbar_decode(data)))

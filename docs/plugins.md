@@ -51,9 +51,11 @@ The only thing this plugin at the moment will do is take whatever value is in th
 
 ```python
 import chepy
+from chepy.core import ChepyDecorators
 
 class MyPlugin(chepy.core.ChepyCore):
     
+    @ChepyDecorators.call_stack
     def myplugin_method(self):
         """another method
         
@@ -70,10 +72,16 @@ Lets breakdown this sample plugin.
 
 ```python
 import chepy
+from chepy.core import ChepyDecorators
 
 class MyPlugin(chepy.core.ChepyCore):
+
+    @ChepyDecorators.call_stack
+    def myplugin_method(self):
 ```
 All Chepy plugins needs to inherit the **ChepyCore** class. This ensures that all the core attributes and methods from ChepyCore are available to the plugin.
+
+The **ChepyDecorators** class offers stack methods to decorate plugin methods with. In this example, the `call_stack` decorator is being applied to the `myplugin_method` method. Although using the decorator is not required, it is recommended. This decorator ensures that that external plugins are also able to use the recipe feature. 
 
 #### Docstrings
 ```python

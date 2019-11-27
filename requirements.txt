@@ -1,6 +1,7 @@
 base58
 colorama
 crccheck
+decorator
 docstring-parser
 emoji
 fire==0.2.1
@@ -11,7 +12,7 @@ jsonpickle
 parsel
 phpserialize
 Pillow
-prompt_toolkit==2.0.10
+prompt_toolkit
 pycipher
 pycryptodome
 pydash

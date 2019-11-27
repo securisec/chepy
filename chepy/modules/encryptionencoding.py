@@ -14,7 +14,7 @@ from Crypto.Cipher import ARC4
 from Crypto.Cipher import DES, DES3, AES
 from Crypto.Cipher import Blowfish
 
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 from .internal.constants import EncryptionConsts
 from ..extras.combinatons import hex_chars
 
@@ -43,6 +43,7 @@ class EncryptionEncoding(ChepyCore):
             iv = binascii.unhexlify(binascii.hexlify(iv))
         return key, iv
 
+    @ChepyDecorators.call_stack
     def rotate(self, rotate_by: int):
         """Rotate string by provided number
         
@@ -66,6 +67,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = self.state.translate(lookup)
         return self
 
+    @ChepyDecorators.call_stack
     def rot_13(self):
         """ROT-13 encoding
         
@@ -78,6 +80,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = codecs.encode(self._convert_to_str(), "rot_13")
         return self
 
+    @ChepyDecorators.call_stack
     def rot_47(self):
         """ROT 47 encoding
         
@@ -101,6 +104,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = "".join(x)
         return self
 
+    @ChepyDecorators.call_stack
     def xor(self, key: str, key_type: str = "hex", ascii: bool = False):
         """XOR state with a key
 
@@ -155,6 +159,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = xor
         return self
 
+    @ChepyDecorators.call_stack
     def xor_bruteforce(self, length: int = 100):
         """Brute force single byte xor
 
@@ -192,6 +197,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = found
         return self
 
+    @ChepyDecorators.call_stack
     def jwt_decode(self):
         """Decode a JWT token. Does not verify
         
@@ -204,6 +210,7 @@ class EncryptionEncoding(ChepyCore):
         }
         return self
 
+    @ChepyDecorators.call_stack
     def jwt_verify(self, secret: str, algorithm: list = ["HS256"]):
         """Verify JWT token
         
@@ -219,6 +226,7 @@ class EncryptionEncoding(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def jwt_sign(self, secret: str, algorithms: str = "HS256"):
         """Sign a json/dict object in JWT
         
@@ -236,6 +244,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = jwt.encode(data, key=secret, algorithm=algorithms)
         return self
 
+    @ChepyDecorators.call_stack
     def jwt_bruteforce(
         self, wordlist: str, b64_encode: bool = False, algorithm: list = ["HS256"]
     ):
@@ -270,6 +279,7 @@ class EncryptionEncoding(ChepyCore):
             else:  # pragma: no cover
                 return self
 
+    @ChepyDecorators.call_stack
     def rc4_encrypt(self, key: str, hex_key: bool = False):
         """Encrypt raw state with RC4
         
@@ -292,6 +302,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = binascii.hexlify(cipher.encrypt(self._convert_to_bytes()))
         return self
 
+    @ChepyDecorators.call_stack
     def rc4_decrypt(self, key: str, hex_key: bool = False):
         """Decrypt raw state with RC4
         
@@ -314,6 +325,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = cipher.decrypt(self._convert_to_bytes())
         return self
 
+    @ChepyDecorators.call_stack
     def des_encrypt(
         self,
         key: str,
@@ -352,30 +364,28 @@ class EncryptionEncoding(ChepyCore):
             b"0b7399049b0267d93d"
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
             cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = DES.new(key, mode=DES.MODE_ECB)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = DES.new(key, mode=DES.MODE_CTR, nonce=b"")
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
             cipher = DES.new(key, mode=DES.MODE_OFB, iv=iv)
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def des_decrypt(
         self,
         key: str,
@@ -430,6 +440,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def triple_des_encrypt(
         self,
         key: str,
@@ -462,30 +473,28 @@ class EncryptionEncoding(ChepyCore):
             b"f8b27a0d8c837edc8fb00ea85f502fb4"
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = DES3.new(key, mode=DES3.MODE_ECB)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
             cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=iv)
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def triple_des_decrypt(
         self,
         key: str,
@@ -542,6 +551,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def aes_encrypt(
         self,
         key: str,
@@ -611,6 +621,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.encrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def aes_decrypt(
         self,
         key: str,
@@ -683,6 +694,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def blowfish_encrypt(
         self,
         key: str,
@@ -713,32 +725,30 @@ class EncryptionEncoding(ChepyCore):
             b"d9b0a79853f139603951bff96c3d0dd5"
         """
 
-        def to_hex(s):
-            return binascii.hexlify(s)
-
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
         if mode == "CBC":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_ECB)
-            self.state = to_hex(cipher.encrypt(pad(self._convert_to_bytes(), 8)))
+            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_OFB, iv=iv)
-            self.state = to_hex(cipher.encrypt(self._convert_to_bytes()))
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def blowfish_decrypt(
         self,
         key: str,
@@ -794,6 +804,7 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
 
+    @ChepyDecorators.call_stack
     def vigenere_encode(self, key: str):
         """Encode with Vigenere ciper
         
@@ -810,6 +821,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Vigenere(key=key).encipher(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def vigenere_decode(self, key: str):
         """Decode Vigenere ciper
         
@@ -826,6 +838,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Vigenere(key=key).decipher(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def affine_encode(self, a: int = 1, b: int = 1):
         """Encode with Affine ciper
         
@@ -843,6 +856,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Affine(a=a, b=b).encipher(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def affine_decode(self, a: int = 1, b: int = 1):
         """Decode Affine ciper
         
@@ -860,6 +874,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Affine(a=a, b=b).decipher(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def atbash_encode(self):
         """Encode with Atbash ciper
         
@@ -873,6 +888,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)
         return self
 
+    @ChepyDecorators.call_stack
     def atbash_decode(self):
         """Decode Atbash ciper
         
@@ -886,6 +902,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = pycipher.Atbash().decipher(self._convert_to_str(), keep_punct=True)
         return self
 
+    @ChepyDecorators.call_stack
     def to_morse_code(
         self,
         dot: str = ".",
@@ -915,6 +932,7 @@ class EncryptionEncoding(ChepyCore):
         self.state = encode
         return self
 
+    @ChepyDecorators.call_stack
     def from_morse_code(
         self,
         dot: str = ".",

@@ -2,10 +2,11 @@ from OpenSSL import crypto as _pyssl_crypto
 from OpenSSL._util import lib as _pyssl_cryptolib
 from Crypto.PublicKey import RSA
 
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Publickey(ChepyCore):
+    @ChepyDecorators.call_stack
     def parse_x509_pem(self):
         """Parse X509 cert in PEM format
         
@@ -72,6 +73,7 @@ class Publickey(ChepyCore):
         self.state = info
         return self
 
+    @ChepyDecorators.call_stack
     def parse_x509_der_hex(self):
         """Parse X509 cert in DER format
         
@@ -119,6 +121,7 @@ class Publickey(ChepyCore):
         self.state = info
         return self
 
+    @ChepyDecorators.call_stack
     def public_from_x509(self):
         """Get public key from x509 certificate
         
@@ -133,6 +136,7 @@ class Publickey(ChepyCore):
         self.state = pubKeyString
         return self
 
+    @ChepyDecorators.call_stack
     def pem_to_der_hex(self):
         """Convert PEM cert to DER format
         
@@ -150,6 +154,7 @@ class Publickey(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def der_hex_to_pem(self):
         """Convert DER format to PEM cert.
         
@@ -181,6 +186,7 @@ class Publickey(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def parse_public_pem(self):
         """Parse pubkey PEM to get n and e
         
@@ -195,6 +201,7 @@ class Publickey(ChepyCore):
         self.state = {"n": key.n, "e": key.e}
         return self
 
+    @ChepyDecorators.call_stack
     def parse_private_pem(self):
         """Parse private key PEM
         

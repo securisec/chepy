@@ -2,10 +2,11 @@ import ipaddress
 import regex as re
 import urllib.parse as _py_urlparse
 from ua_parser.user_agent_parser import Parse as _uap_parse
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 
 
 class Networking(ChepyCore):
+    @ChepyDecorators.call_stack
     def defang_url(self):
         """Make a URL harmless
         
@@ -25,6 +26,7 @@ class Networking(ChepyCore):
         self.state = re.sub(r"\.", "[.]", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def refang_url(self):
         """Refangs a URL so that it is clickable
         
@@ -39,6 +41,7 @@ class Networking(ChepyCore):
         self.state = re.sub(r"\[\.\]", ".", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def defang_ip(self):
         """Make an IP address harmless
         
@@ -62,6 +65,7 @@ class Networking(ChepyCore):
             self.state = re.sub(r"\.|:", "[.]", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def refang_ip(self):
         """Refangs an IP address
         
@@ -75,6 +79,7 @@ class Networking(ChepyCore):
         self.state = re.sub(r"\[\.\]|\[\:\]", ".", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def parse_user_agent(self):
         """Parse a User-Agent string.
         
@@ -102,6 +107,7 @@ class Networking(ChepyCore):
         self.state = _uap_parse(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def parse_uri(self):
         """Parse a URI
         
@@ -130,6 +136,7 @@ class Networking(ChepyCore):
         }
         return self
 
+    @ChepyDecorators.call_stack
     def parse_ip_range(self):
         """Enumerate IP address in a CIDR range
         
@@ -151,6 +158,7 @@ class Networking(ChepyCore):
         ]
         return self
 
+    @ChepyDecorators.call_stack
     def parse_ipv6(self):
         """Get longhand and shorthand of IPv6
         

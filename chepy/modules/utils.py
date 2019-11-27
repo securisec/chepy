@@ -3,11 +3,12 @@ import regex as re
 from typing import Any
 import pydash
 
-from ..core import ChepyCore
+from ..core import ChepyCore, ChepyDecorators
 import chepy.modules.internal.colors as _int_colors
 
 
 class Utils(ChepyCore):
+    @ChepyDecorators.call_stack
     def reverse(self, count: int = 1):
         """Reverses a string
         
@@ -32,6 +33,7 @@ class Utils(ChepyCore):
             )
             return self
 
+    @ChepyDecorators.call_stack
     def count_occurances(self, regex: str, case_sensitive: bool = False):
         """Counts occurances of the regex.
 
@@ -55,6 +57,7 @@ class Utils(ChepyCore):
         self.state = len(r.findall(self._convert_to_str()))
         return self
 
+    @ChepyDecorators.call_stack
     def remove_whitespace(
         self,
         spaces: bool = True,
@@ -90,6 +93,7 @@ class Utils(ChepyCore):
         self.state = re.sub("|".join(remove), "", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def remove_nullbytes(self):
         """Remove null \\x00 byes from binary data
         
@@ -99,6 +103,7 @@ class Utils(ChepyCore):
         self.state = self._convert_to_bytes().replace(b"\x00", b"")
         return self
 
+    @ChepyDecorators.call_stack
     def regex_search(
         self,
         pattern: str,
@@ -139,6 +144,7 @@ class Utils(ChepyCore):
         self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
 
+    @ChepyDecorators.call_stack
     def split_by(self, pattern: str = "\n", trim=True):
         """Split a string by the given pattern
         
@@ -157,6 +163,7 @@ class Utils(ChepyCore):
             self.state = re.split(pattern, self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def unique(self):
         """Get an array of unique list items
         
@@ -172,6 +179,7 @@ class Utils(ChepyCore):
         else:  # pragma: no cover
             raise TypeError("State is not a list")
 
+    @ChepyDecorators.call_stack
     def sorted(self, reverse: bool = False):
         """Sort a list
         
@@ -194,6 +202,7 @@ class Utils(ChepyCore):
         else:  # pragma: no cover
             raise TypeError("State is not a list")
 
+    @ChepyDecorators.call_stack
     def filter_by(self, predicate: Any = None):
         """Filter a dict or list
         
@@ -216,6 +225,7 @@ class Utils(ChepyCore):
         else:  # pragma: no cover
             raise TypeError("State is not a list")
 
+    @ChepyDecorators.call_stack
     def slice(self, start: int = 0, end: int = None):
         """Returns the specified slice
         
@@ -233,6 +243,7 @@ class Utils(ChepyCore):
         self.state = self.state[start:end]
         return self
 
+    @ChepyDecorators.call_stack
     def find_replace(self, pattern: str, repl: str, ignore_case=True):
         """Replace matched pattern with repln
         
@@ -254,6 +265,7 @@ class Utils(ChepyCore):
         self.state = re.sub(pattern, repl, self._convert_to_str(), flags=flags)
         return self
 
+    @ChepyDecorators.call_stack
     def escape_string(self):
         """Escape all special characters in a string
         
@@ -267,6 +279,7 @@ class Utils(ChepyCore):
         self.state = re.escape(self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def unescape_string(self):
         """Unescape \\ from a string
         
@@ -276,6 +289,7 @@ class Utils(ChepyCore):
         self.state = re.sub(r"\\", "", self._convert_to_str())
         return self
 
+    @ChepyDecorators.call_stack
     def color_hex_to_rgb(self):
         """Convert hex color to rgb
         
@@ -287,6 +301,7 @@ class Utils(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
     def diff(
         self,
         state: int = None,
@@ -355,6 +370,7 @@ class Utils(ChepyCore):
         self.state = "".join(process_tag(*t) for t in matcher.get_opcodes())
         return self
 
+    @ChepyDecorators.call_stack
     def pad(self, width: int, direction: str = "left", char: str = " "):
         """Pad string with a character
         
@@ -390,6 +406,7 @@ class Utils(ChepyCore):
             )
         return self
 
+    @ChepyDecorators.call_stack
     def count(self):
         """Count anything
         
@@ -399,6 +416,7 @@ class Utils(ChepyCore):
         self.state = pydash.count_by(self.state)
         return self
 
+    @ChepyDecorators.call_stack
     def set(self):
         """Get an array of unique values
         
