@@ -1,5 +1,6 @@
 import os
 import tempfile
+from pathlib import Path
 from chepy import Chepy
 
 
@@ -128,14 +129,15 @@ def test_load_dir():
 
 
 def test_recipe():
-    temp = tempfile.NamedTemporaryFile()
+    temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
     Chepy(
         "tests/files/encoding"
     ).load_file().reverse().rot_13().base64_decode().base32_decode().hexdump_to_str().save_recipe(
-        temp.name
+        temp
     )
 
     assert (
-        Chepy("tests/files/encoding").load_recipe(temp.name).o
+        Chepy("tests/files/encoding").load_recipe(temp).o
         == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
     )
+    Path(temp).unlink()
