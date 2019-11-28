@@ -18,6 +18,29 @@ from .modules.exceptions import PrintException
 logging.getLogger().setLevel(logging.INFO)
 
 
+class ChepyDecorators(object):
+    @staticmethod
+    @decorator
+    def call_stack(func, *args, **kwargs):
+        """This decorator is used to get the method name and 
+        arguments and save it to self.stack. The data from 
+        self.stack is predominantly used to save recepies. 
+        """
+        func_sig = dict()
+        func_self = args[0]
+        func_sig["function"] = func.__name__
+
+        bound_args = inspect.signature(func).bind(*args, **kwargs)
+        bound_args.apply_defaults()
+
+        func_arguments = dict(bound_args.arguments)
+        del func_arguments["self"]
+        func_sig["args"] = func_arguments
+        func_self._stack.append(func_sig)
+
+        return func(*args, **kwargs)
+
+
 class ChepyCore(object):
     """The `ChepyCore` class for Chepy is primarily used as an interface 
     for all the current modules/classes in Chepy, or for plugin development. 
@@ -107,7 +130,7 @@ class ChepyCore(object):
         Returns:
             str: Expanded absolute path
         """
-        return str(pathlib.Path(path).expanduser().absolute())
+        return pathlib.Path(path).expanduser().absolute()
 
     def _info_logger(self, data: str) -> None:
         """Just a binding for logger.info
@@ -163,6 +186,7 @@ class ChepyCore(object):
                     self.states[i] = getattr(self, method_name)().o
         return self
 
+    @ChepyDecorators.call_stack
     def set_state(self, data: Any):
         """Set any arbitrary values in the current state
 
@@ -186,6 +210,7 @@ class ChepyCore(object):
         self.state = data
         return self
 
+    @ChepyDecorators.call_stack
     def create_state(self):
         """Create a new empty state
         
@@ -195,6 +220,7 @@ class ChepyCore(object):
         self.states[len(self.states)] = {}
         return self
 
+    @ChepyDecorators.call_stack
     def copy_state(self, index: int):
         """Copy the current state to a new state
         
@@ -207,6 +233,7 @@ class ChepyCore(object):
         self.states[index] = self.states.get(self._current_index)
         return self
 
+    @ChepyDecorators.call_stack
     def change_state(self, index: int):
         """Change current state by index
 
@@ -226,6 +253,7 @@ class ChepyCore(object):
         self._current_index = index
         return self
 
+    @ChepyDecorators.call_stack
     def switch_state(self, index: int):  # pragma: no cover
         """Switch current state by index
 
@@ -245,6 +273,7 @@ class ChepyCore(object):
         self._current_index = index
         return self
 
+    @ChepyDecorators.call_stack
     def delete_state(self, index: int):
         """Delete a state specified by the index
         
@@ -260,6 +289,21 @@ class ChepyCore(object):
             logging.warning("{} does not exist".format(index))
         return self
 
+    @ChepyDecorators.call_stack
+    def get_state(self, index: int) -> Any:
+        """Returns the value of the specified state. 
+
+        This method does not chain with other methods of Chepy
+        
+        Args:
+            index (int): The index of the state
+        
+        Returns:
+            Any: Any value that is in the specified state
+        """
+        return self.states.get(index)
+
+    @ChepyDecorators.call_stack
     def save_buffer(self, index: int = None):
         """Save current state in a buffer 
 
@@ -280,6 +324,7 @@ class ChepyCore(object):
             self.buffers[len(self.buffers)] = self.state
         return self
 
+    @ChepyDecorators.call_stack
     def load_buffer(self, index: int):
         """Load the specified buffer into state
         
@@ -306,6 +351,7 @@ class ChepyCore(object):
         self.state = self.buffers[index]
         return self
 
+    @ChepyDecorators.call_stack
     def delete_buffer(self, index: int):
         """Delete a buffer item
         
@@ -321,6 +367,7 @@ class ChepyCore(object):
             logging.warning("{} does not exist".format(index))
         return self
 
+    @ChepyDecorators.call_stack
     def substring(self, pattern: str, group: int = 0):
         """Choose a substring from current state as string 
 
@@ -336,19 +383,6 @@ class ChepyCore(object):
         """
         self.state = re.search(pattern, self._convert_to_str()).group(group)
         return self
-
-    def get_state(self, index: int) -> Any:
-        """Returns the value of the specified state. 
-
-        This method does not chain with other methods of Chepy
-        
-        Args:
-            index (int): The index of the state
-        
-        Returns:
-            Any: Any value that is in the specified state
-        """
-        return self.states.get(index)
 
     def _convert_to_bytes(self) -> None:
         """This method is used to coerce the curret object in 
@@ -447,6 +481,7 @@ class ChepyCore(object):
         """
         return self.state
 
+    @ChepyDecorators.call_stack
     def out(self) -> Any:
         """Get the final output
         
@@ -455,6 +490,7 @@ class ChepyCore(object):
         """
         return self.state
 
+    @ChepyDecorators.call_stack
     def out_as_str(self) -> str:
         """Get current value as str
         
@@ -463,6 +499,7 @@ class ChepyCore(object):
         """
         return self._convert_to_str()
 
+    @ChepyDecorators.call_stack
     def out_as_bytes(self) -> bytes:
         """Get current value as bytes
         
@@ -471,6 +508,7 @@ class ChepyCore(object):
         """
         return self._convert_to_bytes()
 
+    @ChepyDecorators.call_stack
     def get_by_index(self, index: int):
         """Get an item by specifying an index
         
@@ -483,6 +521,7 @@ class ChepyCore(object):
         self.state = self.state[index]
         return self
 
+    @ChepyDecorators.call_stack
     def get_by_key(self, key: str):
         """Get an object from a dict by key
         
@@ -498,6 +537,7 @@ class ChepyCore(object):
         else:  # pragma: no cover
             raise TypeError("State is not a dictionary")
 
+    @ChepyDecorators.call_stack
     def copy_to_clipboard(self) -> None:  # pragma: no cover
         """Copy to clipboard
         
@@ -510,6 +550,7 @@ class ChepyCore(object):
         pyperclip.copy(self._convert_to_str())
         return None
 
+    @ChepyDecorators.call_stack
     def copy(self) -> None:  # pragma: no cover
         """Copy to clipboard
         
@@ -522,6 +563,7 @@ class ChepyCore(object):
         self.copy_to_clipboard()
         return None
 
+    @ChepyDecorators.call_stack
     def web(self, magic: bool = False) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
 
@@ -545,6 +587,7 @@ class ChepyCore(object):
         webbrowser.open_new_tab(url)
         return None
 
+    @ChepyDecorators.call_stack
     def http_request(
         self,
         method: str = "GET",
@@ -618,6 +661,7 @@ class ChepyCore(object):
         }
         return self
 
+    @ChepyDecorators.call_stack
     def load_dir(self, pattern: str = "*"):
         """Load all file paths in a directory
         
@@ -634,6 +678,7 @@ class ChepyCore(object):
         }
         return self
 
+    @ChepyDecorators.call_stack
     def load_file(self):
         """If a path is provided, read the file
         
@@ -654,6 +699,7 @@ class ChepyCore(object):
                 self.states[self._current_index] = bytearray(f.read())
         return self
 
+    @ChepyDecorators.call_stack
     def read_file(self):
         """If a path is provided, read the file 
 
@@ -706,25 +752,49 @@ class ChepyCore(object):
         self._info_logger("File written to {}".format(self._abs_path(file_path)))
         return None
 
+    def save_recipe(self, path: str):
+        """Save the current recipe
 
-class ChepyDecorators(object):
-    @staticmethod
-    @decorator
-    def call_stack(func, *args, **kwargs):
-        """This decorator is used to get the method name and 
-        arguments and save it to self.stack. The data from 
-        self.stack is predominantly used to save recepies. 
+        A recipe will be all the previous methdos called on the 
+        chepy instance along with their args
+        
+        Args:
+            path (str): The path to save the recipe
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("some data").to_hex().base64_encode()
+            >>> c.save_recipe("/path/to/recipe)
+            >>> c.out()
+            NzM2ZjZkNjUyMDY0NjE3NDYx
         """
-        func_sig = dict()
-        func_self = args[0]
-        func_sig["function"] = func.__name__
+        with self._abs_path(path) as f:
+            f.write_text(ujson.dumps(self._stack))
+        self._info_logger("Saved recipe to {}".format(str(path)))
+        return self
 
-        bound_args = inspect.signature(func).bind(*args, **kwargs)
-        bound_args.apply_defaults()
+    def load_recipe(self, path: str):
+        """Load and run a recipe
+        
+        Args:
+            path (str): Path to recipe file
+        
+        Returns:
+            Chepy: The Chepy object.
 
-        func_arguments = dict(bound_args.arguments)
-        del func_arguments["self"]
-        func_sig["args"] = func_arguments
-        func_self._stack.append(func_sig)
-
-        return func(*args, **kwargs)
+        Examples:
+            >>> c = Chepy("some data").load_recipe("/path/to/recipe").out()
+            NzM2ZjZkNjUyMDY0NjE3NDYx
+        """
+        with self._abs_path(path) as f:
+            recipes = ujson.loads(f.read_text())
+            for recipe in recipes:
+                function = recipe["function"]
+                args = recipe["args"]
+                if len(args) > 0:
+                    getattr(self, function)(**args)
+                else:
+                    getattr(self, function)()
+        return self

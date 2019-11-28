@@ -3,7 +3,7 @@
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
 [![](https://img.shields.io/travis/securisec/chepy.svg?label=Travis&logo=travis&branch=master)](https://travis-ci.com/securisec/chepy)
 [![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
-![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)
+[![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)](https://hub.docker.com/r/securisec/chepy)
 
 [![](https://img.shields.io/readthedocs/chepy.svg?logo=read-the-docs&label=Docs)](http://chepy.readthedocs.io/en/latest/)
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
@@ -75,7 +75,7 @@ pipenv install
 ```
 
 
-#### Docker
+#### [Docker](https://hub.docker.com/r/securisec/chepy)
 ```bash
 docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]
 ```
@@ -87,6 +87,7 @@ docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "anot
 - Chepy has a CLI
 - Chepy CLI has full autocompletion. 
 - Extendable via plugins
+- Chepy has the concept of recipes which makes sharing much simpler. 
 - Infinitely scalable as it can leverage the full Python library.
 - Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
 - The Chepy python library is significantly faster than the Cyberchef Node library.

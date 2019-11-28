@@ -146,3 +146,41 @@ Now the state contains an `A` and the buffer contains an `A`
 c.str_to_hex()
 ```
 Now the state contains `41` while the buffer still contains `A`
+
+### Recipes
+Chepy has the concept of recipes which means it can load an run chepy methods from a JSON file. This makes sharing Chepy recipes very easy and prevents code reuse. 
+
+Some caveats to recipes are that they do not include some of the methods from `ChepyCore`. For instance, a recipe cannot write to file, or load or read recipes. Recipes cannot do `fork` operations also. Chepy plugins does support recipes also. 
+
+There are two main methods that handle recipes and they are both part of the Core. 
+
+#### save_recipe
+This method is used to save a recipe. This method is also chainable with other methods.
+
+Example:
+```python
+from chepy import Chepy
+
+c = (
+    Chepy("tests/files/encoding")
+    .load_file()
+    .reverse()
+    .rot_13()
+    .base64_decode()
+    .base32_decode()
+    .hexdump_to_str()
+    .save_recipe('/tmp/a.recipe')
+)
+```
+This code will create the follow JSON recipe:
+```json
+[{"function":"load_file","args":{}},{"function":"reverse","args":{"count":1}},{"function":"rot_13","args":{}},{"function":"base64_decode","args":{"custom":null}},{"function":"base32_decode","args":{}},{"function":"hexdump_to_str","args":{}}]
+```
+
+#### load_recipe
+This method will load a recipe file, and then run the recipe on it. So based of the previous example, instead of running the whole code, we can simply use:
+```python
+from chepy import Chepy
+
+Chepy('tests/files/encoding').load_recipe('/tmp/a.recipe')
+```

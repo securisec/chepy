@@ -1,4 +1,5 @@
 import os
+import tempfile
 from chepy import Chepy
 
 
@@ -125,3 +126,16 @@ def test_write_to_file():
 def test_load_dir():
     assert len(Chepy("tests/files/").load_dir().states) >= 10
 
+
+def test_recipe():
+    temp = tempfile.NamedTemporaryFile()
+    Chepy(
+        "tests/files/encoding"
+    ).load_file().reverse().rot_13().base64_decode().base32_decode().hexdump_to_str().save_recipe(
+        temp.name
+    )
+
+    assert (
+        Chepy("tests/files/encoding").load_recipe(temp.name).o
+        == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
+    )
