@@ -7,7 +7,8 @@ def shannon_entropy(data: Any, unit="shannon") -> float:
     """Calculate the Shannon entropy of any data type. Units 
     could be `natural`, `shannon` or `hartley`
 
-    - 0 represents no randomness (i.e. all the bytes in the data have the same value) whereas 8, the maximum, represents a completely random string.
+    - 0 represents no randomness (i.e. all the bytes in the data have the same value) 
+        whereas 8, the maximum, represents a completely random string.
     - Standard English text usually falls somewhere between 3.5 and 5.
     - Properly encrypted or compressed data of a reasonable length should have an entropy of over 7.5.
 

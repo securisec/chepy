@@ -9,6 +9,7 @@ import inspect
 import jsonpickle
 import ujson
 import io
+import itertools
 import regex as re
 from decorator import decorator
 from typing import Any, Tuple, List, Union
@@ -19,6 +20,9 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 class ChepyDecorators(object):
+    """A class to house all the decorators for Chepy
+    """
+
     @staticmethod
     @decorator
     def call_stack(func, *args, **kwargs):
@@ -711,11 +715,11 @@ class ChepyCore(object):
         self.load_file()
         return self
 
-    def write_to_file(self, file_path: str, as_binary: bool = False) -> None:
+    def write_to_file(self, path: str, as_binary: bool = False) -> None:
         """Save the state to disk. Return None.
         
         Args:
-            file_path (str): The file path to save in.
+            path (str): The file path to save in.
             as_binary (bool, optional): If file should be saved as a binary file. Defaults to False.
         
         Returns:
@@ -730,16 +734,16 @@ class ChepyCore(object):
             mode = "wb+"
         else:
             mode = "w+"
-        with open(str(self._abs_path(file_path)), mode) as f:
+        with open(str(self._abs_path(path)), mode) as f:
             f.write(self.state)
-        self._info_logger("File written to {}".format(self._abs_path(file_path)))
+        self._info_logger("File written to {}".format(self._abs_path(path)))
         return None
 
-    def write_binary(self, file_path: str) -> None:  # pragma: no cover
+    def write_binary(self, path: str) -> None:  # pragma: no cover
         """Save the state to disk. Return None.
         
         Args:
-            file_path (str): The file path to save in.
+            path (str): The file path to save in.
         
         Returns:
             None: Returns None
@@ -747,9 +751,9 @@ class ChepyCore(object):
         Examples:
             >>> c = Chepy("some data").write_binary('/some/path/file')
         """
-        with open(str(self._abs_path(file_path)), "wb+") as f:
+        with open(str(self._abs_path(path)), "wb+") as f:
             f.write(self.state)
-        self._info_logger("File written to {}".format(self._abs_path(file_path)))
+        self._info_logger("File written to {}".format(self._abs_path(path)))
         return None
 
     def save_recipe(self, path: str):
@@ -798,3 +802,106 @@ class ChepyCore(object):
                 else:
                     getattr(self, function)()
         return self
+
+    @ChepyDecorators.call_stack
+    def loop_list(self, callback: str, args: dict = {}):
+        """Loop over an array and run a Chepy method on it
+        
+        Args:
+            callback (str): Chepy method as string
+            args (dict, optional): Dictionary of args. Defaults to {}.
+        
+        Returns:
+            Chepy: The Chepy object
+
+        Examples:
+            This method is capable of running a callable from either 
+            a string, or a chepy method.
+
+            >>> c = Chepy(["an", "array"])
+            >>> c.loop_list('to_hex').loop_list('hmac_hash', {'key': 'secret'})
+            ['5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e', '30d75bf34740e8781cd4ec7b122e3efd8448e270']
+        """
+        assert isinstance(self.state, list), "State is not a list"
+        assert isinstance(callback, str), 'Callback must be a'
+        hold = []
+        current_state = self.state
+        # find the last index that this method was run
+        stack_loop_index = next(
+            itertools.dropwhile(
+                lambda x: self._stack[x]["function"] != "loop_list",
+                reversed(range(len(self._stack))),
+            )
+        )
+        try:
+            for index, data in enumerate(current_state):
+                self.state = current_state[index]
+                if args:
+                    hold.append(getattr(self, callback)(**args).o)
+                else:
+                    hold.append(getattr(self, callback)().o)
+            self._stack = self._stack[: stack_loop_index + 1]
+            self.state = hold
+            return self
+        except:  # pragma: no cover
+            self.state = current_state
+            raise
+
+    @ChepyDecorators.call_stack
+    def loop_dict(self, keys: list, callback: str, args: dict = {}):
+        """Loop over a dictionary and apply the callback to the value
+        
+        Args:
+            keys (list): List of keys to match
+            callback (str): Chepy method as string
+            args (dict, optional): Dictionary of args. Defaults to {}.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy({'some': 'hahahaha', 'lol': 'aahahah'})
+            >>> c.loop_dict(['some'], 'hmac_hash', {'key': 'secret'}).o
+            {'some': '99f77ec06a3c69a4a95371a7888245ba57f47f55', 'lol': 'aahahah'}
+            
+            We can combine `loop_list` and `loop_dict` to loop over a list of dictionaries.
+
+            >>> data = [{"some": "val"}, {"some": "another"}, {"lol": "lol"}, {"another": "aaaa"}]
+            >>> c = Chepy(data)
+            >>> c.loop_list("loop_dict", {"keys": ["some", "lol"], "callback": "to_upper_case"})
+            [
+                {"some": "VAL"},
+                {"some": "ANOTHER"},
+                {"lol": "LOL"},
+                {"another": "aaaa"},
+            ]
+        """
+        assert isinstance(keys, list), "Keys needs to be a list of keys"
+        assert isinstance(args, dict), "Args needs to be a dict"
+        assert isinstance(callback, str), 'Callback must be a string'
+        hold = {}
+        current_state = self.state
+        # find the last index that this method was run
+        stack_loop_index = next(
+            itertools.dropwhile(
+                lambda x: self._stack[x]["function"] != "loop_dict",
+                reversed(range(len(self._stack))),
+            )
+        )
+        try:
+            dict_keys = current_state.keys()
+            for key in keys:
+                if current_state.get(key) is not None:
+                    self.state = current_state.get(key)
+                    if args:
+                        hold[key] = getattr(self, callback)(**args).o
+                    else:
+                        hold[key] = getattr(self, callback)().o
+            for unmatched_key in list(set(dict_keys) - set(keys)):
+                hold[unmatched_key] = current_state[unmatched_key]
+            self._stack = self._stack[: stack_loop_index + 1]
+            self.state = hold
+            return self
+        except:  # pragma: no cover
+            self.state = current_state
+            raise

@@ -37,9 +37,9 @@ def get_style():
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
-            "name1": "#00ffff bold",
-            "name2": "#ff0000 bold",
-            "name3": "#ffd700 bold",
+            "prompt1": "#00ffff bold",
+            "prompt2": "#ff0000 bold",
+            "prompt3": "#ffd700 bold",
             "state_index": "#ffd700",
             "file": "#00ff48",
             "rprompt": "fg:#00ff48",
@@ -92,7 +92,7 @@ def get_options():
 
 
 def prompt_message(fire_obj):
-    elements = [("class:name1", ">"), ("class:name2", ">"), ("class:name3", ">")]
+    elements = [("class:prompt1", ">"), ("class:prompt2", ">"), ("class:prompt3", ">")]
     try:
         elements.append(
             (

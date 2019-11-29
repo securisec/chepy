@@ -150,7 +150,12 @@ Now the state contains `41` while the buffer still contains `A`
 ### Recipes
 Chepy has the concept of recipes which means it can load an run chepy methods from a JSON file. This makes sharing Chepy recipes very easy and prevents code reuse. 
 
-Some caveats to recipes are that they do not include some of the methods from `ChepyCore`. For instance, a recipe cannot write to file, or load or read recipes. Recipes cannot do `fork` operations also. Chepy plugins does support recipes also. 
+Some caveats to recipes are that they do not include some of the methods from `ChepyCore`. For instance, a recipe cannot write to file, or load or read recipes. Chepy plugins does support recipes also. 
+
+Recipes do not support the following operations:
+- `fork`
+
+If these operations are present on the instance, the recipe will not work. 
 
 There are two main methods that handle recipes and they are both part of the Core. 
 

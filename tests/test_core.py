@@ -141,3 +141,38 @@ def test_recipe():
         == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
     )
     Path(temp).unlink()
+
+
+def test_loop_list():
+    c = Chepy(["an", "array"])
+    c.loop_list("to_hex").loop_list("hmac_hash", {"key": "secret"})
+    assert c.o == [
+        "5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
+        "30d75bf34740e8781cd4ec7b122e3efd8448e270",
+    ]
+    c1 = Chepy(["an", "array"])
+    c1.loop_list("to_hex").loop_list("hmac_hash", {"key": "secret"})
+    assert c1.o == [
+        "5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
+        "30d75bf34740e8781cd4ec7b122e3efd8448e270",
+    ]
+
+
+def test_loop_dict():
+    data = [{"some": "val"}, {"some": "another"}, {"lol": "lol"}, {"another": "aaaa"}]
+    c = Chepy(data)
+    c.loop_list("loop_dict", {"keys": ["some", "lol"], "callback": "to_upper_case"})
+    assert c.o == [
+        {"some": "VAL"},
+        {"some": "ANOTHER"},
+        {"lol": "LOL"},
+        {"another": "aaaa"},
+    ]
+
+    d = Chepy({"some": "hahahaha", "lol": "aahahah"})
+    d.loop_dict(["some"], "to_upper_case")
+    assert d.o == {"some": "HAHAHAHA", "lol": "aahahah"}
+
+    e = Chepy({"some": "hahahaha", "lol": "aahahah"})
+    e.loop_dict(["some"], "hmac_hash", {"key": "secret"})
+    assert e.o == {"some": "99f77ec06a3c69a4a95371a7888245ba57f47f55", "lol": "aahahah"}
