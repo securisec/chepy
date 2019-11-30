@@ -58,8 +58,8 @@ def test_extract_domains():
 
 def test_xpath():
     assert (
-        Chepy("http://example.com")
-        .http_request()
+        Chepy("tests/files/test.html")
+        .load_file()
         .xpath_selector("//title/text()")
         .get_by_index(0)
         .o
@@ -87,4 +87,12 @@ def test_jpath():
         .o
         == "Long"
     )
+
+
+def test_html_comments():
+    assert len(Chepy("tests/files/test.html").load_file().html_comments().o) == 3
+
+
+def test_js_comments():
+    assert len(Chepy("tests/files/test.js").load_file().js_comments().o) == 3
 

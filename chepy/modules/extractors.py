@@ -7,6 +7,11 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Extractors(ChepyCore):
+    def _parsel_obj(self):
+        """Returns a parsel.Selector object
+        """
+        return Selector(self._convert_to_str())
+
     @ChepyDecorators.call_stack
     def extract_strings(self, length: int = 4):
         """Extract strings from state
@@ -207,7 +212,7 @@ class Extractors(ChepyCore):
             >>> c.o
             "<title>Example Domain</title>"
         """
-        self.state = Selector(self._convert_to_str()).css(query).getall()
+        self.state = self._parsel_obj().css(query).getall()
         return self
 
     @ChepyDecorators.call_stack
@@ -235,3 +240,30 @@ class Extractors(ChepyCore):
             for j in jsonpath_rw.parse(query).find(ujson.loads(self._convert_to_str()))
         )
         return self
+
+    @ChepyDecorators.call_stack
+    def html_comments(self):
+        """Extract html comments
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = list(
+            filter(lambda x: x != "", self._parsel_obj().xpath("//comment()").getall())
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def js_comments(self):
+        """Extract javascript comments
+
+        Some false positives is expected because of inline // comments
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"/\*[\w'\s\r\n\*]*\*/|//[\w\s']*|/\*.+?\*/", self._convert_to_str()
+        )
+        return self
+
