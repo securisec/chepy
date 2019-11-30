@@ -1,4 +1,6 @@
-<img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="300px">
+<p align="center">
+    <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="50%">
+</p>
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
 ![Travis (.com)](https://img.shields.io/travis/com/securisec/chepy?logo=travis)
