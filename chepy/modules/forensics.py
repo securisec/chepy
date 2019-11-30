@@ -2,7 +2,6 @@ import io
 import os
 import logging
 import pathlib
-import shutil
 import tempfile
 import pprint
 
@@ -54,7 +53,7 @@ class Forensics(ChepyCore):
             logging.info(mimetype)
         if set_state:
             self.state = mimetype
-        shutil.rmtree(filename)
+        # pathlib.Path(filename).unlink()
         return self
 
     @ChepyDecorators.call_stack
@@ -81,7 +80,7 @@ class Forensics(ChepyCore):
                 self.state = meta
             else:  # pragma: no cover
                 logging.info(pprint.pformat(meta))
-        shutil.rmtree(filename)
+        # pathlib.Path(filename).unlink()
         return self
 
     @ChepyDecorators.call_stack
@@ -103,7 +102,7 @@ class Forensics(ChepyCore):
             subfile.setOutput(extract_path)
         subfile.loadParsers()
         subfile.main()
-        shutil.rmtree(filename)
+        # pathlib.Path(filename).unlink()
         return self
 
     @ChepyDecorators.call_stack
@@ -118,5 +117,5 @@ class Forensics(ChepyCore):
             exif = et.get_metadata(filename)
             if exif:
                 self.state = exif
-        shutil.rmtree(filename)
+        # pathlib.Path(filename).unlink()
         return self
