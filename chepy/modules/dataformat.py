@@ -16,7 +16,6 @@ from chepy.modules.internal.constants import Encoding
 
 
 class DataFormat(ChepyCore):
-    
     @ChepyDecorators.call_stack
     def list_to_str(self, join_by=" "):
         """Join an array by `join_by`
@@ -50,7 +49,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def join_list(self, by: str=""):
+    def join_list(self, by: str = ""):
         """Join a list with specified character
         
         Args:
@@ -324,6 +323,20 @@ class DataFormat(ChepyCore):
             "414141"
         """
         self.state = binascii.hexlify(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_hex(self):
+        """Convert a non delimited hex string to string
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("414141").from_hex().out()
+            b"AAA"
+        """
+        self.state = binascii.unhexlify(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack

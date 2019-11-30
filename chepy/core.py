@@ -16,8 +16,6 @@ from typing import Any, Tuple, List, Union
 
 from .modules.exceptions import PrintException
 
-logging.getLogger().setLevel(logging.INFO)
-
 
 class ChepyDecorators(object):
     """A class to house all the decorators for Chepy
@@ -77,6 +75,13 @@ class ChepyCore(object):
         self.cyberchef = self.web
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
+
+        #: Log level
+        self.log_level = logging.INFO
+        #: Log format message
+        self.log_format = "%(levelname)-2s - %(message)s"
+        logging.getLogger().setLevel(self.log_level)
+        logging.basicConfig(format=self.log_format)
 
     @property
     def state(self):
@@ -823,7 +828,7 @@ class ChepyCore(object):
             ['5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e', '30d75bf34740e8781cd4ec7b122e3efd8448e270']
         """
         assert isinstance(self.state, list), "State is not a list"
-        assert isinstance(callback, str), 'Callback must be a'
+        assert isinstance(callback, str), "Callback must be a"
         hold = []
         current_state = self.state
         # find the last index that this method was run
@@ -878,7 +883,7 @@ class ChepyCore(object):
         """
         assert isinstance(keys, list), "Keys needs to be a list of keys"
         assert isinstance(args, dict), "Args needs to be a dict"
-        assert isinstance(callback, str), 'Callback must be a string'
+        assert isinstance(callback, str), "Callback must be a string"
         hold = {}
         current_state = self.state
         # find the last index that this method was run

@@ -117,6 +117,10 @@ def test_to_hex():
     assert Chepy("AAA").to_hex().out().decode() == "414141"
 
 
+def test_from_hex():
+    assert Chepy("414141").from_hex().out().decode() == "AAA"
+
+
 def test_hex_to_int():
     assert Chepy("0x123").hex_to_int().output == 291
     assert Chepy("123").hex_to_int().output == 291

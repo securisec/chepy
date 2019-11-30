@@ -5,6 +5,7 @@ decorator
 docstring-parser
 emoji
 fire==0.2.1
+hachoir==3.1.0
 hashid
 hexdump
 jsonpath-rw
@@ -19,6 +20,7 @@ pydash
 pyjwt
 pyOpenSSL
 pyperclip
+PyExifTool
 PyYAML
 regex
 requests

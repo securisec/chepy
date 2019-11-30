@@ -47,6 +47,11 @@ Either of these methods can be used to load a file info chepy. These methods loa
 c = Chepy("/path/to/some/file.txt").read_file()
 ```
 
+```eval_rst
+.. warning::
+    Chepy will read the entire file to memory, so working with very large files will really slow things down.
+```
+
 #### [load_dir](./chepy.html#chepy.Chepy.load_dir)
 The `load_dir` method is used to load the entire contents of a directory into Chepy. This method optionally takes a pattern argument to specify which files to load. A state is created for each file that matches the pattern in the directory. To load recursively, the pattern `**/*` can be used.
 ```python
