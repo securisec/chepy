@@ -54,7 +54,6 @@ class Forensics(ChepyCore):
             logging.info(mimetype)
         if set_state:
             self.state = mimetype
-        parser.close()
         shutil.rmtree(filename)
         return self
 
