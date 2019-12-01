@@ -2,19 +2,22 @@ import base64
 import binascii
 import pathlib
 import webbrowser
-import pyperclip
-import requests
 import logging
 import inspect
-import jsonpickle
-import ujson
 import io
 import itertools
-import regex as re
-from decorator import decorator
 from typing import Any, Tuple, List, Union
 
+import pyperclip
+import requests
+import ujson
+import jsonpickle
+import regex as re
+import scapy.utils as scapy_utils
+from decorator import decorator
+
 from .modules.exceptions import PrintException
+from .modules.internal.colors import YELLOW, CYAN, GREEN, MAGENTA
 
 
 class ChepyDecorators(object):
@@ -75,6 +78,8 @@ class ChepyCore(object):
         self.cyberchef = self.web
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
+        #: Holder for scapy pcap reader
+        self._pcap_file = None
 
         #: Log level
         self.log_level = logging.INFO
@@ -922,3 +927,44 @@ class ChepyCore(object):
         except:  # pragma: no cover
             self.state = current_state
             raise
+
+    @ChepyDecorators.call_stack
+    def read_pcap(self):
+        """Load a pcap. The state is set to scapy
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        pcap_file = scapy_utils.PcapReader(self.state)
+        self.state = GREEN("Pcap loaded")
+        self._pcap_file = pcap_file
+        return self
+
+    @ChepyDecorators.call_stack
+    def debug(self, verbose: bool = False):
+        """Debug the curren instance of Chepy
+        
+        This method does not change the state. 
+
+        Args:
+            verbose (bool, optional): Show verbose info. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        print(CYAN("Current state:"), YELLOW(str(self._current_index)))
+        print(CYAN("Current states:"), YELLOW(str(len(self.states))))
+        print(
+            CYAN("Current state types:"),
+            YELLOW(str({k: type(v).__name__ for k, v in self.states.items()})),
+        )
+        print(CYAN("Current buffers:"), YELLOW(str(len(self.buffers))))
+        print(
+            CYAN("Current buffer types:"),
+            YELLOW(str({k: type(v).__name__ for k, v in self.buffers.items()})),
+        )
+        if verbose:
+            print(MAGENTA("States:"), self.states)
+            print(MAGENTA("Buffers:"), self.buffers)
+        return self
+

@@ -34,6 +34,7 @@ pillow = "==6.2.1"
 python-magic-bin = "==0.4.14"
 hachoir = "==3.1.0"
 pyexiftool = "==0.1.1"
+scapy = "==2.4.3"
 
 [requires]
 python_version = "3.7"

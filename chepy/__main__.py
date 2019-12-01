@@ -21,7 +21,7 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
-from chepy.modules.internal.colors import RED, YELLOW
+from chepy.modules.internal.colors import RED, YELLOW, CYAN
 from .conf import Config
 
 config = Config()
@@ -248,6 +248,7 @@ def main():
                     getattr(chepy_cli, "cli_show_errors")(errors)
                 elif cli_method == "cli_go_back":
                     args_data = args_data[: -len(last_command + ["-"])]
+                    print(CYAN("Go back: {}".format(last_command)))
                 elif cli_method == "cli_delete_history":
                     Path(config.history_path).unlink()
                 elif cli_args:

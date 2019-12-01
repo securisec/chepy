@@ -11,6 +11,7 @@ from .modules.language import Language
 from .modules.multimedia import Multimedia
 from .modules.networking import Networking
 from .modules.other import Other
+from .modules.pcap import Pcap
 from .modules.publickey import Publickey
 from .modules.utils import Utils
 
@@ -33,6 +34,7 @@ class Chepy(
     Multimedia,
     Networking,
     Other,
+    Pcap,
     Publickey,
     Utils,
     *_plugins

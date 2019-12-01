@@ -25,5 +25,6 @@ PyYAML
 regex
 requests
 requests-toolbelt
+scapy
 ua-parser
 ujson

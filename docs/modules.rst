@@ -18,6 +18,7 @@ Modules
     modules/multimedia.rst
     modules/networking.rst
     modules/other.rst
+    modules/pcap.rst
     modules/publickey.rst
     modules/utils.rst
     internal.rst
