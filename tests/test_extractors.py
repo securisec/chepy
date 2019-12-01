@@ -96,3 +96,10 @@ def test_html_comments():
 def test_js_comments():
     assert len(Chepy("tests/files/test.js").load_file().js_comments().o) == 3
 
+
+def test_html_tag():
+    assert Chepy("tests/files/test.html").load_file().html_tags("p").o == [
+        {"tag": "p", "attributes": {"someval": "someval", "ano-ther": "another"}},
+        {"tag": "p", "attributes": {}},
+    ]
+

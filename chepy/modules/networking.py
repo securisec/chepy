@@ -1,3 +1,6 @@
+import collections
+import socket
+import ssl
 import ipaddress
 import regex as re
 import urllib.parse as _py_urlparse
@@ -175,3 +178,44 @@ class Networking(ChepyCore):
         ip = ipaddress.ip_address(self._convert_to_str())
         self.state = {"long": ip.exploded, "short": ip.compressed}
         return self
+
+    @ChepyDecorators.call_stack
+    def get_ssl_cert(self, port: int = 443):
+        """Get the server side SSL certificate for a domain
+        
+        Args:
+            port (int, optional): Server port. Defaults to 443.
+        
+        Returns:
+            Chepy: The Chepy object
+
+        Examples:
+            >>> Chepy('google.com').get_ssl_cert().o
+            {
+                'subject': {
+                    'commonName': '*.google.com',
+                    'organizationName': 'Google LLC',
+                ...
+                'caIssuers': ('http://pki.goog/gsr2/GTS1O1.crt',),
+                'crlDistributionPoints': ('http://crl.pki.goog/GTS1O1.crl',)
+            }
+        """
+        domain = re.sub("^\w+://", "", self._convert_to_str())
+        with socket.create_connection((domain, port)) as sock:
+            context = ssl.create_default_context()
+            with context.wrap_socket(sock, server_hostname=domain) as sslsock:
+                cert = sslsock.getpeercert()
+                final = {}
+                for key in cert.keys():
+                    if key == "subject" or key == "issuer":
+                        final[key] = dict(
+                            collections.ChainMap(*list(map(dict, cert[key])))
+                        )
+                    elif key == "subjectAltName":
+                        final[key] = list(
+                            map(lambda x: dict([x]), cert["subjectAltName"])
+                        )
+                    else:
+                        final[key] = cert[key]
+                self.state = final
+                return self

@@ -61,3 +61,7 @@ def test_parse_ipv6():
         "short": "2001:4860:4860::8888",
     }
 
+
+def test_get_cert():
+    assert Chepy("google.com").get_ssl_cert().o["subject"]["countryName"] == "US"
+

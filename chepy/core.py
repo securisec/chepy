@@ -153,6 +153,18 @@ class ChepyCore(object):
         logging.info(data)
         return None
 
+    def _warning_logger(self, data: str) -> None:  # pragma: no cover
+        """Just a binding for logger.warning
+        
+        Args:
+            data (str): Message to log
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        logging.warning(data)
+        return None
+
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
         

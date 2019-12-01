@@ -42,6 +42,10 @@ class Forensics(ChepyCore):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/hello").load_file().get_mime()
+            INFO - application/x-executable
         """
         filename = self._temp_file()
         parser = createParser(filename)
@@ -65,6 +69,20 @@ class Forensics(ChepyCore):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("logo.png").load_file().get_metadata().o
+            {'Bits/pixel': '32',
+            'Compression': 'deflate',
+            'Compression rate': '138.6x',
+            'Creation date': '2019-11-30 21:40:30',
+            'Endianness': 'Big endian',
+            'Image DPI height': '3780 DPI',
+            'Image DPI width': '3780 DPI',
+            'Image height': '1080 pixels',
+            'Image width': '1920 pixels',
+            'MIME type': 'image/png',
+            'Pixel format': 'RGBA'}
         """
         filename = self._temp_file()
         filename, realname = filename, filename
@@ -94,6 +112,13 @@ class Forensics(ChepyCore):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("/tmp/stego_50.jpg").load_file().embedded_files(extract_path="/tmp/embedded")
+            [+] Start search on 10757 bytes (10.5 KB)
+            [+] End of search -- offset=10757 (10.5 KB)
+            [+] File at 0 size=10541 (10.3 KB): JPEG picture: 430x425 pixels => /tmp/embedded/file-0001.jpg
+            [+] File at 10541 size=201 (201 bytes): ZIP archive => /tmp/embedded/file-0002.zip
         """
         filename = self._temp_file()
         inp = FileInputStream(filename)
