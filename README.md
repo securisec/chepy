@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="50%">
+    <img src="https://raw.githubusercontent.com/securisec/chepy/master/logo.png" width="65%">
 </p>
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)

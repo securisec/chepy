@@ -1,7 +1,7 @@
 
 # Examples
 
-## Solving a CTF channel
+## Solving a StormCTF channel
 We are given a file called encoding which contains the following string.
 
 ```

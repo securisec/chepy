@@ -18,6 +18,7 @@ from decorator import decorator
 
 from .modules.exceptions import PrintException
 from .modules.internal.colors import YELLOW, CYAN, GREEN, MAGENTA
+from .modules.internal.functions import full_duplex
 
 
 class ChepyDecorators(object):
@@ -79,7 +80,7 @@ class ChepyCore(object):
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
         #: Holder for scapy pcap reader
-        self._pcap_file = None
+        self._pcap_sessions = None
 
         #: Log level
         self.log_level = logging.INFO
@@ -935,9 +936,9 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        pcap_file = scapy_utils.PcapReader(self.state)
+        pcap_file = scapy_utils.rdpcap(self.state)
         self.state = GREEN("Pcap loaded")
-        self._pcap_file = pcap_file
+        self._pcap_sessions = pcap_file.sessions(full_duplex)
         return self
 
     @ChepyDecorators.call_stack

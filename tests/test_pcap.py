@@ -10,6 +10,17 @@ def test_pcap_dns():
             .pcap_dns_queries()
             .o
         )
-        == 6
+        == 3
+    )
+
+def test_pcap_http_streams():
+    assert (
+        len(
+            Chepy("tests/files/test.pcapng")
+            .read_pcap()
+            .pcap_http_streams()
+            .o
+        )
+        == 4
     )
 

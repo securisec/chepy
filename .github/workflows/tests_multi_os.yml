@@ -18,6 +18,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - uses: actions/cache@v1
+      id: cache
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -60,6 +61,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - uses: actions/cache@v1
+      id: cache
       with:
         path: ~\AppData\Local\pip\Cache
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -97,6 +99,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - uses: actions/cache@v1
+      id: cache
       with:
         path: ~/Library/Caches/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
