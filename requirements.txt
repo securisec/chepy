@@ -28,3 +28,4 @@ requests-toolbelt
 scapy
 ua-parser
 ujson
+tqdm
