@@ -24,10 +24,17 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+    - uses: actions/cache@v1
+      id: devcache
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-dev-
     - name: Install
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip install pytest pytest-cov bandit sphinx recommonmark
+        pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
         pip install .
     - name: Test with pytest
@@ -67,10 +74,17 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+    - uses: actions/cache@v1
+      id: devcache
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-dev-
     - name: Install
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip install pytest pytest-cov bandit sphinx recommonmark
+        pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
         pip install .
     - name: Test with pytest
@@ -105,10 +119,17 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+    - uses: actions/cache@v1
+      id: devcache
+      with:
+        path: ~/Library/Caches/pip
+        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-dev-
     - name: Install
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        pip install pytest pytest-cov bandit sphinx recommonmark
+        pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
         pip install .
     - name: Test with pytest
