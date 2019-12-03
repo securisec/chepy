@@ -1,12 +1,10 @@
 FROM python:3.8.0
 
 WORKDIR /chepy
-COPY requirements.txt /chepy
-RUN pip install -r /chepy/requirements.txt \
-    && pip install pytest pytest-cov sphinx bandit recommonmark virtualenv
-
-COPY Pipfile* /chepy/
-RUN virtualenv -p python3 /chepy/venv
+COPY dev_requirements.txt /chepy
+RUN pip install -r /chepy/dev_requirements.txt \
+    && virtualenv -p python3 /chepy/venv \
+    && /chepy/venv/bin/pip3 install -r dev_requirements.txt
 
 COPY . /chepy/
 RUN cd /chepy && venv/bin/pip3 install .

@@ -3,12 +3,13 @@ name: tests
 on: [push, pull_request]
 
 jobs:
-  linux:
+  test:
 
-    runs-on: ubuntu-18.04
+    runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 4
       matrix:
+        os: [ubuntu-18.04, windows-latest, macOS-latest]
         python-version: [3.6, 3.7, 3.8]
 
     steps:
@@ -17,13 +18,6 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
     - uses: actions/cache@v1
       id: devcache
       with:
@@ -52,93 +46,3 @@ jobs:
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage.xml
-
-  windows:
-
-    runs-on: windows-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - uses: actions/cache@v1
-      id: devcache
-      with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev_requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-dev-
-    - name: Install
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: |
-        pip install -r dev_requirements.txt
-        python -m pip install --upgrade pip
-        pip install .
-    - name: Test with pytest
-      run: |
-        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
-        coverage report -m
-    - name: Test with bandit
-      run: |
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
-    - name: Test docs
-      run: |
-        make -C docs/ clean html
-        
-  osx:
-
-    runs-on: macOS-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6, 3.7]
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
-      id: cache
-      with:
-        path: ~/Library/Caches/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - uses: actions/cache@v1
-      id: devcache
-      with:
-        path: ~/Library/Caches/pip
-        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-dev-
-    - name: Install
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: |
-        pip install -r dev_requirements.txt
-        python -m pip install --upgrade pip
-        pip install .
-    - name: Test with pytest
-      run: |
-        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
-        coverage report -m
-    - name: Test with bandit
-      run: |
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
-    - name: Test docs
-      run: |
-        make -C docs/ clean html
