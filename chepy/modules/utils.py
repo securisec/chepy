@@ -168,12 +168,35 @@ class Utils(ChepyCore):
         """Split a string by n characters.
         
         Args:
-            n (int): [description]
+            n (int): n from 0
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("some string").split_by_n(2).o[2]
+            " s"
         """
         self.state = re.findall(".{1," + str(n) + "}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def get_every_n(self, n: int):
+        """Get every nth item from a list or string. 
+
+        Index starts at 0
+        
+        Args:
+            n (int): n from 0
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(["a", 1, "lol", "b", True]).get_every_n(3)
+            ["a", "b"]
+        """
+        self.state = self.state[0::n]
         return self
 
     @ChepyDecorators.call_stack

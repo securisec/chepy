@@ -13,7 +13,7 @@ import requests
 import ujson
 import jsonpickle
 import regex as re
-import scapy.utils as scapy_utils
+import scapy.all as scapy
 from decorator import decorator
 
 from .modules.exceptions import PrintException
@@ -145,7 +145,7 @@ class ChepyCore(object):
             path (str): Path to expand
         
         Returns:
-            str: Expanded absolute path
+            object: Path object
         """
         return pathlib.Path(path).expanduser().absolute()
 
@@ -938,8 +938,9 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        pcap_file = scapy_utils.rdpcap(self.state)
-        self._pcap_read = scapy_utils.PcapReader(self.state)
+        pcap_path = str(self._abs_path(self.state))
+        self._pcap_read = scapy.PcapReader(pcap_path)
+        pcap_file = scapy.rdpcap(pcap_path)
         self.state = GREEN("Pcap loaded")
         self._pcap_sessions = pcap_file.sessions(full_duplex)
         return self

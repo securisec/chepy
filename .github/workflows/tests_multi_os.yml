@@ -32,6 +32,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
@@ -81,6 +82,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
@@ -125,6 +127,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip

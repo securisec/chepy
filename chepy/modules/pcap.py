@@ -4,6 +4,7 @@ import scapy.layers.http as scapy_http
 from scapy.utils import PcapNgReader, PcapReader
 
 from ..core import ChepyCore, ChepyDecorators
+from .internal.functions import Pkt2Dict
 
 
 class Pcap(ChepyCore):
@@ -17,9 +18,9 @@ class Pcap(ChepyCore):
         Examples:
             >>> Chepy("tests/files/test.pcapng").read_pcap().pcap_dns_queries().o
             [
-                {'frame': 1, 'query': b'fcmconnection.googleapis.com.'},
+                b'fcmconnection.googleapis.com.',
                 ...
-                {'frame': 9, 'query': b'google.com.'}
+                b'google.com.'
             ]
         """
         hold = []
@@ -27,9 +28,8 @@ class Pcap(ChepyCore):
         for session in sessions:
             packets = sessions.get(session)
             for packet in packets:
-                if not packet.haslayer(scapy.DNSRR):
+                if not scapy.DNSQR in packet:
                     continue
-                dns = packet.getlayer("DNS")
                 query = packet.getlayer("DNS").qd.qname
                 hold.append(query)
         self.state = hold
@@ -51,23 +51,23 @@ class Pcap(ChepyCore):
             packets = sessions.get(session)
             req_res = {"request": {}, "response": {}}
             for packet in packets:
-                if not packet.haslayer(scapy_http.HTTP):
+                if not scapy_http.HTTP in packet:
                     continue
-                if packet.haslayer(scapy_http.HTTPRequest):
+                if scapy_http.HTTPRequest in packet:
                     req_res["request"]["headers"] = packet.getlayer(
                         scapy_http.HTTPRequest
                     ).fields
-                    if packet.haslayer(scapy_http.Raw):
+                    if scapy_http.Raw in packet:
                         req_res["request"]["payload"] = packet.getlayer(
                             scapy_http.Raw
                         ).load
                     else:
                         req_res["request"]["payload"] = {}
-                if packet.haslayer(scapy_http.HTTPResponse):
+                if scapy_http.HTTPResponse in packet:
                     req_res["response"]["headers"] = packet.getlayer(
                         scapy_http.HTTPResponse
                     ).fields
-                    if packet.haslayer(scapy_http.Raw):
+                    if scapy_http.Raw in packet:
                         req_res["response"]["payload"] = packet.getlayer(
                             scapy_http.Raw
                         ).load
@@ -84,7 +84,7 @@ class Pcap(ChepyCore):
         """Get an array of payloads based on provided layer
         
         Args:
-            layer (str): A valid Scapy layer. 
+            layer (str): Required. A valid Scapy layer. 
         
         Returns:
             Chepy: The Chepy object. 
@@ -92,10 +92,23 @@ class Pcap(ChepyCore):
         assert hasattr(scapy, layer), "Not a valid Scapy layer"
         hold = []
         for packet in self._pcap_read:
-            if not packet.haslayer(layer):
+            if not layer in packet:
                 continue
-            check_raw = packet.haslayer("Raw")
+            check_raw = scapy.Raw in packet
             if check_raw:
                 hold.append(packet.getlayer(scapy.Raw).load)
+        self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def pcap_to_dict(self):
+        """Convert a pcap to a dict
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        hold = []
+        for packet in self._pcap_read:
+            hold.append(Pkt2Dict(packet).to_dict())
         self.state = hold
         return self
