@@ -67,6 +67,10 @@ def test_split_by():
     assert len(Chepy("some lol random lolol data").split_by("lo", trim=False).o) == 4
 
 
+def test_split_by_n():
+    assert Chepy("some string").split_by_n(2).o[2] == " s"
+
+
 def test_unique():
     assert len(Chepy('["a", "a", 1]').str_list_to_list().unique().o) == 2
 

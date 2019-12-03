@@ -80,6 +80,8 @@ class ChepyCore(object):
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
         #: Holder for scapy pcap reader
+        self._pcap_read = None
+        #: Holder for scapy assembled sessions
         self._pcap_sessions = None
 
         #: Log level
@@ -937,6 +939,7 @@ class ChepyCore(object):
             Chepy: The Chepy object. 
         """
         pcap_file = scapy_utils.rdpcap(self.state)
+        self._pcap_read = scapy_utils.PcapReader(self.state)
         self.state = GREEN("Pcap loaded")
         self._pcap_sessions = pcap_file.sessions(full_duplex)
         return self

@@ -164,6 +164,19 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def split_by_n(self, n: int):
+        """Split a string by n characters.
+        
+        Args:
+            n (int): [description]
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(".{1," + str(n) + "}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
     def unique(self):
         """Get an array of unique list items
         

@@ -78,3 +78,24 @@ class Pcap(ChepyCore):
 
         self.state = hold
         return self
+
+    @ChepyDecorators.call_stack
+    def pcap_payload(self, layer: str):
+        """Get an array of payloads based on provided layer
+        
+        Args:
+            layer (str): A valid Scapy layer. 
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        assert hasattr(scapy, layer), "Not a valid Scapy layer"
+        hold = []
+        for packet in self._pcap_read:
+            if not packet.haslayer(layer):
+                continue
+            check_raw = packet.haslayer("Raw")
+            if check_raw:
+                hold.append(packet.getlayer(scapy.Raw).load)
+        self.state = hold
+        return self

@@ -13,14 +13,13 @@ def test_pcap_dns():
         == 3
     )
 
+
 def test_pcap_http_streams():
-    assert (
-        len(
-            Chepy("tests/files/test.pcapng")
-            .read_pcap()
-            .pcap_http_streams()
-            .o
-        )
-        == 4
-    )
+    assert len(Chepy("tests/files/test.pcapng").read_pcap().pcap_http_streams().o) == 4
+
+
+def test_pcap_payload():
+    assert Chepy("tests/files/test.pcapng").read_pcap().pcap_payload(
+        layer="ICMP"
+    ).o == [b"secret", b"message"]
 
