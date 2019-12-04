@@ -69,6 +69,9 @@ class ChepyCore(object):
 
     def __init__(self, *data):
         self.states = dict(list(enumerate(data)))
+        #: Holder for the initial state
+        self.__initial_states = dict(list(enumerate(data)))
+        #: Value of the initial state
         self._current_index = 0
         self.buffers = dict()
         #: Alias for `write_to_file`
@@ -971,5 +974,15 @@ class ChepyCore(object):
         if verbose:
             print(MAGENTA("States:"), self.states)
             print(MAGENTA("Buffers:"), self.buffers)
+        return self
+
+    @ChepyDecorators.call_stack
+    def reset(self):
+        """Reset states back to their initial values
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.states = self.__initial_states
         return self
 

@@ -31,3 +31,6 @@ def test_packet_to_dict():
         == "10.10.10.11"
     )
 
+
+def test_pcap_layer_stats():
+    assert Chepy("tests/files/test.pcapng").read_pcap().pcap_layer_stats().get_by_key("DNS").o == 6

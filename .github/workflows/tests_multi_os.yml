@@ -32,6 +32,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install .
     - name: Test with pytest
+      if 
       run: |
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
         coverage report -m
@@ -42,6 +43,7 @@ jobs:
       run: |
         make -C docs/ clean html
     - name: Upload to codecov
+      if: contains(matrix.matrix.python-version-on, '3.8') && contains(matrix.runs-on, 'ubuntu')
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}

@@ -176,3 +176,6 @@ def test_loop_dict():
     e = Chepy({"some": "hahahaha", "lol": "aahahah"})
     e.loop_dict(["some"], "hmac_hash", {"key": "secret"})
     assert e.o == {"some": "99f77ec06a3c69a4a95371a7888245ba57f47f55", "lol": "aahahah"}
+
+def test_reset():
+    assert Chepy('41', '42').from_hex().reset().states == {0: '41', 1: '42'}

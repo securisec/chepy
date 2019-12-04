@@ -1,3 +1,5 @@
+import collections
+
 import scapy.all as scapy
 import scapy.layers.dns as scapy_dns
 import scapy.layers.http as scapy_http
@@ -111,4 +113,29 @@ class Pcap(ChepyCore):
         for packet in self._pcap_read:
             hold.append(Pkt2Dict(packet).to_dict())
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def pcap_layer_stats(self):
+        """Get a count of all layers in the pcap
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+
+        def get_layers(pkt):
+            yield pkt.name
+            while pkt.payload:
+                pkt = pkt.payload
+                yield pkt.name
+
+        layer_dict = collections.OrderedDict()
+        for packet in self._pcap_read:
+            for key in list(get_layers(packet)):
+                if layer_dict.get(key):
+                    layer_dict[key] += 1
+                else:
+                    layer_dict[key] = 1
+
+        self.state = dict(layer_dict)
         return self

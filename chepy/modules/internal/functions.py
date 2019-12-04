@@ -88,7 +88,7 @@ class Pkt2Dict:
     def to_dict(self):
         """
         Turn every layer to dict, store in ChainMap type.
-        :return: ChainMaq
+        `Reference <https://github.com/littlezz/scapy2dict>`__
         """
         d = list()
         count = 0
