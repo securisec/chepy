@@ -22,7 +22,7 @@ jobs:
       id: devcache
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/dev_requirements.txt') }}
+        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
