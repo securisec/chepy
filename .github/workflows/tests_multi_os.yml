@@ -42,7 +42,7 @@ jobs:
       run: |
         make -C docs/ clean html
     - name: Upload to codecov
-      if: contains(matrix.matrix.python-version, '3.8') && contains(matrix.runs-on, 'ubuntu')
+      if: contains(matrix.runs-on, 'ubuntu')
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}

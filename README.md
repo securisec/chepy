@@ -3,7 +3,7 @@
 </p>
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
-![Travis (.com)](https://img.shields.io/travis/com/securisec/chepy?logo=travis)
+![](https://img.shields.io/travis/com/securisec/chepy?logo=travis)
 [![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)](https://hub.docker.com/r/securisec/chepy)
 [![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
 
