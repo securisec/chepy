@@ -44,6 +44,11 @@ setup(
     license="GPL",
     version=__version__,
     author=__author__,
+    url='https://github.com/securisec/chepy',
+    project_urls={
+        "Documentation": "https://chepy.readthedocs.io/en/latest/",
+        "Source Code": "https://github.com/securisec/chepy",
+    },
     packages=find_packages(exclude=(["tests", "docs"])),
     install_requires=read_requirements(),
     classifiers=[

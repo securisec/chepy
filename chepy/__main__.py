@@ -22,7 +22,7 @@ from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
 from chepy.modules.internal.colors import RED, YELLOW, CYAN
-from .conf import Config
+from chepy.conf import Config
 
 config = Config()
 options = []
@@ -282,4 +282,4 @@ def main():
                     continue
     except KeyboardInterrupt:
         print("OKBye")
-        exit()
+        sys.exit()

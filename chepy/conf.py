@@ -13,6 +13,16 @@ class Config(object):
         self.chepy_dir = Path(home / ".chepy")
         self.chepy_conf = Path(self.chepy_dir / "chepy.conf")
 
+        if not self.chepy_dir.exists():
+            self.chepy_dir.mkdir()
+            c = ConfigParser()
+            c["Plugin"] = {"PluginPath": "None"}
+            c["Cli"] = {"HistoryPath": str(self.chepy_dir / "chepy_history")}
+            Path(str(self.chepy_dir / "chepy_history")).touch()
+            if not self.chepy_conf.exists():
+                with open(str(self.chepy_conf), "w") as f:
+                    c.write(f)
+
         self.config = ConfigParser()
         self.config.read(str(self.chepy_conf))
 

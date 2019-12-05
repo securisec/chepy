@@ -47,3 +47,10 @@ jobs:
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage.xml
+    - name: Run pyinstaller
+      run: |
+        pyinstaller cli.py --name chepy-${{ matrix.os }}-{{ matrix.python-version }} --onefile
+    - uses: actions/upload-artifact@v1
+        with:
+          name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
+          path: dist/chepy
