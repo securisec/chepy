@@ -17,7 +17,6 @@ RUN cd /chepy/ && make -C docs/ clean html
 FROM python:3.8.0-slim
 RUN apt update && apt install exiftool -y
 COPY --from=0 /chepy /chepy
-COPY --from=0 /root/.chepy /root/.chepy
 WORKDIR /data
 VOLUME ["/data"]
 

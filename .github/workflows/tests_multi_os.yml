@@ -51,6 +51,6 @@ jobs:
       run: |
         pyinstaller cli.py --name chepy-${{ matrix.os }}-{{ matrix.python-version }} --onefile
     - uses: actions/upload-artifact@v1
-        with:
-          name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
-          path: dist/chepy
+      with:
+        name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
+        path: dist/chepy
