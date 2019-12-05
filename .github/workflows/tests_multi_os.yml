@@ -51,8 +51,12 @@ jobs:
     - name: Run pyinstaller
       if: startsWith(matrix.python-version,'3.7')
       run: |
+        ls -l 
+        ls -l ../
         pyinstaller cli.py --name chepy --onefile
-    - uses: actions/upload-artifact@v1
+    - name: Upload pyinstaller build
+      if: startsWith(matrix.python-version,'3.7')
+      uses: actions/upload-artifact@v1
       with:
         name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
         path: ../dist/chepy
