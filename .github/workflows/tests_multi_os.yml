@@ -26,7 +26,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.devcache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
@@ -42,7 +42,7 @@ jobs:
       run: |
         make -C docs/ clean html
     - name: Upload to codecov
-      if: contains(matrix.runs-on, 'ubuntu')
+      if: startsWith(matrix.os,'ubuntu')
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}

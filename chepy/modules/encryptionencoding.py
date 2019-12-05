@@ -564,10 +564,9 @@ class EncryptionEncoding(ChepyCore):
 
         Advanced Encryption Standard (AES) is a U.S. Federal Information Processing 
         Standard (FIPS). It was selected after a 5-year process where 15 competing 
-        designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
-        be used based on the size of the 
+        designs were evaluated.
         
-        key:
+        key: The following algorithms will be used based on the size of the 
             16 bytes = AES-128
             24 bytes = AES-192
             32 bytes = AES-256

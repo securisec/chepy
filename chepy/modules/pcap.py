@@ -139,3 +139,27 @@ class Pcap(ChepyCore):
 
         self.state = dict(layer_dict)
         return self
+
+    def pcap_convos(self):
+        """Get layer 3 conversation states
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        convo = collections.OrderedDict()
+        for packet in self._pcap_read:
+            if not scapy.IP in packet:  # pragma: no cover
+                continue
+            ip_layer = packet.getlayer(scapy.IP)
+            src = ip_layer.src
+            dst = ip_layer.dst
+            layer_3 = packet.getlayer(2).name
+            if not convo.get(src):
+                convo[src] = {}
+            if convo[src].get(layer_3):
+                if dst not in convo[src][layer_3]:
+                    convo[src][layer_3].append(dst)
+            else:
+                convo[src][layer_3] = [dst]
+        self.state = dict(convo)
+        return self

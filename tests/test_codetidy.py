@@ -61,3 +61,7 @@ def test_swap_case():
 
 def test_lower_case():
     assert Chepy("HelLo WorLd").to_lower_case().o == "hello world"
+
+
+def test_markdown():
+    assert Chepy("#one").markdown_to_html().o == "<h1>one</h1>"

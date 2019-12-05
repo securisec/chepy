@@ -33,4 +33,22 @@ def test_packet_to_dict():
 
 
 def test_pcap_layer_stats():
-    assert Chepy("tests/files/test.pcapng").read_pcap().pcap_layer_stats().get_by_key("DNS").o == 6
+    assert (
+        Chepy("tests/files/test.pcapng")
+        .read_pcap()
+        .pcap_layer_stats()
+        .get_by_key("DNS")
+        .o
+        == 6
+    )
+
+
+def test_pcap_convo():
+    assert (
+        Chepy("tests/files/test.pcapng")
+        .read_pcap()
+        .pcap_convos()
+        .get_by_key("10.10.10.11")
+        .o["ICMP"]
+    )
+

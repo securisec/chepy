@@ -89,7 +89,6 @@ docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "anot
 - Chepy has a CLI
 - Chepy CLI has full autocompletion. 
 - Extendable via plugins
-- Chepy has the concept of recipes which makes sharing much simpler. 
 - Infinitely scalable as it can leverage the full Python library.
 - Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
 - The Chepy python library is significantly faster than the Cyberchef Node library.

@@ -25,7 +25,7 @@ def setup(app):
 
 # -- Project information -----------------------------------------------------
 
-project = "chepy"
+project = "Chepy"
 copyright = "2019, Hapsida @securisec"
 author = "Hapsida @securisec"
 

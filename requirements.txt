@@ -10,6 +10,7 @@ hashid
 hexdump
 jsonpath-rw
 jsonpickle
+Markdown
 parsel
 phpserialize
 Pillow

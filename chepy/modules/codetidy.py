@@ -2,6 +2,7 @@ import ujson
 import pydash
 import phpserialize
 import regex as re
+import markdown
 from lxml import etree
 from ..core import ChepyCore, ChepyDecorators
 
@@ -219,5 +220,15 @@ class CodeTidy(ChepyCore):
             "sOmE tExT"
         """
         self.state = pydash.swap_case(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def markdown_to_html(self):
+        """Convert markdown syntax to html
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = markdown.markdown(self._convert_to_str())
         return self
 
