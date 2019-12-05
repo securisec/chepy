@@ -55,4 +55,4 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
-        path: dist/chepy
+        path: ../dist/chepy

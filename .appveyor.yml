@@ -21,4 +21,4 @@ test_script:
   - pyinstaller cli.py --name chepy --onefile
 
 artifacts:
-  - dist/*
+  - dist/chepy
