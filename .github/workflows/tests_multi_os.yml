@@ -27,7 +27,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
-      if: steps.devcache.outputs.cache-hit != 'true'
+      # if: steps.devcache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
