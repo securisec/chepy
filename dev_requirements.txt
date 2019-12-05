@@ -29,9 +29,6 @@ requests-toolbelt
 scapy
 ua-parser
 ujson
-
-# Dev
-
 pytest
 pytest-cov
 bandit
