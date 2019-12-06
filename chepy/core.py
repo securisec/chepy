@@ -18,7 +18,6 @@ from decorator import decorator
 
 from .modules.exceptions import PrintException
 from .modules.internal.colors import YELLOW, CYAN, GREEN, MAGENTA
-from .modules.internal.functions import full_duplex
 
 
 class ChepyDecorators(object):
@@ -83,9 +82,7 @@ class ChepyCore(object):
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
         #: Holder for scapy pcap reader
-        self._pcap_read = None
-        #: Holder for scapy assembled sessions
-        self._pcap_sessions = None
+        self._pcap_filepath = None
 
         #: Log level
         self.log_level = logging.INFO
@@ -762,6 +759,8 @@ class ChepyCore(object):
             mode = "wb+"
         else:
             mode = "w+"
+        if isinstance(path, bytes):  # pragma: no cover
+            path = path.decode()
         with open(str(self._abs_path(path)), mode) as f:
             f.write(self.state)
         self._info_logger("File written to {}".format(self._abs_path(path)))
@@ -779,6 +778,8 @@ class ChepyCore(object):
         Examples:
             >>> c = Chepy("some data").write_binary('/some/path/file')
         """
+        if isinstance(path, bytes):  # pragma: no cover
+            path = path.decode()
         with open(str(self._abs_path(path)), "wb+") as f:
             f.write(self.state)
         self._info_logger("File written to {}".format(self._abs_path(path)))
@@ -941,11 +942,8 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        pcap_path = str(self._abs_path(self.state))
-        self._pcap_read = scapy.PcapReader(pcap_path)
-        pcap_file = scapy.rdpcap(pcap_path)
+        self._pcap_filepath = str(self._abs_path(self.state))
         self.state = GREEN("Pcap loaded")
-        self._pcap_sessions = pcap_file.sessions(full_duplex)
         return self
 
     @ChepyDecorators.call_stack

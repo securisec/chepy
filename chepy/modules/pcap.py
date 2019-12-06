@@ -6,7 +6,7 @@ import scapy.layers.http as scapy_http
 from scapy.utils import PcapNgReader, PcapReader
 
 from ..core import ChepyCore, ChepyDecorators
-from .internal.functions import Pkt2Dict
+from .internal.functions import Pkt2Dict, full_duplex
 
 
 class Pcap(ChepyCore):
@@ -26,7 +26,8 @@ class Pcap(ChepyCore):
             ]
         """
         hold = []
-        sessions = self._pcap_sessions
+        pcap = scapy.rdpcap(self._pcap_filepath)
+        sessions = pcap.sessions(full_duplex)
         for session in sessions:
             packets = sessions.get(session)
             for packet in packets:
@@ -48,7 +49,8 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         hold = []
-        sessions = self._pcap_sessions
+        pcap = scapy.rdpcap(self._pcap_filepath)
+        sessions = pcap.sessions(full_duplex)
         for session in sessions:
             packets = sessions.get(session)
             req_res = {"request": {}, "response": {}}
@@ -93,7 +95,7 @@ class Pcap(ChepyCore):
         """
         assert hasattr(scapy, layer), "Not a valid Scapy layer"
         hold = []
-        for packet in self._pcap_read:
+        for packet in scapy.PcapReader(self._pcap_filepath):
             if not layer in packet:
                 continue
             check_raw = scapy.Raw in packet
@@ -110,7 +112,7 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         hold = []
-        for packet in self._pcap_read:
+        for packet in scapy.PcapReader(self._pcap_filepath):
             hold.append(Pkt2Dict(packet).to_dict())
         self.state = hold
         return self
@@ -130,7 +132,7 @@ class Pcap(ChepyCore):
                 yield pkt.name
 
         layer_dict = collections.OrderedDict()
-        for packet in self._pcap_read:
+        for packet in scapy.PcapReader(self._pcap_filepath):
             for key in list(get_layers(packet)):
                 if layer_dict.get(key):
                     layer_dict[key] += 1
@@ -147,7 +149,7 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         convo = collections.OrderedDict()
-        for packet in self._pcap_read:
+        for packet in scapy.PcapReader(self._pcap_filepath):
             if not scapy.IP in packet:  # pragma: no cover
                 continue
             ip_layer = packet.getlayer(scapy.IP)

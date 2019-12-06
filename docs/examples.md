@@ -231,3 +231,22 @@ print(c.o)
 
 #### Cli
 [![asciicast](https://asciinema.org/a/9pVrwFx6G5VT0D2fDFQO0ZyhT.svg)](https://asciinema.org/a/9pVrwFx6G5VT0D2fDFQO0ZyhT)
+
+## HITBGSEC CTF 2017
+#### Script
+```python
+from chepy import Chepy
+
+c = (
+    Chepy("/tmp/a.pcap")
+    .read_pcap()
+    .pcap_payload("UDP")
+    .join_list(b"")
+    .dump_pkcs12_cert("mimikatz")
+    .get_by_key("private")
+    .o.decode()
+)
+
+```
+#### Cli
+[![asciicast](https://asciinema.org/a/UKBYTuo1Mc4LbPGRd3DaKKe4V.svg)](https://asciinema.org/a/UKBYTuo1Mc4LbPGRd3DaKKe4V)

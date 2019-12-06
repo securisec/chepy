@@ -218,3 +218,27 @@ class Publickey(ChepyCore):
             "u": key.u,
         }
         return self
+
+    @ChepyDecorators.call_stack
+    def dump_pkcs12_cert(self, password: str):
+        """Get the private key and cert from pkcs12 cert
+        
+        Args:
+            password (str): Password for certificate
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if isinstance(password, str):
+            password = password.encode()
+        pk12 = _pyssl_crypto.load_pkcs12(self._convert_to_bytes(), password)
+        self.state = {
+            "private": _pyssl_crypto.dump_privatekey(
+                _pyssl_crypto.FILETYPE_PEM, pk12.get_privatekey()
+            ),
+            "cert": _pyssl_crypto.dump_certificate(
+                _pyssl_crypto.FILETYPE_PEM, pk12.get_certificate()
+            ),
+        }
+        return self
+

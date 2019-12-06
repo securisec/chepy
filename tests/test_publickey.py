@@ -94,6 +94,18 @@ igbV1IJdKTBAiZzaOQ==
     )
 
 
+def test_pkcs12():
+    assert (
+        "-----BEGIN PRIVATE KEY-----"
+        in Chepy("tests/files/pkcs12")
+        .read_file()
+        .dump_pkcs12_cert("mimikatz")
+        .get_by_key("private")
+        .o
+        .decode()
+    )
+
+
 def test_parse_public():
     assert (
         Chepy("tests/files/public.pem").load_file().parse_public_pem().get_by_key("e").o

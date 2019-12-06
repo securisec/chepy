@@ -82,6 +82,17 @@ pipenv install
 docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]
 ```
 
+#### Standalone binary
+One can build Chepy to be a standalone binary also. This includes packaging all the dependencies together.
+```bash
+git clone https://github.com/securisec/chepy.git
+cd chepy
+pip install .
+pip install pyinstaller
+pyinstaller cli.py --name chepy --onefile
+```
+The binary will be in the dist/ folder. 
+
 ## Chepy vs Cyberchef
 
 #### Advantages
