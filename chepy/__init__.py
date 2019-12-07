@@ -13,6 +13,7 @@ from .modules.networking import Networking
 from .modules.other import Other
 from .modules.pcap import Pcap
 from .modules.publickey import Publickey
+from .modules.search import Search
 from .modules.utils import Utils
 
 from .conf import Config
@@ -36,6 +37,7 @@ class Chepy(
     Other,
     Pcap,
     Publickey,
+    Search,
     Utils,
     *_plugins
 ):

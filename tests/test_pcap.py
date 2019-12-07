@@ -52,3 +52,7 @@ def test_pcap_convo():
         .o["ICMP"]
     )
 
+
+def test_usb_keyboard():
+    c = Chepy("tests/files/keyboard.pcap").read_pcap().pcap_usb_keyboard()
+    assert "KAIZEN" in c.o

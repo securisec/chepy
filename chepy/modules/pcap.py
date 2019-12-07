@@ -1,5 +1,7 @@
+import binascii
 import collections
 
+import regex as re
 import scapy.all as scapy
 import scapy.layers.dns as scapy_dns
 import scapy.layers.http as scapy_http
@@ -7,6 +9,7 @@ from scapy.utils import PcapNgReader, PcapReader
 
 from ..core import ChepyCore, ChepyDecorators
 from .internal.functions import Pkt2Dict, full_duplex
+from .internal.constants import PcapUSB
 
 
 class Pcap(ChepyCore):
@@ -164,4 +167,50 @@ class Pcap(ChepyCore):
             else:
                 convo[src][layer_3] = [dst]
         self.state = dict(convo)
+        return self
+
+    @ChepyDecorators.call_stack
+    def pcap_usb_keyboard(self, layout: str = "qwerty"):
+        """Decode usb keyboard pcap
+        
+        Args:
+            layout (str, optional): Layout of the keyboard. Defaults to "qwerty".
+        
+        Raises:
+            TypeError: If layout is not qwerty or dvorak
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if layout == "qwerty":
+            key_map = PcapUSB.qwerty_map
+            shift_modifier = PcapUSB.qwerty_modifier
+        elif layout == "dvorak":  # pragma: no cover
+            key_map = PcapUSB.qwerty_map
+            shift_modifier = PcapUSB.qwerty_modifier
+        else:  # pragma: no cover
+            raise TypeError("Valid layouts are qwerty and dvorak")
+
+        packets = scapy.PcapReader(self._pcap_filepath)
+        hold = []
+
+        for packet in packets:
+            if not scapy.Raw in packet:  # pragma: no cover
+                continue
+            load = packet.getlayer("Raw").load
+            key_press = binascii.hexlify(load)[-16:]
+            if key_press == "0000000000000000":  # pragma: no cover
+                continue
+            shift, _, key = re.findall(b".{2}", key_press)[0:3]
+            shift_pressed = bool(shift == b"02")
+            pressed = key_map.get(key.decode())
+            if shift_pressed:
+                special = shift_modifier.get(key.decode())
+                if special:
+                    hold.append(special)
+                elif pressed:
+                    hold.append(pressed.upper())
+            elif pressed:
+                hold.append(pressed)
+        self.state = "".join(hold)
         return self
