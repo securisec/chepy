@@ -19,6 +19,7 @@ prompt_toolkit
 pycipher
 pycryptodome
 pydash
+pyelftools
 pyjwt
 pyOpenSSL
 pyperclip

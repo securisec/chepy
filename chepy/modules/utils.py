@@ -239,27 +239,63 @@ class Utils(ChepyCore):
             raise TypeError("State is not a list")
 
     @ChepyDecorators.call_stack
-    def filter_by(self, predicate: Any = None):
+    def filter_list(self, by: str):
         """Filter a dict or list
         
         Args:
-            predicate (Any, optional): What to filter by. Defaults to None.
+            by (str): Required. What to filter by. Defaults to None.
         
         Raises:
-            TypeError: If state is not a list or dict
+            TypeError: If state is not a list
         
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_by("b").o
+            >>> Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_list("b").o
             [{"b": 2}, {"a": 1, "b": 3}]
         """
-        if isinstance(self.state, (list, dict)):
-            self.state = pydash.filter_(self.state, predicate)
-            return self
-        else:  # pragma: no cover
-            raise TypeError("State is not a list")
+        assert isinstance(self.state, list), 'State is not a list'
+        self.state = pydash.filter_(self.state, by)
+        return self
+
+    @ChepyDecorators.call_stack
+    def filter_dict_key(self, by: str):
+        """Filter dictionary by key
+        
+        Args:
+            by (str): Required. Key to filter by. 
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_key('ano')
+            {'another': 'val'}
+        """
+        assert isinstance(self.state, dict), "State is not a dictionary"
+        self.state = {key: val for (key, val) in self.state.items() if re.search(by, str(key))}
+        return self
+
+    @ChepyDecorators.call_stack
+    def filter_dict_value(self, by: str):
+        """Filter dictionary by value. 
+
+        This method does descend into nested dictionary values. 
+        
+        Args:
+            by (str): Required. Value to filter by. 
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_value('val')
+            {'another': 'val'}
+        """
+        assert isinstance(self.state, dict), "State is not a dictionary"
+        self.state = {key: val for (key, val) in self.state.items() if re.search(by, str(val))}
+        return self
 
     @ChepyDecorators.call_stack
     def slice(self, start: int = 0, end: int = None):

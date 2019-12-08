@@ -6,6 +6,7 @@ Modules
     :caption: Contents:
 
     modules/aritmeticlogic.rst
+    modules/binary.rst
     modules/codetidy.rst
     modules/compression.rst
     modules/dataformat.rst

@@ -83,10 +83,21 @@ def test_sorted():
     assert Chepy(["a", "b", "1", "2"]).sorted().o == ["1", "2", "a", "b"]
 
 
-def test_filter():
-    assert Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_by(
-        "b"
-    ).o == [{"b": 2}, {"a": 1, "b": 3}]
+def test_filter_list():
+    assert Chepy(
+        '[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]'
+    ).str_list_to_list().filter_list("b").o == [{"b": 2}, {"a": 1, "b": 3}]
+
+
+def test_filter_dict_key():
+    assert Chepy({"some": "dict", "another": "val"}).filter_dict_key("ano").o == {
+        "another": "val"
+    }
+
+def test_filter_dict_value():
+    assert Chepy({b"some": b"dict", b"another": "val"}).filter_dict_value("val").o == {
+        b"another": "val"
+    }
 
 
 def test_slice():

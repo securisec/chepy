@@ -3,15 +3,14 @@ name: tests
 on: [push, pull_request]
 
 jobs:
-  test:
 
-    runs-on: ${{ matrix.os }}
+  linux:
+    runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        os: [ubuntu-18.04, windows-latest, macOS-latest]
-        python-version: [3.7]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v1
@@ -27,7 +26,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-dev-
     - name: Install
-      # if: steps.devcache.outputs.cache-hit != 'true'
+      if: steps.devcache.outputs.cache-hit != 'true'
       run: |
         pip install -r dev_requirements.txt
         python -m pip install --upgrade pip
@@ -48,6 +47,97 @@ jobs:
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage.xml
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/cache@v1
+      id: devcache
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-dev-
+    - name: Install
+      if: steps.devcache.outputs.cache-hit != 'true'
+      run: |
+        pip install -r dev_requirements.txt
+        python -m pip install --upgrade pip
+        pip install .
+    - name: Test with pytest
+      run: |
+        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        coverage report -m
+    - name: Test with bandit
+      run: |
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
+    - name: Test docs
+      run: |
+        make -C docs/ clean html
+    - name: Upload to codecov
+      if: startsWith(matrix.os,'ubuntu')
+      uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
+
+  osx:
+    runs-on: macOS-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/cache@v1
+      id: devcache
+      with:
+        path: ~/Library/Caches/pip
+        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-dev-
+    - name: Install
+      if: steps.devcache.outputs.cache-hit != 'true'
+      run: |
+        pip install -r dev_requirements.txt
+        python -m pip install --upgrade pip
+        pip install .
+    - name: Test with pytest
+      run: |
+        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        coverage report -m
+    - name: Test with bandit
+      run: |
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
+    - name: Test docs
+      run: |
+        make -C docs/ clean html
+    - name: Upload to codecov
+      if: startsWith(matrix.os,'ubuntu')
+      uses: codecov/codecov-action@v1.0.3
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
+
+
+
     # - name: Run pyinstaller
     #   if: startsWith(matrix.python-version,'3.7')
     #   run: |

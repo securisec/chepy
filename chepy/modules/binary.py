@@ -1,4 +1,6 @@
 import pefile
+import elftools.elf.elffile as _pyelf
+from elftools.elf.relocation import RelocationSection
 from OpenSSL import crypto
 from OpenSSL.crypto import _lib, _ffi, X509
 
@@ -6,7 +8,7 @@ from chepy.core import ChepyDecorators, ChepyCore
 
 
 class PEFile(ChepyCore):
-    def _pe_object(self, fast: bool = False):
+    def _pe_object(self, fast: bool = True):
         """Returns a pefile.PE instance
         
         Args:
@@ -14,14 +16,37 @@ class PEFile(ChepyCore):
         """
         return pefile.PE(data=self._load_as_file().getvalue(), fast_load=fast)
 
+    @ChepyDecorators.call_stack
     def pe_get_certificates(self):
         """Get certificates used to sign pe file
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/ff.exe).read_file().pe_get_certificates().o
+            [
+                {
+                    'version': 2,
+                    'serial': 17154717934120587862167794914071425081,
+                    'algo': b'sha1WithRSAEncryption',
+                    'before': b'20061110000000Z',
+                    'after': b'20311110000000Z',
+                    'issuer': {
+                        'C': 'US',
+                        'ST': None,
+                        'L': None,
+                        'O': 'DigiCert Inc',
+                        'OU': 'www.digicert.com',
+                        'CN': 'DigiCert Assured ID Root CA',
+                        'email': None
+                    },
+                    ...
+                ...
+            }
         """
 
-        def get_certificates(self): # pragma: no cover
+        def get_certificates(self):  # pragma: no cover
             certs = _ffi.NULL
             if self.type_is_signed():
                 certs = self._pkcs7.d.sign.cert
@@ -95,3 +120,80 @@ class PEFile(ChepyCore):
         self.state = hold
         return self
 
+    @ChepyDecorators.call_stack
+    def pe_imports(self):
+        """Get all the imports from a PE file
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        pe = self._pe_object()
+        pe.parse_data_directories()
+
+        hold = {}
+
+        for entry in pe.DIRECTORY_ENTRY_IMPORT:
+            hold[entry.dll] = {imp.name: hex(imp.address) for imp in entry.imports}
+
+        self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def pe_exports(self):
+        """Get all the exports from a PE file
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("tests/files/ff.exe").read_file().pe_exports().o
+               {
+                    b'KERNEL32.dll': {
+                        b'AcquireSRWLockExclusive': '0x140051ff8',
+                        b'AssignProcessToJobObject': '0x140052000',
+                        b'AttachConsole': '0x140052008',
+                        ...
+                    b'ntdll.dll': {
+                        ...
+                    }
+                }
+        """
+        pe = self._pe_object()
+        pe.parse_data_directories()
+
+        hold = {}
+
+        for exp in pe.DIRECTORY_ENTRY_EXPORT.symbols:
+            hold[exp.name] = hex(pe.OPTIONAL_HEADER.ImageBase + exp.address)
+
+        self.state = hold
+        return self
+
+
+class ELFFile(ChepyCore):
+    def _elf_object(self):
+        """Returns an ELFFile object
+        """
+        return _pyelf.ELFFile(self._load_as_file())
+
+    @ChepyDecorators.call_stack
+    def elf_imports(self):
+        """Get imports from an ELF file
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        hold = {}
+        e = self._elf_object()
+        for section in e.iter_sections():
+            if isinstance(section, RelocationSection):
+                symbol_table = e.get_section(section["sh_link"])
+                symbols = []
+                for relocation in section.iter_relocations():
+                    symbol = symbol_table.get_symbol(relocation["r_info_sym"]).name
+                    if symbol:
+                        symbols.append(symbol)
+                hold[section.name] = symbols
+
+        self.state = hold
+        return self

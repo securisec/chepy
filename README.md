@@ -98,7 +98,8 @@ The binary will be in the dist/ folder.
 #### Advantages
 - Chepy is pure python with a supporting and accessible python api
 - Chepy has a CLI
-- Chepy CLI has full autocompletion. 
+- Chepy CLI has full autocompletion.
+- Supports pe, elf, and other various file format specific parsing.  
 - Extendable via plugins
 - Infinitely scalable as it can leverage the full Python library.
 - Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 

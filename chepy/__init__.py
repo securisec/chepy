@@ -1,5 +1,5 @@
 from .modules.aritmeticlogic import AritmeticLogic
-from .modules.binary import PEFile
+from .modules.binary import PEFile, ELFFile
 from .modules.codetidy import CodeTidy
 from .modules.compression import Compression
 from .modules.dataformat import DataFormat
@@ -28,6 +28,7 @@ class Chepy(
     Compression,
     DataFormat,
     DateTime,
+    ELFFile,
     EncryptionEncoding,
     Extractors,
     Forensics,
