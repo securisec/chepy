@@ -12,6 +12,7 @@ jsonpath-rw
 jsonpickle
 Markdown
 parsel
+pefile
 phpserialize
 Pillow
 prompt_toolkit

@@ -56,3 +56,9 @@ def test_pcap_convo():
 def test_usb_keyboard():
     c = Chepy("tests/files/keyboard.pcap").read_pcap().pcap_usb_keyboard()
     assert "KAIZEN" in c.o
+
+
+def test_raw_payload_offset():
+    assert Chepy("tests/files/test.pcapng").read_pcap().pcap_payload_offset(
+        "ICMP", -20
+    ).o == [b"secret", b"message"]

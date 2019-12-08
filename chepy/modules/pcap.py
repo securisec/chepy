@@ -108,6 +108,39 @@ class Pcap(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def pcap_payload_offset(self, layer: str, start: int, end: int = None):
+        """Dump the raw payload by offset. 
+        
+        Args:
+            layer (str): The layer to get the data from. 
+            start (int): The starting offset of the data to be extracted. 
+                This could be a negative index number.
+            end (int, optional): The end index of the offset.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            In this example, we are extracting all the payloads from the last 20 bytes on 
+            on the ICMP layer. 
+            
+            >>> Chepy('tests/files/test.pcapng').read_pcap().pcap_payload_offset('ICMP', -20)
+            [b'secret', b'message']
+        """
+        packets = scapy.PcapReader(self._pcap_filepath)
+        hold = []
+
+        for packet in packets:
+            if not layer in packet:
+                continue
+            if not scapy.Raw in packet:  # pragma: no cover
+                continue
+            load = packet.getlayer("Raw").load
+            hold.append(load[start:end])
+        self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
     def pcap_to_dict(self):
         """Convert a pcap to a dict
         
