@@ -13,7 +13,6 @@
 import os
 import sys
 from recommonmark.transform import AutoStructify
-from chepy.__version__ import __version__
 
 sys.path.insert(0, os.path.abspath("."))
 
@@ -29,7 +28,6 @@ def setup(app):
 project = "Chepy"
 copyright = "2019, Hapsida @securisec"
 author = "Hapsida @securisec"
-version = __version__
 
 master_doc = 'index'
 
