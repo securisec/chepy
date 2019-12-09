@@ -255,7 +255,7 @@ class Utils(ChepyCore):
             >>> Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_list("b").o
             [{"b": 2}, {"a": 1, "b": 3}]
         """
-        assert isinstance(self.state, list), 'State is not a list'
+        assert isinstance(self.state, list), "State is not a list"
         self.state = pydash.filter_(self.state, by)
         return self
 
@@ -274,7 +274,9 @@ class Utils(ChepyCore):
             {'another': 'val'}
         """
         assert isinstance(self.state, dict), "State is not a dictionary"
-        self.state = {key: val for (key, val) in self.state.items() if re.search(by, str(key))}
+        self.state = {
+            key: val for (key, val) in self.state.items() if re.search(by, str(key))
+        }
         return self
 
     @ChepyDecorators.call_stack
@@ -294,7 +296,9 @@ class Utils(ChepyCore):
             {'another': 'val'}
         """
         assert isinstance(self.state, dict), "State is not a dictionary"
-        self.state = {key: val for (key, val) in self.state.items() if re.search(by, str(val))}
+        self.state = {
+            key: val for (key, val) in self.state.items() if re.search(by, str(val))
+        }
         return self
 
     @ChepyDecorators.call_stack
@@ -436,7 +440,6 @@ class Utils(ChepyCore):
                     return _int_colors.GREEN(matcher.b[j1:j2])
                 else:
                     return "{+" + matcher.b[j1:j2] + "}"
-                return "{+" + matcher.b[j1:j2] + "}"
             assert False, "Unknown tag %r" % tag
 
         self.state = "".join(process_tag(*t) for t in matcher.get_opcodes())
@@ -496,5 +499,28 @@ class Utils(ChepyCore):
             Chepy: The Chepy object. 
         """
         self.state = list(set(self.state))
+        return self
+
+    def get_length(self):  # pragma: no cover
+        """Get the length of the current state.
+
+        This method does not change the state
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self._info_logger(len(self.state))
+        return self
+
+    def get_keys(self):  # pragma: no cover
+        """Get the dict keys of the current state.
+
+        This method does not change the state
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        assert isinstance(self.state, dict), "State is not a dictionary"
+        self._info_logger(self.state.keys())
         return self
 

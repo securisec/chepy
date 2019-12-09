@@ -1,3 +1,4 @@
+.scannerwork
 .DS_Store
 .vscode/
 .test
@@ -107,3 +108,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+sonar-project.properties

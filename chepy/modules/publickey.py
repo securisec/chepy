@@ -43,7 +43,6 @@ class Publickey(ChepyCore):
         issuer = cert.get_issuer()
         subject = cert.get_subject()
         pubkey = cert.get_pubkey()
-        bio = _pyssl_crypto._new_mem_buf()
         info = {
             "version": cert.get_version(),
             "serial": cert.get_serial_number(),
@@ -91,7 +90,7 @@ class Publickey(ChepyCore):
         issuer = cert.get_issuer()
         subject = cert.get_subject()
         pubkey = cert.get_pubkey()
-        bio = _pyssl_crypto._new_mem_buf()
+
         info = {
             "version": cert.get_version(),
             "serial": cert.get_serial_number(),
@@ -128,12 +127,12 @@ class Publickey(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        crtObj = _pyssl_crypto.load_certificate(_pyssl_crypto.FILETYPE_PEM, self.state)
-        pubKeyObject = crtObj.get_pubkey()
-        pubKeyString = _pyssl_crypto.dump_publickey(
-            _pyssl_crypto.FILETYPE_PEM, pubKeyObject
+        crt_obj = _pyssl_crypto.load_certificate(_pyssl_crypto.FILETYPE_PEM, self.state)
+        pub_key_object = crt_obj.get_pubkey()
+        pub_key_string = _pyssl_crypto.dump_publickey(
+            _pyssl_crypto.FILETYPE_PEM, pub_key_object
         )
-        self.state = pubKeyString
+        self.state = pub_key_string
         return self
 
     @ChepyDecorators.call_stack

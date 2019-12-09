@@ -67,7 +67,6 @@ class CodeTidy(ChepyCore):
             >>> c = Chepy("/path/to/file.xml").load_file()
             >>> print(c.beautify_json())
         """
-        parser = etree.XMLParser(remove_blank_text=True)
         self.state = etree.tostring(
             etree.fromstring(self._convert_to_bytes()), pretty_print=True
         )

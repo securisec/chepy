@@ -92,7 +92,7 @@ class Multimedia(ChepyCore):
                 "Valid resampling options are: nearest, antialias, bilinear, box and hamming"
             )
         image = Image.open(self._load_as_file())
-        resized = image.resize((width, height))
+        resized = image.resize((width, height), resample=resample)
         resized.save(fh, extension, quality=quality)
         self.state = fh.getvalue()
         return self
@@ -446,7 +446,7 @@ class Multimedia(ChepyCore):
         else:  # pragma: no cover
             new = image
 
-        formatted = new.save(fh, format_to)
+        new.save(fh, format_to)
         self.state = fh.getvalue()
         return self
 
@@ -485,6 +485,6 @@ class Multimedia(ChepyCore):
             new = image
 
         ImageDraw.Draw(new).text(coordinates, text, color)
-        formatted = new.save(fh, extension)
+        new.save(fh, extension)
         self.state = fh.getvalue()
         return self

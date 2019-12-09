@@ -30,6 +30,9 @@ class EncryptionEncoding(ChepyCore):
         >>> from chepy.modules.encryptionencoding import EncryptionEncoding
     """
 
+    def __check_mode(self, mode) -> None:
+        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+
     def _convert_key(self, key, iv, hex_key, hex_iv):  # pragma: no cover
         if isinstance(key, str):
             key = key.encode()
@@ -364,7 +367,7 @@ class EncryptionEncoding(ChepyCore):
             b"0b7399049b0267d93d"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
@@ -419,7 +422,7 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
@@ -473,7 +476,7 @@ class EncryptionEncoding(ChepyCore):
             b"f8b27a0d8c837edc8fb00ea85f502fb4"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
@@ -530,7 +533,7 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
@@ -724,7 +727,7 @@ class EncryptionEncoding(ChepyCore):
             b"d9b0a79853f139603951bff96c3d0dd5"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 
@@ -738,8 +741,6 @@ class EncryptionEncoding(ChepyCore):
             return self
         elif mode == "CTR":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
-            self.state = cipher.encrypt(self._convert_to_bytes())
-            return self
             self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "OFB":
@@ -782,7 +783,7 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
+        self.__check_mode(mode)
 
         key, iv = self._convert_key(key, iv, hex_key, hex_iv)
 

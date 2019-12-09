@@ -75,3 +75,22 @@ def test_zlib_decompress():
         == b"some text"
     )
 
+
+def test_lzma_compress():
+    assert (
+        Chepy("some data").lzma_compress().to_hex().o
+        == b"fd377a585a000004e6d6b4460200210116000000742fe5a3010008736f6d65206461746100000000bb22facdd6fa557b000121096c18c5d51fb6f37d010000000004595a"
+    )
+
+
+def test_lzma_decompress():
+    assert (
+        Chepy(
+            "fd377a585a000004e6d6b4460200210116000000742fe5a3010008736f6d65206461746100000000bb22facdd6fa557b000121096c18c5d51fb6f37d010000000004595a"
+        )
+        .from_hex()
+        .lzma_decompress()
+        .o
+        == b"some data"
+    )
+

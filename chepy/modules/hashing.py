@@ -535,14 +535,13 @@ class Hashing(ChepyCore):
             TypeError: If key is not in bytes
             TypeError: If not a valid/allowed digest type
         """
-        if isinstance(key, str):
-            key = key.encode()
-        elif isinstance(key, bytes):
-            key = key
-        elif isinstance(key, int):  # pragma: no cover
-            key = bytes(key)
-        else:  # pragma: no cover
-            raise TypeError("key has to be bytes")
+        if not isinstance(key, bytes):
+            if isinstance(key, str):
+                key = key.encode()
+            elif isinstance(key, int):  # pragma: no cover
+                key = bytes(key)
+            else:  # pragma: no cover
+                raise TypeError("key has to be bytes")
 
         if digest == "md5":
             h = hmac.new(key, self._convert_to_bytes(), hashlib.md5)

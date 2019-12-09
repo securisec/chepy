@@ -68,9 +68,6 @@ class PEFile(ChepyCore):
         address = pe.OPTIONAL_HEADER.DATA_DIRECTORY[
             pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_SECURITY"]
         ].VirtualAddress
-        size = pe.OPTIONAL_HEADER.DATA_DIRECTORY[
-            pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_SECURITY"]
-        ].Size
 
         hold = []
         if address == 0:  # pragma: no cover
@@ -88,7 +85,6 @@ class PEFile(ChepyCore):
                 issuer = cert.get_issuer()
                 subject = cert.get_subject()
                 pubkey = cert.get_pubkey()
-                bio = crypto._new_mem_buf()
                 info = {
                     "version": cert.get_version(),
                     "serial": cert.get_serial_number(),

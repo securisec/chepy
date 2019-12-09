@@ -1,6 +1,7 @@
 import io
 import bz2
 import gzip
+import lzma
 import zlib
 import zipfile
 from ..core import ChepyCore, ChepyDecorators
@@ -214,4 +215,24 @@ class Compression(ChepyCore):
             b"some text"
         """
         self.state = zlib.decompress(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def lzma_compress(self):
+        """Compress using xz lzma
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = lzma.compress(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def lzma_decompress(self):
+        """Decompress lzma compressed data
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = lzma.decompress(self._convert_to_bytes())
         return self

@@ -14,6 +14,9 @@
 ![](https://img.shields.io/github/license/securisec/chepy?label=License)
 [![](https://badges.gitter.im/chepy_/community.svg)](https://gitter.im/chepy_/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+[![](https://pepy.tech/badge/chepy)](https://pepy.tech/project/chepy)
+![](https://img.shields.io/docker/pulls/securisec/chepy?label=Docker%20pull&logo=docker)
+
 
 # Chepy
 
@@ -52,6 +55,25 @@ print(
 )
 
 ```
+
+## Chepy vs Cyberchef
+
+#### Advantages
+- Chepy is pure python with a supporting and accessible python api
+- Chepy has a CLI
+- Chepy CLI has full autocompletion.
+- Supports pe, elf, and other various file format specific parsing.  
+- Extendable via plugins
+- Infinitely scalable as it can leverage the full Python library.
+- Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
+- The Chepy python library is significantly faster than the Cyberchef Node library.
+- Works with HTTP/S requests without CORS issues.
+
+#### Disadvantages
+- Chepy is not a web app (at least for now).
+- Chepy does not offer every single thing that Cyberchef does
+- Chepy does not have the `magic` method (at the moment)
+
 
 ## Installation
 Chepy can be installed in a few ways.
@@ -92,24 +114,6 @@ pip install pyinstaller
 pyinstaller cli.py --name chepy --onefile
 ```
 The binary will be in the dist/ folder. 
-
-## Chepy vs Cyberchef
-
-#### Advantages
-- Chepy is pure python with a supporting and accessible python api
-- Chepy has a CLI
-- Chepy CLI has full autocompletion.
-- Supports pe, elf, and other various file format specific parsing.  
-- Extendable via plugins
-- Infinitely scalable as it can leverage the full Python library.
-- Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
-- The Chepy python library is significantly faster than the Cyberchef Node library.
-- Works with HTTP/S requests without CORS issues.
-
-#### Disadvantages
-- Chepy is not a web app (at least for now).
-- Chepy does not offer every single thing that Cyberchef does
-- Chepy does not have the `magic` method (at the moment)
 
 
 

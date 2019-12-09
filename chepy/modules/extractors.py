@@ -158,7 +158,6 @@ class Extractors(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        # pattern = b"[a-z0-9]([a-z0-9-]+\.){1,}[a-z0-9]+\Z"
         if is_binary:  # pragma: no cover
             matched = list(_pyurlparse(x).netloc for x in self.extract_strings().o)
         else:

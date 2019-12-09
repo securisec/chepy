@@ -219,8 +219,8 @@ class Pcap(ChepyCore):
             key_map = PcapUSB.qwerty_map
             shift_modifier = PcapUSB.qwerty_modifier
         elif layout == "dvorak":  # pragma: no cover
-            key_map = PcapUSB.qwerty_map
-            shift_modifier = PcapUSB.qwerty_modifier
+            key_map = PcapUSB.dvorak
+            shift_modifier = PcapUSB.dvorak_modifier
         else:  # pragma: no cover
             raise TypeError("Valid layouts are qwerty and dvorak")
 

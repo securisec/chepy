@@ -5,19 +5,19 @@ def test_image_resize():
     assert len(Chepy("logo.png").read_file().resize_image(128, 128, "png").o) == 1596
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "hamming").o)
-        == 1596
+        == 5476
     )
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "box").o)
-        == 1596
+        == 4866
     )
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "bilinear").o)
-        == 1596
+        == 5920
     )
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "antialias").o)
-        == 1596
+        == 7737
     )
 
 
@@ -57,12 +57,10 @@ def test_image_opacity():
     assert c1 != c2
 
 
-
 def test_image_contrast():
     c1 = Chepy("logo.png").load_file().o
     c2 = Chepy("logo.png").load_file().image_contrast(10, "png").o
     assert c1 != c2
-
 
 
 def test_image_brightness():
@@ -71,12 +69,10 @@ def test_image_brightness():
     assert c1 != c2
 
 
-
 def test_image_sharpness():
     c1 = Chepy("logo.png").load_file().o
     c2 = Chepy("logo.png").load_file().image_sharpness(10, "png").o
     assert c1 != c2
-
 
 
 def test_image_color():

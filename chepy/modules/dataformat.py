@@ -472,7 +472,6 @@ class DataFormat(ChepyCore):
         else:
             delimiters = [" ", "0x", "%", ",", ";", ":", r"\\n", "\\r\\n"]
             string = re.sub("|".join(delimiters), "", self.state)
-            # assert re.search(r"^[a-fA-F0-9]+$", string) is not None, "Invalid hex"
             self.state = string
             return self
 
