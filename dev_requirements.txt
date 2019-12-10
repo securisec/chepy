@@ -34,6 +34,4 @@ ujson
 pytest
 pytest-cov
 bandit
-sphinx
-recommonmark
 virtualenv

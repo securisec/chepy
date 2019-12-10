@@ -1,4 +1,4 @@
-import pkg_resources
+from pkg_resources import resource_filename
 
 import ujson
 import regex as re
@@ -310,9 +310,7 @@ class Extractors(ChepyCore):
             Chepy: The Chepy object. 
         """
         found = {}
-        secrets_path = pkg_resources.resource_filename(
-            __name__, "internal/data/secrets.txt"
-        )
+        secrets_path = resource_filename(__name__, "internal/data/secrets.txt")
         with open(secrets_path, "r") as f:
             for pattern in f:
                 matches = re.findall(fr"{pattern}.*?".strip(), self.response.text)

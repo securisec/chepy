@@ -2,7 +2,7 @@ import ujson
 import pydash
 import phpserialize
 import regex as re
-import markdown
+from markdown import markdown
 from lxml import etree
 from ..core import ChepyCore, ChepyDecorators
 
@@ -228,6 +228,6 @@ class CodeTidy(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = markdown.markdown(self._convert_to_str())
+        self.state = markdown(self._convert_to_str())
         return self
 

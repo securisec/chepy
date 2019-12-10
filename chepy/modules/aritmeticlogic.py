@@ -1,6 +1,8 @@
 import binascii
 import statistics
+
 from ..core import ChepyCore, ChepyDecorators
+from .exceptions import StateNotList
 
 
 class AritmeticLogic(ChepyCore):
@@ -107,7 +109,7 @@ class AritmeticLogic(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert isinstance(self.state, list), "state should be an array"
+        assert isinstance(self.state, list), StateNotList()
         numbers = list(self.__hex_to_int(x) for x in self.state)
         self.state = sum(numbers)
         return self
@@ -119,7 +121,7 @@ class AritmeticLogic(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert isinstance(self.state, list), "state should be an array"
+        assert isinstance(self.state, list), StateNotList()
         numbers = list(self.__hex_to_int(x) for x in self.state)
         self.state = statistics.mean(numbers)
         return self
@@ -131,7 +133,7 @@ class AritmeticLogic(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert isinstance(self.state, list), "state should be an array"
+        assert isinstance(self.state, list), StateNotList()
         numbers = list(self.__hex_to_int(x) for x in self.state)
         self.state = statistics.median(numbers)
         return self

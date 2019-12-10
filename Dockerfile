@@ -3,6 +3,7 @@ FROM python:3.8.0
 WORKDIR /chepy
 COPY dev_requirements.txt /chepy
 RUN pip install -r /chepy/dev_requirements.txt \
+    && pip install python-magic \
     && virtualenv -p python3 /chepy/venv \
     && /chepy/venv/bin/pip3 install -r dev_requirements.txt
 
@@ -11,7 +12,7 @@ RUN cd /chepy && venv/bin/pip3 install .
 
 RUN cd /chepy/ && pytest --disable-pytest-warnings --cov=chepy --cov-config=.coveragerc tests/
 RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
-RUN cd /chepy/ && make -C docs/ clean html
+RUN /chepy/venv/bin/pip3 uninstall -y pytest pytest-cov bandit
 
 
 FROM python:3.8.0-slim

@@ -2,9 +2,11 @@ import binascii
 import collections
 
 import regex as re
-import scapy.all as scapy
-import scapy.layers.dns as scapy_dns
-import scapy.layers.http as scapy_http
+from scapy.utils import PcapReader, rdpcap
+from scapy.layers.dns import DNSQR
+from scapy.layers.inet import IP
+from scapy.packet import Raw
+from scapy.layers.http import HTTPRequest, HTTPResponse, HTTP
 from scapy.utils import PcapNgReader, PcapReader
 
 from ..core import ChepyCore, ChepyDecorators
@@ -29,12 +31,12 @@ class Pcap(ChepyCore):
             ]
         """
         hold = []
-        pcap = scapy.rdpcap(self._pcap_filepath)
+        pcap = rdpcap(self._pcap_filepath)
         sessions = pcap.sessions(full_duplex)
         for session in sessions:
             packets = sessions.get(session)
             for packet in packets:
-                if not scapy.DNSQR in packet:
+                if not DNSQR in packet:
                     continue
                 query = packet.getlayer("DNS").qd.qname
                 hold.append(query)
@@ -52,32 +54,26 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         hold = []
-        pcap = scapy.rdpcap(self._pcap_filepath)
+        pcap = rdpcap(self._pcap_filepath)
         sessions = pcap.sessions(full_duplex)
         for session in sessions:
             packets = sessions.get(session)
             req_res = {"request": {}, "response": {}}
             for packet in packets:
-                if not scapy_http.HTTP in packet:
+                if not HTTP in packet:
                     continue
-                if scapy_http.HTTPRequest in packet:
-                    req_res["request"]["headers"] = packet.getlayer(
-                        scapy_http.HTTPRequest
-                    ).fields
-                    if scapy_http.Raw in packet:
-                        req_res["request"]["payload"] = packet.getlayer(
-                            scapy_http.Raw
-                        ).load
+                if HTTPRequest in packet:
+                    req_res["request"]["headers"] = packet.getlayer(HTTPRequest).fields
+                    if Raw in packet:
+                        req_res["request"]["payload"] = packet.getlayer(Raw).load
                     else:
                         req_res["request"]["payload"] = {}
-                if scapy_http.HTTPResponse in packet:
+                if HTTPResponse in packet:
                     req_res["response"]["headers"] = packet.getlayer(
-                        scapy_http.HTTPResponse
+                        HTTPResponse
                     ).fields
-                    if scapy_http.Raw in packet:
-                        req_res["response"]["payload"] = packet.getlayer(
-                            scapy_http.Raw
-                        ).load
+                    if Raw in packet:
+                        req_res["response"]["payload"] = packet.getlayer(Raw).load
                     else:  # pragma: no cover
                         req_res["response"]["payload"] = {}
             if len(req_res.get("request")):
@@ -96,14 +92,13 @@ class Pcap(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert hasattr(scapy, layer), "Not a valid Scapy layer"
         hold = []
-        for packet in scapy.PcapReader(self._pcap_filepath):
+        for packet in PcapReader(self._pcap_filepath):
             if not layer in packet:
                 continue
-            check_raw = scapy.Raw in packet
+            check_raw = Raw in packet
             if check_raw:
-                hold.append(packet.getlayer(scapy.Raw).load)
+                hold.append(packet.getlayer(Raw).load)
         self.state = hold
         return self
 
@@ -127,13 +122,13 @@ class Pcap(ChepyCore):
             >>> Chepy('tests/files/test.pcapng').read_pcap().pcap_payload_offset('ICMP', -20)
             [b'secret', b'message']
         """
-        packets = scapy.PcapReader(self._pcap_filepath)
+        packets = PcapReader(self._pcap_filepath)
         hold = []
 
         for packet in packets:
             if not layer in packet:
                 continue
-            if not scapy.Raw in packet:  # pragma: no cover
+            if not Raw in packet:  # pragma: no cover
                 continue
             load = packet.getlayer("Raw").load
             hold.append(load[start:end])
@@ -148,7 +143,7 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         hold = []
-        for packet in scapy.PcapReader(self._pcap_filepath):
+        for packet in PcapReader(self._pcap_filepath):
             hold.append(Pkt2Dict(packet).to_dict())
         self.state = hold
         return self
@@ -168,7 +163,7 @@ class Pcap(ChepyCore):
                 yield pkt.name
 
         layer_dict = collections.OrderedDict()
-        for packet in scapy.PcapReader(self._pcap_filepath):
+        for packet in PcapReader(self._pcap_filepath):
             for key in list(get_layers(packet)):
                 if layer_dict.get(key):
                     layer_dict[key] += 1
@@ -185,10 +180,10 @@ class Pcap(ChepyCore):
             Chepy: The Chepy object. 
         """
         convo = collections.OrderedDict()
-        for packet in scapy.PcapReader(self._pcap_filepath):
-            if not scapy.IP in packet:  # pragma: no cover
+        for packet in PcapReader(self._pcap_filepath):
+            if not IP in packet:  # pragma: no cover
                 continue
-            ip_layer = packet.getlayer(scapy.IP)
+            ip_layer = packet.getlayer(IP)
             src = ip_layer.src
             dst = ip_layer.dst
             layer_3 = packet.getlayer(2).name
@@ -224,11 +219,11 @@ class Pcap(ChepyCore):
         else:  # pragma: no cover
             raise TypeError("Valid layouts are qwerty and dvorak")
 
-        packets = scapy.PcapReader(self._pcap_filepath)
+        packets = PcapReader(self._pcap_filepath)
         hold = []
 
         for packet in packets:
-            if not scapy.Raw in packet:  # pragma: no cover
+            if not Raw in packet:  # pragma: no cover
                 continue
             load = packet.getlayer("Raw").load
             key_press = binascii.hexlify(load)[-16:]

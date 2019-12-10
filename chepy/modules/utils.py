@@ -4,6 +4,7 @@ from typing import Any
 import pydash
 
 from ..core import ChepyCore, ChepyDecorators
+from .exceptions import StateNotDict, StateNotList
 import chepy.modules.internal.colors as _int_colors
 
 
@@ -255,7 +256,7 @@ class Utils(ChepyCore):
             >>> Chepy('[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]').str_list_to_list().filter_list("b").o
             [{"b": 2}, {"a": 1, "b": 3}]
         """
-        assert isinstance(self.state, list), "State is not a list"
+        assert isinstance(self.state, list), StateNotList()
         self.state = pydash.filter_(self.state, by)
         return self
 
@@ -273,7 +274,7 @@ class Utils(ChepyCore):
             >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_key('ano')
             {'another': 'val'}
         """
-        assert isinstance(self.state, dict), "State is not a dictionary"
+        assert isinstance(self.state, dict), StateNotDict()
         self.state = {
             key: val for (key, val) in self.state.items() if re.search(by, str(key))
         }
@@ -295,7 +296,7 @@ class Utils(ChepyCore):
             >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_value('val')
             {'another': 'val'}
         """
-        assert isinstance(self.state, dict), "State is not a dictionary"
+        assert isinstance(self.state, dict), StateNotDict()
         self.state = {
             key: val for (key, val) in self.state.items() if re.search(by, str(val))
         }
@@ -425,19 +426,19 @@ class Utils(ChepyCore):
         def process_tag(tag, i1, i2, j1, j2):  # pragma: no cover
             if tag == "replace":
                 if colors:
-                    return _int_colors.BLUE(matcher.b[j1:j2])
+                    return _int_colors.blue(matcher.b[j1:j2])
                 else:
                     return "{" + matcher.a[i1:i2] + "->" + matcher.b[j1:j2] + "}"
             if tag == "delete":
                 if colors:
-                    return _int_colors.RED(matcher.a[i1:i2])
+                    return _int_colors.red(matcher.a[i1:i2])
                 else:
                     return "{-" + matcher.a[i1:i2] + "}"
             if tag == "equal":
                 return matcher.a[i1:i2]
             if tag == "insert":
                 if colors:
-                    return _int_colors.GREEN(matcher.b[j1:j2])
+                    return _int_colors.green(matcher.b[j1:j2])
                 else:
                     return "{+" + matcher.b[j1:j2] + "}"
             assert False, "Unknown tag %r" % tag
@@ -520,7 +521,7 @@ class Utils(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        assert isinstance(self.state, dict), "State is not a dictionary"
+        assert isinstance(self.state, dict), StateNotDict()
         self._info_logger(self.state.keys())
         return self
 

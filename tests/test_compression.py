@@ -94,3 +94,42 @@ def test_lzma_decompress():
         == b"some data"
     )
 
+
+def test_tar_list_files():
+    assert Chepy("tests/files/test.tar.gz").read_file().tar_list_files().o == [
+        "test.js",
+        "test.json",
+    ]
+    assert Chepy("tests/files/test.tar.gz").read_file().tar_list_files(mode="gz").o == [
+        "test.js",
+        "test.json",
+    ]
+
+
+def test_tar_extract_one():
+    assert (
+        b"comment"
+        in Chepy("tests/files/test.tar.gz").read_file().tar_extract_one("test.js").o
+    )
+    assert (
+        b"comment"
+        in Chepy("tests/files/test.tar.gz")
+        .read_file()
+        .tar_extract_one("test.js", mode="gz")
+        .o
+    )
+
+
+def test_tar_extract_all():
+    assert len(Chepy("tests/files/test.tar.gz").read_file().tar_extract_all().o) == 2
+    assert (
+        len(Chepy("tests/files/test.tar.gz").read_file().tar_extract_all(mode="gz").o)
+        == 2
+    )
+
+
+def test_tar_compress():
+    assert len(Chepy("logo.png").read_file().tar_compress("some.png").o) > 50000
+    assert (
+        len(Chepy("logo.png").read_file().tar_compress("some.png", mode="").o) > 50000
+    )

@@ -1,17 +1,19 @@
 from chepy import Chepy
 
 
-def test_detect_file_type():
-    Chepy("tests/files/hello").load_file().get_mime(
-        set_state=True
-    ).o == "application/x-executable"
-    assert True
-    Chepy("tests/files/encoding").load_file().get_mime(set_state=True).o == "text/plain"
-    assert True
+def test_file_mime():
+    assert Chepy("logo.png").load_file().file_mime().o == "image/png"
+
+
+def test_file_magic():
+    assert (
+        Chepy("logo.png").read_file().file_magic().o
+        == "PNG image data, 1920 x 1080, 8-bit/color RGBA, non-interlaced"
+    )
 
 
 def test_get_metadata():
-    assert Chepy("logo.png").load_file().get_metadata(set_state=True).o == {
+    assert Chepy("logo.png").load_file().get_metadata().o == {
         "Bits/pixel": "32",
         "Compression": "deflate",
         "Compression rate": "138.6x",

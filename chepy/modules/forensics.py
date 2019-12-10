@@ -6,6 +6,7 @@ import tempfile
 import pprint
 
 import exiftool
+import magic
 from hachoir.core.log import Logger
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
@@ -34,11 +35,8 @@ class Forensics(ChepyCore):
         return temp_file
 
     @ChepyDecorators.call_stack
-    def get_mime(self, set_state: bool = False):
+    def file_mime(self):
         """Detect the file type based on magic.
-
-        Args:
-            set_state (bool, optional): Save the output to state. Defaults to False.
         
         Returns:
             Chepy: The Chepy object. 
@@ -47,21 +45,24 @@ class Forensics(ChepyCore):
             >>> Chepy("tests/files/hello").load_file().get_mime()
             INFO - application/x-executable
         """
-        filename = self._temp_file()
-        parser = createParser(filename)
-        if not parser:
-            mimetype = "text/plain"
-            logging.info(mimetype)
-        else:
-            mimetype = str(parser.mime_type)
-            logging.info(mimetype)
-        if set_state:
-            self.state = mimetype
-        # pathlib.Path(filename).unlink()
+        m = magic.Magic(mime=True)
+        self.state = m.from_buffer(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack
-    def get_metadata(self, set_state: bool = False):
+    def file_magic(self):
+        """Get the file magic 
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        m = magic.Magic()
+        file_magic = m.from_buffer(self._convert_to_bytes())
+        self.state = file_magic
+        return self
+
+    @ChepyDecorators.call_stack
+    def get_metadata(self):
         """Get metadata from a file
         
         Args:
@@ -94,11 +95,7 @@ class Forensics(ChepyCore):
 
         if metadata is not None:
             meta = metadata.exportDictionary()["Metadata"]
-            if set_state:
-                self.state = meta
-            else:  # pragma: no cover
-                logging.info(pprint.pformat(meta))
-        # pathlib.Path(filename).unlink()
+            self.state = meta
         return self
 
     @ChepyDecorators.call_stack
@@ -142,5 +139,4 @@ class Forensics(ChepyCore):
             exif = et.get_metadata(filename)
             if exif:
                 self.state = exif
-        # pathlib.Path(filename).unlink()
         return self

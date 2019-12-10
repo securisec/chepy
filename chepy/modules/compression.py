@@ -2,12 +2,16 @@ import io
 import bz2
 import gzip
 import lzma
+import tarfile
 import zlib
 import zipfile
 from ..core import ChepyCore, ChepyDecorators
 
 
 class Compression(ChepyCore):
+    def __tar_modes(self, mode):  # pragma: no cover
+        assert mode in ["gz", "bz2", "xz", ""], "Valid modes are gz, bz2, xz"
+
     @ChepyDecorators.call_stack
     def zip_info(self):
         """Gets various information about a zip file 
@@ -118,6 +122,89 @@ class Compression(ChepyCore):
         z.writestr(file_name, self.state)
         z.close()
         self.state = mf.getvalue()
+        return self
+
+    @ChepyDecorators.call_stack
+    def tar_list_files(self, mode: str = ""):
+        """Get file information inside a tar archive
+        
+        Args:
+            mode (str, optional): Mode to open tar file as. Defaults to "".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.__tar_modes(mode)
+        if mode:
+            mode = "r:{}".format(mode)
+        else:
+            mode = "r"
+        tar = tarfile.open(fileobj=self._load_as_file(), mode=mode)
+        self.state = [t.name for t in tar.getmembers()]
+        return self
+
+    @ChepyDecorators.call_stack
+    def tar_extract_one(self, filename: str, mode: str = ""):
+        """Extract one file from inside a tar archive
+        
+        Args:
+            filename (str): Required. File name inside archive. 
+            mode (str, optional): Mode to open tar file as. Defaults to "".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.__tar_modes(mode)
+        if mode:
+            mode = "r:{}".format(mode)
+        else:
+            mode = "r"
+        tar = tarfile.open(fileobj=self._load_as_file(), mode=mode)
+        self.state = tar.extractfile(filename).read()
+        return self
+
+    @ChepyDecorators.call_stack
+    def tar_extract_all(self, mode: str = ""):
+        """Extract one file from inside a tar archive
+        
+        Args:
+            mode (str, optional): Mode to open tar file as. Defaults to "".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.__tar_modes(mode)
+        if mode:
+            mode = "r:{}".format(mode)
+        else:
+            mode = "r"
+        tar = tarfile.open(fileobj=self._load_as_file(), mode=mode)
+        self.state = {t.name: tar.extractfile(t).read() for t in tar.getmembers()}
+        return self
+
+    @ChepyDecorators.call_stack
+    def tar_compress(self, filename: str, mode: str = "gz"):
+        """Compress the state into a tar compressed object.
+        
+        Args:
+            filename (str): A file name for the tar object
+            mode (str, optional): Compression mode. Defaults to "gz".
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.__tar_modes(mode)
+        if mode:
+            mode = "w:{}".format(mode)
+        else:
+            mode = "w"
+        fh = io.BytesIO()
+        with tarfile.open(fileobj=fh, mode=mode) as tar:
+            info = tarfile.TarInfo(name=filename)
+            info.size = len(self._convert_to_bytes())
+            tar.addfile(info, io.BytesIO(self._convert_to_bytes()))
+        self.state = fh.getvalue()
+        fh.close()
         return self
 
     @ChepyDecorators.call_stack

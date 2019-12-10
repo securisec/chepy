@@ -6,18 +6,18 @@ import logging
 import inspect
 import io
 import itertools
+import subprocess
 from typing import Any, Tuple, List, Union
 
 import pyperclip
-import requests
+from requests import request
 import ujson
 import jsonpickle
 import regex as re
-import scapy.all as scapy
 from decorator import decorator
 
 from .modules.exceptions import PrintException
-from .modules.internal.colors import YELLOW, CYAN, GREEN, MAGENTA
+from .modules.internal.colors import yellow, cyan, green, magenta
 
 
 class ChepyDecorators(object):
@@ -675,7 +675,7 @@ class ChepyCore(object):
         params = json2str(params)
         headers = json2str(headers)
         cookies = json2str(cookies)
-        res = requests.request(
+        res = request(
             method=method,
             url=self.state,
             params=params,
@@ -943,7 +943,7 @@ class ChepyCore(object):
             Chepy: The Chepy object. 
         """
         self._pcap_filepath = str(self._abs_path(self.state))
-        self.state = GREEN("Pcap loaded")
+        self.state = green("Pcap loaded")
         return self
 
     @ChepyDecorators.call_stack
@@ -958,20 +958,20 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        print(CYAN("Current state:"), YELLOW(str(self._current_index)))
-        print(CYAN("Current states:"), YELLOW(str(len(self.states))))
+        print(cyan("Current state:"), yellow(str(self._current_index)))
+        print(cyan("Current states:"), yellow(str(len(self.states))))
         print(
-            CYAN("Current state types:"),
-            YELLOW(str({k: type(v).__name__ for k, v in self.states.items()})),
+            cyan("Current state types:"),
+            yellow(str({k: type(v).__name__ for k, v in self.states.items()})),
         )
-        print(CYAN("Current buffers:"), YELLOW(str(len(self.buffers))))
+        print(cyan("Current buffers:"), yellow(str(len(self.buffers))))
         print(
-            CYAN("Current buffer types:"),
-            YELLOW(str({k: type(v).__name__ for k, v in self.buffers.items()})),
+            cyan("Current buffer types:"),
+            yellow(str({k: type(v).__name__ for k, v in self.buffers.items()})),
         )
         if verbose:
-            print(MAGENTA("States:"), self.states)
-            print(MAGENTA("Buffers:"), self.buffers)
+            print(magenta("States:"), self.states)
+            print(magenta("Buffers:"), self.buffers)
         return self
 
     @ChepyDecorators.call_stack
@@ -984,3 +984,12 @@ class ChepyCore(object):
         self.states = self.__initial_states
         return self
 
+    @ChepyDecorators.call_stack
+    def shell_output(self):  # pragma: no cover
+        """Run the command in state and get the output
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = subprocess.getoutput(self.state)
+        return self
