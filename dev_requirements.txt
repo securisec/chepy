@@ -31,7 +31,3 @@ requests-toolbelt
 scapy
 ua-parser
 ujson
-pytest
-pytest-cov
-bandit
-virtualenv

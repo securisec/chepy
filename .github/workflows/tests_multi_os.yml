@@ -23,16 +23,18 @@ jobs:
       id: devcache
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/dev_requirements.txt') }}
+        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-dev-
+          ${{ runner.os }}-pip-
     - name: Install
-      # if: steps.devcache.outputs.cache-hit != 'true'
+      if: steps.devcache.outputs.cache-hit != 'true'
       run: |
-        pip install sphinx recommonmark
-        pip install -r dev_requirements.txt
+        pip install -r requirements.txt
         python -m pip install --upgrade pip
         pip install .
+    - name: Install test requirements
+      run: |
+        pip install sphinx recommonmark pytest pytest-cov bandit
     - name: Test with pytest
       run: |
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
