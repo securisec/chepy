@@ -488,3 +488,77 @@ class Multimedia(ChepyCore):
         new.save(fh, extension)
         self.state = fh.getvalue()
         return self
+
+    @ChepyDecorators.call_stack
+    def lsb_dump_by_channel(self, channel: str = "r", column_first: bool = False): # pragma: no cover
+        """Dump LSB from a specific color channel
+        
+        Args:
+            channel (str, optional): Color channel. r, g, b. Defaults to 'r'.
+            column_first (bool, optional): Order by column first. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        channels = ["r", "g", "b"]
+        assert channel in channels, "Valid channels are {}".format("".join(channels))
+        if channel == "r":
+            index = 0
+        elif channel == "g":
+            index = 1
+        elif channel == "b":
+            index = 2
+        image = Image.open(self._load_as_file())
+        pixels = image.load()
+        if column_first:
+            height, width = image.size
+        else:
+            width, height = image.size
+
+        data = ""
+        for y in range(height):
+            for x in range(width):
+                try:
+                    pix = pixels[x, y][index]
+                    lsb = bin(pix).zfill(8)[-1]
+                    data += lsb
+                except IndexError:
+                    break
+
+        self.state = data
+        return self
+
+    @ChepyDecorators.call_stack
+    def msb_dump_by_channel(self, channel: str = "r", column_first: bool = False): # pragma: no cover
+        """Dump MSB from a specific color channel
+        
+        Args:
+            channel (str, optional): Color channel. r, g, b. Defaults to 'r'.
+            column_first (bool, optional): Order by column first. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        channels = ["r", "g", "b"]
+        assert channel in channels, "Valid channels are {}".format("".join(channels))
+        if channel == "r":
+            index = 0
+        elif channel == "g":
+            index = 1
+        elif channel == "b":
+            index = 2
+        image = Image.open(self._load_as_file())
+        pixels = image.load()
+        if column_first:
+            height, width = image.size
+        else:
+            width, height = image.size
+
+        data = ""
+        for x in range(height):
+            for y in range(width):
+                val = pixels[x, y][index]
+                data += ((bin(val)[2:]).zfill(8))[0]
+
+        self.state = data
+        return self

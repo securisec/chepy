@@ -1,3 +1,4 @@
+import re
 from chepy import Chepy
 
 
@@ -92,3 +93,20 @@ def test_convert_image():
         Chepy("logo.png").load_file().convert_image("jpeg").to_hex().o[0:6] == b"ffd8ff"
     )
 
+
+def test_lsb_by_channel():
+    assert re.search(
+        b"4E34B38257200616FB75CD869B8C3CF0",
+        Chepy("tests/files/lsb.png").read_file().lsb_dump_by_channel().from_binary().o,
+    )
+
+
+def test_msb_by_channel():
+    assert re.search(
+        b"MSB_really_sucks",
+        Chepy("tests/files/msb.png")
+        .read_file()
+        .msb_dump_by_channel("b", True)
+        .from_binary()
+        .o,
+    )
