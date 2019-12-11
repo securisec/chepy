@@ -990,6 +990,15 @@ class ChepyCore(object):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            This method can be used to interace with the shell and Chepy 
+            directly by ingesting a commands output in Chepy. 
+
+            >>> c = Chepy("ls -l").shell_output().o
+            test.html
+            ...
+            test.py
         """
         self.state = subprocess.getoutput(self.state)
         return self

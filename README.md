@@ -131,6 +131,7 @@ The binary will be in the dist/ folder.
    extras.rst
    plugins.md
    pullrequest.md
+   config.md
 
 
 Indices and tables

@@ -224,6 +224,7 @@ def test_from_binary():
         "b",
         "c",
     ]
+    assert Chepy("01100100011000010111010001100001").from_binary().o == b"data"
 
 
 def test_to_octal():

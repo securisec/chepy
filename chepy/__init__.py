@@ -17,9 +17,9 @@ from .modules.publickey import Publickey
 from .modules.search import Search
 from .modules.utils import Utils
 
-from .conf import Config
+from .config import ChepyConfig
 
-_plugins = Config().load_plugins()
+_plugins = ChepyConfig().load_plugins()
 
 
 class Chepy(

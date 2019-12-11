@@ -665,7 +665,11 @@ class DataFormat(ChepyCore):
                 "c",
             ]
         """
-        self.state = list(chr(int(s, 2)) for s in self.state)
+        if isinstance(self.state, list):
+            self.state = list(chr(int(s, 2)) for s in self.state)
+        else:
+            n = int(self._convert_to_str(), 2)
+            self.state = n.to_bytes((n.bit_length() + 7) // 8, "big")
         return self
 
     @ChepyDecorators.call_stack

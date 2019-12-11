@@ -22,13 +22,15 @@ from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
 from chepy.modules.internal.colors import red, yellow, cyan
-from chepy.conf import Config
+from chepy.config import ChepyConfig
 
-config = Config()
+config = ChepyConfig()
 options = []
 chepy = dir(Chepy)
 fire_obj = None
 errors = []
+
+prompt_colors = config.prompt_colors.split()
 
 
 def get_style():
@@ -37,18 +39,17 @@ def get_style():
             "completion-menu.completion.current": "bg:#00aaaa #000000",
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
-            "prompt1": "#00ffff bold",
-            "prompt2": "#ff0000 bold",
-            "prompt3": "#ffd700 bold",
+            "prompt1": "{} bold".format(prompt_colors[0]),
+            "prompt2": "{} bold".format(prompt_colors[1]),
+            "prompt3": "{} bold".format(prompt_colors[2]),
             "state_index": "#ffd700",
-            "file": "#00ff48",
-            "rprompt": "fg:#00ff48",
-            "bottom-toolbar": "#000000",
-            "bt_version": "bg:#00ff48",
-            "bt_states": "bg:#60cdd5",
-            "bt_buffers": "bg:#ff00ff",
-            "bt_type": "bg:#ffd700",
-            "bt_errors": "bg:#ff0000",
+            "rprompt": "fg:{}".format(config.prompt_rprompt),
+            "bottom-toolbar": config.prompt_bottom_toolbar,
+            "prompt_toolbar_version": "bg:{}".format(config.prompt_toolbar_version),
+            "prompt_toolbar_states": "bg:{}".format(config.prompt_toolbar_states),
+            "prompt_toolbar_buffers": "bg:{}".format(config.prompt_toolbar_buffers),
+            "prompt_toolbar_type": "bg:{}".format(config.prompt_toolbar_type),
+            "prompt_toolbar_errors": "bg:{}".format(config.prompt_toolbar_errors),
         }
     )
 
@@ -92,7 +93,11 @@ def get_options():
 
 
 def prompt_message(fire_obj):
-    elements = [("class:prompt1", ">"), ("class:prompt2", ">"), ("class:prompt3", ">")]
+    elements = [
+        ("class:prompt1", config.prompt_char),
+        ("class:prompt2", config.prompt_char),
+        ("class:prompt3", config.prompt_char),
+    ]
     try:
         elements.append(
             (
@@ -116,16 +121,22 @@ def bottom_toolbar(fire_obj):
         current_state = fire_obj._current_index if fire_obj is not None else 0
         buffers = len(fire_obj.buffers) if fire_obj is not None else 0
         return [
-            ("class:bt_version", "Chepy: {} ".format(__version__)),
+            ("class:prompt_toolbar_version", "Chepy: {} ".format(__version__)),
             (
-                "class:bt_states",
+                "class:prompt_toolbar_states",
                 " States: {current}/{total} ".format(
                     current=current_state, total=states
                 ),
             ),
-            ("class:bt_buffers", " Buffers: {total} ".format(total=buffers)),
-            ("class:bt_type", " State: {} ".format(type(fire_obj.state).__name__)),
-            ("class:bt_errors", " Errors: {} ".format(len(errors))),
+            (
+                "class:prompt_toolbar_buffers",
+                " Buffers: {total} ".format(total=buffers),
+            ),
+            (
+                "class:prompt_toolbar_type",
+                " State: {} ".format(type(fire_obj.state).__name__),
+            ),
+            ("class:prompt_toolbar_errors", " Errors: {} ".format(len(errors))),
         ]
 
 
@@ -195,10 +206,13 @@ class CustomCompleter(Completer):
 
 
 def get_current_type(obj):
-    if obj:
-        return type(obj).__name__
+    if config.show_rprompt:
+        if obj:
+            return type(obj).__name__
+        else:
+            return "Type of current state"
     else:
-        return "Type of current state"
+        return None
 
 
 def parse_args(args):
