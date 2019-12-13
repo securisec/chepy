@@ -6,13 +6,12 @@ RUN pip install -r /chepy/requirements.txt \
     && pip install python-magic virtualenv \
     && virtualenv -p python3 /chepy/venv \
     && /chepy/venv/bin/pip3 install -r requirements.txt \
-    && pip install sphinx recommonmark pytest pytest-cov bandit
+    && pip install pytest pytest-cov bandit pytest-xdist
 
 COPY . /chepy/
 RUN cd /chepy && venv/bin/pip3 install .
 
-RUN cd /chepy/ && pytest --disable-pytest-warnings --cov=chepy --cov-config=.coveragerc tests/
-RUN cd /chepy/ && make -C docs/ clean html
+RUN cd /chepy/ && pytest
 RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
 RUN /chepy/venv/bin/pip3 uninstall -y pytest pytest-cov bandit \
     && rm -rf /chepy/tests \
