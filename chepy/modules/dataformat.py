@@ -7,6 +7,7 @@ import base58
 import ujson
 import yaml
 import regex as re
+import hexdump
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 from typing import Any
@@ -476,7 +477,7 @@ class DataFormat(ChepyCore):
             return self
 
     @ChepyDecorators.call_stack
-    def hexdump_to_str(self):
+    def str_from_hexdump(self):
         """Extract a string from a hexdump
         
         Returns:
@@ -484,6 +485,26 @@ class DataFormat(ChepyCore):
         """
         # TODO make new line aware \n \r\n \0a etc
         self.state = "".join(re.findall(r"\|(.+)\|", self._convert_to_str()))
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_hexdump(self):
+        """Convert the state to hexdump
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = hexdump.hexdump(self._convert_to_bytes(), result="return")
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_hexdump(self):
+        """Convert hexdump back to str
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = hexdump.restore(self._convert_to_str())
         return self
 
     @ChepyDecorators.call_stack

@@ -282,3 +282,18 @@ def test_from_braille():
 def test_trim():
     assert Chepy("\nlol ").trim().o == "lol"
 
+
+def test_to_hexdump():
+    assert Chepy("some").to_hexdump().o.split() == [
+        "00000000:",
+        "73",
+        "6F",
+        "6D",
+        "65",
+        "some",
+    ]
+
+
+def test_from_hexdump():
+    assert Chepy("some").to_hexdump().from_hexdump().o == b"some"
+

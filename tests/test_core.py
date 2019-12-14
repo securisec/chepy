@@ -132,7 +132,7 @@ def test_recipe():
     temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
     Chepy(
         "tests/files/encoding"
-    ).load_file().reverse().rot_13().base64_decode().base32_decode().hexdump_to_str().save_recipe(
+    ).load_file().reverse().rot_13().base64_decode().base32_decode().str_from_hexdump().save_recipe(
         temp
     )
 
