@@ -13,11 +13,11 @@ class ChepyConfig(object):
         self.chepy_dir = Path(home / ".chepy")
         self.chepy_conf = Path(self.chepy_dir / "chepy.conf")
 
-        if not self.chepy_dir.exists():  # pragma: no cover
-            self.chepy_dir.mkdir()
+        if not self.chepy_conf.exists():  # pragma: no cover
+            self.chepy_dir.mkdir(exist_ok=True)
             c = ConfigParser()
 
-            c["Plugin"] = {"PluginPath": "None"}
+            c["Plugins"] = {"EnablePlugins": "false", "PluginPath": "../chepy_plugins"}
             c["Cli"] = {}
             cli_options = c["Cli"]
             cli_options["history_path"] = str(self.chepy_dir / "chepy_history")
@@ -40,7 +40,16 @@ class ChepyConfig(object):
         self.config = ConfigParser()
         self.config.read(str(self.chepy_conf))
 
-        self.plugin_path = self.config["Plugin"]["PluginPath"]
+        plugin_path = self.config["Plugins"]["PluginPath"]
+        self.enable_plugins = json.loads(self.config["Plugins"]["EnablePlugins"])
+
+        if self.enable_plugins:
+            if plugin_path != "None":
+                self.plugin_path = Path(plugin_path).expanduser().resolve()
+            else:
+                self.plugin_path = Path(plugin_path)
+        else:
+            self.plugin_path = Path("None")
 
         self.history_path = self.config["Cli"]["history_path"]
         self.prompt_char = self.config["Cli"]["prompt_char"]
@@ -56,8 +65,8 @@ class ChepyConfig(object):
 
     def load_plugins(self):  # pragma: no cover
         plugins = []
-        if self.plugin_path != "None":
-            sys.path.append(self.plugin_path)
+        if self.plugin_path.stem != "None":
+            sys.path.append(str(self.plugin_path))
 
             my_plugins = [
                 importlib.import_module(name)

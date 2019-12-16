@@ -11,14 +11,15 @@ RUN pip install -r /chepy/requirements.txt \
 COPY . /chepy/
 RUN cd /chepy && venv/bin/pip3 install .
 
-RUN cd /chepy/ && pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc
+RUN cd /chepy/ && pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
 RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
 RUN /chepy/venv/bin/pip3 uninstall -y pytest pytest-cov bandit \
     && rm -rf /chepy/tests \
     && rm -rf /chepy/build \
     && rm -rf /chepy/dist \
     && rm -rf /chepy/ignore \
-    && rm -rf /chepy/docs
+    && rm -rf /chepy/docs \
+    && rm -rf /chepy/plugins_test
 
 
 FROM python:3.8.0-slim

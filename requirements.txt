@@ -10,16 +10,13 @@ hashid
 hexdump
 jsonpath-rw
 jsonpickle
-Markdown
 parsel
-pefile
 phpserialize
 Pillow
 prompt_toolkit
 pycipher
 pycryptodome
 pydash
-pyelftools
 pyjwt
 pyOpenSSL
 pyperclip
@@ -28,6 +25,4 @@ PyYAML
 regex
 requests
 requests-toolbelt
-scapy
-ua-parser
 ujson

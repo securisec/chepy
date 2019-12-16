@@ -3,6 +3,7 @@ omit =
     chepy/__main__.py
     chepy/config.py
     chepy/modules/internal/cli.py
+    chepy/chepy_plugins/*
 
 
 [report]

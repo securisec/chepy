@@ -1,3 +1,4 @@
+import sys
 import base64
 import binascii
 import pathlib
@@ -7,6 +8,7 @@ import inspect
 import io
 import itertools
 import subprocess
+from configparser import ConfigParser
 from typing import Any, Tuple, List, Union
 
 import pyperclip
@@ -81,8 +83,6 @@ class ChepyCore(object):
         self.cyberchef = self.web
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
-        #: Holder for scapy pcap reader
-        self._pcap_filepath = None
 
         #: Log level
         self.log_level = logging.INFO
@@ -936,17 +936,6 @@ class ChepyCore(object):
             raise
 
     @ChepyDecorators.call_stack
-    def read_pcap(self):
-        """Load a pcap. The state is set to scapy
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        self._pcap_filepath = str(self._abs_path(self.state))
-        self.state = green("Pcap loaded")
-        return self
-
-    @ChepyDecorators.call_stack
     def debug(self, verbose: bool = False):
         """Debug the curren instance of Chepy
         
@@ -1002,3 +991,33 @@ class ChepyCore(object):
         """
         self.state = subprocess.getoutput(self.state)
         return self
+
+    def plugins(self, enable: str) -> None:  # pragma: no cover
+        """Use this method to enable or disable Chepy plugins. 
+
+        Valid options are `true` or `false`. Once this method completes, 
+        it does call sys.exit(). 
+
+        Args:
+            enable (str): Set to `true` or `false`
+
+        Returns:
+            None
+        """
+        assert enable in ['true', 'false'], 'Valid values are true and false'
+        conf_path = pathlib.Path().home() / ".chepy" / "chepy.conf"
+        c = ConfigParser()
+        c.read(conf_path)
+        c.set("Plugins", "enableplugins", enable)
+        with open(conf_path, "w") as f:
+            c.write(f)
+        if enable:
+            self._info_logger(
+                green("Plugins have been enabled. Restart Chepy for effects to take place.")
+            )
+        else:
+            self._info_logger(
+                green("Plugins have been disabled. Restart Chepy for effects to take place.")
+            )
+        sys.exit()
+        return None

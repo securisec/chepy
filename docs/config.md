@@ -3,6 +3,8 @@
 The Chepy config files are stored in a folder called **.chepy** in the users home directory. There are two files in it. 
 
 ## chepy.conf
+### Plugin.enableplugins
+This should be set to either `true` or `false` to control if plugins should be loaded by Chepy.
 ### Plugin.pluginpath
 This path controls where chepy will look for plugins and extensions. For more information, see [plugins](/plugins)
 

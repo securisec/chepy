@@ -63,7 +63,7 @@ print(
 - Chepy has a CLI
 - Chepy CLI has full autocompletion.
 - Supports pe, elf, and other various file format specific parsing.  
-- Extendable via plugins
+- Extendable via [plugins](https://chepy-plugins.readthedocs.io/en/latest/)
 - Infinitely scalable as it can leverage the full Python library.
 - Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
 - The Chepy python library is significantly faster than the Cyberchef Node library.
@@ -91,14 +91,6 @@ pip3 install -e .
 # I use -e here so that if I update later with git pull, I dont have it install it again (unless dependencies have changed)
 ```
 
-#### Pipenv
-```
-git clone https://github.com/securisec/chepy.git
-cd chepy
-pipenv install
-```
-
-
 #### [Docker](https://hub.docker.com/r/securisec/chepy)
 ```bash
 docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]
@@ -115,7 +107,8 @@ pyinstaller cli.py --name chepy --onefile
 ```
 The binary will be in the dist/ folder. 
 
-
+### Plugins
+[Check here for plugins docs](https://chepy-plugins.readthedocs.io/en/latest/)
 
 ```eval_rst
 .. toctree::
@@ -132,6 +125,7 @@ The binary will be in the dist/ folder.
    plugins.md
    pullrequest.md
    config.md
+   faq.md
 
 
 Indices and tables

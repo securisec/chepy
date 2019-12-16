@@ -1,5 +1,4 @@
 from .modules.aritmeticlogic import AritmeticLogic
-from .modules.binary import PEFile, ELFFile
 from .modules.codetidy import CodeTidy
 from .modules.compression import Compression
 from .modules.dataformat import DataFormat
@@ -12,7 +11,6 @@ from .modules.language import Language
 from .modules.multimedia import Multimedia
 from .modules.networking import Networking
 from .modules.other import Other
-from .modules.pcap import Pcap
 from .modules.publickey import Publickey
 from .modules.search import Search
 from .modules.utils import Utils
@@ -28,7 +26,6 @@ class Chepy(
     Compression,
     DataFormat,
     DateTime,
-    ELFFile,
     EncryptionEncoding,
     Extractors,
     Forensics,
@@ -37,8 +34,6 @@ class Chepy(
     Multimedia,
     Networking,
     Other,
-    Pcap,
-    PEFile,
     Publickey,
     Search,
     Utils,

@@ -5,7 +5,7 @@ from chepy import Chepy
 
 
 def test_states():
-    c = Chepy("AA", "BB")
+    c = Chepy("AA", "BB").debug()
     state1 = c.to_hex().o
     c.change_state(1)
     state2 = c.to_hex().o
@@ -14,7 +14,7 @@ def test_states():
 
 
 def test_substring():
-    assert Chepy("some data").substring("s(ome)", 1).o == "ome"
+    assert Chepy("some data").debug(True).substring("s(ome)", 1).o == "ome"
     assert Chepy("some data").substring("s(ome)").o == "some"
 
 

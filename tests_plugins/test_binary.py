@@ -37,4 +37,3 @@ def test_elf_imports():
         )
         == 9
     )
-

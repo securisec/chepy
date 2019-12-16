@@ -1,14 +1,15 @@
 # Chepy Plugins
 
-Chepy allows users to extend Chepy and add plugins to it. This documentation describes how to create or load plugins in Chepy.
+Chepy allows users to extend Chepy and add plugins to it. This documentation describes how to create or load plugins in Chepy. For current official Chepy plugins, [refer to this docs](https://chepy-plugins.readthedocs.io/en/latest/), or [this repo](https://github.com/securisec/chepy_plugins). These plugins are disabled by default, but can be enabled using the config file. If an import requirement fails for any of the built in plugins, it will show a message showing which one failed. 
 
 ## chepy.conf file
-The chepy.conf file is what controls various aspects of how chepy runs. This file can be located in the users home directory. 
+The chepy.conf file is what controls various aspects of how chepy runs. This file can be located in the users home directory. Plugins can be enabled or disabled with `Plugins.enableplugins` in the **chepy.conf** file.
 
 The default Chepy conf file on setup looks like this:
 
 ```bash
-[Plugin]
+[Plugins]
+enableplugins = true
 pluginpath = None
 # this needs to be an absolute path. Plugins are loaded from this directory
 
@@ -50,12 +51,11 @@ This is a bare bones example of how a Chepy plugin works. In this case, `myplugi
 The only thing this plugin at the moment will do is take whatever value is in the state, and multiply it with 20. All methods in Chepy plugins should set the value of `self.state` and should return `self`. This allows chaining with other methods that are available. 
 
 ```python
-import chepy
-from chepy.core import ChepyDecorators
+import chepy.core
 
 class MyPlugin(chepy.core.ChepyCore):
     
-    @ChepyDecorators.call_stack
+    @chepy.core.ChepyDecorators.call_stack
     def myplugin_method(self):
         """another method
         
@@ -71,12 +71,11 @@ Lets breakdown this sample plugin.
 #### Importing ChepyCore
 
 ```python
-import chepy
-from chepy.core import ChepyDecorators
+import chepy.core
 
 class MyPlugin(chepy.core.ChepyCore):
 
-    @ChepyDecorators.call_stack
+    @chepy.core.ChepyDecorators.call_stack
     def myplugin_method(self):
 ```
 All Chepy plugins needs to inherit the **ChepyCore** class. This ensures that all the core attributes and methods from ChepyCore are available to the plugin.
