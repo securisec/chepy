@@ -1,3 +1,4 @@
+.bandit.json
 .scannerwork
 .DS_Store
 .vscode/
@@ -108,4 +109,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-sonar-project.properties

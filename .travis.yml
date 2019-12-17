@@ -1,9 +1,14 @@
-dist: bionic
+dist: trusty
 language: python
 python:
 - '3.7'
 cache:
 - pip
+addons:
+  sonarcloud:
+    organization: "securisec"
+    token:
+      secure: SB1eaFai/4thp6R41DxSjuPquXxVTE5TKUFIIpA9kHjflUDDHwL9BdB3Wp9m9XpxUmRLlUQglhMx2JodM9zqAO6zBO7g+E0vHsfbhD8nf6oR0yJb3dAnd5TrBiYENxY4Mmg1JxehfYm4ifgxghUMT8rS3rBuSjwLfgB+nyuB0TVf9TTqOsFnSNv2nlU4pcT+bxCkgRBMsHLUcii67P01eH0H0sA29esm+oyDITHrtX/AuKkKcAubg9hlnzm8PuOS8+H8wOTmJlmUu9jwCoeNvEyxqEE8F352KKrcGdm7Lr+nod2KVbcfl0qL1CMPFBqAj6arQ3lK4JSdkKXQnLedZH887GSAw9qIroVvRnyUFVJoKOYq1uwBO1AawjiDH5QE3Vny4RQMBc+3iJQNYy9Rm0wWGorn4BaUfbev4K++wMeh5kPHyPZO22/wd0RHXsra4r6FmqqocQ1a/vgShRalLeWvZDAUP2cIzovXTYRFGS+Or671tnTh4rrAT7jMXiBHZdIFIP0ZtV4s0zAbDkVh0T79wfIW9B0EVxWVQ+4bO6EUClG5L6HeHjH6dbl72v82xZVcmMrA5EIF7HfixWYL+CeAQIBAMrXweztzjIlWwbn76fZPFVCNmMfTBzR6xWUaGYt+EM7RPfo0xIqVEfmSeJ6vPKQx/jA6g0EOKCyaoHY=
 before_install:
 - python -V
 - pip -V
@@ -17,8 +22,9 @@ script:
 - sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
 - pip install -r chepy/chepy_plugins/requirements.txt
 - pytest --disable-pytest-warnings tests_plugins/
-- bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
+- bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404 --output .bandit.json --format json
 - make -C docs/ clean html
+- sonar-scanner
 deploy:
   provider: pypi
   user: __token__

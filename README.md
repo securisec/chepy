@@ -10,10 +10,10 @@
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
 [![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
 
-[![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
 ![](https://img.shields.io/github/license/securisec/chepy?label=License)
-[![](https://badges.gitter.im/chepy_/community.svg)](https://gitter.im/chepy_/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+
+[![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
 [![](https://pepy.tech/badge/chepy)](https://pepy.tech/project/chepy)
 ![](https://img.shields.io/docker/pulls/securisec/chepy?label=Docker%20pull&logo=docker)
 
