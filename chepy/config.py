@@ -17,7 +17,10 @@ class ChepyConfig(object):
             self.chepy_dir.mkdir(exist_ok=True)
             c = ConfigParser()
 
-            c["Plugins"] = {"EnablePlugins": "false", "PluginPath": "../chepy_plugins"}
+            c["Plugins"] = {
+                "EnablePlugins": "false",
+                "PluginPath": str(Path(__file__).parent / "chepy_plugins"),
+            }
             c["Cli"] = {}
             cli_options = c["Cli"]
             cli_options["history_path"] = str(self.chepy_dir / "chepy_history")

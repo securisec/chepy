@@ -1,0 +1,3 @@
+[submodule "chepy/chepy_plugins"]
+	path = chepy/chepy_plugins
+	url = https://github.com/securisec/chepy_plugins

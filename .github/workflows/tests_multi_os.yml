@@ -19,32 +19,54 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v1
-      id: devcache
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+    # - uses: actions/cache@v1
+    #   id: devcache
+    #   with:
+    #     path: ~/.cache/pip
+    #     key: ${{ runner.os }}-pip-dev-${{ hashFiles('**/requirements.txt') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-pip-
+
     - name: Install
       # if: steps.devcache.outputs.cache-hit != 'true'
       run: |
+        git submodule update --init --recursive
         pip install -r requirements.txt
         python -m pip install --upgrade pip
         pip install .
+        
     - name: Install test requirements
       run: |
         pip install sphinx recommonmark pytest pytest-cov bandit pyperclip
+        
     - name: Test with pytest
       run: |
         pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
         coverage report -m
+        
+    - name: Test plugins osx
+      if: matrix.os == 'macOS-latest'
+      run: |
+        sed -iE 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
+        sed -iE '/chepy/d' chepy/chepy_plugins/requirements.txt
+        pip install chepy/chepy_plugins/requirements.txt
+        pytest --disable-pytest-warnings tests_plugins/
+    - name: Test plugins ubuntu
+      if: contains(matrix.os, 'ubuntu')
+      run: |
+        sed -i 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
+        sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
+        pip install chepy/chepy_plugins/requirements.txt
+        pytest --disable-pytest-warnings tests_plugins/
+        
     - name: Test with bandit
       run: |
         bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
+        
     - name: Test docs
       run: |
         make -C docs/ clean html
+        
     - name: Upload to codecov
       if: startsWith(matrix.os,'ubuntu')
       uses: codecov/codecov-action@v1.0.3
