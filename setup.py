@@ -2,8 +2,6 @@
 import sys
 from setuptools import setup, find_packages
 from os import path
-from shutil import copy
-from pathlib import Path
 
 # get version and author information
 with open("chepy/__version__.py", "r") as f:

@@ -1,7 +1,5 @@
 import sys
-from colorama import Fore, init
-
-# init(convert=True)
+from colorama import Fore
 
 
 def red(s: str) -> str:  # pragma: no cover

@@ -18,7 +18,6 @@ import jsonpickle
 import regex as re
 from decorator import decorator
 
-from .modules.exceptions import PrintException
 from .modules.internal.colors import yellow, cyan, green, magenta
 
 
@@ -1004,7 +1003,7 @@ class ChepyCore(object):
         Returns:
             None
         """
-        assert enable in ['true', 'false'], 'Valid values are true and false'
+        assert enable in ["true", "false"], "Valid values are true and false"
         conf_path = pathlib.Path().home() / ".chepy" / "chepy.conf"
         c = ConfigParser()
         c.read(conf_path)
@@ -1013,11 +1012,15 @@ class ChepyCore(object):
             c.write(f)
         if enable:
             self._info_logger(
-                green("Plugins have been enabled. Restart Chepy for effects to take place.")
+                green(
+                    "Plugins have been enabled. Restart Chepy for effects to take place."
+                )
             )
         else:
             self._info_logger(
-                green("Plugins have been disabled. Restart Chepy for effects to take place.")
+                green(
+                    "Plugins have been disabled. Restart Chepy for effects to take place."
+                )
             )
         sys.exit()
         return None

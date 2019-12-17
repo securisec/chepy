@@ -2,7 +2,7 @@ import binascii
 import hmac
 import hashlib
 import hashid
-from Crypto.Hash import MD2, MD4, MD5, SHA256, SHA512
+from Crypto.Hash import MD2, MD4, MD5, SHA512
 from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
 from Crypto.Hash import RIPEMD

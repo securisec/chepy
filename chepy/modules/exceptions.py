@@ -1,7 +1,3 @@
-class PrintException(Exception):
-    pass
-
-
 class StateNotList(Exception):  # pragma: no cover
     def __init__(self, msg="State is not a list", *args, **kwargs):
         super().__init__(msg, *args, **kwargs)

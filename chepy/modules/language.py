@@ -1,6 +1,5 @@
 import emoji
 import unicodedata
-from typing import List
 import regex as re
 
 from ..core import ChepyCore, ChepyDecorators

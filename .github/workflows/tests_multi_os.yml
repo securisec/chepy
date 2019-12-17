@@ -58,6 +58,13 @@ jobs:
         sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
+    - name: Test plugins windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        Set-Content -Path ~/.chepy/chepy.conf -Value (Get-Content ~/.chepy/chepy.conf | %{$_ -replace "enableplugins = false","enableplugins = true"})
+        Set-Content -Path chepy/chepy_plugins/requirements.txt -Value (Get-Content -Path chepy/chepy_plugins/requirements.txt | Select-String -Pattern 'chepy' -NotMatch)
+        pip install -r chepy/chepy_plugins/requirements.txt
+        pytest --disable-pytest-warnings tests_plugins/
         
     - name: Test with bandit
       run: |

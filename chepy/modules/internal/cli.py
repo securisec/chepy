@@ -1,7 +1,6 @@
 import sys
 import inspect
 from pprint import pformat, pprint
-from subprocess import getoutput
 
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion

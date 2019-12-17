@@ -1,13 +1,10 @@
-import io
 import os
 import logging
 import pathlib
 import tempfile
-import pprint
 
 import exiftool
 import magic
-from hachoir.core.log import Logger
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
 from hachoir.subfile.search import SearchSubfile

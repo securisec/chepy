@@ -1,5 +1,4 @@
 from OpenSSL import crypto as _pyssl_crypto
-from OpenSSL._util import lib as _pyssl_cryptolib
 from Crypto.PublicKey import RSA
 
 from ..core import ChepyCore, ChepyDecorators

@@ -9,7 +9,6 @@ RUN pip install -r /chepy/requirements.txt \
     && pip install scapy markdown pefile pyelftools
 
 COPY . /chepy/
-RUN cd /chepy && git submodule update --init --recursive
 RUN cd /chepy \
     && sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt \
     && pip install -e . \
