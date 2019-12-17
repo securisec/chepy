@@ -49,14 +49,14 @@ jobs:
       run: |
         sed -iE 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
         sed -iE '/chepy/d' chepy/chepy_plugins/requirements.txt
-        pip install chepy/chepy_plugins/requirements.txt
+        pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
     - name: Test plugins ubuntu
       if: contains(matrix.os, 'ubuntu')
       run: |
         sed -i 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
         sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
-        pip install chepy/chepy_plugins/requirements.txt
+        pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
         
     - name: Test with bandit
