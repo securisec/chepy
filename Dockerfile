@@ -13,8 +13,10 @@ RUN cd /chepy \
     && sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt \
     && pip install -e . \
     && venv/bin/pip3 install . \
-    && venv/bin/pip3 install -r chepy/chepy_plugins/requirements.txt
-RUN pip install -r /chepy/chepy/chepy_plugins/requirements.txt
+    && venv/bin/pip3 install -r chepy/chepy_plugins/requirements.txt \
+    && mkdir -p /chepy/venv/lib/python3.8/site-packages/chepy/chepy/chepy_plugins \
+    && cp -r /chepy/chepy/chepy_plugins/data/ /chepy/venv/lib/python3.8/site-packages/chepy/chepy_plugins/ \
+    && pip install -r /chepy/chepy/chepy_plugins/requirements.txt
 
 RUN cd /chepy/ && pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
 RUN sed -i 's/enableplugins = false/enableplugins = true/' /root/.chepy/chepy.conf
