@@ -1,5 +1,3 @@
-from pkg_resources import resource_filename
-
 import ujson
 import regex as re
 import jsonpath_rw
@@ -296,25 +294,4 @@ class Extractors(ChepyCore):
             tags.append({"tag": tag, "attributes": dict(attributes)})
 
         self.state = tags
-        return self
-
-    @ChepyDecorators.call_stack
-    def secrets(self):  # pragma: no cover
-        """Checks for secrets 
-        
-        Checks ~1500 different secrets patterns. Returns a dict of partial 
-        pattern name as the key, and and array of found matches as the value. 
-        This mostly checks for common variable names that contains secrets. 
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        found = {}
-        secrets_path = resource_filename(__name__, "internal/data/secrets.txt")
-        with open(secrets_path, "r") as f:
-            for pattern in f:
-                matches = re.findall(fr"{pattern}.*?".strip(), self.response.text)
-                if matches:
-                    found[re.sub(r"[^a-zA-Z0-9_]", "", pattern[0:20])] = matches
-        self.state = found
         return self

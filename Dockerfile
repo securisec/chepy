@@ -19,10 +19,10 @@ RUN pip install -r /chepy/chepy/chepy_plugins/requirements.txt
 RUN cd /chepy/ && pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
 RUN sed -i 's/enableplugins = false/enableplugins = true/' /root/.chepy/chepy.conf
 RUN cd /chepy/ && pytest --disable-pytest-warnings tests_plugins/
+RUN python -c "from chepy import Chepy"
 
 RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
-RUN /chepy/venv/bin/pip3 uninstall -y pytest pytest-cov bandit \
-    && rm -rf /chepy/tests \
+RUN rm -rf /chepy/tests \
     && rm -rf /chepy/build \
     && rm -rf /chepy/dist \
     && rm -rf /chepy/ignore \

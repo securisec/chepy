@@ -8,12 +8,13 @@
 
 [![](https://img.shields.io/readthedocs/chepy.svg?logo=read-the-docs&label=Docs)](http://chepy.readthedocs.io/en/latest/)
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
+
 [![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
-
-![](https://img.shields.io/github/license/securisec/chepy?label=License)
-
+![](https://img.shields.io/sonar/coverage/securisec_chepy?color=limegreen&logo=sonarcloud&label=SonarCloud&server=https%3A%2F%2Fsonarcloud.io)
 
 [![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
+![](https://img.shields.io/github/license/securisec/chepy?label=License)
+
 [![](https://pepy.tech/badge/chepy)](https://pepy.tech/project/chepy)
 ![](https://img.shields.io/docker/pulls/securisec/chepy?label=Docker%20pull&logo=docker)
 

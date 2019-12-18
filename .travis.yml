@@ -22,6 +22,7 @@ script:
 - sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
 - pip install -r chepy/chepy_plugins/requirements.txt
 - pytest --disable-pytest-warnings tests_plugins/
+- python -c "from chepy import Chepy"
 - bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404 --output .bandit.json --format json
 - make -C docs/ clean html
 - sonar-scanner

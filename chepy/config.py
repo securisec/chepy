@@ -1,4 +1,5 @@
 import sys
+import logging
 import importlib
 import inspect
 import pkgutil
@@ -74,11 +75,14 @@ class ChepyConfig(object):
             my_plugins = [
                 importlib.import_module(name)
                 for finder, name, ispkg in pkgutil.iter_modules()
-                if name.startswith("chepy_")
+                if (name.startswith("chepy_") and name != "chepy_plugins")
             ]
 
             for plugin in my_plugins:
-                klass, mod = inspect.getmembers(plugin, inspect.isclass)[0]
-                loaded = getattr(plugin, klass)
-                plugins.append(loaded)
+                try:
+                    klass, mod = inspect.getmembers(plugin, inspect.isclass)[0]
+                    loaded = getattr(plugin, klass)
+                    plugins.append(loaded)
+                except:
+                    logging.warning("Error loading {}".format(plugin.__name__))
         return plugins

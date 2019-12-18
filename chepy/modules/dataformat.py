@@ -245,6 +245,30 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def to_bytes(self):
+        """Converts the data in state to bytes
+        
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy({'some': 'val', 'kl': 1}).to_bytes().o
+            b"{'some': 'val', 'kl': 1}"
+        """
+        self.state = self._convert_to_str().encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_bytes(self):
+        """Decodes bytes to string.
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self._convert_to_bytes().decode()
+        return self
+
+    @ChepyDecorators.call_stack
     def base64_encode(self, custom: str = None):
         """Encode as Base64
         
@@ -579,6 +603,16 @@ class DataFormat(ChepyCore):
             ["a", "b", "c"]
         """
         self.state = list(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def str_to_dict(self):
+        """Convert string to a dictionary
+        
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = yaml.safe_load(self._convert_to_str())
         return self
 
     @ChepyDecorators.call_stack

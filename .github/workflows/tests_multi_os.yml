@@ -51,6 +51,7 @@ jobs:
         sed -iE '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
+        python -c "from chepy import Chepy"
     - name: Test plugins ubuntu
       if: contains(matrix.os, 'ubuntu')
       run: |
@@ -58,6 +59,7 @@ jobs:
         sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
+        python -c "from chepy import Chepy"
     - name: Test plugins windows
       if: matrix.os == 'windows-latest'
       run: |
@@ -65,7 +67,8 @@ jobs:
         Set-Content -Path chepy/chepy_plugins/requirements.txt -Value (Get-Content -Path chepy/chepy_plugins/requirements.txt | Select-String -Pattern 'chepy' -NotMatch)
         pip install -r chepy/chepy_plugins/requirements.txt
         pytest --disable-pytest-warnings tests_plugins/
-        
+        python -c "from chepy import Chepy"
+
     - name: Test with bandit
       run: |
         bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404

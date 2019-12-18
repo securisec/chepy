@@ -190,8 +190,22 @@ def test_get_by_key():
     assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == "data"
 
 
+def test_to_bytes():
+    assert Chepy({"some": "val", "kl": 1}).to_bytes().o == b"{'some': 'val', 'kl': 1}"
+
+
+def test_from_bytes():
+    assert (
+        Chepy(b'{"some": "val", "kl": 1}').from_bytes().o == '{"some": "val", "kl": 1}'
+    )
+
+
 def test_str_to_list():
     assert Chepy("abc").str_to_list().o == ["a", "b", "c"]
+
+
+def test_str_to_dict():
+    assert Chepy(b"{'some': 'dict'}").str_to_dict().o == {"some": "dict"}
 
 
 def test_int_to_str():
