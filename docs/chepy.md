@@ -10,9 +10,7 @@ The **Chepy** class in the main class for Chepy, and includes all the methods fr
 ```
 
 ```eval_rst
-.. autoclass:: chepy.Chepy
+.. automodule:: chepy
     :members:
     :inherited-members:
-
-    .. automethod:: __init__
 ```
