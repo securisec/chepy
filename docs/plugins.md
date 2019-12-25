@@ -2,6 +2,8 @@
 
 Chepy allows users to extend Chepy and add plugins to it. This documentation describes how to create or load plugins in Chepy. For current official Chepy plugins, [refer to this docs](https://chepy-plugins.readthedocs.io/en/latest/), or [this repo](https://github.com/securisec/chepy_plugins). These plugins are disabled by default, but can be enabled using the config file. If an import requirement fails for any of the built in plugins, it will show a message showing which one failed. 
 
+To use the existing plugin path directory, use `cli_plugin_path` from the cli to identify the plugin path, or refer to the chepy.conf file.
+
 ## chepy.conf file
 The chepy.conf file is what controls various aspects of how chepy runs. This file can be located in the users home directory. Plugins can be enabled or disabled with `Plugins.enableplugins` in the **chepy.conf** file.
 

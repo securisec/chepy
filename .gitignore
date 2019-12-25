@@ -110,3 +110,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 sonar-project.properties.local
+slim.report.json

@@ -25,7 +25,7 @@ class ChepyConfig(object):
             c["Cli"] = {}
             cli_options = c["Cli"]
             cli_options["history_path"] = str(self.chepy_dir / "chepy_history")
-            cli_options["prompt_char"] = ">"
+            cli_options["prompt_char"] = "❯"
             cli_options["prompt_colors"] = "#00ffff #ff0000 #ffd700"
             cli_options["show_rprompt"] = "false"
             cli_options["prompt_rprompt"] = "#00ff48"

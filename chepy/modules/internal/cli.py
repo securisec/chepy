@@ -9,6 +9,7 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.formatted_text import FormattedText
 
 from chepy import Chepy
+from chepy.modules.internal.colors import yellow, red
 
 module = sys.modules[__name__]
 options = []
@@ -170,7 +171,7 @@ def cli_get_attr(fire: object, attr: str):
     if fire is not None and not isinstance(fire, Chepy):
         print_in_colors(getattr(fire, attr)())
     else:
-        print("nope")
+        print(red("Nope. That didnt work.."))
 
 
 def cli_pretty_print(fire: object):
@@ -182,7 +183,13 @@ def cli_pretty_print(fire: object):
     if fire is not None and isinstance(fire, Chepy):
         print_in_colors(pformat(fire.state))
     else:
-        print("nope")
+        print(red("Nope. That didnt work.."))
+
+
+def cli_plugin_path(config):
+    """Print the current plugin path
+    """
+    print(yellow(str(config.plugin_path)))
 
 
 def cli_show_errors(errors):

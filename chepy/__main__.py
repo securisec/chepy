@@ -260,6 +260,8 @@ def main():
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
                 if cli_method == "cli_show_errors":
                     getattr(chepy_cli, "cli_show_errors")(errors)
+                elif cli_method == "cli_plugin_path":
+                    getattr(chepy_cli, "cli_plugin_path")(config)
                 elif cli_method == "cli_go_back":
                     args_data = args_data[: -len(last_command + ["-"])]
                     print(cyan("Go back: {}".format(last_command)))
@@ -288,6 +290,8 @@ def main():
                 try:
                     last_command = prompt.split() + ["-"]
                     fire_obj = fire.Fire(Chepy, command=args_data)
+                except SystemExit:
+                    sys.exit()
                 except:
                     # go back to last working arg
                     e_type, e_msg, e_traceback = sys.exc_info()
