@@ -90,6 +90,7 @@ class Utils(ChepyCore):
             remove.append("\t")
         if form_feeds:
             remove.append("\f")
+        print(remove)
         self.state = re.sub("|".join(remove), "", self._convert_to_str())
         return self
 
@@ -347,6 +348,10 @@ class Utils(ChepyCore):
         
         Returns:
             Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("\\$ome' d@ta").unescape_string().o
+            "$ome' d@ta"
         """
         self.state = re.escape(self._convert_to_str())
         return self
@@ -357,10 +362,6 @@ class Utils(ChepyCore):
         
         Returns:
             Chepy: The Chepy object.
-
-        Examples:
-            >>> Chepy("\\$ome' d@ta").unescape_string().o
-            "$ome' d@ta"
         """
         self.state = re.sub(r"\\", "", self._convert_to_str())
         return self
