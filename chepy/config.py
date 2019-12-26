@@ -56,16 +56,39 @@ class ChepyConfig(object):
             self.plugin_path = Path("None")
 
         self.history_path = self.config["Cli"]["history_path"]
-        self.prompt_char = self.config["Cli"]["prompt_char"]
-        self.prompt_colors = self.config["Cli"]["prompt_colors"]
-        self.show_rprompt = json.loads(self.config["Cli"]["show_rprompt"])
-        self.prompt_rprompt = self.config["Cli"]["prompt_rprompt"]
-        self.prompt_bottom_toolbar = self.config["Cli"]["prompt_bottom_toolbar"]
-        self.prompt_toolbar_version = self.config["Cli"]["prompt_toolbar_version"]
-        self.prompt_toolbar_states = self.config["Cli"]["prompt_toolbar_states"]
-        self.prompt_toolbar_buffers = self.config["Cli"]["prompt_toolbar_buffers"]
-        self.prompt_toolbar_type = self.config["Cli"]["prompt_toolbar_type"]
-        self.prompt_toolbar_errors = self.config["Cli"]["prompt_toolbar_errors"]
+        self.prompt_char = self.__get_conf_value(">", "prompt_char")
+        self.prompt_colors = self.__get_conf_value(
+            "#00ffff #ff0000 #ffd700", "prompt_colors"
+        )
+        self.show_rprompt = json.loads(self.__get_conf_value("false", "show_rprompt"))
+        self.prompt_rprompt = self.__get_conf_value("#00ff48", "prompt_rprompt")
+        self.prompt_bottom_toolbar = self.__get_conf_value(
+            "#000000", "prompt_bottom_toolbar"
+        )
+        self.prompt_toolbar_version = self.__get_conf_value(
+            "#00ff48", "prompt_toolbar_version"
+        )
+        self.prompt_toolbar_states = self.__get_conf_value(
+            "#60cdd5", "prompt_toolbar_states"
+        )
+        self.prompt_toolbar_buffers = self.__get_conf_value(
+            "#ff00ff", "prompt_toolbar_buffers"
+        )
+        self.prompt_toolbar_type = self.__get_conf_value(
+            "#ffd700", "prompt_toolbar_type"
+        )
+        self.prompt_toolbar_errors = self.__get_conf_value(
+            "#ff0000", "prompt_toolbar_errors"
+        )
+
+    def __get_conf_value(self, default: str, option: str, section: str = "Cli"):
+        if self.config.has_section(section):
+            if self.config.has_option(section, option):
+                return self.config[section][option]
+            else:
+                return default
+        else:
+            return default
 
     def load_plugins(self):  # pragma: no cover
         plugins = []

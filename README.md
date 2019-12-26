@@ -86,7 +86,7 @@ pip3 install chepy
 
 ### Git
 ```bash
-git clone https://github.com/securisec/chepy.git
+git clone --recursive https://github.com/securisec/chepy.git
 cd chepy
 pip3 install -e .
 # I use -e here so that if I update later with git pull, I dont have it install it again (unless dependencies have changed)
