@@ -11,7 +11,11 @@ from configparser import ConfigParser
 class ChepyConfig(object):
     def __init__(self):
         home = Path.home()
-        self.chepy_dir = Path(home / ".chepy")
+        self.chepy_dir = (
+            Path(".chepy").resolve()
+            if Path(".chepy").exists()
+            else Path(home / ".chepy")
+        )
         self.chepy_conf = Path(self.chepy_dir / "chepy.conf")
 
         if not self.chepy_conf.exists():  # pragma: no cover
@@ -44,8 +48,10 @@ class ChepyConfig(object):
         self.config = ConfigParser()
         self.config.read(str(self.chepy_conf))
 
-        plugin_path = self.config["Plugins"]["PluginPath"]
-        self.enable_plugins = json.loads(self.config["Plugins"]["EnablePlugins"])
+        plugin_path = self.__get_conf_value("None", "PluginPath", "Plugins")
+        self.enable_plugins = json.loads(
+            self.__get_conf_value("false", "EnablePlugins", "Plugins")
+        )
 
         if self.enable_plugins:
             if plugin_path != "None":
@@ -55,7 +61,9 @@ class ChepyConfig(object):
         else:
             self.plugin_path = Path("None")
 
-        self.history_path = self.config["Cli"]["history_path"]
+        self.history_path = self.__get_conf_value(
+            str(self.chepy_dir / "chepy_history"), "history_path"
+        )
         self.prompt_char = self.__get_conf_value(">", "prompt_char")
         self.prompt_colors = self.__get_conf_value(
             "#00ffff #ff0000 #ffd700", "prompt_colors"

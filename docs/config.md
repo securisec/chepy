@@ -1,6 +1,8 @@
 # Config
 
-The Chepy config files are stored in a folder called **.chepy** in the users home directory. There are two files in it. 
+Chepy is set to look at the present working directory for a a folder called **.chepy** for config files. By default, Chepy config files are stored in a folder called **.chepy** in the users home directory. There are two files in it. 
+
+If any of the config options are missing, Chepy will automatically assign default values to it. If **.chepy** folder is detected, but config options have been set, then Chepy will automatically create a set of default config options.
 
 ## chepy.conf
 ### Plugin.enableplugins
@@ -32,3 +34,23 @@ Controls the color of the errors in the toolbar. Defaults to *#ff0000*
 
 ### chepy_history
 This file saves the history of all the commands in that have been run in the chepy cli. 
+
+### Valid chepy.conf file contents
+```
+[Plugins]
+enableplugins = false
+pluginpath = /path/to/chepy_install/chepy/chepy/chepy_plugins
+
+[Cli]
+history_path = /path/to/home/.chepy/chepy_history
+prompt_char = >
+prompt_colors = #00ffff #ff0000 #ffd700
+show_rprompt = false
+prompt_rprompt = #00ff48
+prompt_bottom_toolbar = #000000
+prompt_toolbar_version = #00ff48
+prompt_toolbar_states = #60cdd5
+prompt_toolbar_buffers = #ff00ff
+prompt_toolbar_type = #ffd700
+prompt_toolbar_errors = #ff0000
+```
