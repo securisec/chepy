@@ -1,6 +1,6 @@
 import difflib
 import regex as re
-from typing import Any
+from typing import Any, Union
 import pydash
 
 from ..core import ChepyCore, ChepyDecorators
@@ -239,11 +239,12 @@ class Utils(ChepyCore):
             raise TypeError("State is not a list")
 
     @ChepyDecorators.call_stack
-    def filter_list(self, by: str):
-        """Filter a dict or list
+    def filter_list(self, by: Union[str, dict], regex: bool = True):
+        """Filter a list by a string regex or dict key
         
         Args:
-            by (str): Required. What to filter by. Defaults to None.
+            by (Union[str, dict]): If string, supports regex. Or dictionary
+            regex (bool, optional): If pattern is a regex. Defaults to True
         
         Raises:
             TypeError: If state is not a list
@@ -256,7 +257,13 @@ class Utils(ChepyCore):
             [{"b": 2}, {"a": 1, "b": 3}]
         """
         assert isinstance(self.state, list), StateNotList()
-        self.state = pydash.filter_(self.state, by)
+        if regex:
+            pattern = by if isinstance(self.state[0], str) else by.encode()
+            self.state = [f for f in self.state if re.search(pattern, f)]
+        else:
+            self.state = pydash.filter_(self.state, by)
+        if len(self.state) == 1:
+            self.state = self.state[0]
         return self
 
     @ChepyDecorators.call_stack

@@ -86,7 +86,10 @@ def test_sorted():
 def test_filter_list():
     assert Chepy(
         '[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]'
-    ).str_list_to_list().filter_list("b").o == [{"b": 2}, {"a": 1, "b": 3}]
+    ).str_list_to_list().filter_list("b", False).o == [{"b": 2}, {"a": 1, "b": 3}]
+    assert Chepy(["a", "aa", "bb"]).filter_list('aa?').o == ['a', 'aa'] 
+    assert Chepy([b"a", b"aa", b"bb"]).filter_list('aa?').o == [b'a', b'aa'] 
+    assert Chepy([b"a", b"aa", b"bb"]).filter_list('b+').o == b'bb'
 
 
 def test_filter_dict_key():

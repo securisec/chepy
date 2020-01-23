@@ -12,6 +12,7 @@ from .modules.extractors import Extractors
 from .modules.forensics import Forensics
 from .modules.hashing import Hashing
 from .modules.language import Language
+from .modules.links import Links
 from .modules.multimedia import Multimedia
 from .modules.networking import Networking
 from .modules.other import Other
@@ -36,6 +37,7 @@ class Chepy(
     Forensics,
     Hashing,
     Language,
+    Links,
     Multimedia,
     Networking,
     Other,
