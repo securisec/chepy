@@ -1,15 +1,15 @@
 from chepy import Chepy
 
 
-def test_file_mime():
-    assert Chepy("logo.png").load_file().file_mime().o == "image/png"
+# def test_file_mime():
+#     assert Chepy("logo.png").load_file().file_mime().o == "image/png"
 
 
-def test_file_magic():
-    assert (
-        Chepy("logo.png").read_file().file_magic().o
-        == "PNG image data, 1920 x 1080, 8-bit/color RGBA, non-interlaced"
-    )
+# def test_file_magic():
+#     assert (
+#         Chepy("logo.png").read_file().file_magic().o
+#         == "PNG image data, 1920 x 1080, 8-bit/color RGBA, non-interlaced"
+#     )
 
 
 def test_get_metadata():

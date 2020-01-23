@@ -4,7 +4,6 @@ import pathlib
 import tempfile
 
 import exiftool
-import magic
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
 from hachoir.subfile.search import SearchSubfile
@@ -32,8 +31,10 @@ class Forensics(ChepyCore):
         return temp_file
 
     @ChepyDecorators.call_stack
-    def file_mime(self):
-        """Detect the file type based on magic.
+    def file_mime(self):  # pragma: no cover
+        """Detect the file type based on magic. 
+
+        This method does require python-magic or python-magic-bin to be installed. 
         
         Returns:
             Chepy: The Chepy object. 
@@ -42,21 +43,35 @@ class Forensics(ChepyCore):
             >>> Chepy("tests/files/hello").load_file().get_mime()
             INFO - application/x-executable
         """
-        m = magic.Magic(mime=True)
-        self.state = m.from_buffer(self._convert_to_bytes())
-        return self
+        try:
+            import magic
+
+            m = magic.Magic(mime=True)
+            self.state = m.from_buffer(self._convert_to_bytes())
+            return self
+        except ImportError:
+            self._error_logger("Could not import magic. Try pip install python-magic")
+            return self
 
     @ChepyDecorators.call_stack
-    def file_magic(self):
+    def file_magic(self):  # pragma: no cover
         """Get the file magic 
+
+        This method does require python-magic or python-magic-bin to be installed. 
         
         Returns:
             Chepy: The Chepy object. 
         """
-        m = magic.Magic()
-        file_magic = m.from_buffer(self._convert_to_bytes())
-        self.state = file_magic
-        return self
+        try:
+            import magic
+
+            m = magic.Magic()
+            file_magic = m.from_buffer(self._convert_to_bytes())
+            self.state = file_magic
+            return self
+        except ImportError:
+            self._error_logger("Could not import magic. Try pip install python-magic")
+            return self
 
     @ChepyDecorators.call_stack
     def get_metadata(self):
