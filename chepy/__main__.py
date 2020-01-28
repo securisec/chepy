@@ -195,8 +195,10 @@ class CustomCompleter(Completer):
                 )
                 not_chepy_obj = ""
                 if method_docs.get("returns"):
-                    if method_docs["returns"] != "Chepy":
-                        not_chepy_obj = "bg:#ffd700"
+                    if method_docs["returns"] == None:
+                        not_chepy_obj = "bg:{}".format(config.prompt_cli_method)
+                    elif method_docs["returns"] == "ChepyPlugin":
+                        not_chepy_obj = "bg:{}".format(config.prompt_plugin_method)
                 yield Completion(
                     method_name,
                     start_position=-len(word),

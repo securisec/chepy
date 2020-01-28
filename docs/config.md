@@ -30,6 +30,10 @@ Controls the color of the buffers in the toolbar. Defaults to *#ff00ff*
 Controls the color of the current state type in the toolbar. Defaults to *#ffd700*
 ### Cli.prompt_toolbar_errors
 Controls the color of the errors in the toolbar. Defaults to *#ff0000*
+### Cli.prompt_cli_method
+Controls the color of the cli methods. Defaults to *#00d700*
+### Cli.prompt_plugin_method
+Controls the color of the plugin methods. Defaults to *#30d8ff*
 
 
 ### chepy_history
