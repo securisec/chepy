@@ -21,7 +21,7 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
-from chepy.modules.internal.colors import red, yellow, cyan
+from chepy.modules.internal.colors import red, yellow, cyan, magenta
 from chepy.config import ChepyConfig
 
 config = ChepyConfig()
@@ -256,7 +256,7 @@ def main():
 
             # check and output any commands that start with cli_
             if re.match(r"^\!", prompt):
-                print(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt)))
+                print(magenta(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt))))
             elif re.search(r"^cli_.+", prompt):
                 cli_method = prompt.split()[0]
                 cli_args = re.search(r"--(\w+)\s(\w+)", prompt)

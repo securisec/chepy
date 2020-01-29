@@ -19,7 +19,7 @@ import jsonpickle
 import regex as re
 from decorator import decorator
 
-from .modules.internal.colors import yellow, cyan, green, magenta
+from .modules.internal.colors import yellow, cyan, green, magenta, blue, red
 
 
 class ChepyDecorators(object):
@@ -160,7 +160,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        logging.info(data)
+        logging.info(blue(data))
         return None
 
     def _warning_logger(self, data: str) -> None:  # pragma: no cover
@@ -172,7 +172,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        logging.warning(data)
+        logging.warning(yellow(data))
         return None
 
     def _error_logger(self, data: str) -> None:  # pragma: no cover
@@ -184,7 +184,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        logging.error(data)
+        logging.error(red(data))
         return None
 
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):

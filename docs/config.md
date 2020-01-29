@@ -34,6 +34,8 @@ Controls the color of the errors in the toolbar. Defaults to *#ff0000*
 Controls the color of the cli methods. Defaults to *#00d700*
 ### Cli.prompt_plugin_method
 Controls the color of the plugin methods. Defaults to *#30d8ff*
+### Cli.cli_info_color
+Controls the color of the output from `cli_*` methods. Defaults to *#ffb4ad*
 
 
 ### chepy_history

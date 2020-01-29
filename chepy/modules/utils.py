@@ -508,26 +508,3 @@ class Utils(ChepyCore):
         self.state = list(set(self.state))
         return self
 
-    def get_length(self):  # pragma: no cover
-        """Get the length of the current state.
-
-        This method does not change the state
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        self._info_logger(len(self.state))
-        return self
-
-    def get_keys(self):  # pragma: no cover
-        """Get the dict keys of the current state.
-
-        This method does not change the state
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        assert isinstance(self.state, dict), StateNotDict()
-        self._info_logger(self.state.keys())
-        return self
-
