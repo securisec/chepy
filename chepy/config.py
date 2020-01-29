@@ -41,7 +41,7 @@ class ChepyConfig(object):
             cli_options["prompt_toolbar_errors"] = "#ff0000"
             cli_options["prompt_cli_method"] = "#ffd700"
             cli_options["prompt_plugin_method"] = "#30d8ff"
-            cli_options["cli_info_color"] = "#ffb4ad"
+            cli_options["cli_info_color"] = "#c2c2ff"
 
             Path(str(self.chepy_dir / "chepy_history")).touch()
             if not self.chepy_conf.exists():
@@ -98,7 +98,7 @@ class ChepyConfig(object):
             "#30d8ff", "prompt_plugin_method"
         )
         self.cli_info_color = self.__get_conf_value(
-            "#ffb4ad", "cli_info_color"
+            "#c2c2ff", "cli_info_color"
         )
 
     def __get_conf_value(self, default: str, option: str, section: str = "Cli"):

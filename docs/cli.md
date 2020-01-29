@@ -2,6 +2,27 @@
 
 Chepy CLI is a fully dynamically generated cli that combines the power for python-fire and prompt_toolkit to create its cli. The cli is used very similar to how the main `Chepy` class is used as it allows for method chaining. We know from the docs that some of the methods in the `Chepy` class takes optional or required arguments. In the cli, these are passed as flags. Refer to the [examples](./examples.md) for use cases.
 
+## Cli options
+```bash
+usage: chepy [-h] [-v] [-r RECIPE] [data [data ...]]
+
+positional arguments:
+  data
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -r RECIPE, --recipe RECIPE
+```
+
+### Cli Recipes
+The cli can be run in a non interactive mode using the `-r` flag. This flag will load the recipe that is supplied and run it on the arguments that is provided.
+
+```bash
+# Example
+chepy -r test.recipe a.png
+```
+
 ### Using builtins
 
 One of the more advanced functions of the cli allows the user to use arbitrary builtin methods when the state does not contain a Chepy object. 
