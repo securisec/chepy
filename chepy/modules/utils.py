@@ -512,6 +512,7 @@ class Utils(ChepyCore):
         self._info_logger(len(self.state))
         return self
 
+    @ChepyDecorators.call_stack
     def get_dict_values(self):
         """Get the dict values of the current state as a list.
 
