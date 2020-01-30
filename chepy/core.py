@@ -610,7 +610,7 @@ class ChepyCore(object):
     def web(
         self,
         magic: bool = False,
-        cyberchef_url: str = "https://gchq.github.io/CyberChef",
+        cyberchef_url: str = "https://gchq.github.io/CyberChef/",
     ) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
 
@@ -622,22 +622,20 @@ class ChepyCore(object):
             None: Opens the current data in CyberChef
         """
         data = re.sub(
-            b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
+            "=+$", "", base64.b64encode(self._convert_to_bytes()).decode()
         )
         if magic:
             url = urljoin(
                 cyberchef_url,
-                "/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
-                    data.decode()
-                ),
+                "#recipe=Magic(3,false,false,'')&input={}".format(data),
             )
         else:
             url = urljoin(
                 cyberchef_url,
-                "/#recipe=From_Hex('None')&input={}".format(data.decode()),
+                "#recipe=&input={}".format(data),
             )
         webbrowser.open_new_tab(url)
-        return None
+        return self
 
     @ChepyDecorators.call_stack
     def http_request(
