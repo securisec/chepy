@@ -10,7 +10,7 @@ def test_image_resize():
     )
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "box").o)
-        == 4866
+        != 4900
     )
     assert (
         len(Chepy("logo.png").read_file().resize_image(128, 128, "png", "bilinear").o)

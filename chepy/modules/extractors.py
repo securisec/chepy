@@ -13,6 +13,36 @@ class Extractors(ChepyCore):
         return Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
+    def extract_hashes(self):
+        """Extract md5, sha1, sha256 and sha512 hashes
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(
+            >>>     ["60b725f10c9c85c70d97880dfe8191b3", "3f786850e387550fdab836ed7e6dc881de23001b"]
+            >>> ).extract_hashes()
+            {'md5': [b'60b725f10c9c85c70d97880dfe8191b3'], 'sha1': [b'3f786850e387550fdab836ed7e6dc881de23001b'], 'sha256': [], 'sha512': []}
+        """
+        data = self._convert_to_bytes()
+        found = {}
+        found["md5"] = re.findall(
+            rb"(?:[^a-fA-F\d]|\b)([a-fA-F\d]{32})(?:[^a-fA-F\d]|\b)", data
+        )
+        found["sha1"] = re.findall(
+            rb"(?:[^a-fA-F\d]|\b)([a-fA-F\d]{40})(?:[^a-fA-F\d]|\b)", data
+        )
+        found["sha256"] = re.findall(
+            rb"(?:[^a-fA-F\d]|\b)([a-fA-F\d]{64})(?:[^a-fA-F\d]|\b)", data
+        )
+        found["sha512"] = re.findall(
+            rb"(?:[^a-fA-F\d]|\b)([a-fA-F\d]{128})(?:[^a-fA-F\d]|\b)", data
+        )
+        self.state = found
+        return self
+
+    @ChepyDecorators.call_stack
     def extract_strings(self, length: int = 4):
         """Extract strings from state
         

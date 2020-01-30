@@ -9,10 +9,12 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.formatted_text import FormattedText
 
 from chepy import Chepy
+from chepy.config import ChepyConfig
 from chepy.modules.internal.colors import yellow, red
 
 module = sys.modules[__name__]
 options = []
+config = ChepyConfig()
 
 
 class CliCompleter(Completer):
@@ -100,7 +102,7 @@ def get_cli_options():
 
 
 def print_in_colors(out):
-    style = Style.from_dict({"cli_out": "fg:#ffb4ad"})
+    style = Style.from_dict({"cli_out": "fg:{}".format(config.cli_info_color)})
     print_formatted_text(FormattedText([("class:cli_out", str(out))]), style=style)
 
 
@@ -127,6 +129,28 @@ def cli_get_state(fire: object, index: int):
         print_in_colors(fire.states[int(0)])
     else:
         print(type(fire))
+
+
+def cli_show_length(fire: object):
+    """Get the length of the current state.
+
+    Args:
+        fire (object): The fire object
+    """
+    print_in_colors(len(fire.state))
+
+
+def cli_show_dict_keys(fire: object, pretty: bool = False):
+    """Get the dict keys of the current state.
+
+    Args:
+        fire (object): The fire object
+        pretty (bool): Pretty print output. Defaults to False
+    """
+    if pretty:
+        print_in_colors(pformat(list(fire.state.keys())))
+    else:
+        print_in_colors(fire.state.keys())
 
 
 def cli_show_states(fire: object, pretty: bool = False):

@@ -6,6 +6,17 @@ def test_extract_strings():
     assert len(Chepy("tests/files/hello").load_file().extract_strings().o) == 29
 
 
+def test_extract_hashes():
+    assert Chepy(
+        ["60b725f10c9c85c70d97880dfe8191b3", "3f786850e387550fdab836ed7e6dc881de23001b"]
+    ).extract_hashes().o == {
+        "md5": [b"60b725f10c9c85c70d97880dfe8191b3"],
+        "sha1": [b"3f786850e387550fdab836ed7e6dc881de23001b"],
+        "sha256": [],
+        "sha512": [],
+    }
+
+
 def test_extract_ips():
     assert len(Chepy("127.0.0.1\n::80").extract_ips().o) == 2
 

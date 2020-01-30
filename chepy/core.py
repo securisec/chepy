@@ -9,6 +9,7 @@ import io
 import itertools
 import subprocess
 from configparser import ConfigParser
+from urllib.parse import urljoin
 from typing import Any, Tuple, List, Union
 
 import pyperclip
@@ -18,7 +19,7 @@ import jsonpickle
 import regex as re
 from decorator import decorator
 
-from .modules.internal.colors import yellow, cyan, green, magenta
+from .modules.internal.colors import yellow, cyan, green, magenta, blue, red
 
 
 class ChepyDecorators(object):
@@ -80,6 +81,8 @@ class ChepyCore(object):
         self.bake = self.out
         #: Alias for `web`
         self.cyberchef = self.web
+        #: Alias for `load_file`
+        self.load_file = self.read_file
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
 
@@ -157,7 +160,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        logging.info(data)
+        logging.info(blue(data))
         return None
 
     def _warning_logger(self, data: str) -> None:  # pragma: no cover
@@ -169,7 +172,19 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        logging.warning(data)
+        logging.warning(yellow(data))
+        return None
+
+    def _error_logger(self, data: str) -> None:  # pragma: no cover
+        """Just a binding for logger.error
+        
+        Args:
+            data (str): Message to log
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        logging.error(red(data))
         return None
 
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
@@ -592,11 +607,16 @@ class ChepyCore(object):
         return None
 
     @ChepyDecorators.call_stack
-    def web(self, magic: bool = False) -> None:  # pragma: no cover
+    def web(
+        self,
+        magic: bool = False,
+        cyberchef_url: str = "https://gchq.github.io/CyberChef",
+    ) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
 
         Args:
             magic (bool, optional): Start with the magic method in CyberChef
+            cyberchef_url (string, optional): Base url for Cyberchef
         
         Returns:
             None: Opens the current data in CyberChef
@@ -605,12 +625,16 @@ class ChepyCore(object):
             b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
         )
         if magic:
-            url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
-                data.decode()
+            url = urljoin(
+                cyberchef_url,
+                "/CyberChef/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
+                    data.decode()
+                ),
             )
         else:
-            url = "https://gchq.github.io/CyberChef/#recipe=From_Hex('None')&input={}".format(
-                data.decode()
+            url = urljoin(
+                cyberchef_url,
+                "/CyberChef/#recipe=From_Hex('None')&input={}".format(data.decode()),
             )
         webbrowser.open_new_tab(url)
         return None
@@ -707,7 +731,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def load_file(self):
+    def read_file(self):
         """If a path is provided, read the file
         
         Returns:
@@ -725,18 +749,6 @@ class ChepyCore(object):
         except UnicodeDecodeError:
             with open(path, "rb") as f:
                 self.states[self._current_index] = bytearray(f.read())
-        return self
-
-    @ChepyDecorators.call_stack
-    def read_file(self):
-        """If a path is provided, read the file 
-
-        Alias of `load_file`.
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        self.load_file()
         return self
 
     def write_to_file(self, path: str, as_binary: bool = False) -> None:
@@ -936,7 +948,7 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def debug(self, verbose: bool = False):
-        """Debug the curren instance of Chepy
+        """Debug the current instance of Chepy
         
         This method does not change the state. 
 

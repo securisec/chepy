@@ -14,10 +14,10 @@ def read_requirements():
 
 
 requirements = read_requirements()
-if sys.platform == "linux":
-    requirements.append("python-magic")
-else:
-    requirements.append("python-magic-bin==0.4.14")
+# if sys.platform == "linux":
+#     requirements.append("python-magic")
+# else:
+#     requirements.append("python-magic-bin==0.4.14")
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, "README.md")) as f:

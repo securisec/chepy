@@ -21,7 +21,7 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
-from chepy.modules.internal.colors import red, yellow, cyan
+from chepy.modules.internal.colors import red, yellow, cyan, magenta
 from chepy.config import ChepyConfig
 
 config = ChepyConfig()
@@ -195,8 +195,10 @@ class CustomCompleter(Completer):
                 )
                 not_chepy_obj = ""
                 if method_docs.get("returns"):
-                    if method_docs["returns"] != "Chepy":
-                        not_chepy_obj = "bg:#ffd700"
+                    if method_docs["returns"] == None:
+                        not_chepy_obj = "bg:{}".format(config.prompt_cli_method)
+                    elif method_docs["returns"] == "ChepyPlugin":
+                        not_chepy_obj = "bg:{}".format(config.prompt_plugin_method)
                 yield Completion(
                     method_name,
                     start_position=-len(word),
@@ -220,6 +222,9 @@ def parse_args(args):
     parse.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
     )
+    parse.add_argument(
+        "-r", "--recipe", dest="recipe"
+    )
     parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 
@@ -231,73 +236,76 @@ def main():
     args = parse_args(sys.argv[1:])
     args_data = args.data
 
-    args_data.append("-")
+    if args.recipe:
+        print(Chepy(*args_data).load_recipe(args.recipe).o)
+    else:
+        args_data.append("-")
 
-    history_file = config.history_path
-    session = PromptSession(
-        history=FileHistory(history_file),
-        style=get_style(),
-        wrap_lines=True,
-        auto_suggest=AutoSuggestFromHistory(),
-    )
-    try:
-        while True:
-            prompt = session.prompt(
-                prompt_message(fire_obj=fire_obj),
-                bottom_toolbar=bottom_toolbar(fire_obj),
-                completer=FuzzyCompleter(
-                    merge_completers([CustomCompleter(), chepy_cli.CliCompleter()])
-                ),
-                validator=CustomValidator(),
-                rprompt=get_current_type(fire_obj),
-            )
+        history_file = config.history_path
+        session = PromptSession(
+            history=FileHistory(history_file),
+            style=get_style(),
+            wrap_lines=True,
+            auto_suggest=AutoSuggestFromHistory(),
+        )
+        try:
+            while True:
+                prompt = session.prompt(
+                    prompt_message(fire_obj=fire_obj),
+                    bottom_toolbar=bottom_toolbar(fire_obj),
+                    completer=FuzzyCompleter(
+                        merge_completers([CustomCompleter(), chepy_cli.CliCompleter()])
+                    ),
+                    validator=CustomValidator(),
+                    rprompt=get_current_type(fire_obj),
+                )
 
-            # check and output any commands that start with cli_
-            if re.match(r"^\!", prompt):
-                print(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt)))
-            elif re.search(r"^cli_.+", prompt):
-                cli_method = prompt.split()[0]
-                cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
-                if cli_method == "cli_show_errors":
-                    getattr(chepy_cli, "cli_show_errors")(errors)
-                elif cli_method == "cli_plugin_path":
-                    getattr(chepy_cli, "cli_plugin_path")(config)
-                elif cli_method == "cli_go_back":
-                    args_data = args_data[: -len(last_command + ["-"])]
-                    print(cyan("Go back: {}".format(last_command)))
-                elif cli_method == "cli_delete_history":
-                    Path(config.history_path).unlink()
-                elif cli_args:
-                    getattr(chepy_cli, cli_method)(
-                        fire_obj, **{cli_args.group(1): cli_args.group(2)}
-                    )
-                else:
-                    getattr(chepy_cli, cli_method)(fire_obj)
-
-            else:
-                for method in chepy:
-                    if not method.startswith("_") and not isinstance(
-                        getattr(Chepy, method), property
-                    ):
-                        fire.decorators._SetMetadata(
-                            getattr(Chepy, method),
-                            fire.decorators.ACCEPTS_POSITIONAL_ARGS,
-                            False,
+                # check and output any commands that start with cli_
+                if re.match(r"^\!", prompt):
+                    print(magenta(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt))))
+                elif re.search(r"^cli_.+", prompt):
+                    cli_method = prompt.split()[0]
+                    cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
+                    if cli_method == "cli_show_errors":
+                        getattr(chepy_cli, "cli_show_errors")(errors)
+                    elif cli_method == "cli_plugin_path":
+                        getattr(chepy_cli, "cli_plugin_path")(config)
+                    elif cli_method == "cli_go_back":
+                        args_data = args_data[: -len(last_command + ["-"])]
+                        print(cyan("Go back: {}".format(last_command)))
+                    elif cli_method == "cli_delete_history":
+                        Path(config.history_path).unlink()
+                    elif cli_args:
+                        getattr(chepy_cli, cli_method)(
+                            fire_obj, **{cli_args.group(1): cli_args.group(2)}
                         )
-                args_data += prompt.split()
-                if args_data[-1] != "-":
-                    args_data.append("-")
-                try:
-                    last_command = prompt.split() + ["-"]
-                    fire_obj = fire.Fire(Chepy, command=args_data)
-                except SystemExit:
-                    sys.exit()
-                except:
-                    # go back to last working arg
-                    e_type, e_msg, e_traceback = sys.exc_info()
-                    print(red(e_type.__name__), yellow(e_msg.__str__()))
-                    args_data = args_data[: -len(last_command)]
-                    continue
-    except KeyboardInterrupt:
-        print("OKBye")
-        sys.exit()
+                    else:
+                        getattr(chepy_cli, cli_method)(fire_obj)
+
+                else:
+                    for method in chepy:
+                        if not method.startswith("_") and not isinstance(
+                            getattr(Chepy, method), property
+                        ):
+                            fire.decorators._SetMetadata(
+                                getattr(Chepy, method),
+                                fire.decorators.ACCEPTS_POSITIONAL_ARGS,
+                                False,
+                            )
+                    args_data += prompt.split()
+                    if args_data[-1] != "-":
+                        args_data.append("-")
+                    try:
+                        last_command = prompt.split() + ["-"]
+                        fire_obj = fire.Fire(Chepy, command=args_data)
+                    except SystemExit:
+                        sys.exit()
+                    except:
+                        # go back to last working arg
+                        e_type, e_msg, e_traceback = sys.exc_info()
+                        print(red(e_type.__name__), yellow(e_msg.__str__()))
+                        args_data = args_data[: -len(last_command)]
+                        continue
+        except KeyboardInterrupt:
+            print("OKBye")
+            sys.exit()

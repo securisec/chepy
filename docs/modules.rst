@@ -15,6 +15,7 @@ Modules
     modules/forensics.rst
     modules/hashing.rst
     modules/language.rst
+    modules/links.rst
     modules/multimedia.rst
     modules/networking.rst
     modules/other.rst
