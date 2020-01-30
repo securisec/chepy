@@ -627,14 +627,14 @@ class ChepyCore(object):
         if magic:
             url = urljoin(
                 cyberchef_url,
-                "/CyberChef/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
+                "/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
                     data.decode()
                 ),
             )
         else:
             url = urljoin(
                 cyberchef_url,
-                "/CyberChef/#recipe=From_Hex('None')&input={}".format(data.decode()),
+                "/#recipe=From_Hex('None')&input={}".format(data.decode()),
             )
         webbrowser.open_new_tab(url)
         return None
