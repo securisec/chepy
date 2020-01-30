@@ -508,3 +508,15 @@ class Utils(ChepyCore):
         self.state = list(set(self.state))
         return self
 
+    @ChepyDecorators.call_stack
+    def get_dict_values(self):
+        """Get the dict values of the current state as a list.
+        Returns:
+            Chepy: The Chepy object.
+        Examples:
+            >>> Chepy({'some': 'dict', 'another': 'val'}).get_dict_values()
+            ['dict', 'val']
+        """
+        assert isinstance(self.state, dict), StateNotDict()
+        self.state = [val for (key, val) in self.state.items()]
+        return self

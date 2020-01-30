@@ -150,3 +150,5 @@ def test_count():
 def test_set():
     assert len(Chepy("some text").set().o) == 7
 
+def test_get_dict_values():
+    assert Chepy({'key1': 'v1', 'key2': 'v2'}).get_dict_values().output == ['v1', 'v2']
