@@ -104,7 +104,7 @@ class ChepyCore(object):
     def __str__(self):
         try:
             if isinstance(self.state, bytearray):
-                return "bytearray in state"
+                return re.sub(rb'[^\x00-\x7f]', b'.', self.state).decode()
             else:
                 return self._convert_to_str()
         except UnicodeDecodeError:  # pragma: no cover
@@ -610,7 +610,7 @@ class ChepyCore(object):
     def web(
         self,
         magic: bool = False,
-        cyberchef_url: str = "https://gchq.github.io/CyberChef",
+        cyberchef_url: str = "https://gchq.github.io/CyberChef/",
     ) -> None:  # pragma: no cover
         """Opens the current string in CyberChef on the browser as hex
 
@@ -622,22 +622,22 @@ class ChepyCore(object):
             None: Opens the current data in CyberChef
         """
         data = re.sub(
-            b"=", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
+            b"=+$", "", base64.b64encode(binascii.hexlify(self._convert_to_bytes()))
         )
         if magic:
             url = urljoin(
                 cyberchef_url,
-                "/CyberChef/#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
+                "#recipe=From_Hex('None')Magic(3,false,false,'')&input={}".format(
                     data.decode()
                 ),
             )
         else:
             url = urljoin(
                 cyberchef_url,
-                "/CyberChef/#recipe=From_Hex('None')&input={}".format(data.decode()),
+                "#recipe=From_Hex('None')&input={}".format(data.decode()),
             )
         webbrowser.open_new_tab(url)
-        return None
+        return self
 
     @ChepyDecorators.call_stack
     def http_request(

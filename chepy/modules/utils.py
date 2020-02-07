@@ -267,6 +267,26 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def filter_list_by_length(self, length: int, exact: bool=False):
+        """Filter a list by length by specifying minimum length. 
+
+        It will also return items that exceed the specified length. 
+        
+        Args:
+            length (int): Minimum length to match
+            exact (bool): Match exact length
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        assert isinstance(self.state, list), StateNotList()
+        if exact:
+            self.state = [x for x in self.state if len(str(x)) == int(length)]
+        else:
+            self.state = [x for x in self.state if len(str(x)) >= int(length)]
+        return self
+
+    @ChepyDecorators.call_stack
     def filter_dict_key(self, by: str):
         """Filter dictionary by key
         

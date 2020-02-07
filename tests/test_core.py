@@ -76,7 +76,7 @@ def test_delete_buffer():
 
 def test___str__():
     assert str(Chepy("abc")) == "abc"
-    assert str(Chepy(bytearray(b"abc"))) == "bytearray in state"
+    assert str(Chepy(bytearray(b"abc"))) == "abc"
 
 
 def test_convert_to_bytes():
@@ -87,7 +87,7 @@ def test_convert_to_bytes():
     assert Chepy(["a"])._convert_to_bytes() == b"['a']"
     assert Chepy(True)._convert_to_bytes() == b"True"
     assert Chepy(bytearray("a", "utf8"))._convert_to_bytes() == b"a"
-    assert str(Chepy(bytearray(b"abc"))) == "bytearray in state"
+    assert str(Chepy(bytearray(b"abc"))) == "abc"
 
 
 def test_convert_to_str():

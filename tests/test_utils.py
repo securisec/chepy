@@ -87,15 +87,16 @@ def test_filter_list():
     assert Chepy(
         '[{"a": 1}, {"b": 2}, {"a": 1, "b": 3}]'
     ).str_list_to_list().filter_list("b", False).o == [{"b": 2}, {"a": 1, "b": 3}]
-    assert Chepy(["a", "aa", "bb"]).filter_list('aa?').o == ['a', 'aa'] 
-    assert Chepy([b"a", b"aa", b"bb"]).filter_list('aa?').o == [b'a', b'aa'] 
-    assert Chepy([b"a", b"aa", b"bb"]).filter_list('b+').o == b'bb'
+    assert Chepy(["a", "aa", "bb"]).filter_list("aa?").o == ["a", "aa"]
+    assert Chepy([b"a", b"aa", b"bb"]).filter_list("aa?").o == [b"a", b"aa"]
+    assert Chepy([b"a", b"aa", b"bb"]).filter_list("b+").o == b"bb"
 
 
 def test_filter_dict_key():
     assert Chepy({"some": "dict", "another": "val"}).filter_dict_key("ano").o == {
         "another": "val"
     }
+
 
 def test_filter_dict_value():
     assert Chepy({b"some": b"dict", b"another": "val"}).filter_dict_value("val").o == {
@@ -149,4 +150,9 @@ def test_count():
 
 def test_set():
     assert len(Chepy("some text").set().o) == 7
+
+
+def test_filter_list_by_length():
+    assert len(Chepy([1, 2, 33, 444]).filter_list_by_length(2).o) == 2
+    assert len(Chepy([1, 2, 33, 444]).filter_list_by_length(2, True).o) == 1
 
