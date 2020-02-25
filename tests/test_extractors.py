@@ -105,7 +105,7 @@ def test_html_comments():
 
 
 def test_js_comments():
-    assert len(Chepy("tests/files/test.js").load_file().js_comments().o) == 3
+    assert len(Chepy("tests/files/test.js").load_file().javascript_comments().o) == 3
 
 
 def test_html_tag():
@@ -113,4 +113,143 @@ def test_html_tag():
         {"tag": "p", "attributes": {"someval": "someval", "ano-ther": "another"}},
         {"tag": "p", "attributes": {}},
     ]
+
+
+def test_extract_basicauth():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_auth_basic().o)
+        == 1
+    )
+
+
+def test_extract_bearerauth():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_auth_bearer().o)
+        == 1
+    )
+
+
+def test_extract_awskeyid():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_aws_keyid().o)
+        == 1
+    )
+
+
+def test_extract_s3url():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_aws_s3_url().o)
+        == 1
+    )
+
+
+def test_extract_dsaprivate():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_dsa_private().o)
+        == 1
+    )
+
+
+def test_extract_fbaccess():
+    assert (
+        len(
+            Chepy("tests/files/fake_secrets.txt")
+            .read_file()
+            .extract_facebook_access_token()
+            .o
+        )
+        == 1
+    )
+
+
+def test_extract_githubtoken():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_github().o) == 1
+    )
+
+
+def test_extract_googleapi():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_google_api().o)
+        == 1
+    )
+
+
+def test_extract_googlecaptcha():
+    assert (
+        len(
+            Chepy("tests/files/fake_secrets.txt").read_file().extract_google_captcha().o
+        )
+        == 1
+    )
+
+
+def test_extract_googleoauth():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_google_oauth().o)
+        == 1
+    )
+
+
+def test_extract_jwttoken():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_jwt_token().o)
+        == 1
+    )
+
+
+def test_extract_mailgun():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_mailgun_api().o)
+        == 1
+    )
+
+
+def test_extract_paypal():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_paypal_bt().o)
+        == 1
+    )
+
+
+def test_extract_rsaprivate():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_rsa_private().o)
+        == 1
+    )
+
+
+def test_extract_squareaccess():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_square_access().o)
+        == 1
+    )
+
+
+def test_extract_squareoauth():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_square_oauth().o)
+        == 1
+    )
+
+
+def test_extract_stripeapi():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_stripe_api().o)
+        == 2
+    )
+
+
+def test_extract_twilioapi():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_twilio_api().o)
+        == 1
+    )
+
+
+def test_extract_twiliosid():
+    assert (
+        len(Chepy("tests/files/fake_secrets.txt").read_file().extract_twilio_sid().o)
+        == 2
+    )
 

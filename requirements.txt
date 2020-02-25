@@ -13,7 +13,7 @@ jsonpickle
 parsel
 phpserialize
 Pillow
-prompt_toolkit
+prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
 pydash

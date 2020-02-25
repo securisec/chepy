@@ -38,6 +38,7 @@ class ChepyConfig(object):
             cli_options["prompt_toolbar_states"] = "#60cdd5"
             cli_options["prompt_toolbar_buffers"] = "#ff00ff"
             cli_options["prompt_toolbar_type"] = "#ffd700"
+            cli_options["prompt_toolbar_plugins"] = "#ffccbc"
             cli_options["prompt_toolbar_errors"] = "#ff0000"
             cli_options["prompt_cli_method"] = "#ffd700"
             cli_options["prompt_plugin_method"] = "#30d8ff"
@@ -87,6 +88,9 @@ class ChepyConfig(object):
         )
         self.prompt_toolbar_type = self.__get_conf_value(
             "#ffd700", "prompt_toolbar_type"
+        )
+        self.prompt_toolbar_plugins = self.__get_conf_value(
+            "#ffccbc", "prompt_toolbar_plugins"
         )
         self.prompt_toolbar_errors = self.__get_conf_value(
             "#ff0000", "prompt_toolbar_errors"

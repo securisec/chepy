@@ -283,7 +283,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def js_comments(self):
+    def javascript_comments(self):
         """Extract javascript comments
 
         Some false positives is expected because of inline // comments
@@ -325,3 +325,213 @@ class Extractors(ChepyCore):
 
         self.state = tags
         return self
+
+    @ChepyDecorators.call_stack
+    def extract_google_api(self):
+        """Extract Goolge api keys
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"AIza[0-9A-Za-z-_]{35}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_google_captcha(self):
+        """Extract Goolge captcha keys
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"6L[0-9A-Za-z-_]{38}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_google_oauth(self):
+        """Extract Goolge oauth keys
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"ya29\.[0-9A-Za-z\-_]+", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_aws_keyid(self):
+        """Extract AWS key ids
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"AKIA[0-9A-Z]{16}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_aws_s3_url(self):
+        """Extract AWS S3 URLs
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"s3\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\.s3\.amazonaws.com",
+            self._convert_to_str(),
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_facebook_access_token(self):
+        """Extract Facebook access tokens
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"EAACEdEose0cBA[0-9A-Za-z]+", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_auth_basic(self):
+        """Extract basic authentication tokens
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"[B|b]asic\s*[a-zA-Z0-9=:_\+\/-]+", self._convert_to_str()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_auth_bearer(self):
+        """Extract bearer authentication tokens
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"[b|B]earer\s*[a-zA-Z0-9_\-\.=:_\+\/]+", self._convert_to_str()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_mailgun_api(self):
+        """Extract Mailgun API key
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"key-[0-9a-zA-Z]{32}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_twilio_api(self):
+        """Extract Twilio API key
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"SK[0-9a-fA-F]{32}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_twilio_sid(self):
+        """Extract Twilio account or app sid
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"A[C|P][a-zA-Z0-9_\-]{32}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_paypal_bt(self):
+        """Extract Paypal braintree access token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}",
+            self._convert_to_str(),
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_square_oauth(self):
+        """Extract Square oauth secret token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"sq0csp-[ 0-9A-Za-z\-_]{43}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_square_access(self):
+        """Extract Square access token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"sqOatp-[0-9A-Za-z\-_]{22}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_stripe_api(self):
+        """Extract Stripe standard or restricted api token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(r"[s|r]k_live_[0-9a-zA-Z]{24}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_github(self):
+        """Extract Github access token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"[a-zA-Z0-9_-]*:[a-zA-Z0-9_\-]+@github\.com*", self._convert_to_str()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_rsa_private(self):
+        """Extract RSA private key
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"-----BEGIN RSA PRIVATE KEY-----", self._convert_to_str()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_dsa_private(self):
+        """Extract DSA private key
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"-----BEGIN DSA PRIVATE KEY-----", self._convert_to_str()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_jwt_token(self):
+        """Extract JWT token
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = re.findall(
+            r"ey[A-Za-z0-9_-]*\.[A-Za-z0-9._-]*|ey[A-Za-z0-9_\/+-]*\.[A-Za-z0-9._\/+-]*",
+            self._convert_to_str(),
+        )
+        return self
+

@@ -49,6 +49,7 @@ def get_style():
             "prompt_toolbar_states": "bg:{}".format(config.prompt_toolbar_states),
             "prompt_toolbar_buffers": "bg:{}".format(config.prompt_toolbar_buffers),
             "prompt_toolbar_type": "bg:{}".format(config.prompt_toolbar_type),
+            "prompt_toolbar_plugins": "bg:{}".format(config.prompt_toolbar_plugins),
             "prompt_toolbar_errors": "bg:{}".format(config.prompt_toolbar_errors),
         }
     )
@@ -136,6 +137,7 @@ def bottom_toolbar(fire_obj):
                 "class:prompt_toolbar_type",
                 " State: {} ".format(type(fire_obj.state).__name__),
             ),
+            ("class:prompt_toolbar_plugins", " Plugins: {} ".format(config.enable_plugins)),
             ("class:prompt_toolbar_errors", " Errors: {} ".format(len(errors))),
         ]
 
