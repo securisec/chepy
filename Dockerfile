@@ -6,7 +6,7 @@ RUN pip install -r /chepy/requirements.txt \
     && pip install python-magic virtualenv \
     && virtualenv -p python3 /chepy/venv \
     && pip install pytest pytest-cov bandit \
-    && pip install scapy markdown pefile pyelftools
+    && pip install scapy markdown pefile pyelftools pydriller
 
 COPY . /chepy/
 RUN cd /chepy \
