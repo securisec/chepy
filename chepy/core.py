@@ -82,7 +82,7 @@ class ChepyCore(object):
         #: Alias for `web`
         self.cyberchef = self.web
         #: Alias for `load_file`
-        self.load_file = self.read_file
+        self.read_file = self.load_file
         #: Holds all the methods that are called/chanined and their args
         self._stack = list()
 
@@ -648,7 +648,7 @@ class ChepyCore(object):
         headers: dict = {},
         cookies: dict = {},
     ):
-        """Get data from http request
+        """Make a http/s request
 
         Make a HTTP/S request and work with the data in Chepy. Most common http 
         methods are supported; but some methods may not provide a response body. 
@@ -714,6 +714,63 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
+    def load_from_url(
+        self,
+        method: str = "GET",
+        params: dict = {},
+        json: dict = None,
+        headers: dict = {},
+        cookies: dict = {},
+    ):
+        """Load binary content from a url
+
+        Most common http methods are supported; but some methods may not provide a response body. 
+        
+        Args:
+            method (str, optional): Request method. Defaults to 'GET'.
+            params (dict, optional): Query Args. Defaults to {}.
+            json (dict, optional): Request payload. Defaults to None.
+            headers (dict, optional): Headers for request. Defaults to {}.
+            cookies (dict, optional): Cookies for request. Defaults to {}.
+        
+        Raises:
+            NotImplementedError: If state is not a string or dictionary
+            requests.RequestException: If response status code is not 200
+        
+        Returns:
+            Chepy: A bytearray of the response content. The Chepy object.
+
+        Examples:
+            By default, this methed with make a GET request, But supports most 
+            common methods. 
+            
+                >>> c = Chepy("http://example.com/file.png").load_from_url()
+                >>> b'\\x89PNG...'
+        """
+
+        def json2str(obj):  # pragma: no cover
+            if isinstance(obj, dict):
+                return obj
+            elif isinstance(obj, str):
+                return json.loads(obj)
+            else:
+                raise NotImplementedError
+
+        params = json2str(params)
+        headers = json2str(headers)
+        cookies = json2str(cookies)
+        res = request(
+            method=method,
+            url=self.state,
+            params=params,
+            json=json,
+            headers=headers,
+            cookies=cookies,
+        )
+        self.state = io.BytesIO(res.content).read()
+        return self
+
+    @ChepyDecorators.call_stack
     def load_dir(self, pattern: str = "*"):
         """Load all file paths in a directory
         
@@ -731,8 +788,8 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def read_file(self):
-        """If a path is provided, read the file
+    def load_file(self):
+        """If a path is provided, load the file
         
         Returns:
             Chepy: The Chepy object. 
