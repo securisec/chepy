@@ -1,5 +1,6 @@
 import sys
 import inspect
+import regex as re
 from pprint import pformat, pprint
 
 from docstring_parser import parse as _parse_doc
@@ -10,7 +11,7 @@ from prompt_toolkit.formatted_text import FormattedText
 
 from chepy import Chepy
 from chepy.config import ChepyConfig
-from chepy.modules.internal.colors import yellow, red
+from chepy.modules.internal.colors import yellow, red, yellow_background
 
 module = sys.modules[__name__]
 options = []
@@ -66,6 +67,25 @@ def functions_cli():
         if inspect.isfunction(obj) and obj.__name__.startswith("cli_"):
             functions.append(obj.__name__)
     return functions
+
+
+def cli_highlight(fire: object, highlight: str):
+    """Highlight regex match for cli
+    
+    Args:
+        fire (object): The fire object.
+        highlight (str): Regex to highlight
+    """
+    current_state = fire.states[fire._current_index]
+    if fire is not None and isinstance(fire, Chepy):
+        try:
+            print(re.sub('({})'.format(highlight), yellow_background(r'\1'), str(current_state)))
+        except:
+            red('Could not highlight because state is not a string')
+        # elif type(current_state) == bytes or type(current_state) == bytearray:
+        #     print(re.sub('({})'.format(highlight).encode(), red(r'\1').encode(), current_state).decode())
+    else:
+        print(type(fire))
 
 
 def get_cli_options():
@@ -126,7 +146,7 @@ def cli_get_state(fire: object, index: int):
         index (int): Required. The index for the state
     """
     if fire is not None and isinstance(fire, Chepy):
-        print_in_colors(fire.states[int(0)])
+        print_in_colors(fire.states[int(index)])
     else:
         print(type(fire))
 

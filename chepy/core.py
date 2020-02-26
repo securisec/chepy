@@ -709,7 +709,7 @@ class ChepyCore(object):
         self.state = {
             "body": res.text,
             "status": res.status_code,
-            "headers": res.headers,
+            "headers": dict(res.headers),
         }
         return self
 
@@ -799,7 +799,7 @@ class ChepyCore(object):
             >>> # at the moment, the state only contains the string "/path/to/file"
             >>> c.load_file() # this will load the file content into the state
         """
-        path = pathlib.Path(self.state).expanduser().absolute()
+        path = pathlib.Path(str(self.state)).expanduser().absolute()
         try:
             with open(path, "r") as f:
                 self.states[self._current_index] = f.read()

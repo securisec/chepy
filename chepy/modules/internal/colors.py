@@ -1,5 +1,20 @@
 import sys
-from colorama import Fore
+from colorama import Fore, Back
+
+
+def yellow_background(s: str) -> str:  # pragma: no cover
+    """Yellow color string if tty
+    
+    Args:
+        s (str): String to color
+    
+    Returns:
+        str: Colored string
+    """
+    if sys.stdout.isatty():
+        return Back.YELLOW + Fore.BLACK + s + Fore.RESET + Back.RESET
+    else:
+        return s
 
 
 def red(s: str) -> str:  # pragma: no cover

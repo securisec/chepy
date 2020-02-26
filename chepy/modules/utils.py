@@ -181,22 +181,23 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def get_every_n(self, n: int):
-        """Get every nth item from a list or string. 
+    def select_every_n(self, n: int, start: int = 0):
+        """Select every nth item from a list or string. 
 
         Index starts at 0
         
         Args:
             n (int): n from 0
+            start (int): starting position. Defaults to 0.
         
         Returns:
             Chepy: The Chepy object. 
 
         Examples:
-            >>> Chepy(["a", 1, "lol", "b", True]).get_every_n(3)
+            >>> Chepy(["a", 1, "lol", "b", True]).select_every_n(3)
             ["a", "b"]
         """
-        self.state = self.state[0::n]
+        self.state = self.state[start::n]
         return self
 
     @ChepyDecorators.call_stack
@@ -267,7 +268,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def filter_list_by_length(self, length: int, exact: bool=False):
+    def filter_list_by_length(self, length: int, exact: bool = False):
         """Filter a list by length by specifying minimum length. 
 
         It will also return items that exceed the specified length. 

@@ -267,7 +267,7 @@ def main():
                     print(magenta(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt))))
                 elif re.search(r"^cli_.+", prompt):
                     cli_method = prompt.split()[0]
-                    cli_args = re.search(r"--(\w+)\s(\w+)", prompt)
+                    cli_args = re.search(r"--(\w+)\s([\w\W]+)", prompt)
                     if cli_method == "cli_show_errors":
                         getattr(chepy_cli, "cli_show_errors")(errors)
                     elif cli_method == "cli_plugin_path":
