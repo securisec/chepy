@@ -79,8 +79,42 @@ def test_unique():
     assert len(Chepy('["a", "a", 1]').str_list_to_list().unique().o) == 2
 
 
-def test_sorted():
-    assert Chepy(["a", "b", "1", "2"]).sorted().o == ["1", "2", "a", "b"]
+def test_sorted_list():
+    assert Chepy(["a", "b", "1", "2"]).sort_list().o == ["1", "2", "a", "b"]
+    assert Chepy(["a", "b", "1", "2"]).sort_list(reverse=True).o == ["b", "a", "2", "1"]
+
+
+def test_sort_dict_key():
+    assert Chepy(
+        {"z": "string", "a": True, "zz": 1, "aaa": {"bb": "data"}, "ccc": [1, "a"]}
+    ).sort_dict_key().o == {
+        "a": True,
+        "aaa": {"bb": "data"},
+        "ccc": [1, "a"],
+        "z": "string",
+        "zz": 1,
+    }
+    assert Chepy(
+        {"z": "string", "a": True, "zz": 1, "aaa": {"bb": "data"}, "ccc": [1, "a"]}
+    ).sort_dict_key(reverse=True).o == {
+        "zz": 1,
+        "z": "string",
+        "ccc": [1, "a"],
+        "aaa": {"bb": "data"},
+        "a": True,
+    }
+
+
+def test_sort_dict_value():
+    assert Chepy(
+        {"z": "string", "a": "True", "zz": "1", "aaa": {"bb": "data"}, "ccc": [1, "a"]}
+    ).sort_dict_value().o == {
+        "zz": "1",
+        "a": "True",
+        "ccc": [1, "a"],
+        "z": "string",
+        "aaa": {"bb": "data"},
+    }
 
 
 def test_filter_list():

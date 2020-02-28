@@ -33,7 +33,7 @@ jobs:
         git submodule update --init --recursive
         pip install -r requirements.txt
         python -m pip install --upgrade pip
-        pip install .
+        pip install .[extras]
         
     - name: Install test requirements
       run: |

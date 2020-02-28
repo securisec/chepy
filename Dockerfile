@@ -6,7 +6,7 @@ RUN pip install -r /chepy/requirements.txt \
     && pip install python-magic virtualenv \
     && virtualenv -p python3 /chepy/venv \
     && pip install pytest pytest-cov bandit \
-    && pip install scapy markdown pefile pyelftools pydriller
+    && pip install scapy markdown pefile pyelftools pydriller requests
 
 COPY . /chepy/
 RUN cd /chepy \
@@ -36,6 +36,8 @@ FROM python:3.8.0-slim
 COPY --from=0 /chepy /chepy
 RUN apt update \
     && apt install exiftool libmagic-dev -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
     && /chepy/venv/bin/chepy -v \
     && sed -i 's/enableplugins = false/enableplugins = true/' /root/.chepy/chepy.conf
 WORKDIR /data

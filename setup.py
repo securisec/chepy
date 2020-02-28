@@ -35,6 +35,7 @@ setup(
         "Documentation": "https://chepy.readthedocs.io/en/latest/",
         "Source Code": "https://github.com/securisec/chepy",
     },
+    extras_require={"extras": ["requests"]},
     packages=find_packages(exclude=(["tests", "docs"])),
     install_requires=requirements,
     classifiers=[

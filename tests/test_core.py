@@ -191,3 +191,15 @@ def test_load_from_url():
         )
         == bytes
     )
+
+
+def test_pretty():
+    assert (
+        Chepy({"a": 1, "b": 2, "c": [1, 2, 3]}).pretty().o
+        == """{
+  'a': 1,
+  'b': 2,
+  'c': [1, 2, 3]
+}"""
+    )
+

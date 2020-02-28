@@ -82,6 +82,8 @@ Chepy can be installed in a few ways.
 ### Pypi
 ```bash
 pip3 install chepy
+# optionally with extra requirements
+pip3 install chepy[extras]
 ```
 
 ### Git

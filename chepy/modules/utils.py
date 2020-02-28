@@ -1,5 +1,6 @@
 import difflib
 import regex as re
+from collections import OrderedDict
 from typing import Any, Union
 import pydash
 
@@ -205,39 +206,79 @@ class Utils(ChepyCore):
         """Get an array of unique list items
         
         Raises:
-            TypeError: If state is not a list
+            StateNotList: If state is not a list
         
         Returns:
             Chepy: The Chepy object.
         """
-        if isinstance(self.state, list):
-            self.state = pydash.uniq(self.state)
-            return self
-        else:  # pragma: no cover
-            raise TypeError("State is not a list")
+        assert isinstance(self.state, list), StateNotList()
+        self.state = pydash.uniq(self.state)
+        return self
 
     @ChepyDecorators.call_stack
-    def sorted(self, reverse: bool = False):
+    def sort_list(self, reverse: bool = False):
         """Sort a list
         
         Args:
             reverse (bool, optional): In reverse order. Defaults to False.
         
         Raises:
-            TypeError: If state is not list
+            StateNotList: If state is not list
         
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy(["a", "b", "1", "2"]).sorted().o
+            >>> Chepy(["a", "b", "1", "2"]).sort_list().o
             ["1", "2", "a", "b"]
         """
-        if isinstance(self.state, (list)):
-            self.state = sorted(self.state)
-            return self
-        else:  # pragma: no cover
-            raise TypeError("State is not a list")
+        assert isinstance(self.state, list), StateNotList()
+        self.state = sorted(
+            self.state, key=lambda v: (isinstance(v, str), v), reverse=reverse
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def sort_dict_key(self, reverse: bool = False):
+        """Sort a dictionary by key
+        
+        Args:
+            reverse (bool, optional): Reverse sort order. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy({'z': 'string', 'a': True, 'zz': 1, 'aaa': {'bb': 'data'}, 'ccc': [1,'a']})
+            >>> c.sort_dict_key(reverse=True)
+            {'zz': 1, 'z': 'string', 'ccc': [1, 'a'], 'aaa': {'bb': 'data'}, 'a': True}
+        """
+        assert isinstance(self.state, dict), StateNotDict()
+        self.state = dict(OrderedDict(sorted(self.state.items(), reverse=reverse)))
+        return self
+
+    @ChepyDecorators.call_stack
+    def sort_dict_value(self, reverse=False):
+        """Sort dictionary by value
+        
+        Args:
+            reverse (bool, optional): Reverse sort order. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy({'z': 'string', 'a': 'True', 'zz': '1', 'aaa': {'bb': 'data'}, 'ccc': [1,'a']})
+            >>> c.sort_dict_value()
+            {'zz': '1', 'a': 'True', 'ccc': [1, 'a'], 'z': 'string', 'aaa': {'bb': 'data'}}
+        """
+        assert isinstance(self.state, dict), StateNotDict()
+        self.state = dict(
+            OrderedDict(
+                sorted(self.state.items(), reverse=reverse, key=lambda x: str(x[1]))
+            )
+        )
+        return self
 
     @ChepyDecorators.call_stack
     def filter_list(self, by: Union[str, dict], regex: bool = True):
@@ -248,7 +289,7 @@ class Utils(ChepyCore):
             regex (bool, optional): If pattern is a regex. Defaults to True
         
         Raises:
-            TypeError: If state is not a list
+            StateNotList: If state is not a list
         
         Returns:
             Chepy: The Chepy object.

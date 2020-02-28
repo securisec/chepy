@@ -10,10 +10,10 @@ import itertools
 import subprocess
 from configparser import ConfigParser
 from urllib.parse import urljoin
+from prettyprinter import pformat
 from typing import Any, Tuple, List, Union
 
 import pyperclip
-from requests import request
 import ujson
 import jsonpickle
 import regex as re
@@ -104,7 +104,7 @@ class ChepyCore(object):
     def __str__(self):
         try:
             if isinstance(self.state, bytearray):
-                return re.sub(rb'[^\x00-\x7f]', b'.', self.state).decode()
+                return re.sub(rb"[^\x00-\x7f]", b".", self.state).decode()
             else:
                 return self._convert_to_str()
         except UnicodeDecodeError:  # pragma: no cover
@@ -695,6 +695,12 @@ class ChepyCore(object):
             else:
                 raise NotImplementedError
 
+        try:
+            from requests import request
+        except ImportError: # pragma: no cover
+            self._error_logger("Could not import requests. pip install requests")
+            return self
+
         params = json2str(params)
         headers = json2str(headers)
         cookies = json2str(cookies)
@@ -755,6 +761,12 @@ class ChepyCore(object):
                 return json.loads(obj)
             else:
                 raise NotImplementedError
+
+        try:
+            from requests import request
+        except ImportError: # pragma: no cover
+            self._error_logger("Could not import requests. pip install requests")
+            return self
 
         params = json2str(params)
         headers = json2str(headers)
@@ -1060,6 +1072,19 @@ class ChepyCore(object):
         self.state = subprocess.getoutput(self.state)
         return self
 
+    @ChepyDecorators.call_stack
+    def pretty(self, indent: int = 2):
+        """Prettify the state. 
+        
+        Args:
+            indent (int, optional): Indent level. Defaults to 2.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = pformat(self.state, indent=int(indent))
+        return self
+
     def plugins(self, enable: str) -> None:  # pragma: no cover
         """Use this method to enable or disable Chepy plugins. 
 
@@ -1093,3 +1118,27 @@ class ChepyCore(object):
             )
         sys.exit()
         return None
+
+    def set_plugin_path(self, path: str) -> None:  # pragma: no cover
+        """Use this method to set the path for Chepy plugins. 
+
+        Args:
+            path (str): Path to plugins directory
+
+        Returns:
+            None
+        """
+        expand_path = self._abs_path(path)
+        if expand_path.exists():
+            conf_path = pathlib.Path().home() / ".chepy" / "chepy.conf"
+            c = ConfigParser()
+            c.read(conf_path)
+            c.set("Plugins", "pluginpath", str(expand_path))
+            with open(conf_path, "w") as f:
+                c.write(f)
+            self._info_logger(green("Plugin path has been set. Restart for changes."))
+            sys.exit()
+            return None
+        else:
+            raise AttributeError("The path does not exist")
+

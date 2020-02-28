@@ -13,6 +13,7 @@ jsonpickle
 parsel
 phpserialize
 Pillow
+prettyprinter
 prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
@@ -23,6 +24,4 @@ pyperclip
 PyExifTool
 PyYAML
 regex
-requests
-requests-toolbelt
 ujson
