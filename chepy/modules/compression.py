@@ -323,3 +323,23 @@ class Compression(ChepyCore):
         """
         self.state = lzma.decompress(self._convert_to_bytes())
         return self
+
+    @ChepyDecorators.call_stack
+    def raw_inflate(self):
+        """Raw inflate data
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = zlib.decompress(self._convert_to_bytes(), -15)
+        return self
+
+    @ChepyDecorators.call_stack
+    def raw_deflate(self):
+        """Raw deflate data
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = zlib.compress(self._convert_to_bytes())[2:-4]
+        return self

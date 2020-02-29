@@ -535,3 +535,20 @@ class Extractors(ChepyCore):
         )
         return self
 
+    @ChepyDecorators.call_stack
+    def extract_base64(self, min: int = 20):
+        """Extract base64 encoded strings
+        
+        Args:
+            min (int, optional): Minium length to match. Defaults to 20.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        found = re.findall("[a-zA-Z0-9+/=]{%s,}" % str(20), self._convert_to_str())
+        if len(found) > 1: # pragma: no cover
+            self.state = found
+        else:
+            self.state = found[0]
+        return self
+

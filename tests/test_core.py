@@ -143,6 +143,15 @@ def test_recipe():
     Path(temp).unlink()
 
 
+def test_loop():
+    assert (
+        Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
+        .loop(6, "base64_decode")
+        .o
+        == b"securisec"
+    )
+
+
 def test_loop_list():
     c = Chepy(["an", "array"])
     c.loop_list("to_hex").loop_list("hmac_hash", {"key": "secret"})

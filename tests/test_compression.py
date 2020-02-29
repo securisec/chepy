@@ -133,3 +133,7 @@ def test_tar_compress():
     assert (
         len(Chepy("logo.png").read_file().tar_compress("some.png", mode="").o) > 50000
     )
+
+
+def test_raw_deflate_inflate():
+    assert Chepy("securisec").raw_deflate().raw_inflate().o == b"securisec"

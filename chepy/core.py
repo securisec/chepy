@@ -697,7 +697,7 @@ class ChepyCore(object):
 
         try:
             from requests import request
-        except ImportError: # pragma: no cover
+        except ImportError:  # pragma: no cover
             self._error_logger("Could not import requests. pip install requests")
             return self
 
@@ -764,7 +764,7 @@ class ChepyCore(object):
 
         try:
             from requests import request
-        except ImportError: # pragma: no cover
+        except ImportError:  # pragma: no cover
             self._error_logger("Could not import requests. pip install requests")
             return self
 
@@ -913,6 +913,40 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
+    def loop(self, iterations: int, callback: str, args: dict = {}):
+        """Loop and apply callback n times
+        
+        Args:
+            iterations (int): Number of iterations to loop
+            callback (str): The Chepy method to loop over
+            args (dict, optional): Optional arguments for the callback. Defaults to {}.
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
+            >>> c.loop(iterations=6, callback='hmac_hash', args={'key': 'secret'})
+            securisec
+        """
+        assert isinstance(callback, str), "Callback must be a string"
+        assert isinstance(iterations, int), "Iterations must be an intiger"
+        assert isinstance(args, dict), "Args must be a dick"
+
+        stack_loop_index = next(
+            itertools.dropwhile(
+                lambda x: self._stack[x]["function"] != "loop",
+                reversed(range(len(self._stack))),
+            )
+        )
+
+        for _ in range(iterations):
+            d = getattr(self, callback)(**args)
+
+        self._stack = self._stack[: stack_loop_index + 1]
+        return self
+
+    @ChepyDecorators.call_stack
     def loop_list(self, callback: str, args: dict = {}):
         """Loop over an array and run a Chepy method on it
         
@@ -932,7 +966,7 @@ class ChepyCore(object):
             ['5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e', '30d75bf34740e8781cd4ec7b122e3efd8448e270']
         """
         assert isinstance(self.state, list), "State is not a list"
-        assert isinstance(callback, str), "Callback must be a"
+        assert isinstance(callback, str), "Callback must be a string"
         hold = []
         current_state = self.state
         # find the last index that this method was run

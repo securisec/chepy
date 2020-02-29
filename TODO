@@ -1,4 +1,7 @@
 
 Todo:
+  ✔ raw inflate and deflate
+  ✔ extract base64 method
   ✔ sort dict by key or value
   ✔ Change sort list to be able to sort by any data type
+  ✔ loop method to loop over the same thing
