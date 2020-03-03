@@ -940,7 +940,7 @@ class ChepyCore(object):
             )
         )
 
-        for _ in range(iterations):
+        for _ in range(int(iterations)):
             d = getattr(self, callback)(**args)
 
         self._stack = self._stack[: stack_loop_index + 1]
@@ -992,7 +992,8 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def loop_dict(self, keys: list, callback: str, args: dict = {}):
-        """Loop over a dictionary and apply the callback to the value
+        """
+        Loop over a dictionary and apply the callback to the value
         
         Args:
             keys (list): List of keys to match

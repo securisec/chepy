@@ -1,7 +1,11 @@
 
 Todo:
-  ✔ raw inflate and deflate
-  ✔ extract base64 method
-  ✔ sort dict by key or value
-  ✔ Change sort list to be able to sort by any data type
-  ✔ loop method to loop over the same thing
+  ☐ cyberchef recipe to chepy recipe converter
+Archive:
+  ✔ get help for a method with ? @project(Todo)
+  ✔ raw inflate and deflate @project(Todo)
+  ✔ extract base64 method @project(Todo)
+  ✔ sort dict by key or value @project(Todo)
+  ✔ Change sort list to be able to sort by any data type @project(Todo)
+  ✔ loop method to loop over the same thing @project(Todo)
+  ✔ allow comments in cli @project(Todo)

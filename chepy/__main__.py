@@ -21,7 +21,7 @@ from prompt_toolkit import PromptSession
 from chepy import Chepy
 from chepy.__version__ import __version__
 import chepy.modules.internal.cli as chepy_cli
-from chepy.modules.internal.colors import red, yellow, cyan, magenta
+from chepy.modules.internal.colors import red, yellow, cyan, magenta, green
 from chepy.config import ChepyConfig
 
 config = ChepyConfig()
@@ -137,7 +137,10 @@ def bottom_toolbar(fire_obj):
                 "class:prompt_toolbar_type",
                 " State: {} ".format(type(fire_obj.state).__name__),
             ),
-            ("class:prompt_toolbar_plugins", " Plugins: {} ".format(config.enable_plugins)),
+            (
+                "class:prompt_toolbar_plugins",
+                " Plugins: {} ".format(config.enable_plugins),
+            ),
             ("class:prompt_toolbar_errors", " Errors: {} ".format(len(errors))),
         ]
 
@@ -145,7 +148,7 @@ def bottom_toolbar(fire_obj):
 class CustomValidator(Validator):
     def validate(self, document):
         text = document.text.split()
-        if document.text.startswith("!"):
+        if re.search(r"^(!|#|\?)", document.text):
             pass
         elif len(text) > 1:
             if not text[-2].startswith("--"):
@@ -224,9 +227,7 @@ def parse_args(args):
     parse.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
     )
-    parse.add_argument(
-        "-r", "--recipe", dest="recipe"
-    )
+    parse.add_argument("-r", "--recipe", dest="recipe")
     parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 
@@ -265,6 +266,14 @@ def main():
                 # check and output any commands that start with cli_
                 if re.match(r"^\!", prompt):
                     print(magenta(subprocess.getoutput(re.sub(r"^\!\s?", "", prompt))))
+                # check if line is a comment
+                elif re.match(r"^#", prompt):
+                    print(cyan(prompt))
+                # get help for a method
+                elif re.match(r"^\?", prompt):
+                    _method_name = re.match(r"^\?(\s?)+([\w_]+)", prompt).group(2)
+                    chepy_cli.get_doc(_method_name)
+                # check if method called is a cli method
                 elif re.search(r"^cli_.+", prompt):
                     cli_method = prompt.split()[0]
                     cli_args = re.search(r"--(\w+)\s([\w\W]+)", prompt)
@@ -300,6 +309,9 @@ def main():
                     try:
                         last_command = prompt.split() + ["-"]
                         fire_obj = fire.Fire(Chepy, command=args_data)
+                    # handle required args for methods
+                    except fire.core.FireExit:
+                        args_data = args_data[: -len(last_command)]
                     except SystemExit:
                         sys.exit()
                     except:
@@ -309,5 +321,5 @@ def main():
                         args_data = args_data[: -len(last_command)]
                         continue
         except KeyboardInterrupt:
-            print("OKBye")
+            print(green("\nOKBye"))
             sys.exit()

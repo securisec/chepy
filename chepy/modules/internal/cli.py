@@ -69,6 +69,14 @@ def functions_cli():
     return functions
 
 
+def get_doc(method: str):
+    """Get docs for a method"""
+    try:
+        print(yellow(getattr(Chepy, method).__doc__))
+    except:
+        print(red(pformat("Could not find docs...")))
+
+
 def cli_highlight(fire: object, highlight: str):
     """Highlight regex match for cli
     
