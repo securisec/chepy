@@ -1,5 +1,6 @@
 import difflib
 import regex as re
+import exrex
 from collections import OrderedDict
 from typing import Any, Union
 import pydash
@@ -568,5 +569,21 @@ class Utils(ChepyCore):
             Chepy: The Chepy object. 
         """
         self.state = list(set(self.state))
+        return self
+
+    @ChepyDecorators.call_stack
+    def regex_to_str(self, all_combo: bool = False):
+        """Convert a regex to a matching string
+        
+        Args:
+            all_combo (bool, optional): Generate all combos that match regex. Defaults to False.
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        if all_combo:
+            self.state = list(exrex.generate(self._convert_to_str()))
+        else:
+            self.state = exrex.getone(self._convert_to_str())
         return self
 

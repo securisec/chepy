@@ -4,6 +4,7 @@ crccheck
 decorator
 docstring-parser
 emoji
+exrex
 fire==0.2.1
 hachoir==3.1.0
 hashid
@@ -13,7 +14,6 @@ jsonpickle
 parsel
 phpserialize
 Pillow
-prettyprinter
 prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
@@ -21,7 +21,6 @@ pydash
 pyjwt
 pyOpenSSL
 pyperclip
-PyExifTool
 PyYAML
 regex
 ujson

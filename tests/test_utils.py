@@ -190,3 +190,8 @@ def test_filter_list_by_length():
     assert len(Chepy([1, 2, 33, 444]).filter_list_by_length(2).o) == 2
     assert len(Chepy([1, 2, 33, 444]).filter_list_by_length(2, True).o) == 1
 
+
+def test_regex_to_str():
+    assert len(Chepy("lol([a-c])").regex_to_str().o) == 4
+    assert len(Chepy("lol([a-c])").regex_to_str(all_combo=True).o) == 3
+

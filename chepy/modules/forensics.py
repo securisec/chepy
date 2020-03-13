@@ -3,7 +3,6 @@ import logging
 import pathlib
 import tempfile
 
-import exiftool
 from hachoir.parser import createParser
 from hachoir.metadata import extractMetadata
 from hachoir.subfile.search import SearchSubfile
@@ -137,18 +136,4 @@ class Forensics(ChepyCore):
         subfile.loadParsers()
         subfile.main()
         # pathlib.Path(filename).unlink()
-        return self
-
-    @ChepyDecorators.call_stack
-    def get_exif(self):  # pragma: no cover
-        """Extract EXIF data from a file
-        
-        Returns:
-            Chepy: The Chepy object. 
-        """
-        filename = self._temp_file()
-        with exiftool.ExifTool() as et:
-            exif = et.get_metadata(filename)
-            if exif:
-                self.state = exif
         return self

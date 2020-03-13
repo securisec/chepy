@@ -292,7 +292,7 @@ class DataFormat(ChepyCore):
         if custom is not None:
             x = base64.b64encode(self._convert_to_bytes())
             std_base64chars = (
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
             )
             self.state = bytes(
                 str(x)[2:-1].translate(str(x)[2:-1].maketrans(std_base64chars, custom)),
@@ -326,12 +326,18 @@ class DataFormat(ChepyCore):
         """
         if custom is not None:
             std_base64chars = (
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
             )
             c = self._convert_to_str().translate(str.maketrans(custom, std_base64chars))
             self.state = base64.b64decode(c.encode())
         else:
-            self.state = base64.b64decode(self._convert_to_bytes())
+            try:
+                self.state = base64.b64decode(self._convert_to_bytes())
+            except binascii.Error:
+                try:
+                    self.state = base64.b64decode(self._convert_to_bytes() + b"=")
+                except binascii.Error:  # pragma: no cover
+                    self.state = base64.b64decode(self._convert_to_bytes() + b"==")
         return self
 
     @ChepyDecorators.call_stack

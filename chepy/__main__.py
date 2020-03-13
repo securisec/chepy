@@ -312,6 +312,8 @@ def main():
                     # handle required args for methods
                     except fire.core.FireExit:
                         args_data = args_data[: -len(last_command)]
+                    except TypeError as e:
+                        print(red(e.message))
                     except SystemExit:
                         sys.exit()
                     except:

@@ -90,7 +90,7 @@ def test_base64_encode():
     assert (
         Chepy("some random? data")
         .base64_encode(
-            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
         )
         .o
         == b"QqxhNG/mMKtYPqoz64FVR42="
@@ -98,11 +98,11 @@ def test_base64_encode():
 
 
 def test_base64_decode():
-    assert Chepy("c29tZSByYW5kb20/IGRhdGE=").base64_decode().o == b"some random? data"
+    assert Chepy("c29tZSByYW5kb20/IGRhdGE").base64_decode().o == b"some random? data"
     assert (
         Chepy("QqxhNG/mMKtYPqoz64FVR42=")
         .base64_decode(
-            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
         )
         .o
         == b"some random? data"

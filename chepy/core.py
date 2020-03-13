@@ -10,7 +10,7 @@ import itertools
 import subprocess
 from configparser import ConfigParser
 from urllib.parse import urljoin
-from prettyprinter import pformat
+from pprint import pformat
 from typing import Any, Tuple, List, Union
 
 import pyperclip
@@ -1108,7 +1108,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def pretty(self, indent: int = 2):
+    def pretty(self, indent: int = 2): # pragma: no cover
         """Prettify the state. 
         
         Args:
