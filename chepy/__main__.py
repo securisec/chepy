@@ -227,7 +227,7 @@ def parse_args(args):
     parse.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
     )
-    parse.add_argument("-r", "--recipe", dest="recipe")
+    parse.add_argument("-r", "--recipe", dest="recipe", help="Run a Chepy recipe and exit")
     parse.add_argument("data", nargs="*")
     return parse.parse_args(args)
 

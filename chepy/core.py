@@ -792,11 +792,8 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.states = {
-            x[0]: str(x[1])
-            for x in enumerate(pathlib.Path(self.state).glob(pattern))
-            if x[1].is_file()
-        }
+        files = [x for x in pathlib.Path(self.state).glob(pattern) if x.is_file()]
+        self.states = {x[0]: str(x[1]) for x in enumerate(files) if x[1].is_file()}
         return self
 
     @ChepyDecorators.call_stack
@@ -1108,7 +1105,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def pretty(self, indent: int = 2): # pragma: no cover
+    def pretty(self, indent: int = 2):  # pragma: no cover
         """Prettify the state. 
         
         Args:

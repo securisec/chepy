@@ -303,7 +303,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_decode(self, custom: str = None):
+    def base64_decode(self, custom: str = None, fix_padding: bool = True):
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a 
@@ -313,6 +313,7 @@ class DataFormat(ChepyCore):
 
         Args:
             custom (str, optional): Provide a custom charset to base64 with
+            fix_padding (bool, optional): If padding error, add padding. Defaults to True
         
         Returns:
             Chepy: The Chepy object. 
@@ -334,10 +335,15 @@ class DataFormat(ChepyCore):
             try:
                 self.state = base64.b64decode(self._convert_to_bytes())
             except binascii.Error:
-                try:
-                    self.state = base64.b64decode(self._convert_to_bytes() + b"=")
-                except binascii.Error:  # pragma: no cover
-                    self.state = base64.b64decode(self._convert_to_bytes() + b"==")
+                if fix_padding:
+                    try:
+                        self._warning_logger("Padding error. Adding =")
+                        self.state = base64.b64decode(self._convert_to_bytes() + b"=")
+                    except binascii.Error:  # pragma: no cover
+                        self._warning_logger("Padding error. Adding ==")
+                        self.state = base64.b64decode(self._convert_to_bytes() + b"==")
+                else:  # pragma: no cover
+                    raise
         return self
 
     @ChepyDecorators.call_stack

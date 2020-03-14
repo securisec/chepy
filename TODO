@@ -5,12 +5,9 @@ Cli:
   ☐ write to file with prompt toolkit path autocomplete
 
 Enhance:
-  ✔ incorrect padding in base64
-    ✔ optionally disable with arg
 
 Methods:
   ☐ magic method from cyberchef
-  ✔ exrex for regex based generation. arg for all combos
 
 Github Actions:
   ☐ build pyinstaller artifact for osx
@@ -27,6 +24,9 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ incorrect padding in base64 @project(Enhance)
+  ✔ optionally disable with arg @project(Enhance)
+  ✔ exrex for regex based generation. arg for all combos @project(Methods)
   ✔ raw inflate and deflate @project(Methods)
   ✔ extract base64 method @project(Methods)
   ✔ sort dict by key or value @project(Methods)
