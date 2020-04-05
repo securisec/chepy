@@ -23,4 +23,5 @@ pyOpenSSL
 pyperclip
 PyYAML
 regex
+typing_extensions
 ujson

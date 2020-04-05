@@ -23,6 +23,19 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, "README.md")) as f:
     long_description = f.read()
 
+core_extra_deps = ["requests"]
+
+plugin_deps = [
+    "scapy",
+    "Markdown",
+    "chepy",
+    "pefile",
+    "pyelftools",
+    "ua-parser==0.8.0",
+    "pydriller",
+    "pyexiftool",
+]
+
 setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -35,7 +48,7 @@ setup(
         "Documentation": "https://chepy.readthedocs.io/en/latest/",
         "Source Code": "https://github.com/securisec/chepy",
     },
-    extras_require={"extras": ["requests"]},
+    extras_require={"extras": core_extra_deps + plugin_deps},
     packages=find_packages(exclude=(["tests", "docs"])),
     install_requires=requirements,
     classifiers=[

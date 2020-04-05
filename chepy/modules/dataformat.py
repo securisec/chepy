@@ -7,6 +7,7 @@ import ujson
 import yaml
 import regex as re
 import hexdump
+from typing import Union
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
@@ -16,11 +17,11 @@ from chepy.modules.internal.constants import Encoding
 
 class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
-    def list_to_str(self, join_by=" "):
+    def list_to_str(self, join_by: Union[str, bytes]=" "):
         """Join an array by `join_by`
         
         Args:
-            join_by (str, optional): String character to join by, by default ' '
+            join_by (Union[str, bytes], optional): String character to join by, by default ' '
         
         Returns:
             Chepy: The Chepy object. 
@@ -48,11 +49,11 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def join_list(self, by: str = ""):
+    def join_list(self, by: Union[str, bytes] = ""):
         """Join a list with specified character
         
         Args:
-            by (str): What to join with. Defaults to ""
+            by (Union[str, bytes], optional): What to join with. Defaults to ""
         
         Returns:
             Chepy: The Chepy object. 

@@ -192,3 +192,41 @@ def test_scrypt_hash():
         Chepy("abc").scrypt_hash(salt="", key_length=16).out()
         == "f352f3374cf4e344dde4108b96985248"
     )
+
+
+def test_derive_pbkdf2_key():
+    assert (
+        Chepy(".")
+        .derive_pbkdf2_key(
+            "mR3m", "d9016d44c374f5fb62604683f4d61578", show_full_key=True
+        )
+        .o[:10]
+        == "7c8898f222"
+    )
+    assert (
+        Chepy(".").derive_pbkdf2_key("mR3m", "d9016d44c374f5fb62604683f4d61578").o
+        == "7c8898f22239ce49aad28e6d16266b8dc1d681f86d2a56c76ebad5cfac1b0dd6"
+    )
+    assert (
+        Chepy(".")
+        .derive_pbkdf2_key("mR3m", "d9016d44c374f5fb62604683f4d61578", hash_type="md5")
+        .o[:10]
+        == "f7918edc04"
+    )
+    assert (
+        Chepy(".")
+        .derive_pbkdf2_key(
+            "mR3m", "d9016d44c374f5fb62604683f4d61578", hash_type="sha256"
+        )
+        .o[:10]
+        == "16b0a769cb"
+    )
+    assert (
+        Chepy(".")
+        .derive_pbkdf2_key(
+            "mR3m", "d9016d44c374f5fb62604683f4d61578", hash_type="sha512"
+        )
+        .o[:10]
+        == "6d2a9c4b24"
+    )
+

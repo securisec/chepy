@@ -140,7 +140,7 @@ class ChepyCore(object):
         """
         return io.BytesIO(self._convert_to_bytes())
 
-    def _abs_path(self, path: str) -> str:
+    def _abs_path(self, path: str):
         """Returns the absolute path by expanding home dir
         
         Args:
@@ -220,7 +220,7 @@ class ChepyCore(object):
             self.change_state(i)
             for method in methods:
                 if type(method[0]).__name__ == "method":
-                    method_name = method[0].__name__
+                    method_name = method[0].__name__  # type: ignore
                 elif isinstance(method[0], str):
                     method_name = method[0]
                 if len(method) > 1:
@@ -411,14 +411,14 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def substring(self, pattern: str, group: int = 0):
+    def substring(self, pattern: Union[str, bytes], group: int = 0):
         """Choose a substring from current state as string 
 
         The preceeding methods will only run on the substring and 
         not the original state. Group capture is supported. 
         
         Args:
-            pattern (str): Pattern to match.
+            pattern (Union[str, bytes]): Pattern to match.
             group (int, optional): Group to match. Defaults to 0.
         
         Returns:
@@ -427,7 +427,7 @@ class ChepyCore(object):
         self.state = re.search(pattern, self._convert_to_str()).group(group)
         return self
 
-    def _convert_to_bytes(self) -> None:
+    def _convert_to_bytes(self) -> bytes:
         """This method is used to coerce the curret object in 
         the state variable into a string. The method should be 
         called inside any method that operates on a string object 
@@ -455,13 +455,13 @@ class ChepyCore(object):
             # todo check more types here
             raise NotImplementedError
 
-    def _convert_to_bytearray(self):
+    def _convert_to_bytearray(self) -> bytearray:
         """Attempts to coerce the current state into a 
         `bytesarray` object
         """
         return bytearray(self._convert_to_bytes())
 
-    def _convert_to_str(self):
+    def _convert_to_str(self) -> str:
         """This method is used to coerce the curret object in 
         the state variable into bytes. The method should be 
         called inside any method that operates on a bytes object 
@@ -489,7 +489,7 @@ class ChepyCore(object):
             # todo check more types here
             raise NotImplementedError
 
-    def _convert_to_int(self):
+    def _convert_to_int(self) -> int:
         """This method is used to coerce the curret object in 
         the state variable into an int. The method should be 
         called inside any method that operates on a int types 
@@ -637,7 +637,7 @@ class ChepyCore(object):
                 "#recipe=From_Hex('None')&input={}".format(data.decode()),
             )
         webbrowser.open_new_tab(url)
-        return self
+        return None
 
     @ChepyDecorators.call_stack
     def http_request(
@@ -797,8 +797,11 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def load_file(self):
+    def load_file(self, binary_mode: bool = False):
         """If a path is provided, load the file
+        
+        Args:
+            binary_mode (bool, optional): Force load in binary mode.
         
         Returns:
             Chepy: The Chepy object. 
@@ -809,37 +812,34 @@ class ChepyCore(object):
             >>> c.load_file() # this will load the file content into the state
         """
         path = pathlib.Path(str(self.state)).expanduser().absolute()
-        try:
-            with open(path, "r") as f:
-                self.states[self._current_index] = f.read()
-        except UnicodeDecodeError:
+        if binary_mode:
             with open(path, "rb") as f:
                 self.states[self._current_index] = bytearray(f.read())
+        else:
+            try:
+                with open(path, "r") as f:  # type: ignore
+                    self.states[self._current_index] = f.read()
+            except UnicodeDecodeError:
+                with open(path, "rb") as f:
+                    self.states[self._current_index] = bytearray(f.read())
         return self
 
-    def write_to_file(self, path: str, as_binary: bool = False) -> None:
+    def write_to_file(self, path: str) -> None:
         """Save the state to disk. Return None.
         
         Args:
             path (str): The file path to save in.
-            as_binary (bool, optional): If file should be saved as a binary file. Defaults to False.
         
         Returns:
             None: Returns None
 
         Examples:
             >>> c = Chepy("some data").write_to_file('/some/path/file', as_binary=True)
-            >>> # use the alias
-            >>> c = Chepy("some data").write('/some/path/file', as_binary=True)
         """
-        if as_binary:
-            mode = "wb+"
-        else:
-            mode = "w+"
         if isinstance(path, bytes):  # pragma: no cover
             path = path.decode()
-        with open(str(self._abs_path(path)), mode) as f:
-            f.write(self.state)
+        with open(str(self._abs_path(path)), "w+") as f:
+            f.write(self._convert_to_str())
         self._info_logger("File written to {}".format(self._abs_path(path)))
         return None
 
@@ -949,7 +949,7 @@ class ChepyCore(object):
         
         Args:
             callback (str): Chepy method as string
-            args (dict, optional): Dictionary of args. Defaults to {}.
+            args (dict, optional): Dictionary of args. If in cli, dont use spaces. Defaults to {}.
         
         Returns:
             Chepy: The Chepy object
@@ -973,6 +973,8 @@ class ChepyCore(object):
                 reversed(range(len(self._stack))),
             )
         )
+        if isinstance(args, str):  # pragma: no cover
+            args = ujson.loads(args)
         try:
             for index, data in enumerate(current_state):
                 self.state = current_state[index]
@@ -993,9 +995,9 @@ class ChepyCore(object):
         Loop over a dictionary and apply the callback to the value
         
         Args:
-            keys (list): List of keys to match
+            keys (list): List of keys to match. If in cli, dont use spaces.
             callback (str): Chepy method as string
-            args (dict, optional): Dictionary of args. Defaults to {}.
+            args (dict, optional): Dictionary of args. If in cli, dont use spaces. Defaults to {}.
         
         Returns:
             Chepy: The Chepy object. 
@@ -1017,8 +1019,6 @@ class ChepyCore(object):
                 {"another": "aaaa"},
             ]
         """
-        assert isinstance(keys, list), "Keys needs to be a list of keys"
-        assert isinstance(args, dict), "Args needs to be a dict"
         assert isinstance(callback, str), "Callback must be a string"
         hold = {}
         current_state = self.state
@@ -1029,6 +1029,12 @@ class ChepyCore(object):
                 reversed(range(len(self._stack))),
             )
         )
+
+        if isinstance(keys, str):  # pragma: no cover
+            keys = ujson.loads(keys)
+
+        if isinstance(args, str):  # pragma: no cover
+            args = ujson.loads(args)
         try:
             dict_keys = current_state.keys()
             for key in keys:
@@ -1173,4 +1179,3 @@ class ChepyCore(object):
             return None
         else:
             raise AttributeError("The path does not exist")
-

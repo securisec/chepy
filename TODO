@@ -1,3 +1,13 @@
+Fix:
+
+Code:
+  ☐ add more examples in docstrings
+
+New ideas:
+  ☐ rubber ducky encode/decode
+  ✔ derive pbkdf2 key
+  ☐ save registers https://t.co/pBNRufibY8?amp=1 
+
 Cli:
   ☐ optionally show output window in a split screen window
   ☐ lower the chepy prompt lower. that empty space is not being used
@@ -24,6 +34,9 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ fix zip header @project(New ideas)
+  ✘ switch to mypy as linter @project(Code)
+  ✔ load_file with binary flag @project(Enhance)
   ✔ incorrect padding in base64 @project(Enhance)
   ✔ optionally disable with arg @project(Enhance)
   ✔ exrex for regex based generation. arg for all combos @project(Methods)

@@ -115,9 +115,6 @@ def test_out_as_bytes():
 
 
 def test_write_to_file():
-    Chepy(b"\x41").write_to_file(".test", as_binary=True)
-    with open(".test", "r") as f:
-        assert f.read() == "A"
     Chepy("A").write_to_file(".test")
     with open(".test", "r") as f:
         assert f.read() == "A"
@@ -126,6 +123,10 @@ def test_write_to_file():
 
 def test_load_dir():
     assert len(Chepy("tests/files/").load_dir().states) >= 10
+
+
+def test_load_file_binary():
+    assert type(Chepy("tests/files/pkcs12").load_file(True).o) == bytearray
 
 
 def test_recipe():

@@ -2,11 +2,14 @@ import binascii
 import hmac
 import hashlib
 import hashid
-from Crypto.Hash import MD2, MD4, MD5, SHA512
+from typing import Union
+from typing_extensions import Literal
+from Crypto.Hash import MD2, MD4, MD5, SHA512, SHA1, SHA256
 from Crypto.Hash import keccak
 from Crypto.Hash import SHAKE128, SHAKE256
 from Crypto.Hash import RIPEMD
 from Crypto.Hash import BLAKE2b, BLAKE2s
+from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Protocol.KDF import bcrypt as _crypto_bcrypt
 from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
 from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
@@ -99,6 +102,10 @@ class Hashing(ChepyCore):
 
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("A").sha2_512().out()
+            21b4f4bd9e64ed355c3eb676a28ebedaf6d8f17bdc365995b319097153044080516bd083bfcce66121a3072646994c8430cc382b8dc543e84880183bf856cff5
         """
         self.state = hashlib.sha512(self._convert_to_bytes()).hexdigest()
         return self
@@ -557,6 +564,63 @@ class Hashing(ChepyCore):
             )
 
         self.state = h.hexdigest()
+        return self
+
+    @ChepyDecorators.call_stack
+    def derive_pbkdf2_key(
+        self,
+        password: Union[str, bytes],
+        salt: Union[str, bytes],
+        key_size: int = 256,
+        iterations: int = 1000,
+        hash_type: Literal["md5", "sha1", "sha256", "sh512"] = "sha1",
+        hex_salt: bool = True,
+        show_full_key: bool = False,
+    ):
+        """Derive a PBKDF2 key
+        
+        Args:
+            password (Union[str, bytes]): Password
+            salt (Union[str, bytes]): Salt
+            key_size (int, optional): Key size. Defaults to 256.
+            iterations (int, optional): Number of iterations. Defaults to 1000.
+            hash_type (Literal[, optional): Hash type. Defaults to "sha1".
+            hex_salt (bool, optional): If salt is in hex format. Defaults to True.
+            show_full_key (bool, optional): Show AES256 64 bit key only. Defaults to False.
+        
+        Raises:
+            TypeError: If hash type is not one of md5, sha1, sha256, sha512
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy(".").derive_pbkdf2_key("mR3m", "d9016d44c374f5fb62604683f4d61578").o[:10]
+            "7c8898f222"
+        """        
+        if isinstance(salt, str):
+            salt = salt.encode()
+
+        if hex_salt:
+            salt = binascii.unhexlify(salt)
+
+        if hash_type == "md5":
+            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=MD5)
+        elif hash_type == "sha1":
+            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA1)
+        elif hash_type == "sha256":
+            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA256)
+        elif hash_type == "sha512":
+            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA512)
+        else:  # pragma: no cover
+            raise TypeError(
+                "Currently supported digests are md5, sha1, sha256 and sha512"
+            )
+
+        if show_full_key:
+            self.state = h.hex()
+        else:
+            self.state = h.hex()[:64]
         return self
 
     @ChepyDecorators.call_stack

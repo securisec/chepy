@@ -5,12 +5,25 @@ import lzma
 import tarfile
 import zlib
 import zipfile
+import binascii
 from ..core import ChepyCore, ChepyDecorators
 
 
 class Compression(ChepyCore):
     def __tar_modes(self, mode):  # pragma: no cover
         assert mode in ["gz", "bz2", "xz", ""], "Valid modes are gz, bz2, xz"
+
+    @ChepyDecorators.call_stack
+    def fix_zip_header(self):
+        """Fix the first 4 bytes of a zip file
+        
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        data = bytearray(binascii.hexlify(self._convert_to_bytes()))
+        data[0:8] = b'504b0304'
+        self.state = binascii.unhexlify(data)
+        return self
 
     @ChepyDecorators.call_stack
     def zip_info(self):

@@ -1,5 +1,17 @@
 from chepy import Chepy
 
+def test_fix_zip_header():
+    assert (
+        Chepy(
+            "4834434b1400000008003a9d7f502a0ae5b6230000002a00000008001c00666c61672e747874555409000340d5835e40d5835e75780b000104e803000004e8030000f3f109ae2e294a4ccf4c8ecf2bcd4d4a2d8acfcd2f4a8dcfc9cc4e8dcf4512aee50200504b01021e031400000008003a9d7f502a0ae5b6230000002a000000080018000000000001000000808100000000666c61672e747874555405000340d5835e75780b000104e803000004e8030000504b050600000000010001004e000000650000000000"
+        )
+        .from_hex()
+        .fix_zip_header()
+        .unzip_one("flag.txt")
+        .trim()
+        .o
+        == "LLS{tragic_number_more_like_magic_number}"
+    )
 
 def test_zip_info():
     assert (
