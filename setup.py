@@ -20,7 +20,7 @@ requirements = read_requirements()
 #     requirements.append("python-magic-bin==0.4.14")
 
 this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, "README.md"), "r") as f:
+with open(path.join(this_directory, "README.md"), "r", encoding='utf8') as f:
     long_description = f.read()
 
 core_extra_deps = ["requests"]
