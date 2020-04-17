@@ -93,9 +93,10 @@ class EncryptionEncoding(ChepyCore):
         hold = {}
         lc = string.ascii_lowercase
         uc = string.ascii_uppercase
-        for rotate_by in range(1,27):
+        for rotate_by in range(1, 27):
             lookup = str.maketrans(
-                lc + uc, lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by]
+                lc + uc,
+                lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by],
             )
             hold[str(rotate_by)] = self.state.translate(lookup)
         self.state = hold
