@@ -71,6 +71,37 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def rotate_bruteforce(self):
+        """Brute force rotation from 1 to 26.
+        Returned value is a dict where key is the rotation count.
+        
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            In this example, we will rotate by 20
+
+            >>> Chepy('uryyb').rotate_bruteforce()
+            {
+                '1': 'vszzc',
+                '2': 'wtaad',
+                ...
+                '13': 'hello',
+                ...
+            }
+        """
+        hold = {}
+        lc = string.ascii_lowercase
+        uc = string.ascii_uppercase
+        for rotate_by in range(1,27):
+            lookup = str.maketrans(
+                lc + uc, lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by]
+            )
+            hold[str(rotate_by)] = self.state.translate(lookup)
+        self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
     def rot_13(self):
         """ROT-13 encoding
         

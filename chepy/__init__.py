@@ -9,7 +9,6 @@ from .modules.dataformat import DataFormat
 from .modules.datetimemodule import DateTime
 from .modules.encryptionencoding import EncryptionEncoding
 from .modules.extractors import Extractors
-from .modules.forensics import Forensics
 from .modules.hashing import Hashing
 from .modules.language import Language
 from .modules.links import Links
@@ -34,7 +33,6 @@ class Chepy(
     DateTime,
     EncryptionEncoding,
     Extractors,
-    Forensics,
     Hashing,
     Language,
     Links,

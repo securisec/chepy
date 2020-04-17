@@ -10,6 +10,23 @@ class Search(ChepyCore):
     """
 
     @ChepyDecorators.call_stack
+    def search(self, pattern: str):
+        """Search. Group matches are returned as tuples.
+        
+        Args:
+            pattern (str): String pattern to search
+        
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("abcdefg123 and again abcdefg123").search("abc(de)fg(12)(3)").o
+            [('abcdefg123', 'de', '12', '3'), ('abcdefg123', 'de', '12', '3')]
+        """
+        self.state = re.findall('({})'.format(pattern), self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
     def search_ctf_flags(self, prefix: str, postfix: str = ".+?\{*\}"):
         """Search CTF style flags. 
 

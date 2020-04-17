@@ -15,6 +15,13 @@ optional arguments:
   -r RECIPE, --recipe RECIPE
 ```
 
+## Cli magic markers
+There are three special characters in the cli.
+
+- `!` If a line begins with `!` it is interpreted as a shell command. For example: `! ls -la`
+- `#` If a line begins with `#` it is interpreted as a comment. For example: `# hello`
+- `?` If a line begins with `?` it provides help for the provided Chepy method. For example: `? to_hex`
+
 ### Cli Recipes
 The cli can be run in a non interactive mode using the `-r` flag. This flag will load the recipe that is supplied and run it on the arguments that is provided.
 

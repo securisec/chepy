@@ -9,6 +9,10 @@ def test_rotate():
     assert Chepy("some data").rotate(20).output == "migy xunu"
 
 
+def test_rotate_bruteforce():
+    assert Chepy("uryyb").rotate_bruteforce().o["13"] == "hello"
+
+
 def test_xor_utf():
     assert Chepy("some data").xor("UD", "utf").output.decode() == "&+8!u 404"
 
@@ -428,4 +432,3 @@ def test_from_morse_code():
         Chepy(".... . .-.. .-.. --- \n.-- --- .-. .-.. -..").from_morse_code().o
         == "HELLO WORLD"
     )
-

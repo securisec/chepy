@@ -12,7 +12,6 @@ Modules
     modules/datetimemodule.rst
     modules/encryptionencoding.rst
     modules/extractors.rst
-    modules/forensics.rst
     modules/hashing.rst
     modules/language.rst
     modules/links.rst

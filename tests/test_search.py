@@ -1,6 +1,13 @@
 from chepy import Chepy
 
 
+def test_search():
+    assert (
+        Chepy("abcdefg123 and again abcdefg123").search(r"abc(de)fg(12)(3)").o
+        == [('abcdefg123', 'de', '12', '3'), ('abcdefg123', 'de', '12', '3')]
+    )
+
+
 def test_ctf_flags():
     assert (
         Chepy("tests/files/flags")
@@ -33,4 +40,3 @@ def test_twilio_key():
 
 def test_aws_key():
     assert len(Chepy("tests/files/flags").read_file().search_aws_key().o) == 1
-

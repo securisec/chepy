@@ -21,11 +21,14 @@
 
 # Chepy
 
+
 ![Solving a CTF with Chepy](https://raw.githubusercontent.com/securisec/chepy/master/docs/assets/ctf.gif)
 
 Chepy is a python library with a handy cli that is aimed to mirror some of the capabilities of [CyberChef](https://gchq.github.io/CyberChef/). A reasonable amount of effort was put behind Chepy to make it compatible to the various functionalities that CyberChef offers, all in a pure Pythonic manner. There are some key advantages and disadvantages that Chepy has over Cyberchef. The Cyberchef concept of _stacking_ different modules is kept alive in Chepy.
 
 There is still a long way to go for Chepy as it does not offer every single ability of Cyberchef.
+
+## Feel free to give the project a ⭐️!
 
 ## Docs
 [Refer to the docs for full usage information](http://chepy.readthedocs.io/en/latest/)

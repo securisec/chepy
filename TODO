@@ -5,10 +5,14 @@ Code:
 
 New ideas:
   ☐ rubber ducky encode/decode
-  ✔ derive pbkdf2 key
   ☐ save registers https://t.co/pBNRufibY8?amp=1 
+  ☐ different keyboard converters
 
 Cli:
+  ☐ use $EDITOR to open state in an editor https://github.com/fmoo/python-editor.
+    Problem is it ill not set the state because chepy runs from scratch everytime
+    ☐ edit with editor and send back to buffer
+    ☐ open vim or vi with buffer. data can be piped to bim vim can read stdin with -
   ☐ optionally show output window in a split screen window
   ☐ lower the chepy prompt lower. that empty space is not being used
   ☐ pyinstaller package as single file
@@ -34,6 +38,9 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ use lazy-import to increase performance @project(Code)
+  ✔ rotate bruteforce @project(New ideas)
+  ✔ derive pbkdf2 key @project(New ideas)
   ✔ fix zip header @project(New ideas)
   ✘ switch to mypy as linter @project(Code)
   ✔ load_file with binary flag @project(Enhance)
