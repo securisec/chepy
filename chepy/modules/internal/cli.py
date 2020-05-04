@@ -3,6 +3,7 @@ import inspect
 import regex as re
 from pprint import pformat, pprint
 
+import editor
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import print_formatted_text
@@ -77,6 +78,17 @@ def get_doc(method: str):
         print(red(pformat("Could not find docs...")))
 
 
+def cli_edit_state(fire: object, args: list):
+    """Edit the current state
+
+    Args:
+        args (object): Cli args
+    """
+    current_index = fire._current_index
+    hold = editor.edit(contents=str(fire.states[current_index])).decode()
+    args[current_index] = hold
+
+
 def cli_highlight(fire: object, highlight: str):
     """Highlight regex match for cli
     
@@ -87,9 +99,15 @@ def cli_highlight(fire: object, highlight: str):
     current_state = fire.states[fire._current_index]
     if fire is not None and isinstance(fire, Chepy):
         try:
-            print(re.sub('({})'.format(highlight), yellow_background(r'\1'), str(current_state)))
+            print(
+                re.sub(
+                    "({})".format(highlight),
+                    yellow_background(r"\1"),
+                    str(current_state),
+                )
+            )
         except:
-            red('Could not highlight because state is not a string')
+            red("Could not highlight because state is not a string")
         # elif type(current_state) == bytes or type(current_state) == bytearray:
         #     print(re.sub('({})'.format(highlight).encode(), red(r'\1').encode(), current_state).decode())
     else:

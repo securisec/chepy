@@ -1092,7 +1092,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def shell_output(self):  # pragma: no cover
+    def load_command(self):  # pragma: no cover
         """Run the command in state and get the output
         
         Returns:

@@ -20,6 +20,7 @@ pydash
 pyjwt
 pyOpenSSL
 pyperclip
+python-editor
 PyYAML
 regex
 typing_extensions

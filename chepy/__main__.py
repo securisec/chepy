@@ -227,8 +227,10 @@ def parse_args(args):
     parse.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
     )
-    parse.add_argument("-r", "--recipe", dest="recipe", help="Run a Chepy recipe and exit")
-    parse.add_argument("data", nargs="*")
+    parse.add_argument(
+        "-r", "--recipe", dest="recipe", help="Run a Chepy recipe and exit"
+    )
+    parse.add_argument("data", nargs="+")
     return parse.parse_args(args)
 
 
@@ -277,13 +279,25 @@ def main():
                 elif re.search(r"^cli_.+", prompt):
                     cli_method = prompt.split()[0]
                     cli_args = re.search(r"--(\w+)\s([\w\W]+)", prompt)
+                    # Show errors encountered
                     if cli_method == "cli_show_errors":
                         getattr(chepy_cli, "cli_show_errors")(errors)
+                    # show the current plugin path
                     elif cli_method == "cli_plugin_path":
                         getattr(chepy_cli, "cli_plugin_path")(config)
+                    # Edit the current state
+                    elif cli_method == "cli_edit_state":
+                        try:
+                            getattr(chepy_cli, "cli_edit_state")(fire_obj, args_data)
+                            args_data = args_data[0 : args_data.index("-")] + ["-"]
+                        except:
+                            e_type, e_msg, e_traceback = sys.exc_info()
+                            print(red(e_type.__name__), yellow("Could not edit state"))
+                    # Go back one step
                     elif cli_method == "cli_go_back":
                         args_data = args_data[: -len(last_command + ["-"])]
                         print(cyan("Go back: {}".format(last_command)))
+                    # Delete the cli history file
                     elif cli_method == "cli_delete_history":
                         Path(config.history_path).unlink()
                     elif cli_args:

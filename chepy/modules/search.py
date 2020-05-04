@@ -40,6 +40,10 @@ class Search(ChepyCore):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/flags").read_file().search_ctf_flags("pico").get_by_index(0)
+            picoCTF{r3source_pag3_f1ag}
         """
         self.state = re.findall(prefix + postfix, self._convert_to_str(), re.IGNORECASE)
         return self
@@ -50,6 +54,10 @@ class Search(ChepyCore):
         
         Returns:
             Chepy: The Chepy object. 
+
+        Examples:
+            >>> Chepy("tests/files/flags").read_file().search_slack_tokens().get_by_index(0)
+            xoxp...859
         """
         self.state = re.findall(
             "(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
