@@ -8,10 +8,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      max-parallel: 6
+      max-parallel: 9
       matrix:
         os: [ubuntu-18.04, windows-latest, macOS-latest]
-        python-version: ["3.6", "3.7"]
+        python-version: ["3.6", "3.7", "3.8"]
 
     steps:
     - uses: actions/checkout@v1
