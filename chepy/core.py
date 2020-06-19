@@ -8,6 +8,7 @@ import inspect
 import io
 import itertools
 import subprocess
+from importlib.machinery import SourceFileLoader
 from configparser import ConfigParser
 from urllib.parse import urljoin
 from pprint import pformat
@@ -264,15 +265,17 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def copy_state(self, index: int):
+    def copy_state(self, index: int = None):
         """Copy the current state to a new state
         
         Args:
-            index (int): Index of new state
+            index (int): Index of new state. Defaults to next available.
         
         Returns:
             Chepy: The Chepy object. 
         """
+        if not index:
+            index = len(self.states)
         self.states[index] = self.states.get(self._current_index)
         return self
 
@@ -907,6 +910,33 @@ class ChepyCore(object):
                     getattr(self, function)(**args)
                 else:
                     getattr(self, function)()
+        return self
+
+    # @ChepyDecorators.call_stack
+    def run_script(self, path: str, save_state: bool = False):
+        """Run a custom script on the state. 
+        The custom script must have a function called **cpy_script** which 
+        must take one argument. The state is passed as the argument. 
+
+        Args:
+            path (str): Path to custom script
+            save_state (bool, optional): Save script output to the state. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object. 
+
+        Examples:
+            >>> c = Chepy("A").to_hex().run_script('tests/files/script.py', True)
+            b'4141'
+        """
+        script_path = str(self._abs_path(path))
+        loader = SourceFileLoader("cpy_s", script_path)
+        handle = loader.load_module("cpy_s")
+        if save_state:
+            self.state = handle.cpy_script(self.state)
+        else:
+            print(cyan("Script Output: {}".format(script_path)))
+            print(handle.cpy_script(self.state))
         return self
 
     @ChepyDecorators.call_stack
