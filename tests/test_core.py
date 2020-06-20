@@ -27,15 +27,20 @@ def test_create_state():
 
 
 def test_copy_state():
-    assert Chepy("some data").create_state().copy_state(1).states == {0: "some data", 1: "some data"}
+    assert Chepy("some data").create_state().copy_state(1).states == {
+        0: "some data",
+        1: "some data",
+    }
     assert Chepy("some data").copy_state().states == {0: "some data", 1: "some data"}
 
 
 def test_set_state():
     assert Chepy("some data").set_state("new data").o == "new data"
 
+
 def test_run_script():
-    assert Chepy("A").to_hex().run_script('tests/files/script.py', True).o == b'4141'
+    assert Chepy("A").to_hex().run_script("tests/files/script.py", True).o == b"4141"
+    assert Chepy("A").to_hex().run_script("tests/files/script.py").o == b"41"
 
 
 def test_fork():
