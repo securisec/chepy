@@ -7,6 +7,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Extractors(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def _parsel_obj(self):
         """Returns a parsel.Selector object
         """
@@ -546,7 +549,7 @@ class Extractors(ChepyCore):
             Chepy: The Chepy object. 
         """
         found = re.findall("[a-zA-Z0-9+/=]{%s,}" % str(20), self._convert_to_str())
-        if len(found) > 1: # pragma: no cover
+        if len(found) > 1:  # pragma: no cover
             self.state = found
         else:
             self.state = found[0]

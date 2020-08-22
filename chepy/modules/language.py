@@ -6,6 +6,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Language(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def unicode_chrs_by_lang(self, lang: str):
         """Detect language specific characters

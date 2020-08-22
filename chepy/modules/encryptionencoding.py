@@ -30,6 +30,9 @@ class EncryptionEncoding(ChepyCore):
         >>> from chepy.modules.encryptionencoding import EncryptionEncoding
     """
 
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def __check_mode(self, mode) -> None:
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 

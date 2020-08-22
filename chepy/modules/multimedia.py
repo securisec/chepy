@@ -37,6 +37,9 @@ class Multimedia(ChepyCore):
         >>> m = Multimedia("/path/to/image.png").load_file().split_color_channels("png").get_by_key("blue").blur_image().write("/path/to/file.png", as_binary=True)
     """
 
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def _force_rgba(self, image):  # pragma: no cover
         if image.mode != "RGBA":
             new = image.convert("RGBA")
@@ -490,7 +493,9 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def lsb_dump_by_channel(self, channel: str = "r", column_first: bool = False): # pragma: no cover
+    def lsb_dump_by_channel(
+        self, channel: str = "r", column_first: bool = False
+    ):  # pragma: no cover
         """Dump LSB from a specific color channel
         
         Args:
@@ -529,7 +534,9 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def msb_dump_by_channel(self, channel: str = "r", column_first: bool = False): # pragma: no cover
+    def msb_dump_by_channel(
+        self, channel: str = "r", column_first: bool = False
+    ):  # pragma: no cover
         """Dump MSB from a specific color channel
         
         Args:

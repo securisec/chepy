@@ -18,6 +18,11 @@ Enhance:
 
 Methods:
   ☐ magic method from cyberchef
+  ☐ base 16
+  ☐ base 36
+  ☐ base 62
+  ☐ base 91
+  ☐ base 92
 
 Github Actions:
   ☐ build pyinstaller artifact for osx

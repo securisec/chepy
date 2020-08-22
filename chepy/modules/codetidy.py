@@ -7,6 +7,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class CodeTidy(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def minify_json(self):
         """Minify JSON string

@@ -4,6 +4,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class DateTime(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def from_unix_ts(self):
         """Convert UNIX timestamp to datetime

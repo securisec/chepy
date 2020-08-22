@@ -5,6 +5,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Publickey(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def _convert_cert_to_obj(self, cert):
         issuer = cert.get_issuer()
         subject = cert.get_subject()

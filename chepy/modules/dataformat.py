@@ -16,6 +16,9 @@ from chepy.modules.internal.constants import Encoding
 
 
 class DataFormat(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def list_to_str(self, join_by: Union[str, bytes]=" "):
         """Join an array by `join_by`

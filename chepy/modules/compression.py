@@ -10,6 +10,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Compression(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def __tar_modes(self, mode):  # pragma: no cover
         assert mode in ["gz", "bz2", "xz", ""], "Valid modes are gz, bz2, xz"
 
@@ -21,7 +24,7 @@ class Compression(ChepyCore):
             Chepy: The Chepy object. 
         """
         data = bytearray(binascii.hexlify(self._convert_to_bytes()))
-        data[0:8] = b'504b0304'
+        data[0:8] = b"504b0304"
         self.state = binascii.unhexlify(data)
         return self
 

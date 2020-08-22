@@ -4,6 +4,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Other(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def generate_uuid(self) -> str:
         """Generate v4 UUID

@@ -4,6 +4,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Links(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def pastebin_to_raw(self):
         """Convert a pastebin link to raw pastebin link

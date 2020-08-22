@@ -116,6 +116,9 @@ The binary will be in the dist/ folder.
 ### Plugins
 [Check here for plugins docs](https://chepy-plugins.readthedocs.io/en/latest/)
 
+### Used by
+[Remnux linux](https://docs.remnux.org/discover-the-tools/examine+static+properties/deobfuscation#chepy)
+
 ```eval_rst
 .. toctree::
    :maxdepth: 3

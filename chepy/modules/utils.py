@@ -11,6 +11,9 @@ import chepy.modules.internal.colors as _int_colors
 
 
 class Utils(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def reverse(self, count: int = 1):
         """Reverses a string

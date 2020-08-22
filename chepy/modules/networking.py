@@ -8,6 +8,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Networking(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     @ChepyDecorators.call_stack
     def defang_url(self):
         """Make a URL harmless

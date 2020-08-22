@@ -19,6 +19,9 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Hashing(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+        
     @ChepyDecorators.call_stack
     def identify_hash(self):
         """Identify hash type

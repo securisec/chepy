@@ -6,6 +6,9 @@ from .exceptions import StateNotList
 
 
 class AritmeticLogic(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     def __hex_to_int(self, n):  # pragma: no cover
         if isinstance(n, str):
             return int(n, 0)

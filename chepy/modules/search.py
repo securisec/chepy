@@ -4,6 +4,9 @@ from ..core import ChepyDecorators, ChepyCore
 
 
 class Search(ChepyCore):
+    def __init__(self, *data):
+        super().__init__(*data)
+
     """Class that is geared towards regex searches of secrets
 
     `Reference <https://github.com/dxa4481/truffleHog>`__
@@ -23,7 +26,7 @@ class Search(ChepyCore):
             >>> Chepy("abcdefg123 and again abcdefg123").search("abc(de)fg(12)(3)").o
             [('abcdefg123', 'de', '12', '3'), ('abcdefg123', 'de', '12', '3')]
         """
-        self.state = re.findall('({})'.format(pattern), self._convert_to_str())
+        self.state = re.findall("({})".format(pattern), self._convert_to_str())
         return self
 
     @ChepyDecorators.call_stack
