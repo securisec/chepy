@@ -115,6 +115,7 @@ def test_sort_dict_value():
         "z": "string",
         "aaa": {"bb": "data"},
     }
+    assert Chepy({"a": 2, "b": 1}).sort_dict_value().o == {"b": 1, "a": 2}
 
 
 def test_filter_list():

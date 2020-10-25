@@ -1,7 +1,7 @@
 import sys
 import inspect
 import regex as re
-from pprint import pformat, pprint
+import pprint
 
 import editor
 from docstring_parser import parse as _parse_doc
@@ -13,6 +13,8 @@ from prompt_toolkit.formatted_text import FormattedText
 from chepy import Chepy
 from chepy.config import ChepyConfig
 from chepy.modules.internal.colors import yellow, red, yellow_background
+
+pprint.sorted = lambda x, key=None: x
 
 module = sys.modules[__name__]
 options = []
@@ -75,7 +77,7 @@ def get_doc(method: str):
     try:
         print(yellow(getattr(Chepy, method).__doc__))
     except:
-        print(red(pformat("Could not find docs...")))
+        print(red(pprint.pformat("Could not find docs...")))
 
 
 def cli_edit_state(fire: object, args: list):
@@ -194,7 +196,7 @@ def cli_show_dict_keys(fire: object, pretty: bool = False):
         pretty (bool): Pretty print output. Defaults to False
     """
     if pretty:
-        print_in_colors(pformat(list(fire.state.keys())))
+        print_in_colors(pprint.pformat(list(fire.state.keys())))
     else:
         print_in_colors(fire.state.keys())
 
@@ -208,7 +210,7 @@ def cli_show_states(fire: object, pretty: bool = False):
     """
     if fire is not None and isinstance(fire, Chepy):
         if pretty:
-            print_in_colors(pformat(fire.states))
+            print_in_colors(pprint.pformat(fire.states))
         else:
             print_in_colors(fire.states)
     else:
@@ -224,7 +226,7 @@ def cli_show_buffers(fire: object, pretty: bool = False):
     """
     if fire is not None and isinstance(fire, Chepy):
         if pretty:
-            print_in_colors(pformat(fire.buffers))
+            print_in_colors(pprint.pformat(fire.buffers))
         else:
             print_in_colors(fire.buffers)
     else:
@@ -251,7 +253,7 @@ def cli_pretty_print(fire: object):
         fire (object): The fire object
     """
     if fire is not None and isinstance(fire, Chepy):
-        print_in_colors(pformat(fire.state))
+        print_in_colors(pprint.pprint(fire.state))
     else:
         print(red("Nope. That didnt work.."))
 
@@ -265,7 +267,7 @@ def cli_plugin_path(config):
 def cli_show_errors(errors):
     """Show the errors messages if any
     """
-    pprint(errors)
+    pprint.pprint(errors)
 
 
 def cli_go_back():

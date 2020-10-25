@@ -277,11 +277,18 @@ class Utils(ChepyCore):
             {'zz': '1', 'a': 'True', 'ccc': [1, 'a'], 'z': 'string', 'aaa': {'bb': 'data'}}
         """
         assert isinstance(self.state, dict), StateNotDict()
-        self.state = dict(
-            OrderedDict(
-                sorted(self.state.items(), reverse=reverse, key=lambda x: str(x[1]))
+        try:
+            self.state = dict(
+                OrderedDict(
+                    sorted(self.state.items(), reverse=reverse, key=lambda x: x[1])
+                )
             )
-        )
+        except:
+            self.state = dict(
+                OrderedDict(
+                    sorted(self.state.items(), reverse=reverse, key=lambda x: str(x[1]))
+                )
+            )
         return self
 
     @ChepyDecorators.call_stack
