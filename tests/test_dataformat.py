@@ -109,6 +109,19 @@ def test_base64_decode():
     )
 
 
+def test_decode_bytes():
+    assert (
+        Chepy(
+            b'{"flag":{" b":"MjQ3Q1RGe2RhODA3OTVmOGE1Y2FiMmUwMzdkNzM4NTgwN2I5YTkxfQ=="}}\x17\x8by\x90[\xc38E"\xf2\xb8\xfe\xf0\x95\xcc\x16.7\xabc\x92\xc0\x92'
+        )
+        .decode_bytes()
+        .extract_base64()
+        .base64_decode()
+        .o
+        == b"247CTF{da80795f8a5cab2e037d7385807b9a91}"
+    )
+
+
 def test_base58_encode():
     assert Chepy("some data").base58_encode().output.decode() == "2UDrs31qcWSPi"
 

@@ -351,6 +351,19 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def decode_bytes(self, errors: str ='ignore'):
+        """Decode bytes to string
+
+        Args:
+            errors (str, optional): Ignore or replace error chars. Defaults to 'ignore'.
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = self._convert_to_bytes().decode(errors=errors)
+        return self
+
+    @ChepyDecorators.call_stack
     def to_hex(self):
         """Converts a string to its hex representation
         
