@@ -5,7 +5,7 @@ decorator
 docstring-parser
 emoji
 exrex
-fire==0.2.1
+fire==0.4.0
 hashid
 hexdump
 jsonpath-rw

@@ -222,3 +222,45 @@ class CodeTidy(ChepyCore):
         """
         self.state = pydash.swap_case(self._convert_to_str())
         return self
+
+    @ChepyDecorators.call_stack
+    def to_leetspeak(self, special_chars: bool = True):
+        """Convert string to l33t speak
+
+        Args:
+            special_chars (bool, optional): Use special chars in conversion. Defaults to True.
+
+        Returns:
+            Chepy: The Chepy object
+
+        Examples:
+            >>> Chepy("somexValue").to_leetspeak().o
+            "50m3%V@1u3"
+        """
+        chars = {
+            'B': '8',
+            'E': '3',
+            'L': '1',
+            'O': '0',
+            'S': '5',
+            'T': '7',
+            'Z': '2'
+        }
+        special = {
+            'A': '@',
+            'C': '(',
+            'I': '!',
+            'X': '%'
+
+        }
+        if special_chars:
+            chars = {**chars, **special}
+        hold = ''
+        for char in list(self._convert_to_str()):
+            upper = char.upper()
+            if chars.get(upper):
+                hold += chars.get(upper)
+            else:
+                hold += char
+        self.state = hold
+        return self

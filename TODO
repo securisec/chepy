@@ -39,6 +39,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ string to l33tspeak.  @project(Methods)
   ✔ run script loaded into chepy. script should be a function that takes one arg, and state is passed to arg. fixed function name in script should be passed that can be imported on method call @project(New ideas)
   ✔ use $EDITOR to open state in an editor https://github.com/fmoo/python-editor. @project(Cli)
   ✔ run command method to save output to state @project(New ideas)

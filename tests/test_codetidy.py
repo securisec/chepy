@@ -62,3 +62,7 @@ def test_swap_case():
 def test_lower_case():
     assert Chepy("HelLo WorLd").to_lower_case().o == "hello world"
 
+
+def test_leet_speak():
+    assert Chepy("somexValue").to_leetspeak().o == "50m3%V@1u3"
+    assert Chepy("somexValue").to_leetspeak(False).o == "50m3xVa1u3"
