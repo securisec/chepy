@@ -72,7 +72,7 @@ class ChepyCore(object):
     def __init__(self, *data):
         self.states = dict(list(enumerate(data)))
         #: Holder for the initial state
-        self.__initial_states = dict(list(enumerate(data)))
+        self._initial_states = dict(list(enumerate(data)))
         #: Value of the initial state
         self._current_index = 0
         self.buffers = dict()
@@ -1118,7 +1118,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.states = self.__initial_states
+        self.states = self._initial_states
         return self
 
     @ChepyDecorators.call_stack

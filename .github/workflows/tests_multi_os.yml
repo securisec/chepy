@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2.2.1
       with:
         python-version: ${{ matrix.python-version }}
     # - uses: actions/cache@v1
@@ -37,7 +37,7 @@ jobs:
         
     - name: Install test requirements
       run: |
-        pip install sphinx recommonmark pytest pytest-cov bandit pyperclip
+        pip install sphinx recommonmark pytest==6.2.1 pytest-cov bandit pyperclip
         
     - name: Test with pytest
       run: |
@@ -50,6 +50,7 @@ jobs:
         sed -iE 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
         sed -iE '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
+        pip install .
         pytest --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
     - name: Test plugins ubuntu
@@ -58,6 +59,7 @@ jobs:
         sed -i 's/enableplugins = false/enableplugins = true/' ~/.chepy/chepy.conf
         sed -i '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
+        pip install .
         pytest --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
     - name: Test plugins windows
@@ -74,11 +76,12 @@ jobs:
         bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
         
     - name: Test docs
+      if: ${{ !env.ACT }}
       run: |
         make -C docs/ clean html
         
     - name: Upload to codecov
-      if: startsWith(matrix.os,'ubuntu')
+      if: startsWith(matrix.os,'ubuntu') && ${{ !env.ACT  }}
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}
