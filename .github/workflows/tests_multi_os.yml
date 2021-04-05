@@ -81,7 +81,7 @@ jobs:
         make -C docs/ clean html
         
     - name: Upload to codecov
-      if: startsWith(matrix.os,'ubuntu') && ${{ !env.ACT  }}
+      if: startsWith(matrix.os,'ubuntu')
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}
