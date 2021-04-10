@@ -8,13 +8,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      max-parallel: 9
+      max-parallel: 6
       matrix:
         os: [ubuntu-18.04, windows-latest, macOS-latest]
         python-version: ["3.7", "3.8"]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@2.3.4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2.2.1
       with:
@@ -81,22 +81,28 @@ jobs:
         make -C docs/ clean html
         
     - name: Upload to codecov
-      if: startsWith(matrix.os,'ubuntu')
+      if: startsWith(matrix.os,'ubuntu') && ${{ !env.ACT }}
       uses: codecov/codecov-action@v1.0.3
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./coverage.xml
-    # - name: Run pyinstaller
-    #   if: startsWith(matrix.python-version,'3.7')
-    #   run: |
-    #     ls -l 
-    #     ls -l ../
-    #     pyinstaller cli.py --name chepy --onefile
-    # - name: Upload pyinstaller build
-    #   if: startsWith(matrix.python-version,'3.7')
-    #   run: |
-    #     pyinstaller cli.py --name chepy --onefile
-    #   uses: actions/upload-artifact@v1
-    #   with:
-    #     name: chepy-${{ matrix.os }}-{{ matrix.python-version }}
-    #     path: dist/chepy
+    
+  publish:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags') && ${{ !env.ACT }}
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: setup
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: "3.7"
+      - name: build
+        run: |
+          python setup.py sdist
+      - name: publish
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_PASSWORD }}

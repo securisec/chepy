@@ -1,6 +1,14 @@
 from chepy import Chepy
 
 
+def test_eval():
+    assert Chepy("1").eval_state().o == 1
+
+
+def test_bytes_to_ascii():
+    assert Chepy([116, 101, 115, 116]).bytes_to_ascii().o == "test"
+
+
 def test_dict_to_json():
     assert (
         Chepy({"some": "data", "a": ["list", 1, True]}).dict_to_json().o
@@ -50,10 +58,10 @@ job: Developer
 skill: Elite
 employed: true
 foods:
-- Apple
-- Orange
-- Strawberry
-- Mango
+  - Apple
+  - Orange
+  - Strawberry
+  - Mango
 languages:
   perl: Elite
   python: Elite
@@ -323,4 +331,3 @@ def test_to_hexdump():
 
 def test_from_hexdump():
     assert Chepy("some").to_hexdump().from_hexdump().o == b"some"
-

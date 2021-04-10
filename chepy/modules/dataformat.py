@@ -7,6 +7,7 @@ import ujson
 import yaml
 import regex as re
 import hexdump
+from ast import literal_eval
 from typing import Union
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
@@ -18,6 +19,29 @@ from chepy.modules.internal.constants import Encoding
 class DataFormat(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
+
+    @ChepyDecorators.call_stack
+    def eval_state(self):
+        """Eval state as python. 
+        Handy when converting string representation 
+        of objects.
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        self.state = literal_eval(self.state)
+        return self
+
+    @ChepyDecorators.call_stack
+    def bytes_to_ascii(self):
+        """Convert bytes (array of bytes) to ascii
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert isinstance(self.state, list), "Data in state is not a list"
+        self.state = bytearray(self.state).decode()
+        return self
 
     @ChepyDecorators.call_stack
     def list_to_str(self, join_by: Union[str, bytes]=" "):
@@ -116,8 +140,13 @@ class DataFormat(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
+        class ChepyYamlDumper(yaml.Dumper):
+            def increase_indent(self, flow=False, indentless=False):
+                return super(ChepyYamlDumper, self).increase_indent(flow, False)
+
         self.state = yaml.dump(
             ujson.loads(self.state),
+            Dumper=ChepyYamlDumper,
             default_flow_style=False,
             sort_keys=False,
             allow_unicode=True,
