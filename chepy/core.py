@@ -914,7 +914,7 @@ class ChepyCore(object):
 
     # @ChepyDecorators.call_stack
     def run_script(self, path: str, save_state: bool = False):
-        """Run a custom script on the state. 
+        """Inject and run a custom script on the state. 
         The custom script must have a function called **cpy_script** which 
         must take one argument. The state is passed as the argument. 
 
