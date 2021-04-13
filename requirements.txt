@@ -6,6 +6,7 @@ docstring-parser
 emoji
 exrex
 fire==0.4.0
+lazy-import
 hashid
 hexdump
 jsonpath-rw
