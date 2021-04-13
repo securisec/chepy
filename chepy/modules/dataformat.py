@@ -22,8 +22,8 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def eval_state(self):
-        """Eval state as python. 
-        Handy when converting string representation 
+        """Eval state as python.
+        Handy when converting string representation
         of objects.
 
         Returns:
@@ -44,14 +44,14 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def list_to_str(self, join_by: Union[str, bytes]=" "):
+    def list_to_str(self, join_by: Union[str, bytes] = " "):
         """Join an array by `join_by`
-        
+
         Args:
             join_by (Union[str, bytes], optional): String character to join by, by default ' '
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["a", "b", "c"]).list_to_str(",").o
@@ -64,7 +64,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def str_list_to_list(self):
         """Convert a string list to a list
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -78,12 +78,12 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def join_list(self, by: Union[str, bytes] = ""):
         """Join a list with specified character
-        
+
         Args:
             by (Union[str, bytes], optional): What to join with. Defaults to ""
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         Examples:
             >>> Chepy(["a", "b", "c"]).join_list(":").o
             "a:b:c"
@@ -94,7 +94,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def json_to_dict(self):
         """Convert a JSON string to a dict object
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -111,7 +111,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def dict_to_json(self):
         """Convert a dict object to a JSON string
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -126,7 +126,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def yaml_to_json(self):
         """Convert yaml to a json string
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -136,10 +136,11 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def json_to_yaml(self):
         """Convert a json string to yaml structure
-        
+
         Returns:
             Chepy: The Chepy object.
         """
+
         class ChepyYamlDumper(yaml.Dumper):
             def increase_indent(self, flow=False, indentless=False):
                 return super(ChepyYamlDumper, self).increase_indent(flow, False)
@@ -156,14 +157,14 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def base58_encode(self):
         """Encode as Base58
-        
-        Base58 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property encodes raw data 
+
+        Base58 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property encodes raw data
         into an ASCII Base58 string.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").base58_encode().output.decode()
@@ -175,14 +176,14 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def base58_decode(self):
         """Decode as Base58
-        
-        Base58 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property decodes raw data 
+
+        Base58 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property decodes raw data
         into an ASCII Base58 string.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("2UDrs31qcWSPi").base58_decode().output.decode()
@@ -195,13 +196,13 @@ class DataFormat(ChepyCore):
     def base85_encode(self):
         """Encode as Base58
 
-        Base85 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property decodes raw data 
+        Base85 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property decodes raw data
         into an ASCII Base58 string.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").base85_encode().output.decode()
@@ -214,13 +215,13 @@ class DataFormat(ChepyCore):
     def base85_decode(self):
         """Decode as Base85
 
-        Base85 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property decodes raw data 
+        Base85 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property decodes raw data
         into an ASCII Base58 string.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("F)Po,+Cno&@/").base85_decode().output.decode()
@@ -232,14 +233,14 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def base32_encode(self):
         """Encode as Base32
-        
-        Base32 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers. It uses a smaller set of characters than 
+
+        Base32 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers. It uses a smaller set of characters than
         Base64, usually the uppercase alphabet and the numbers 2 to 7.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").base32_encode().output.decode()
@@ -251,14 +252,14 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def base32_decode(self):
         """Decode as Base32
-        
-        Base32 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers. It uses a smaller set of characters than 
+
+        Base32 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers. It uses a smaller set of characters than
         Base64, usually the uppercase alphabet and the numbers 2 to 7.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = base64.b32decode(self.state)
         return self
@@ -266,7 +267,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_int(self):
         """Converts the string representation of a number into an int
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -280,7 +281,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_bytes(self):
         """Converts the data in state to bytes
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -294,7 +295,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_bytes(self):
         """Decodes bytes to string.
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -304,18 +305,18 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def base64_encode(self, custom: str = None):
         """Encode as Base64
-        
-        Base64 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property encodes raw data 
+
+        Base64 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property encodes raw data
         into an ASCII Base64 string.
 
         Args:
             custom (str, optional): Provide a custom charset to base64 with
-        
+
         Returns:
-            Chepy: The Chepy object. 
-        
+            Chepy: The Chepy object.
+
         Examples:
             >>> # To use a custom character set, use:
             >>> custom = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -339,17 +340,17 @@ class DataFormat(ChepyCore):
     def base64_decode(self, custom: str = None, fix_padding: bool = True):
         """Decode as Base64
 
-        Base64 is a notation for encoding arbitrary byte data using a 
-        restricted set of symbols that can be conveniently used by humans 
-        and processed by computers.This property decodes raw data 
+        Base64 is a notation for encoding arbitrary byte data using a
+        restricted set of symbols that can be conveniently used by humans
+        and processed by computers.This property decodes raw data
         into an ASCII Base64 string.
 
         Args:
             custom (str, optional): Provide a custom charset to base64 with
             fix_padding (bool, optional): If padding error, add padding. Defaults to True
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             Base64 decode using a custom string
@@ -380,14 +381,14 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_bytes(self, errors: str ='ignore'):
+    def decode_bytes(self, errors: str = "ignore"):
         """Decode bytes to string
 
         Args:
             errors (str, optional): Ignore or replace error chars. Defaults to 'ignore'.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = self._convert_to_bytes().decode(errors=errors)
         return self
@@ -395,9 +396,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_hex(self):
         """Converts a string to its hex representation
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("AAA").to_hex().out().decode()
@@ -409,9 +410,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_hex(self):
         """Convert a non delimited hex string to string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("414141").from_hex().out()
@@ -423,16 +424,16 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def hex_to_int(self):
         """Converts hex into its intiger represantation
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             Chepy works with hex characters that start with a 0x
 
             >>> Chepy("0x123").hex_to_int().output
             291
-            
+
             Without 0x in the hex
 
             >>> Chepy("123").hex_to_int().output
@@ -447,12 +448,12 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def hex_to_binary(self):
         """Hex to binary hex
-        
-        Converts a hex string to its binary form. Example: 
+
+        Converts a hex string to its binary form. Example:
         41 becomes \\x41
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("ab00").hex_to_binary().o
@@ -464,17 +465,17 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def hex_to_str(self, ignore: bool = False):
         """Decodes a hex string to ascii ignoring any decoding errors
-        
+
         Args:
             ignore (bool, optional): Ignore errors, by default False
-        
+
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             To ignore UnicodeDecode errors, set ignore to True
             >>> Chepy("4100").hex_to_str(ignore=True).o
-            "A\x00" 
+            "A\x00"
         """
         if ignore:
             self.state = binascii.unhexlify(self._convert_to_bytes()).decode(
@@ -487,9 +488,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def str_to_hex(self):
         """Converts a string to a hex string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = binascii.hexlify(self._convert_to_bytes())
         return self
@@ -497,9 +498,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def int_to_hex(self):
         """Converts an integer into its hex equivalent
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(101).int_to_hex().o
@@ -511,9 +512,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def int_to_str(self):
         """Converts an integer into a string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = self._convert_to_str()
         return self
@@ -521,9 +522,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def binary_to_hex(self):
         """Converts binary data into a hex string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = binascii.hexlify(self._convert_to_bytes())
         return self
@@ -531,15 +532,15 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def normalize_hex(self, is_bytearray=False):
         """Normalize a hex string
-        
-        Removes special encoding characters from a hex string like %, 
+
+        Removes special encoding characters from a hex string like %,
         0x, , :, ;, \\n and \\r\\n
 
         Args:
             is_bytearray (bool, optional): Set to True if state is a bytearray
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("41:42:CE").normalize_hex().o
@@ -559,7 +560,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def str_from_hexdump(self):
         """Extract a string from a hexdump
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -570,9 +571,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_hexdump(self):
         """Convert the state to hexdump
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hexdump.hexdump(self._convert_to_bytes(), result="return")
         return self
@@ -580,9 +581,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_hexdump(self):
         """Convert hexdump back to str
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hexdump.restore(self._convert_to_str())
         return self
@@ -590,15 +591,15 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def url_encode(self, safe: str = ""):
         """URL encode
-        
-        Encodes problematic characters into percent-encoding, 
+
+        Encodes problematic characters into percent-encoding,
         a format supported by URIs/URLs.
-        
+
         Args:
             safe (str, optional): String of characters that will not be encoded, by default ""
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             Url encode while specifying save characters
@@ -612,7 +613,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def url_decode(self):
         """Converts URI/URL percent-encoded characters back to their raw values.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -626,11 +627,11 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def bytearray_to_str(self, encoding: str = "utf8", errors: str = "replace"):
         """Convert a python bytearray to string
-        
+
         Args:
             encoding (str, optional): String encoding. Defaults to 'utf8'.
-            errors (str, optional): How errors should be handled. Defaults to replace. 
-        
+            errors (str, optional): How errors should be handled. Defaults to replace.
+
         Raises:
             TypeError: If state is not a bytearray
 
@@ -652,7 +653,7 @@ class DataFormat(ChepyCore):
         """Convert string to list
 
         Converts the string in state to an array of individual characyers
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -666,7 +667,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def str_to_dict(self):
         """Convert string to a dictionary
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -681,13 +682,13 @@ class DataFormat(ChepyCore):
         e.g. Γειά σου becomes 0393 03b5 03b9 03ac 20 03c3 03bf 03c5
 
         Args:
-            escape_char (str, optional): Charcater to prepend with. Example \\u, u etc. 
+            escape_char (str, optional): Charcater to prepend with. Example \\u, u etc.
                 @ChepyDecorators.call_stack
                 Defaults to ''
-        
+
         Returns:
-            Chepy: The Chepy object. 
-        
+            Chepy: The Chepy object.
+
         Examples:
             >>> Chepy("aㅎ").to_charcode().o
             ["61", "314e"]
@@ -701,12 +702,12 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_charcode(self, prefix: str = ""):
         """Convert array of unicode chars to string
-        
+
         Args:
             prefix (str, optional): Any prefix for the charcode. Ex: \\u or u. Defaults to "".
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["314e", "61", "20", "41"]).from_charcode().o
@@ -722,7 +723,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_decimal(self):
         """Convert charactes to decimal
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -736,9 +737,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_decimal(self):
         """Convert a list of decimal numbers to string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy([12622]).from_decimal().o
@@ -750,7 +751,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_binary(self):
         """Convert string characters to binary
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -764,9 +765,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_binary(self):
         """Convert a list of binary numbers to string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["01100001", "01100010", "01100011"]).from_binary().o
@@ -786,7 +787,7 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_octal(self):
         """Convert string characters to octal
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -800,9 +801,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_octal(self):
         """Convert a list of octal numbers to string
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["141", "142", "30516"]).from_octal().o
@@ -816,9 +817,9 @@ class DataFormat(ChepyCore):
         """Encode html entities
 
         Encode special html characters like & > < etc
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy('https://google.com&a="lol"').to_html_entity().o
@@ -832,9 +833,9 @@ class DataFormat(ChepyCore):
         """Decode html entities
 
         Decode special html characters like & > < etc
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
@@ -846,9 +847,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_punycode(self):
         """Encode to punycode
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("münchen").to_punycode().o
@@ -860,9 +861,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_punycode(self):
         """Decode to punycode
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(b"mnchen-3ya").from_punycode().o
@@ -875,12 +876,12 @@ class DataFormat(ChepyCore):
     def encode_bruteforce(self):
         """Bruteforce the various encoding for a string
 
-        Enumerates all supported text encodings for the input, 
+        Enumerates all supported text encodings for the input,
         allowing you to quickly spot the correct one.
         `Reference <https://docs.python.org/2.4/lib/standard-encodings.html>`__
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("münchen한").encode_bruteforce()
@@ -918,12 +919,12 @@ class DataFormat(ChepyCore):
     def decode_bruteforce(self):
         """Bruteforce the various decoding for a string
 
-        Enumerates all supported text encodings for the input, 
+        Enumerates all supported text encodings for the input,
         allowing you to quickly spot the correct one.
         `Reference <https://docs.python.org/2.4/lib/standard-encodings.html>`__
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("m\\xfcnchen\\ud55c").decode_bruteforce()
@@ -964,9 +965,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def to_braille(self):
         """Convery text to six-dot braille symbols
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("secret message").to_braille().o
@@ -979,9 +980,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def from_braille(self):
         """Convery text to six-dot braille symbols
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o
@@ -994,10 +995,9 @@ class DataFormat(ChepyCore):
     @ChepyDecorators.call_stack
     def trim(self):
         """Trim string. Removes whitespaces
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = self._convert_to_str().strip()
         return self
-

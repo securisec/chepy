@@ -21,14 +21,14 @@ from ..core import ChepyCore, ChepyDecorators
 class Hashing(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
-        
+
     @ChepyDecorators.call_stack
     def identify_hash(self):
         """Identify hash type
-        
-        Tries to determine information about a given hash and suggests which 
-        algorithm may have been used to generate it based on its length. 
-        
+
+        Tries to determine information about a given hash and suggests which
+        algorithm may have been used to generate it based on its length.
+
         Returns:
             Chepy: The Chepy object.
 
@@ -51,14 +51,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha1(self):
         """Get SHA1 hash
-        
-        The SHA (Secure Hash Algorithm) hash functions were designed by the NSA. 
-        SHA-1 is the most established of the existing SHA hash functions and it is 
-        used in a variety of security applications and protocols. However, SHA-1's 
+
+        The SHA (Secure Hash Algorithm) hash functions were designed by the NSA.
+        SHA-1 is the most established of the existing SHA hash functions and it is
+        used in a variety of security applications and protocols. However, SHA-1's
         collision resistance has been weakening as new attacks are discovered or improved.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").sha1().output
@@ -70,18 +70,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha2_256(self):
         """Get SHA2-256 hash
-        
-        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
-        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
-        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
-        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
-        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
-        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
-        are truncated versions of SHA-512, but the initial values are generated using the method 
+
+        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224,
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256
+        are truncated versions of SHA-512, but the initial values are generated using the method
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").sha2_256().output
@@ -93,18 +93,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha2_512(self):
         """Get SHA2-512 hash
-        
-        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
-        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
-        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
-        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
-        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
-        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
-        are truncated versions of SHA-512, but the initial values are generated using the method 
+
+        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224,
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256
+        are truncated versions of SHA-512, but the initial values are generated using the method
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").sha2_512().out()
@@ -116,21 +116,21 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha2_512_truncate(self, truncate: int = 256):
         """Get SHA2-512/bits hash
-        
-        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
-        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
-        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
-        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
-        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
-        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
-        are truncated versions of SHA-512, but the initial values are generated using the method 
+
+        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224,
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256
+        are truncated versions of SHA-512, but the initial values are generated using the method
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
         Args:
             truncate (int, optional): The bits to truncate by. Defaults to 256
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         assert truncate in [256, 224], "Valid truncates are 256, 224"
         h = SHA512.new(self._convert_to_bytes(), truncate=str(truncate))
@@ -140,18 +140,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha2_384(self):
         """Get SHA2-384 hash
-        
-        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
-        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
-        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
-        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
-        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
-        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
-        are truncated versions of SHA-512, but the initial values are generated using the method 
+
+        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224,
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256
+        are truncated versions of SHA-512, but the initial values are generated using the method
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hashlib.sha384(self._convert_to_bytes()).hexdigest()
         return self
@@ -159,18 +159,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha2_224(self):
         """Get SHA2-224 hash
-        
-        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2 
-        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of 
-        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224, 
-        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit 
-        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224 
-        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256 
-        are truncated versions of SHA-512, but the initial values are generated using the method 
+
+        The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
+        includes significant changes from its predecessor, SHA-1. The SHA-2 family consists of
+        hash functions with digests (hash values) that are 224, 256, 384 or 512 bits: SHA224,
+        SHA256, SHA384, SHA512. SHA-512 operates on 64-bit words. SHA-256 operates on 32-bit
+        words. SHA-384 is largely identical to SHA-512 but is truncated to 384 bytes. SHA-224
+        is largely identical to SHA-256 but is truncated to 224 bytes. SHA-512/224 and SHA-512/256
+        are truncated versions of SHA-512, but the initial values are generated using the method
         described in Federal Information Processing Standards (FIPS) PUB 180-4.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").sha2_224().out()
@@ -182,15 +182,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha3_512(self):
         """Get SHA3-512 hash
-        
-        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
-        Although part of the same series of standards, SHA-3 is internally quite different from the 
-        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
-        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche, 
+
+        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
+        Although part of the same series of standards, SHA-3 is internally quite different from the
+        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic
+        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche,
         building upon RadioGatún.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hashlib.sha3_512(self._convert_to_bytes()).hexdigest()
         return self
@@ -198,15 +198,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha3_256(self):
         """Get SHA3-256 hash
-        
-        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
-        Although part of the same series of standards, SHA-3 is internally quite different from the 
-        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
-        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche, 
+
+        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
+        Although part of the same series of standards, SHA-3 is internally quite different from the
+        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic
+        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche,
         building upon RadioGatún.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hashlib.sha3_256(self._convert_to_bytes()).hexdigest()
         return self
@@ -214,15 +214,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha3_384(self):
         """Get SHA3-384 hash
-        
-        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
-        Although part of the same series of standards, SHA-3 is internally quite different from the 
-        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
-        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche, 
+
+        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
+        Although part of the same series of standards, SHA-3 is internally quite different from the
+        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic
+        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche,
         building upon RadioGatún.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hashlib.sha3_384(self._convert_to_bytes()).hexdigest()
         return self
@@ -230,15 +230,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def sha3_224(self):
         """Get SHA2-224 hash
-        
-        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015. 
-        Although part of the same series of standards, SHA-3 is internally quite different from the 
-        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic 
-        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche, 
+
+        The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
+        Although part of the same series of standards, SHA-3 is internally quite different from the
+        MD5-like structure of SHA-1 and SHA-2.<br><br>SHA-3 is a subset of the broader cryptographic
+        primitive family Keccak designed by Guido Bertoni, Joan Daemen, Michaël Peeters, and Gilles Van Assche,
         building upon RadioGatún.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = hashlib.sha3_224(self._convert_to_bytes()).hexdigest()
         return self
@@ -246,14 +246,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def md2(self):
         """Get MD2 hash
-        
-        The MD2 (Message-Digest 2) algorithm is a cryptographic hash function developed by 
-        Ronald Rivest in 1989. The algorithm is optimized for 8-bit computers.Although MD2 is 
-        no longer considered secure, even as of 2014, it remains in use in public key 
+
+        The MD2 (Message-Digest 2) algorithm is a cryptographic hash function developed by
+        Ronald Rivest in 1989. The algorithm is optimized for 8-bit computers.Although MD2 is
+        no longer considered secure, even as of 2014, it remains in use in public key
         infrastructures as part of certificates generated with MD2 and RSA.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = MD2.new()
         h.update(self._convert_to_bytes())
@@ -263,13 +263,13 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def md4(self):
         """Get MD4 hash
-        
-        The MD4 (Message-Digest 4) algorithm is a cryptographic hash function 
-        developed by Ronald Rivest in 1990. The digest length is 128 bits. The algorithm 
+
+        The MD4 (Message-Digest 4) algorithm is a cryptographic hash function
+        developed by Ronald Rivest in 1990. The digest length is 128 bits. The algorithm
         has influenced later designs, such as the MD5, SHA-1 and RIPEMD algorithms.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = MD4.new()
         h.update(self._convert_to_bytes())
@@ -279,15 +279,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def md5(self):
         """Get MD5 hash
-        
-        MD5 (Message-Digest 5) is a widely used hash function. It has been used 
-        in a variety of security applications and is also commonly used to check 
-        the integrity of files.<br><br>However, MD5 is not collision resistant and 
-        it isn't suitable for applications like SSL/TLS certificates or digital 
+
+        MD5 (Message-Digest 5) is a widely used hash function. It has been used
+        in a variety of security applications and is also commonly used to check
+        the integrity of files.<br><br>However, MD5 is not collision resistant and
+        it isn't suitable for applications like SSL/TLS certificates or digital
         signatures that rely on this property.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").md5().output
@@ -301,14 +301,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def keccak_512(self):
         """Get KECCAK-512 hash
-        
-        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
-        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
-        selected as the winner of the SHA-3 design competition. This version of the 
+
+        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
+        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was
+        selected as the winner of the SHA-3 design competition. This version of the
         algorithm is Keccak[c=2d] and differs from the SHA-3 specification.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = keccak.new(digest_bits=512)
         h.update(self._convert_to_bytes())
@@ -318,14 +318,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def keccak_384(self):
         """Get KECCAK-384 hash
-        
-        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
-        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
-        selected as the winner of the SHA-3 design competition. This version of the 
+
+        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
+        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was
+        selected as the winner of the SHA-3 design competition. This version of the
         algorithm is Keccak[c=2d] and differs from the SHA-3 specification.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = keccak.new(digest_bits=384)
         h.update(self._convert_to_bytes())
@@ -335,14 +335,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def keccak_256(self):
         """Get KECCAK-256 hash
-        
-        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
-        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
-        selected as the winner of the SHA-3 design competition. This version of the 
+
+        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
+        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was
+        selected as the winner of the SHA-3 design competition. This version of the
         algorithm is Keccak[c=2d] and differs from the SHA-3 specification.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = keccak.new(digest_bits=256)
         h.update(self._convert_to_bytes())
@@ -352,14 +352,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def keccak_224(self):
         """Get KECCAK-224 hash
-        
-        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen, 
-        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was 
-        selected as the winner of the SHA-3 design competition. This version of the 
+
+        The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
+        Michaël Peeters, and Gilles Van Assche, building upon RadioGatún. It was
+        selected as the winner of the SHA-3 design competition. This version of the
         algorithm is Keccak[c=2d] and differs from the SHA-3 specification.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = keccak.new(digest_bits=224)
         h.update(self._convert_to_bytes())
@@ -369,15 +369,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def shake_256(self, size: int = 64):
         """Get Shake-256 hash
-        
-        Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm, 
+
+        Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm,
         part of the Keccak family, allowing for variable output length/size.
 
         Args:
             size (int, optional): How many bytes to read, by default 64
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = SHAKE256.new()
         h.update(self._convert_to_bytes())
@@ -387,15 +387,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def shake_128(self, size: int = 64):
         """Get Shake-128 hash
-        
-        Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm, 
+
+        Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm,
         part of the Keccak family, allowing for variable output length/size.
 
         Args:
             size (int, optional): How many bytes to read, by default 64
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = SHAKE128.new()
         h.update(self._convert_to_bytes())
@@ -405,15 +405,15 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def ripemd_160(self):
         """Get RIPEMD-160 hash
-        
-        RIPEMD (RACE Integrity Primitives Evaluation Message Digest) is a family of 
-        cryptographic hash functions developed in Leuven, Belgium, by Hans Dobbertin, 
-        Antoon Bosselaers and Bart Preneel at the COSIC research group at the Katholieke 
-        Universiteit Leuven, and first published in 1996.<br><br>RIPEMD was based upon the 
+
+        RIPEMD (RACE Integrity Primitives Evaluation Message Digest) is a family of
+        cryptographic hash functions developed in Leuven, Belgium, by Hans Dobbertin,
+        Antoon Bosselaers and Bart Preneel at the COSIC research group at the Katholieke
+        Universiteit Leuven, and first published in 1996.<br><br>RIPEMD was based upon the
         design principles used in MD4, and is similar in performance to the more popular SHA-1.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         h = RIPEMD.new()
         h.update(self._convert_to_bytes())
@@ -423,18 +423,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def blake_2b(self, bits: int = 256, key: bytes = ""):
         """Get Balke-2b hash
-        
-        Performs BLAKE2b hashing on the input. BLAKE2b is a flavour of the 
-        BLAKE cryptographic hash function that is optimized for 64-bit 
-        platforms and produces digests of any size between 1 and 64 bytes. 
+
+        Performs BLAKE2b hashing on the input. BLAKE2b is a flavour of the
+        BLAKE cryptographic hash function that is optimized for 64-bit
+        platforms and produces digests of any size between 1 and 64 bytes.
         Supports the use of an optional key.
-        
+
         Args:
             bits (int, optional): Number of digest bits, by default 256
             key (bytes, optional): Encryption secret key, by default ''
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").blake_2b(bits=128, key="key").output
@@ -455,18 +455,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def blake_2s(self, bits: int = 256, key: bytes = ""):
         """Get Blake-2s hash
-        
-        Performs BLAKE2s hashing on the input. BLAKE2s is a flavour of 
-        the BLAKE cryptographic hash function that is optimized for 8- to 
-        32-bit platforms and produces digests of any size between 1 and 32 bytes. 
+
+        Performs BLAKE2s hashing on the input. BLAKE2s is a flavour of
+        the BLAKE cryptographic hash function that is optimized for 8- to
+        32-bit platforms and produces digests of any size between 1 and 32 bytes.
         Supports the use of an optional key.
-        
+
         Args:
             bits (int, optional): Number of digest bits, by default 256
             key (bytes, optional): Encryption secret key, by default ''
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("A").blake_2s(bits=128, key="key").output
@@ -481,13 +481,13 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def crc8_checksum(self):
         """Get CRC8 checksum
-        
-        A cyclic redundancy check (CRC) is an error-detecting code commonly 
-        used in digital networks and storage devices to detect accidental changes 
+
+        A cyclic redundancy check (CRC) is an error-detecting code commonly
+        used in digital networks and storage devices to detect accidental changes
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = Crc8().process(self._convert_to_bytes()).finalhex()
         return self
@@ -495,13 +495,13 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def crc16_checksum(self):
         """Get CRC16 checksum
-        
-        A cyclic redundancy check (CRC) is an error-detecting code commonly 
-        used in digital networks and storage devices to detect accidental changes 
+
+        A cyclic redundancy check (CRC) is an error-detecting code commonly
+        used in digital networks and storage devices to detect accidental changes
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = CrcArc().process(self._convert_to_bytes()).finalhex()
         return self
@@ -509,13 +509,13 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def crc32_checksum(self):
         """Get CRC32 checksum
-        
-        A cyclic redundancy check (CRC) is an error-detecting code commonly 
-        used in digital networks and storage devices to detect accidental changes 
+
+        A cyclic redundancy check (CRC) is an error-detecting code commonly
+        used in digital networks and storage devices to detect accidental changes
         to raw data. The CRC was invented by W. Wesley Peterson in 1961.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("a").crc32_checksum().output
@@ -527,20 +527,20 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
         """Get HMAC hash
-        
+
         HMAC hash the state
 
-        Keyed-Hash Message Authentication Codes (HMAC) are a mechanism for 
+        Keyed-Hash Message Authentication Codes (HMAC) are a mechanism for
         message authentication using cryptographic hash functions.
-        
+
         Args:
             key (bytes, optional): Starting key for the hash, by default b''
-            digest (str, optional): The digest type, by default "sha1". Possible values are 
+            digest (str, optional): The digest type, by default "sha1". Possible values are
                 md5, sha1, sha256 and sha512
-        
+
         Returns:
-            Chepy: The Chepy object. 
-        
+            Chepy: The Chepy object.
+
         Raises:
             TypeError: If key is not in bytes
             TypeError: If not a valid/allowed digest type
@@ -581,7 +581,7 @@ class Hashing(ChepyCore):
         show_full_key: bool = False,
     ):
         """Derive a PBKDF2 key
-        
+
         Args:
             password (Union[str, bytes]): Password
             salt (Union[str, bytes]): Salt
@@ -590,17 +590,17 @@ class Hashing(ChepyCore):
             hash_type (Literal[, optional): Hash type. Defaults to "sha1".
             hex_salt (bool, optional): If salt is in hex format. Defaults to True.
             show_full_key (bool, optional): Show AES256 64 bit key only. Defaults to False.
-        
+
         Raises:
             TypeError: If hash type is not one of md5, sha1, sha256, sha512
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(".").derive_pbkdf2_key("mR3m", "d9016d44c374f5fb62604683f4d61578").o[:10]
             "7c8898f222"
-        """        
+        """
         if isinstance(salt, str):
             salt = salt.encode()
 
@@ -610,11 +610,17 @@ class Hashing(ChepyCore):
         if hash_type == "md5":
             h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=MD5)
         elif hash_type == "sha1":
-            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA1)
+            h = PBKDF2(
+                password, salt, key_size, count=iterations, hmac_hash_module=SHA1
+            )
         elif hash_type == "sha256":
-            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA256)
+            h = PBKDF2(
+                password, salt, key_size, count=iterations, hmac_hash_module=SHA256
+            )
         elif hash_type == "sha512":
-            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=SHA512)
+            h = PBKDF2(
+                password, salt, key_size, count=iterations, hmac_hash_module=SHA512
+            )
         else:  # pragma: no cover
             raise TypeError(
                 "Currently supported digests are md5, sha1, sha256 and sha512"
@@ -629,18 +635,18 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def bcrypt_hash(self, rounds: int = 10):
         """Get Bcrypt hash
-        
-        bcrypt is a password hashing function designed by Niels Provos and David Mazières, 
-        based on the Blowfish cipher, and presented at USENIX in 1999. Besides incorporating 
-        a salt to protect against rainbow table attacks, bcrypt is an adaptive function: over 
-        time, the iteration count (rounds) can be increased to make it slower, so it remains 
+
+        bcrypt is a password hashing function designed by Niels Provos and David Mazières,
+        based on the Blowfish cipher, and presented at USENIX in 1999. Besides incorporating
+        a salt to protect against rainbow table attacks, bcrypt is an adaptive function: over
+        time, the iteration count (rounds) can be increased to make it slower, so it remains
         resistant to brute-force search attacks even with increasing computation power.
-        
+
         Args:
             rounds (int, optional): rounds of hashing, by default 10
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
         return self
@@ -648,14 +654,14 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     def bcrypt_compare(self, hash: str):
         """Compare Bcrypt hash
-        
+
         Tests whether the provided hash matches the given string at init.
-        
+
         Args:
             hash (str): Required. brypt hash
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("abc")
@@ -679,18 +685,18 @@ class Hashing(ChepyCore):
     ):
         """Get Scrypt hash
 
-        scrypt is a password-based key derivation function (PBKDF) created by Colin Percival. 
-        The algorithm was specifically designed to make it costly to perform large-scale 
-        custom hardware attacks by requiring large amounts of memory. In 2016, the scrypt 
+        scrypt is a password-based key derivation function (PBKDF) created by Colin Percival.
+        The algorithm was specifically designed to make it costly to perform large-scale
+        custom hardware attacks by requiring large amounts of memory. In 2016, the scrypt
         algorithm was published by IETF as RFC 7914.
-        
+
         Args:
             salt (str, optional): A string of characters that modifies the hash. Defaults to "".
             key_length (int, optional): number of bytes to use when autogenerating new salts. Defaults to 64.
             N (int, optional): CPU/memory cost parameter. Defaults to 14.
             r (int, optional): The blocksize parameter. Defaults to 8.
             p (int, optional): Parallelization parameter;. Defaults to 1.
-        
+
         Returns:
             Chepy: The Chepy object.
 

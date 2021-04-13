@@ -11,16 +11,15 @@ class Extractors(ChepyCore):
         super().__init__(*data)
 
     def _parsel_obj(self):
-        """Returns a parsel.Selector object
-        """
+        """Returns a parsel.Selector object"""
         return Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
     def extract_hashes(self):
         """Extract md5, sha1, sha256 and sha512 hashes
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(
@@ -48,12 +47,12 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def extract_strings(self, length: int = 4):
         """Extract strings from state
-        
+
         Args:
             length (int, optional): Min length of string. Defaults to 4.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("tests/files/hello").load_file().extract_strings().o
@@ -74,14 +73,14 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def extract_ips(self, invalid: bool = False, is_binary: bool = False):
         """Extract ipv4 and ipv6 addresses
-        
+
         Args:
             invalid (bool, optional): Include :: addresses. Defaults to False.
-            is_binary (bool, optional): The state is in binary format. It will then first 
+            is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         pattern = b"((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))"
         if is_binary:  # pragma: no cover
@@ -102,14 +101,14 @@ class Extractors(ChepyCore):
         """Extract email
 
         Args:
-            is_binary (bool, optional): The state is in binary format. It will then first 
+            is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
-            Sometimes, the state is in a binary format, and not readable. In this case 
+            Sometimes, the state is in a binary format, and not readable. In this case
             set the binary flag to True.
 
             >>> Chepy("tests/files/test.der").load_file().extract_email(is_binary=True).o
@@ -133,11 +132,11 @@ class Extractors(ChepyCore):
         """Extract MAC addresses
 
         Args:
-            is_binary (bool, optional): The state is in binary format. It will then first 
+            is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         pattern = b"^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$"
         if is_binary:  # pragma: no cover
@@ -158,11 +157,11 @@ class Extractors(ChepyCore):
         """Extract urls including http, file, ssh and ftp
 
         Args:
-            is_binary (bool, optional): The state is in binary format. It will then first 
+            is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         pattern = b"(file|ftps?|http[s]?|ssh)://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
         if is_binary:  # pragma: no cover
@@ -183,11 +182,11 @@ class Extractors(ChepyCore):
         """Extract domains
 
         Args:
-            is_binary (bool, optional): The state is in binary format. It will then first 
+            is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if is_binary:  # pragma: no cover
             matched = list(_pyurlparse(x).netloc for x in self.extract_strings().o)
@@ -203,13 +202,13 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def xpath_selector(self, query: str, namespaces: str = None):
         """Extract data using valid xpath selectors
-        
+
         Args:
             query (str): Required. Xpath query
             namespaces (str, optional): Namespace. Applies for XML data. Defaults to None.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("http://example.com")
@@ -229,12 +228,12 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def css_selector(self, query: str):
         """Extract data using valid CSS selectors
-        
+
         Args:
             query (str): Required. CSS query
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("http://example.com")
@@ -252,12 +251,12 @@ class Extractors(ChepyCore):
         """Query JSON with jpath query
 
         `Reference <https://goessner.net/articles/JsonPath/index.html#e2>`__
-        
+
         Args:
             query (str): Required. Query. For reference, see the help
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("tests/files/test.json")
@@ -276,9 +275,9 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def html_comments(self):
         """Extract html comments
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = list(
             filter(lambda x: x != "", self._parsel_obj().xpath("//comment()").getall())
@@ -290,9 +289,9 @@ class Extractors(ChepyCore):
         """Extract javascript comments
 
         Some false positives is expected because of inline // comments
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"/\*[\w'\s\r\n\*]*\*/|//[\w\s']*|/\*.+?\*/", self._convert_to_str()
@@ -302,12 +301,12 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def html_tags(self, tag: str):
         """Extract tags from html along with their attributes
-        
+
         Args:
             tag (str): A HTML tag
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("http://example.com").http_request().html_tags('p').o
@@ -334,7 +333,7 @@ class Extractors(ChepyCore):
         """Extract Goolge api keys
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"AIza[0-9A-Za-z-_]{35}", self._convert_to_str())
         return self
@@ -344,7 +343,7 @@ class Extractors(ChepyCore):
         """Extract Goolge captcha keys
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"6L[0-9A-Za-z-_]{38}", self._convert_to_str())
         return self
@@ -354,7 +353,7 @@ class Extractors(ChepyCore):
         """Extract Goolge oauth keys
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"ya29\.[0-9A-Za-z\-_]+", self._convert_to_str())
         return self
@@ -364,7 +363,7 @@ class Extractors(ChepyCore):
         """Extract AWS key ids
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"AKIA[0-9A-Z]{16}", self._convert_to_str())
         return self
@@ -374,7 +373,7 @@ class Extractors(ChepyCore):
         """Extract AWS S3 URLs
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"s3\.amazonaws.com[/]+|[a-zA-Z0-9_-]*\.s3\.amazonaws.com",
@@ -387,7 +386,7 @@ class Extractors(ChepyCore):
         """Extract Facebook access tokens
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"EAACEdEose0cBA[0-9A-Za-z]+", self._convert_to_str())
         return self
@@ -397,7 +396,7 @@ class Extractors(ChepyCore):
         """Extract basic authentication tokens
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"[B|b]asic\s*[a-zA-Z0-9=:_\+\/-]+", self._convert_to_str()
@@ -409,7 +408,7 @@ class Extractors(ChepyCore):
         """Extract bearer authentication tokens
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"[b|B]earer\s*[a-zA-Z0-9_\-\.=:_\+\/]+", self._convert_to_str()
@@ -421,7 +420,7 @@ class Extractors(ChepyCore):
         """Extract Mailgun API key
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"key-[0-9a-zA-Z]{32}", self._convert_to_str())
         return self
@@ -431,7 +430,7 @@ class Extractors(ChepyCore):
         """Extract Twilio API key
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"SK[0-9a-fA-F]{32}", self._convert_to_str())
         return self
@@ -441,7 +440,7 @@ class Extractors(ChepyCore):
         """Extract Twilio account or app sid
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"A[C|P][a-zA-Z0-9_\-]{32}", self._convert_to_str())
         return self
@@ -451,7 +450,7 @@ class Extractors(ChepyCore):
         """Extract Paypal braintree access token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}",
@@ -464,7 +463,7 @@ class Extractors(ChepyCore):
         """Extract Square oauth secret token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"sq0csp-[ 0-9A-Za-z\-_]{43}", self._convert_to_str())
         return self
@@ -474,7 +473,7 @@ class Extractors(ChepyCore):
         """Extract Square access token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"sqOatp-[0-9A-Za-z\-_]{22}", self._convert_to_str())
         return self
@@ -484,7 +483,7 @@ class Extractors(ChepyCore):
         """Extract Stripe standard or restricted api token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(r"[s|r]k_live_[0-9a-zA-Z]{24}", self._convert_to_str())
         return self
@@ -494,7 +493,7 @@ class Extractors(ChepyCore):
         """Extract Github access token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"[a-zA-Z0-9_-]*:[a-zA-Z0-9_\-]+@github\.com*", self._convert_to_str()
@@ -506,7 +505,7 @@ class Extractors(ChepyCore):
         """Extract RSA private key
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"-----BEGIN RSA PRIVATE KEY-----", self._convert_to_str()
@@ -518,7 +517,7 @@ class Extractors(ChepyCore):
         """Extract DSA private key
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"-----BEGIN DSA PRIVATE KEY-----", self._convert_to_str()
@@ -530,7 +529,7 @@ class Extractors(ChepyCore):
         """Extract JWT token
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.findall(
             r"ey[A-Za-z0-9_-]*\.[A-Za-z0-9._-]*|ey[A-Za-z0-9_\/+-]*\.[A-Za-z0-9._\/+-]*",
@@ -541,12 +540,12 @@ class Extractors(ChepyCore):
     @ChepyDecorators.call_stack
     def extract_base64(self, min: int = 20):
         """Extract base64 encoded strings
-        
+
         Args:
             min (int, optional): Minium length to match. Defaults to 20.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         found = re.findall("[a-zA-Z0-9+/=]{%s,}" % str(20), self._convert_to_str())
         if len(found) > 1:  # pragma: no cover
@@ -554,4 +553,3 @@ class Extractors(ChepyCore):
         else:
             self.state = found[0]
         return self
-

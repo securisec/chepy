@@ -17,10 +17,10 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def reverse(self, count: int = 1):
         """Reverses a string
-        
+
         Args:
             count (int, optional): Reverse by the number of characters indicated in count. Defaults to 1.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -73,14 +73,14 @@ class Utils(ChepyCore):
         form_feeds: bool = True,
     ):
         """Remove whitespace from a string
-        
+
         Args:
             spaces (bool, optional): Remove spaces. Defaults to True.
             carriage_return (bool, optional): Remove carriage return \\r. Defaults to True.
             line_feeds (bool, optional): Remove line feeds \\n. Defaults to True.
             tabs (bool, optional): Temove tabs \\t. Defaults to True.
             form_feeds (bool, optional): Remove form feeds \\f. Defaults to True.
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -101,7 +101,7 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def remove_nullbytes(self):
         """Remove null \\x00 byes from binary data
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -119,7 +119,7 @@ class Utils(ChepyCore):
         extended: bool = False,
     ):
         """Regex search on current data
-        
+
         Args:
             pattern (str): Required. The regex pattern to search by
             ignore_case (bool, optional): Set case insentive flag. Defaults to False.
@@ -127,7 +127,7 @@ class Utils(ChepyCore):
             dotall (bool, optional): `.` matches newline. Defaults to False.
             unicode (bool, optional): Match unicode characters. Defaults to False.
             extended (bool, optional): Ignore whitespace. Defaults to False.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -152,11 +152,11 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def split_by(self, pattern: str = "\n", trim=True):
         """Split a string by the given pattern
-        
+
         Args:
             pattern (str, optional): Pattern to split by. Defaults to '\\n'.
             time (bool, optional): Trim whitespace after split. Defaults to True
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -171,12 +171,12 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def split_by_n(self, n: int):
         """Split a string by n characters.
-        
+
         Args:
             n (int): n from 0
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some string").split_by_n(2).o[2]
@@ -187,16 +187,16 @@ class Utils(ChepyCore):
 
     @ChepyDecorators.call_stack
     def select_every_n(self, n: int, start: int = 0):
-        """Select every nth item from a list or string. 
+        """Select every nth item from a list or string.
 
         Index starts at 0
-        
+
         Args:
             n (int): n from 0
             start (int): starting position. Defaults to 0.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["a", 1, "lol", "b", True]).select_every_n(3)
@@ -208,10 +208,10 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def unique(self):
         """Get an array of unique list items
-        
+
         Raises:
             StateNotList: If state is not a list
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -222,13 +222,13 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def sort_list(self, reverse: bool = False):
         """Sort a list
-        
+
         Args:
             reverse (bool, optional): In reverse order. Defaults to False.
-        
+
         Raises:
             StateNotList: If state is not list
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -245,12 +245,12 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def sort_dict_key(self, reverse: bool = False):
         """Sort a dictionary by key
-        
+
         Args:
             reverse (bool, optional): Reverse sort order. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy({'z': 'string', 'a': True, 'zz': 1, 'aaa': {'bb': 'data'}, 'ccc': [1,'a']})
@@ -264,10 +264,10 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def sort_dict_value(self, reverse=False):
         """Sort dictionary by value
-        
+
         Args:
             reverse (bool, optional): Reverse sort order. Defaults to False.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -294,14 +294,14 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def filter_list(self, by: Union[str, dict], regex: bool = True):
         """Filter a list by a string regex or dict key
-        
+
         Args:
             by (Union[str, dict]): If string, supports regex. Or dictionary
             regex (bool, optional): If pattern is a regex. Defaults to True
-        
+
         Raises:
             StateNotList: If state is not a list
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -321,16 +321,16 @@ class Utils(ChepyCore):
 
     @ChepyDecorators.call_stack
     def filter_list_by_length(self, length: int, exact: bool = False):
-        """Filter a list by length by specifying minimum length. 
+        """Filter a list by length by specifying minimum length.
 
-        It will also return items that exceed the specified length. 
-        
+        It will also return items that exceed the specified length.
+
         Args:
             length (int): Minimum length to match
             exact (bool): Match exact length
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         assert isinstance(self.state, list), StateNotList()
         if exact:
@@ -342,12 +342,12 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def filter_dict_key(self, by: str):
         """Filter dictionary by key
-        
+
         Args:
-            by (str): Required. Key to filter by. 
-        
+            by (str): Required. Key to filter by.
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_key('ano')
@@ -361,15 +361,15 @@ class Utils(ChepyCore):
 
     @ChepyDecorators.call_stack
     def filter_dict_value(self, by: str):
-        """Filter dictionary by value. 
+        """Filter dictionary by value.
 
-        This method does descend into nested dictionary values. 
-        
+        This method does descend into nested dictionary values.
+
         Args:
-            by (str): Required. Value to filter by. 
-        
+            by (str): Required. Value to filter by.
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy({'some': 'dict', 'another': 'val'}).filter_dict_value('val')
@@ -384,11 +384,11 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def slice(self, start: int = 0, end: int = None):
         """Returns the specified slice
-        
+
         Args:
             start (int, optional): Start position. Defaults to 0.
             end (int, optional): End position. Defaults to None.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -402,12 +402,12 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def find_replace(self, pattern: str, repl: str, ignore_case=True):
         """Replace matched pattern with repln
-        
+
         Args:
             pattern (str): Required. Pattern to search
             repl (str): Required. Pattern to match
             ignore_case (bool, optional): Case insensitive. Defaults to True.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -424,7 +424,7 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def escape_string(self):
         """Escape all special characters in a string
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -434,7 +434,7 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def unescape_string(self):
         """Unescape \\ from a string
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -448,7 +448,7 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def color_hex_to_rgb(self):
         """Convert hex color to rgb
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -466,18 +466,18 @@ class Utils(ChepyCore):
         swap: bool = False,
     ):
         """Diff state with another state or buffer
-        
+
         Args:
             state (int, optional): Index of state to compare against. Defaults to None.
             buffer (int, optional): Index of buffer to compare against. Defaults to None.
             colors (int, optional): Show colored diff. Defaults to False.
             swap (int, optional): Swap the diff order. Defaults to False.
-        
+
         Raises:
             TypeError: If both state and buffer is set to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("first string", "First $trin")
@@ -528,19 +528,19 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def pad(self, width: int, direction: str = "left", char: str = " "):
         """Pad string with a character
-        
+
         Args:
-            width (int): Required. Total length of string. The padding is calculated from 
+            width (int): Required. Total length of string. The padding is calculated from
                 the length of state minus width.
             direction (str, optional): Padding direction. left or right. Defaults to 'left'.
             char (str, optional): Char to fill with. Defaults to ' '.
-        
+
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("lol").pad(5, char="a")
-            lol # this is because "lol" is len 3, and padding is 5 - 2, which is 2, so no 
+            lol # this is because "lol" is len 3, and padding is 5 - 2, which is 2, so no
             padding is added
             >>> c = Chepy("lol").pad(8, char="a")
             lolaa # 8 - 3 so the output is padded for 5 chars
@@ -564,9 +564,9 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def count(self):
         """Count anything
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = pydash.count_by(self.state)
         return self
@@ -574,9 +574,9 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def set(self):
         """Get an array of unique values
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = list(set(self.state))
         return self
@@ -584,16 +584,15 @@ class Utils(ChepyCore):
     @ChepyDecorators.call_stack
     def regex_to_str(self, all_combo: bool = False):
         """Convert a regex to a matching string
-        
+
         Args:
             all_combo (bool, optional): Generate all combos that match regex. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if all_combo:
             self.state = list(exrex.generate(self._convert_to_str()))
         else:
             self.state = exrex.getone(self._convert_to_str())
         return self
-

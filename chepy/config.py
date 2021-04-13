@@ -95,15 +95,11 @@ class ChepyConfig(object):
         self.prompt_toolbar_errors = self.__get_conf_value(
             "#ff0000", "prompt_toolbar_errors"
         )
-        self.prompt_cli_method = self.__get_conf_value(
-            "#ffd700", "prompt_cli_method"
-        )
+        self.prompt_cli_method = self.__get_conf_value("#ffd700", "prompt_cli_method")
         self.prompt_plugin_method = self.__get_conf_value(
             "#30d8ff", "prompt_plugin_method"
         )
-        self.cli_info_color = self.__get_conf_value(
-            "#c2c2ff", "cli_info_color"
-        )
+        self.cli_info_color = self.__get_conf_value("#c2c2ff", "cli_info_color")
 
     def __get_conf_value(self, default: str, option: str, section: str = "Cli"):
         if self.config.has_section(section):

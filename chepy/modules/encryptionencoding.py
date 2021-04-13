@@ -20,10 +20,10 @@ from ..extras.combinatons import hex_chars
 
 
 class EncryptionEncoding(ChepyCore):
-    """This class handles most operations related to various encryption 
-    related operations. This class inherits the ChepyCore class, and all the 
+    """This class handles most operations related to various encryption
+    related operations. This class inherits the ChepyCore class, and all the
     methods are also available from the Chepy class
-    
+
     Examples:
         >>> from chepy import Chepy
         or
@@ -52,10 +52,10 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def rotate(self, rotate_by: int):
         """Rotate string by provided number
-        
+
         Args:
             rotate_by (int): Required. Number to rotate by
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -77,7 +77,7 @@ class EncryptionEncoding(ChepyCore):
     def rotate_bruteforce(self):
         """Brute force rotation from 1 to 26.
         Returned value is a dict where key is the rotation count.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -108,12 +108,12 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def rot_13(self):
         """ROT-13 encoding
-        
-        A simple caesar substitution cipher which rotates alphabet 
+
+        A simple caesar substitution cipher which rotates alphabet
         characters by the specified amount (default 13).
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = codecs.encode(self._convert_to_str(), "rot_13")
         return self
@@ -121,12 +121,12 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def rot_47(self):
         """ROT 47 encoding
-        
-        A slightly more complex variation of a caesar cipher, which includes 
+
+        A slightly more complex variation of a caesar cipher, which includes
         ASCII characters from 33 '!' to 126 '~'. Default rotation: 47.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some").rot_47().output
@@ -146,8 +146,8 @@ class EncryptionEncoding(ChepyCore):
     def xor(self, key: str, key_type: str = "hex", ascii: bool = False):
         """XOR state with a key
 
-        Valid key formats are utf, hex and base64. Simple XOR cipher is a type 
-        of additive cipher based on logical operation xor, which operates according 
+        Valid key formats are utf, hex and base64. Simple XOR cipher is a type
+        of additive cipher based on logical operation xor, which operates according
         to the following principles.
 
         (A * B) + (!A * !B)
@@ -160,14 +160,14 @@ class EncryptionEncoding(ChepyCore):
 
         The main advantage of xor chipher is that the encyption is reversible with t
         he same logical operation.
-        
+
         Args:
             key (str): Required. The key to xor by
             key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".
             ascii (bool, optional): If the input is in ascii format
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("secret").xor(key="secret", key_type="utf").to_hex()
@@ -201,12 +201,12 @@ class EncryptionEncoding(ChepyCore):
     def xor_bruteforce(self, length: int = 100):
         """Brute force single byte xor
 
-        For multibyte xor bruteforce, use chepy.extras.crypto_extras.xor_bruteforce_multi 
+        For multibyte xor bruteforce, use chepy.extras.crypto_extras.xor_bruteforce_multi
         function
-        
+
         Args:
             length (int, optional): How to bytes to bruteforce. Defaults to 100.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -238,9 +238,9 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def jwt_decode(self):
         """Decode a JWT token. Does not verify
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = {
             "payload": jwt.decode(self._convert_to_str(), verify=False),
@@ -251,13 +251,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def jwt_verify(self, secret: str, algorithm: list = ["HS256"]):
         """Verify JWT token
-        
+
         Args:
             secret (str): Required. Secret key for token
             algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"]
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = jwt.decode(
             self._convert_to_str(), key=secret, algorithms=algorithm
@@ -267,13 +267,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def jwt_sign(self, secret: str, algorithms: str = "HS256"):
         """Sign a json/dict object in JWT
-        
+
         Args:
             secret (str): Required. Secret to sign with
             algorithms (str, optional): Signing algorithm. Defaults to "HS256".
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if isinstance(self.state, dict):
             data = self.state
@@ -288,16 +288,16 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Brute force JWT token secret
 
-        This method will use the provided wordlist to try and bruteforce the 
+        This method will use the provided wordlist to try and bruteforce the
         verification.
-        
+
         Args:
             wordlist (str): Required. Path to a wordlist
             b64_encode (bool, optional): Encoded the words in base64. Defaults to False.
             algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"].
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         with open(pathlib.Path(wordlist).expanduser().absolute()) as words:
             for word in words:
@@ -320,13 +320,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def rc4_encrypt(self, key: str, hex_key: bool = False):
         """Encrypt raw state with RC4
-        
+
         Args:
             key (str): Required. Secret key
             hex_key (bool, optional): If key is in hex. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").rc4_encrypt("736563726574", hex_key=True).o
@@ -343,13 +343,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def rc4_decrypt(self, key: str, hex_key: bool = False):
         """Decrypt raw state with RC4
-        
+
         Args:
             key (str): Required. Secret key
             hex_key (bool, optional): If key is in hex. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("9e59bf79a2c0b7d253").hex_to_str().rc4_decrypt("secret").o
@@ -374,23 +374,23 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Encrypt raw state with DES
 
-        DES is a previously dominant algorithm for encryption, and was published 
-        as an official U.S. Federal Information Processing Standard (FIPS). It is 
-        now considered to be insecure due to its small key size. DES uses a key 
-        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes. 
-        You can generate a password-based key using one of the KDF operations. 
-        The Initialization Vector should be 8 bytes long. If not entered, it will 
+        DES is a previously dominant algorithm for encryption, and was published
+        as an official U.S. Federal Information Processing Standard (FIPS). It is
+        now considered to be insecure due to its small key size. DES uses a key
+        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes.
+        You can generate a password-based key using one of the KDF operations.
+        The Initialization Vector should be 8 bytes long. If not entered, it will
         default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).o
@@ -432,25 +432,25 @@ class EncryptionEncoding(ChepyCore):
         hex_key: bool = False,
         hex_iv: bool = True,
     ):
-        """Decrypt raw state encrypted with DES. 
+        """Decrypt raw state encrypted with DES.
 
-        DES is a previously dominant algorithm for encryption, and was published 
-        as an official U.S. Federal Information Processing Standard (FIPS). It is 
-        now considered to be insecure due to its small key size. DES uses a key 
-        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes. 
-        You can generate a password-based key using one of the KDF operations. 
-        The Initialization Vector should be 8 bytes long. If not entered, it will 
+        DES is a previously dominant algorithm for encryption, and was published
+        as an official U.S. Federal Information Processing Standard (FIPS). It is
+        now considered to be insecure due to its small key size. DES uses a key
+        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes.
+        You can generate a password-based key using one of the KDF operations.
+        The Initialization Vector should be 8 bytes long. If not entered, it will
         default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("1ee5cb52954b211d1acd6e79c598baac").hex_to_str().des_decrypt("password").o
@@ -489,22 +489,22 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Encrypt raw state with Triple DES
 
-        Triple DES applies DES three times to each block to increase key size. Key: 
-        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length 
-        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one 
-        of the KDF operations. IV: The Initialization Vector should be 8 bytes long. 
-        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB 
+        Triple DES applies DES three times to each block to increase key size. Key:
+        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length
+        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one
+        of the KDF operations. IV: The Initialization Vector should be 8 bytes long.
+        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB
         mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").triple_des_encrypt("super secret password !!", mode="ECB").o
@@ -541,24 +541,24 @@ class EncryptionEncoding(ChepyCore):
         hex_key: bool = False,
         hex_iv: bool = True,
     ):
-        """Decrypt raw state encrypted with DES. 
+        """Decrypt raw state encrypted with DES.
 
-        Triple DES applies DES three times to each block to increase key size. Key: 
-        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length 
-        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one 
-        of the KDF operations. IV: The Initialization Vector should be 8 bytes long. 
-        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB 
+        Triple DES applies DES three times to each block to increase key size. Key:
+        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length
+        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one
+        of the KDF operations. IV: The Initialization Vector should be 8 bytes long.
+        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB
         mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("f8b27a0d8c837edce87dd13a1ab41f96")
@@ -600,29 +600,29 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Encrypt raw state with AES
 
-        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing 
-        Standard (FIPS). It was selected after a 5-year process where 15 competing 
+        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
+        Standard (FIPS). It was selected after a 5-year process where 15 competing
         designs were evaluated.
-        
-        key: The following algorithms will be used based on the size of the 
+
+        key: The following algorithms will be used based on the size of the
             16 bytes = AES-128
             24 bytes = AES-192
             32 bytes = AES-256
-        
-        You can generate a password-based key using one of the KDF operations. 
-        IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
+
+        You can generate a password-based key using one of the KDF operations.
+        IV: The Initialization Vector should be 16 bytes long. If not entered, it will
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. 
+            iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").aes_encrypt("secret password!", mode="ECB").o
@@ -667,32 +667,32 @@ class EncryptionEncoding(ChepyCore):
         hex_key: bool = False,
         hex_iv: bool = True,
     ):
-        """Decrypt raw state encrypted with DES. 
+        """Decrypt raw state encrypted with DES.
 
-        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing 
-        Standard (FIPS). It was selected after a 5-year process where 15 competing 
-        designs were evaluated.<br><br><b>Key:</b> The following algorithms will 
-        be used based on the size of the 
-        
+        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
+        Standard (FIPS). It was selected after a 5-year process where 15 competing
+        designs were evaluated.<br><br><b>Key:</b> The following algorithms will
+        be used based on the size of the
+
         key:
             16 bytes = AES-128
             24 bytes = AES-192
             32 bytes = AES-256
-        
-        You can generate a password-based key using one of the KDF operations. 
-        IV: The Initialization Vector should be 16 bytes long. If not entered, it will 
+
+        You can generate a password-based key using one of the KDF operations.
+        IV: The Initialization Vector should be 16 bytes long. If not entered, it will
         default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
-        
+
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. 
+            iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("5fb8c186394fc399849b89d3b6605fa3")
@@ -742,8 +742,8 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Encrypt raw state with Blowfish
 
-        Blowfish is a symmetric-key block cipher designed in 1993 by 
-        Bruce Schneier and included in a large number of cipher suites 
+        Blowfish is a symmetric-key block cipher designed in 1993 by
+        Bruce Schneier and included in a large number of cipher suites
         and encryption products. AES now receives more attention.
         IV: The Initialization Vector should be 8 bytes long.
 
@@ -753,9 +753,9 @@ class EncryptionEncoding(ChepyCore):
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("some data").blowfish_encrypt("password", mode="ECB").o
@@ -794,21 +794,21 @@ class EncryptionEncoding(ChepyCore):
     ):
         """Encrypt raw state with Blowfish
 
-        Blowfish is a symmetric-key block cipher designed in 1993 by 
-        Bruce Schneier and included in a large number of cipher suites 
+        Blowfish is a symmetric-key block cipher designed in 1993 by
+        Bruce Schneier and included in a large number of cipher suites
         and encryption products. AES now receives more attention.
         IV: The Initialization Vector should be 8 bytes long.
-        
+
         Args:
             key (str): Required. The secret key
-            iv (str, optional): IV for certain modes only. 
+            iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
             hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
             hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("d9b0a79853f13960fcee3cae16e27884")
@@ -842,12 +842,12 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def vigenere_encode(self, key: str):
         """Encode with Vigenere ciper
-        
+
         Args:
             key (str): Required. The secret key
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("secret").vigenere_encode("secret").o
@@ -859,12 +859,12 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def vigenere_decode(self, key: str):
         """Decode Vigenere ciper
-        
+
         Args:
             key (str): Required. The secret key
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("KIEIIM").vigenere_decode("secret").o
@@ -876,13 +876,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def affine_encode(self, a: int = 1, b: int = 1):
         """Encode with Affine ciper
-        
+
         Args:
             a (int, optional): Multiplier value. Defaults to 1
             b (int, optional): Additive value. Defaults to 1
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("secret").affine_encode().o
@@ -894,13 +894,13 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def affine_decode(self, a: int = 1, b: int = 1):
         """Decode Affine ciper
-        
+
         Args:
             a (int, optional): Multiplier value. Defaults to 1
             b (int, optional): Additive value. Defaults to 1
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("TFDSFU").affine_decode().o
@@ -912,9 +912,9 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def atbash_encode(self):
         """Encode with Atbash ciper
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("secret").atbash_encode().o
@@ -926,9 +926,9 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def atbash_decode(self):
         """Decode Atbash ciper
-        
+
         Returns:
-            Chepy: The Chepy oject. 
+            Chepy: The Chepy oject.
 
         Examples:
             >>> Chepy("hvxivg").atbash_decode().o
@@ -946,15 +946,15 @@ class EncryptionEncoding(ChepyCore):
         word_delim: str = "\n",
     ):
         """Encode string to morse code
-        
+
         Args:
             dot (str, optional): The char for dot. Defaults to ".".
             dash (str, optional): The char for dash. Defaults to "-".
             letter_delim (str, optional): Letter delimiter. Defaults to " ".
             word_delim (str, optional): Word delimiter. Defaults to "\\n".
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         encode = ""
         morse_code_dict = EncryptionConsts.MORSE_CODE_DICT
@@ -976,15 +976,15 @@ class EncryptionEncoding(ChepyCore):
         word_delim: str = "\n",
     ):
         """Decode morse code
-        
+
         Args:
             dot (str, optional): The char for dot. Defaults to ".".
             dash (str, optional): The char for dash. Defaults to "-".
             letter_delim (str, optional): Letter delimiter. Defaults to " ".
             word_delim (str, optional): Word delimiter. Defaults to "\\n".
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         decode = ""
         morse_code_dict = EncryptionConsts.MORSE_CODE_DICT

@@ -5,22 +5,22 @@ from ..core import ChepyCore, ChepyDecorators
 
 
 class Multimedia(ChepyCore):
-    """The `Multimedia` class is used predominantly to handle image and 
-    audio file processing. All the methods within the `Multimedia` class 
-    are available in the main **Chepy** class. For coverage, it is important 
-    to understand that this class will sometimes coerce non RGBA to RGB and 
+    """The `Multimedia` class is used predominantly to handle image and
+    audio file processing. All the methods within the `Multimedia` class
+    are available in the main **Chepy** class. For coverage, it is important
+    to understand that this class will sometimes coerce non RGBA to RGB and
     RGB to RGBA formats.
-    
+
     Examples:
         To use the Multimedia class as a standalone, import with
-        
+
         >>> from chepy.modules.multimedia import Multimedia
         >>> m = Multimedia("/path/to/image.png").load_file()
         This will load the image as bytes into Chepy.
 
-        Advanced example using the Multimedia class. We will take 
-        our loaded image, convert it split out the RGB color channels, 
-        get the blue image, blur it and finally write it to disk. 
+        Advanced example using the Multimedia class. We will take
+        our loaded image, convert it split out the RGB color channels,
+        get the blue image, blur it and finally write it to disk.
 
         >>> from chepy.modules.multimedia import Multimedia
         >>> m = Multimedia("/path/to/image.png").load_file()
@@ -63,17 +63,17 @@ class Multimedia(ChepyCore):
         resample: str = "nearest",
         quality: int = 100,
     ):
-        """Resize an image. 
-        
+        """Resize an image.
+
         Args:
             width (int): Required. Width in pixels
             height (int): Required. Height in pixels
             extension (str, optional): File extension of loaded image. Defaults to png
             resample (str, optional): Resample rate. Defaults to "nearest".
             quality (int, optional): Quality of output. Defaults to 100.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("image.png").load_file().resize_image(256, 256, "png")
@@ -106,9 +106,9 @@ class Multimedia(ChepyCore):
 
         Args:
             extension (str, optional): File extension of loaded image. Defaults to png
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             Write the blue image to disk in this example
@@ -152,13 +152,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def rotate_image(self, rotate_by: int, extension: str = "png"):
         """Rotate an image
-        
+
         Args:
             rotate_by (int): Required. Roate by degrees
             extension (str, optional): File extension of loaded image. Defaults to png
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             To flip an image horizontally, we can:
@@ -178,14 +178,14 @@ class Multimedia(ChepyCore):
         self, extension: str = "png", gaussian: bool = False, radius: int = 2
     ):
         """Blur an image
-        
+
         Args:
             extension (str, optional): File extension of loaded image. Defaults to png
             gaussian (bool, optional): If Gaussian blur is to be applied. Defaults to False.
             radius (int, optional): Radius for Gaussian blur. Defaults to 2.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("logo.png").load_file().blur_image("png")
@@ -210,12 +210,12 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def grayscale_image(self, extension: str = "png"):
         """Grayscale an image
-        
+
         Args:
             extension (str, optional): File extension of loaded image. Defaults to png
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("logo.png").load_file().grayscale_image("png")
@@ -231,12 +231,12 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def invert_image(self, extension: str = "png"):
         """Invert the colors of the image
-        
+
         Args:
             extension (str, optional): File extension of loaded image. Defaults to png
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("logo.png").load_file().invert_image("png")
@@ -253,13 +253,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def image_opacity(self, level: int, extension: str = "png"):
         """Change the opacity of an image
-        
+
         Args:
             level (int): Required. Level of opacity. Half is 128
             extension (str, optional): File extension of loaded image. Defaults to png
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         image = Image.open(self._load_as_file())
         image = self._force_rgba(image)
@@ -272,13 +272,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def image_contrast(self, factor: int, extension: str = "png"):
         """Change image contrast
-        
+
         Args:
             factor (int): Factor to increase the contrast by
             extension (str, optional): File extension of loaded image. Defaults to "png"
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         image = Image.open(self._load_as_file())
         image = self._force_rgb(image)
@@ -291,13 +291,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def image_brightness(self, factor: int, extension: str = "png"):
         """Change image brightness
-        
+
         Args:
             factor (int): Factor to increase the brightness by
             extension (str, optional): File extension of loaded image. Defaults to "png"
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         image = Image.open(self._load_as_file())
         image = self._force_rgb(image)
@@ -310,13 +310,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def image_sharpness(self, factor: int, extension: str = "png"):
         """Change image sharpness
-        
+
         Args:
             factor (int): Factor to increase the sharpness by
             extension (str, optional): File extension of loaded image. Defaults to "png"
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         image = Image.open(self._load_as_file())
         image = self._force_rgb(image)
@@ -329,13 +329,13 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def image_color(self, factor: int, extension: str = "png"):
         """Change image color
-        
+
         Args:
             factor (int): Factor to increase the color by
             extension (str, optional): File extension of loaded image. Defaults to "png"
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         image = Image.open(self._load_as_file())
         image = self._force_rgb(image)
@@ -354,14 +354,14 @@ class Multimedia(ChepyCore):
         """Convert image to ascii art
 
         `Reference: <https://dev.to/anuragrana/generating-ascii-art-from-colored-image-using-python-4ace>`__
-        
+
         Args:
-            art_width (int, optional): Width of the ascii art. Higher values 
+            art_width (int, optional): Width of the ascii art. Higher values
                 show more details. Defaults to 120.
             chars (List[str], optional): A list of chars to build the ascii art with
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("pythonlogo.png").load_file()
@@ -424,13 +424,13 @@ class Multimedia(ChepyCore):
 
     @ChepyDecorators.call_stack
     def convert_image(self, format_to: str):
-        """Change image format. 
+        """Change image format.
 
         Example, convert png to jpeg
-        
+
         Args:
             format_to (str): Required. A valid image format extension
-        
+
         Returns:
             Chepy: The Chepy object
 
@@ -462,17 +462,17 @@ class Multimedia(ChepyCore):
         color: Tuple[int, int, int] = (0, 0, 0),
     ):
         """Add text to an image
-        
+
         Args:
             text (str): Required. Text to add
             extension (str, optional): File extension of loaded image. Defaults to png
-            coordinates (Tuple[int, int], optional): Coordinates of image where to add text. 
+            coordinates (Tuple[int, int], optional): Coordinates of image where to add text.
                 Defaults to (0, 0).
-            color (Tuple[int, int, int], optional): Color of text. 
+            color (Tuple[int, int, int], optional): Color of text.
                 Defaults to (0, 0, 0) which is black.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("logo.png").load_file().image_add_text("some text")
@@ -497,13 +497,13 @@ class Multimedia(ChepyCore):
         self, channel: str = "r", column_first: bool = False
     ):  # pragma: no cover
         """Dump LSB from a specific color channel
-        
+
         Args:
             channel (str, optional): Color channel. r, g, b. Defaults to 'r'.
             column_first (bool, optional): Order by column first. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         channels = ["r", "g", "b"]
         assert channel in channels, "Valid channels are {}".format("".join(channels))
@@ -538,13 +538,13 @@ class Multimedia(ChepyCore):
         self, channel: str = "r", column_first: bool = False
     ):  # pragma: no cover
         """Dump MSB from a specific color channel
-        
+
         Args:
             channel (str, optional): Color channel. r, g, b. Defaults to 'r'.
             column_first (bool, optional): Order by column first. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         channels = ["r", "g", "b"]
         assert channel in channels, "Valid channels are {}".format("".join(channels))

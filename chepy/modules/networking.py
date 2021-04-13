@@ -14,14 +14,14 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def defang_url(self):
         """Make a URL harmless
-        
-        Takes a Universal Resource Locator (URL) and 'Defangs' it; 
-        meaning the URL becomes invalid, neutralising the risk of accidentally 
-        clicking on a malicious link. This is often used when dealing with 
+
+        Takes a Universal Resource Locator (URL) and 'Defangs' it;
+        meaning the URL becomes invalid, neutralising the risk of accidentally
+        clicking on a malicious link. This is often used when dealing with
         malicious links or IOCs.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("https://app.google.com/?lol=some data&a=1").defang_url().o
@@ -34,9 +34,9 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def refang_url(self):
         """Refangs a URL so that it is clickable
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("hxxps://app[.]google[.]com/?lol=some data&a=1").refang_url().o
@@ -49,18 +49,18 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def defang_ip(self):
         """Make an IP address harmless
-        
-        Takes a IPv4 or IPv6 address and 'Defangs' it, meaning the 
-        IP becomes invalid, removing the risk of accidentally utilising 
+
+        Takes a IPv4 or IPv6 address and 'Defangs' it, meaning the
+        IP becomes invalid, removing the risk of accidentally utilising
         it as an IP address.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("2001:4860:4860::8844").defang_ip().o
             "2001[:]4860[:]4860[:][:]8844"
-            
+
             >>> Chepy("127.0.0.1").defang_ip().o
             "127[.]0[.]0[.]1"
         """
@@ -73,9 +73,9 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def refang_ip(self):
         """Refangs an IP address
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("127[.]0[.]0[.]1").refang_ip().o
@@ -87,7 +87,7 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_uri(self):
         """Parse a URI
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -116,7 +116,7 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_ip_range(self):
         """Enumerate IP address in a CIDR range
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -138,7 +138,7 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_ipv6(self):
         """Get longhand and shorthand of IPv6
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -156,10 +156,10 @@ class Networking(ChepyCore):
     @ChepyDecorators.call_stack
     def get_ssl_cert(self, port: int = 443):
         """Get the server side SSL certificate for a domain
-        
+
         Args:
             port (int, optional): Server port. Defaults to 443.
-        
+
         Returns:
             Chepy: The Chepy object
 

@@ -1,3 +1,5 @@
+import lazy_import
+
 import sys
 import base64
 import binascii
@@ -16,7 +18,8 @@ from typing import Any, Tuple, List, Union
 
 import pyperclip
 import ujson
-import jsonpickle
+
+jsonpickle = lazy_import.lazy_module("jsonpickle")
 import regex as re
 from decorator import decorator
 
@@ -24,15 +27,14 @@ from .modules.internal.colors import yellow, cyan, green, magenta, blue, red
 
 
 class ChepyDecorators(object):
-    """A class to house all the decorators for Chepy
-    """
+    """A class to house all the decorators for Chepy"""
 
     @staticmethod
     @decorator
     def call_stack(func, *args, **kwargs):
-        """This decorator is used to get the method name and 
-        arguments and save it to self.stack. The data from 
-        self.stack is predominantly used to save recepies. 
+        """This decorator is used to get the method name and
+        arguments and save it to self.stack. The data from
+        self.stack is predominantly used to save recepies.
         """
         func_sig = dict()
         func_self = args[0]
@@ -50,23 +52,23 @@ class ChepyDecorators(object):
 
 
 class ChepyCore(object):
-    """The `ChepyCore` class for Chepy is primarily used as an interface 
-    for all the current modules/classes in Chepy, or for plugin development. 
-    The `ChepyCore` class is what provides the various attributes like **states**, 
+    """The `ChepyCore` class for Chepy is primarily used as an interface
+    for all the current modules/classes in Chepy, or for plugin development.
+    The `ChepyCore` class is what provides the various attributes like **states**,
     **buffers**, etc and is required to use and extend Chepy.
-    
+
     Args:
         \*data (tuple): The core class takes arbitrary number of arguments as \*args.
 
     Attributes:
-        states (dict): Contains all the current states. Each arg passed to 
+        states (dict): Contains all the current states. Each arg passed to
             the ChepyCore class will be considered a state.
-        buffers (dict): Contains all the current buffers if a buffer is saved. 
-        state (Any): The data in the current state. The state changes each time a 
-            Chepy method is called. 
-    
+        buffers (dict): Contains all the current buffers if a buffer is saved.
+        state (Any): The data in the current state. The state changes each time a
+            Chepy method is called.
+
     Returns:
-        Chepy: The Chepy object. 
+        Chepy: The Chepy object.
     """
 
     def __init__(self, *data):
@@ -119,23 +121,23 @@ class ChepyCore(object):
             return ""
 
     def _pickle_class(self, obj: Any) -> Any:
-        """This method takes another object as an argument and 
-        pickels that into a json object using jsonpickel. The 
+        """This method takes another object as an argument and
+        pickels that into a json object using jsonpickel. The
         return value is a dictionary
-        
+
         Args:
             obj (Any): Any object
-        
+
         Returns:
-            Any: unpickeled JSON as a python object. 
+            Any: unpickeled JSON as a python object.
         """
         return ujson.loads(jsonpickle.encode(obj, unpicklable=True))
 
     def _load_as_file(self) -> object:
-        """This method is used when a function or a method expects 
-        a file path to load a file. Instead of passing a file path, 
+        """This method is used when a function or a method expects
+        a file path to load a file. Instead of passing a file path,
         this method allows passing an io.BytesIO object instead.
-        
+
         Returns:
             object: io.BytesIO object
         """
@@ -143,10 +145,10 @@ class ChepyCore(object):
 
     def _abs_path(self, path: str):
         """Returns the absolute path by expanding home dir
-        
+
         Args:
             path (str): Path to expand
-        
+
         Returns:
             object: Path object
         """
@@ -154,58 +156,58 @@ class ChepyCore(object):
 
     def _info_logger(self, data: str) -> None:
         """Just a binding for logger.info
-        
+
         Args:
             data (str): Message to log
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         logging.info(blue(data))
         return None
 
     def _warning_logger(self, data: str) -> None:  # pragma: no cover
         """Just a binding for logger.warning
-        
+
         Args:
             data (str): Message to log
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         logging.warning(yellow(data))
         return None
 
     def _error_logger(self, data: str) -> None:  # pragma: no cover
         """Just a binding for logger.error
-        
+
         Args:
             data (str): Message to log
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         logging.error(red(data))
         return None
 
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
-        
-        Method names in a list of tuples. If using in the cli, 
+
+        Method names in a list of tuples. If using in the cli,
         this should not contain any spaces.
 
         Args:
-            methods (List[Tuple[Union[str, object], dict]]): Required. 
+            methods (List[Tuple[Union[str, object], dict]]): Required.
                 List of tuples
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
-            This method takes an array of method names and their args as an list of 
-            tuples; the first value of the tuple is the method name as either a string, 
-            or as an object, and the second value is a ditionary of arguments. The keys of 
-            in the dictionary are method argument names, while the values are argument 
+            This method takes an array of method names and their args as an list of
+            tuples; the first value of the tuple is the method name as either a string,
+            or as an object, and the second value is a ditionary of arguments. The keys of
+            in the dictionary are method argument names, while the values are argument
             values.
 
             >>> from chepy import Chepy
@@ -234,14 +236,14 @@ class ChepyCore(object):
     def set_state(self, data: Any):
         """Set any arbitrary values in the current state
 
-        This method is simply changing the value of the instantiated 
-        state with an arbitrary value. 
-        
+        This method is simply changing the value of the instantiated
+        state with an arbitrary value.
+
         Args:
             data (Any): Any data type
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("some data")
@@ -257,9 +259,9 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def create_state(self):
         """Create a new empty state
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.states[len(self.states)] = {}
         return self
@@ -267,12 +269,12 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def copy_state(self, index: int = None):
         """Copy the current state to a new state
-        
+
         Args:
             index (int): Index of new state. Defaults to next available.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if not index:
             index = len(self.states)
@@ -284,13 +286,13 @@ class ChepyCore(object):
         """Change current state by index
 
         Same behaviour as switch_state
-        
+
         Args:
             index (int): Index of new state
-        
+
         Raises:
             TypeError: If specified index does not exist
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -304,13 +306,13 @@ class ChepyCore(object):
         """Switch current state by index
 
         Same behaviour as change_state
-        
+
         Args:
             index (int): Index of new state
-        
+
         Raises:
             TypeError: If specified index does not exist
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -322,12 +324,12 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def delete_state(self, index: int):
         """Delete a state specified by the index
-        
+
         Args:
             index (int): Index of state
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         try:
             del self.states[index]
@@ -337,13 +339,13 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def get_state(self, index: int) -> Any:
-        """Returns the value of the specified state. 
+        """Returns the value of the specified state.
 
         This method does not chain with other methods of Chepy
-        
+
         Args:
             index (int): The index of the state
-        
+
         Returns:
             Any: Any value that is in the specified state
         """
@@ -351,18 +353,18 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def save_buffer(self, index: int = None):
-        """Save current state in a buffer 
+        """Save current state in a buffer
 
-        Buffers are temporary holding areas for anything that is in the state. 
-        The state can change, but the buffer does not. Can be chained with other 
-        methods. Use in conjunction with `load_buffer` to load buffer back into 
-        the state. 
-        
+        Buffers are temporary holding areas for anything that is in the state.
+        The state can change, but the buffer does not. Can be chained with other
+        methods. Use in conjunction with `load_buffer` to load buffer back into
+        the state.
+
         Args:
             index (int, optional): The index to save the state in, defaults to next index if None
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if index is not None:
             self.buffers[index] = self.state
@@ -373,12 +375,12 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def load_buffer(self, index: int):
         """Load the specified buffer into state
-        
+
         Args:
             index (int): Index key of an existing buffer
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("A").save_buffer()
@@ -390,7 +392,7 @@ class ChepyCore(object):
             >>> c.buffers
             {0: "A"}
             >>> c.load_buffer(0)
-            >>> # loads the content of the buffer back into the current state. 
+            >>> # loads the content of the buffer back into the current state.
             >>> c.state
             "A"
         """
@@ -400,12 +402,12 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def delete_buffer(self, index: int):
         """Delete a buffer item
-        
+
         Args:
             index (int): Key of buffer item
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         try:
             del self.buffers[index]
@@ -415,29 +417,29 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def substring(self, pattern: Union[str, bytes], group: int = 0):
-        """Choose a substring from current state as string 
+        """Choose a substring from current state as string
 
-        The preceeding methods will only run on the substring and 
-        not the original state. Group capture is supported. 
-        
+        The preceeding methods will only run on the substring and
+        not the original state. Group capture is supported.
+
         Args:
             pattern (Union[str, bytes]): Pattern to match.
             group (int, optional): Group to match. Defaults to 0.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = re.search(pattern, self._convert_to_str()).group(group)
         return self
 
     def _convert_to_bytes(self) -> bytes:
-        """This method is used to coerce the curret object in 
-        the state variable into a string. The method should be 
-        called inside any method that operates on a string object 
-        instead of calling `self.state` directly to avoid errors. 
-        
+        """This method is used to coerce the curret object in
+        the state variable into a string. The method should be
+        called inside any method that operates on a string object
+        instead of calling `self.state` directly to avoid errors.
+
         Raises:
-            NotImplementedError: If type coercian isnt available 
+            NotImplementedError: If type coercian isnt available
                 for the current state type.
         """
         if isinstance(self.state, bytes):
@@ -459,19 +461,19 @@ class ChepyCore(object):
             raise NotImplementedError
 
     def _convert_to_bytearray(self) -> bytearray:
-        """Attempts to coerce the current state into a 
+        """Attempts to coerce the current state into a
         `bytesarray` object
         """
         return bytearray(self._convert_to_bytes())
 
     def _convert_to_str(self) -> str:
-        """This method is used to coerce the curret object in 
-        the state variable into bytes. The method should be 
-        called inside any method that operates on a bytes object 
-        instead of calling `self.state` directly to avoid errors. 
-        
+        """This method is used to coerce the curret object in
+        the state variable into bytes. The method should be
+        called inside any method that operates on a bytes object
+        instead of calling `self.state` directly to avoid errors.
+
         Raises:
-            NotImplementedError: If type coercian isnt available 
+            NotImplementedError: If type coercian isnt available
                 for the current state type.
         """
         if isinstance(self.state, bytes):
@@ -493,13 +495,13 @@ class ChepyCore(object):
             raise NotImplementedError
 
     def _convert_to_int(self) -> int:
-        """This method is used to coerce the curret object in 
-        the state variable into an int. The method should be 
-        called inside any method that operates on a int types 
-        instead of calling `self.state` directly to avoid errors. 
-        
+        """This method is used to coerce the curret object in
+        the state variable into an int. The method should be
+        called inside any method that operates on a int types
+        instead of calling `self.state` directly to avoid errors.
+
         Raises:
-            NotImplementedError: If type coercian isnt available 
+            NotImplementedError: If type coercian isnt available
                 for the current state type.
         """
         if isinstance(self.state, int):
@@ -512,7 +514,7 @@ class ChepyCore(object):
     @property
     def o(self):
         """Get the final output
-        
+
         Returns:
             Any: Final output
         """
@@ -521,7 +523,7 @@ class ChepyCore(object):
     @property
     def output(self):
         """Get the final output
-        
+
         Returns:
             Any: Final output
         """
@@ -530,7 +532,7 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def out(self) -> Any:
         """Get the final output
-        
+
         Returns:
             Any: Final output
         """
@@ -539,7 +541,7 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def out_as_str(self) -> str:
         """Get current value as str
-        
+
         Returns:
             str: Current value as a string
         """
@@ -548,7 +550,7 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def out_as_bytes(self) -> bytes:
         """Get current value as bytes
-        
+
         Returns:
             bytes: Current value as bytes
         """
@@ -557,10 +559,10 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def get_by_index(self, index: int):
         """Get an item by specifying an index
-        
+
         Args:
             index (int): Index number to get
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -570,10 +572,10 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def get_by_key(self, key: str):
         """Get an object from a dict by key
-        
+
         Args:
             key (str): A valid key
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -586,10 +588,10 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def copy_to_clipboard(self) -> None:  # pragma: no cover
         """Copy to clipboard
-        
-        Copy the final output to the clipboard. If an 
+
+        Copy the final output to the clipboard. If an
         error is raised, refer to the documentation on the error.
-        
+
         Returns:
             None: Copies final output to the clipboard
         """
@@ -599,10 +601,10 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def copy(self) -> None:  # pragma: no cover
         """Copy to clipboard
-        
-        Copy the final output to the clipboard. If an 
+
+        Copy the final output to the clipboard. If an
         error is raised, refer to the documentation on the error.
-        
+
         Returns:
             None: Copies final output to the clipboard
         """
@@ -620,7 +622,7 @@ class ChepyCore(object):
         Args:
             magic (bool, optional): Start with the magic method in CyberChef
             cyberchef_url (string, optional): Base url for Cyberchef
-        
+
         Returns:
             None: Opens the current data in CyberChef
         """
@@ -653,37 +655,37 @@ class ChepyCore(object):
     ):
         """Make a http/s request
 
-        Make a HTTP/S request and work with the data in Chepy. Most common http 
-        methods are supported; but some methods may not provide a response body. 
-        
+        Make a HTTP/S request and work with the data in Chepy. Most common http
+        methods are supported; but some methods may not provide a response body.
+
         Args:
             method (str, optional): Request method. Defaults to 'GET'.
             params (dict, optional): Query Args. Defaults to {}.
             json (dict, optional): Request payload. Defaults to None.
             headers (dict, optional): Headers for request. Defaults to {}.
             cookies (dict, optional): Cookies for request. Defaults to {}.
-        
+
         Raises:
             NotImplementedError: If state is not a string or dictionary
             requests.RequestException: If response status code is not 200
-        
+
         Returns:
             Chepy: A dictionary containing body, status and headers. The Chepy object.
 
         Examples:
-            By default, this methed with make a GET request, But supports most 
-            common methods. 
-            
+            By default, this methed with make a GET request, But supports most
+            common methods.
+
                 >>> c = Chepy("http://example.com").http_request()
                 >>> c.get_by_key("headers")
 
-            This method can also be used to make more complex requests by specifying 
+            This method can also be used to make more complex requests by specifying
             headers, cookies, body data etc.
 
                 >>> c = Chepy("https://en4qpftrmznwq.x.pipedream.net")
                 >>> c.http_request(
-                >>>    method="POST", 
-                >>>    headers={"My-header": "some header"}, 
+                >>>    method="POST",
+                >>>    headers={"My-header": "some header"},
                 >>>    json={"some": "data"}
                 >>> )
                 >>> print(c.get_by_key("body"))
@@ -733,26 +735,26 @@ class ChepyCore(object):
     ):
         """Load binary content from a url
 
-        Most common http methods are supported; but some methods may not provide a response body. 
-        
+        Most common http methods are supported; but some methods may not provide a response body.
+
         Args:
             method (str, optional): Request method. Defaults to 'GET'.
             params (dict, optional): Query Args. Defaults to {}.
             json (dict, optional): Request payload. Defaults to None.
             headers (dict, optional): Headers for request. Defaults to {}.
             cookies (dict, optional): Cookies for request. Defaults to {}.
-        
+
         Raises:
             NotImplementedError: If state is not a string or dictionary
             requests.RequestException: If response status code is not 200
-        
+
         Returns:
             Chepy: A bytearray of the response content. The Chepy object.
 
         Examples:
-            By default, this methed with make a GET request, But supports most 
-            common methods. 
-            
+            By default, this methed with make a GET request, But supports most
+            common methods.
+
                 >>> c = Chepy("http://example.com/file.png").load_from_url()
                 >>> b'\\x89PNG...'
         """
@@ -788,12 +790,12 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def load_dir(self, pattern: str = "*"):
         """Load all file paths in a directory
-        
+
         Args:
             pattern (str, optional): File pattern to match. Defaults to "*".
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         files = [x for x in pathlib.Path(self.state).glob(pattern) if x.is_file()]
         self.states = {x[0]: str(x[1]) for x in enumerate(files) if x[1].is_file()}
@@ -802,13 +804,13 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def load_file(self, binary_mode: bool = False):
         """If a path is provided, load the file
-        
+
         Args:
             binary_mode (bool, optional): Force load in binary mode.
-        
+
         Returns:
-            Chepy: The Chepy object. 
-        
+            Chepy: The Chepy object.
+
         Examples:
             >>> c = Chepy("/path/to/file")
             >>> # at the moment, the state only contains the string "/path/to/file"
@@ -829,10 +831,10 @@ class ChepyCore(object):
 
     def write_to_file(self, path: str) -> None:
         """Save the state to disk. Return None.
-        
+
         Args:
             path (str): The file path to save in.
-        
+
         Returns:
             None: Returns None
 
@@ -848,10 +850,10 @@ class ChepyCore(object):
 
     def write_binary(self, path: str) -> None:  # pragma: no cover
         """Save the state to disk. Return None.
-        
+
         Args:
             path (str): The file path to save in.
-        
+
         Returns:
             None: Returns None
 
@@ -868,14 +870,14 @@ class ChepyCore(object):
     def save_recipe(self, path: str):
         """Save the current recipe
 
-        A recipe will be all the previous methdos called on the 
+        A recipe will be all the previous methdos called on the
         chepy instance along with their args
-        
+
         Args:
             path (str): The path to save the recipe
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("some data").to_hex().base64_encode()
@@ -890,10 +892,10 @@ class ChepyCore(object):
 
     def load_recipe(self, path: str):
         """Load and run a recipe
-        
+
         Args:
             path (str): Path to recipe file
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -914,16 +916,16 @@ class ChepyCore(object):
 
     # @ChepyDecorators.call_stack
     def run_script(self, path: str, save_state: bool = False):
-        """Inject and run a custom script on the state. 
-        The custom script must have a function called **cpy_script** which 
-        must take one argument. The state is passed as the argument. 
+        """Inject and run a custom script on the state.
+        The custom script must have a function called **cpy_script** which
+        must take one argument. The state is passed as the argument.
 
         Args:
             path (str): Path to custom script
             save_state (bool, optional): Save script output to the state. Defaults to False.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("A").to_hex().run_script('tests/files/script.py', True)
@@ -942,14 +944,14 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def loop(self, iterations: int, callback: str, args: dict = {}):
         """Loop and apply callback n times
-        
+
         Args:
             iterations (int): Number of iterations to loop
             callback (str): The Chepy method to loop over
             args (dict, optional): Optional arguments for the callback. Defaults to {}.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
@@ -976,16 +978,16 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def loop_list(self, callback: str, args: dict = {}):
         """Loop over an array and run a Chepy method on it
-        
+
         Args:
             callback (str): Chepy method as string
             args (dict, optional): Dictionary of args. If in cli, dont use spaces. Defaults to {}.
-        
+
         Returns:
             Chepy: The Chepy object
 
         Examples:
-            This method is capable of running a callable from either 
+            This method is capable of running a callable from either
             a string, or a chepy method.
 
             >>> c = Chepy(["an", "array"])
@@ -1023,20 +1025,20 @@ class ChepyCore(object):
     def loop_dict(self, keys: list, callback: str, args: dict = {}):
         """
         Loop over a dictionary and apply the callback to the value
-        
+
         Args:
             keys (list): List of keys to match. If in cli, dont use spaces.
             callback (str): Chepy method as string
             args (dict, optional): Dictionary of args. If in cli, dont use spaces. Defaults to {}.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> c = Chepy({'some': 'hahahaha', 'lol': 'aahahah'})
             >>> c.loop_dict(['some'], 'hmac_hash', {'key': 'secret'}).o
             {'some': '99f77ec06a3c69a4a95371a7888245ba57f47f55', 'lol': 'aahahah'}
-            
+
             We can combine `loop_list` and `loop_dict` to loop over a list of dictionaries.
 
             >>> data = [{"some": "val"}, {"some": "another"}, {"lol": "lol"}, {"another": "aaaa"}]
@@ -1086,14 +1088,14 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def debug(self, verbose: bool = False):
         """Debug the current instance of Chepy
-        
-        This method does not change the state. 
+
+        This method does not change the state.
 
         Args:
             verbose (bool, optional): Show verbose info. Defaults to False.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         print(cyan("Current state:"), yellow(str(self._current_index)))
         print(cyan("Current states:"), yellow(str(len(self.states))))
@@ -1114,9 +1116,9 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def reset(self):
         """Reset states back to their initial values
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.states = self._initial_states
         return self
@@ -1124,13 +1126,13 @@ class ChepyCore(object):
     @ChepyDecorators.call_stack
     def load_command(self):  # pragma: no cover
         """Run the command in state and get the output
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
-            This method can be used to interace with the shell and Chepy 
-            directly by ingesting a commands output in Chepy. 
+            This method can be used to interace with the shell and Chepy
+            directly by ingesting a commands output in Chepy.
 
             >>> c = Chepy("ls -l").shell_output().o
             test.html
@@ -1142,22 +1144,22 @@ class ChepyCore(object):
 
     @ChepyDecorators.call_stack
     def pretty(self, indent: int = 2):  # pragma: no cover
-        """Prettify the state. 
-        
+        """Prettify the state.
+
         Args:
             indent (int, optional): Indent level. Defaults to 2.
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         self.state = pformat(self.state, indent=int(indent))
         return self
 
     def plugins(self, enable: str) -> None:  # pragma: no cover
-        """Use this method to enable or disable Chepy plugins. 
+        """Use this method to enable or disable Chepy plugins.
 
-        Valid options are `true` or `false`. Once this method completes, 
-        it does call sys.exit(). 
+        Valid options are `true` or `false`. Once this method completes,
+        it does call sys.exit().
 
         Args:
             enable (str): Set to `true` or `false`
@@ -1188,7 +1190,7 @@ class ChepyCore(object):
         return None
 
     def set_plugin_path(self, path: str) -> None:  # pragma: no cover
-        """Use this method to set the path for Chepy plugins. 
+        """Use this method to set the path for Chepy plugins.
 
         Args:
             path (str): Path to plugins directory

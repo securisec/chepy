@@ -10,9 +10,9 @@ class Links(ChepyCore):
     @ChepyDecorators.call_stack
     def pastebin_to_raw(self):
         """Convert a pastebin link to raw pastebin link
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("https://pastebin.com/abCD").pastebin_to_raw()
@@ -24,9 +24,9 @@ class Links(ChepyCore):
     @ChepyDecorators.call_stack
     def github_to_raw(self):
         """Convert a github link to raw github link
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("https://github.com/securisec/chepy/blob/master/README.md").github_to_raw()

@@ -43,14 +43,14 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_x509_pem(self):
         """Parse X509 cert in PEM format
-        
-        X.509 is an ITU-T standard for a public key infrastructure (PKI) 
-        and Privilege Management Infrastructure (PMI). It is commonly involved 
-        with SSL/TLS security. This operation displays the contents of 
+
+        X.509 is an ITU-T standard for a public key infrastructure (PKI)
+        and Privilege Management Infrastructure (PMI). It is commonly involved
+        with SSL/TLS security. This operation displays the contents of
         a certificate in a human readable format, similar to the openssl command line tool.
-        
+
         Returns:
-            Chepy: A Chepy object. 
+            Chepy: A Chepy object.
 
         Examples:
             >>> Chepy(path).load_file().parse_x509_pem().o
@@ -81,14 +81,14 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_x509_der_hex(self):
         """Parse X509 cert in DER format
-        
-        X.509 is an ITU-T standard for a public key infrastructure (PKI) 
-        and Privilege Management Infrastructure (PMI). It is commonly involved 
-        with SSL/TLS security.<br><br>This operation displays the contents of 
+
+        X.509 is an ITU-T standard for a public key infrastructure (PKI)
+        and Privilege Management Infrastructure (PMI). It is commonly involved
+        with SSL/TLS security.<br><br>This operation displays the contents of
         a certificate in a human readable format, similar to the openssl command line tool.
-        
+
         Returns:
-            Chepy: A Chepy object. 
+            Chepy: A Chepy object.
         """
         cert = _pyssl_crypto.load_certificate(
             _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
@@ -100,9 +100,9 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def public_from_x509(self):
         """Get public key from x509 certificate
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         crt_obj = _pyssl_crypto.load_certificate(_pyssl_crypto.FILETYPE_PEM, self.state)
         pub_key_object = crt_obj.get_pubkey()
@@ -115,10 +115,10 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def pem_to_der_hex(self):
         """Convert PEM cert to DER format
-        
-        Converts PEM (Privacy Enhanced Mail) format to a hexadecimal 
+
+        Converts PEM (Privacy Enhanced Mail) format to a hexadecimal
         DER (Distinguished Encoding Rules) string.
-        
+
         Returns:
             Chepy: The Chepy object.
         """
@@ -133,10 +133,10 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def der_hex_to_pem(self):
         """Convert DER format to PEM cert.
-        
-        Converts a hexadecimal DER (Distinguished Encoding Rules) 
+
+        Converts a hexadecimal DER (Distinguished Encoding Rules)
         string into PEM (Privacy Enhanced Mail) format.
-        
+
         Returns:
             Chepy: The Chepy object.
 
@@ -165,9 +165,9 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_public_pem(self):
         """Parse pubkey PEM to get n and e
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("tests/files/public.pem").load_file().parse_public_pem().get_by_key("e").o
@@ -180,9 +180,9 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def parse_private_pem(self):
         """Parse private key PEM
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         key = RSA.importKey(self.state)
         self.state = {
@@ -198,12 +198,12 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def dump_pkcs12_cert(self, password: str):
         """Get the private key and cert from pkcs12 cert
-        
+
         Args:
             password (str): Password for certificate
-        
+
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         if isinstance(password, str):
             password = password.encode()
@@ -217,4 +217,3 @@ class Publickey(ChepyCore):
             ),
         }
         return self
-

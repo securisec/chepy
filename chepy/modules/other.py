@@ -11,10 +11,10 @@ class Other(ChepyCore):
     def generate_uuid(self) -> str:
         """Generate v4 UUID
 
-        Generates an RFC 4122 version 4 compliant Universally Unique Identifier 
-        (UUID), also known as a Globally Unique Identifier (GUID). A version 4 
+        Generates an RFC 4122 version 4 compliant Universally Unique Identifier
+        (UUID), also known as a Globally Unique Identifier (GUID). A version 4
         UUID relies on random numbers
-        
+
         Returns:
             str: A random UUID
 
