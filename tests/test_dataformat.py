@@ -5,6 +5,14 @@ def test_eval():
     assert Chepy("1").eval_state().o == 1
 
 
+def test_base16_encode():
+    assert Chepy("test").base16_encode().o == b"74657374"
+
+
+def test_base16_decode():
+    assert Chepy("74657374").base16_decode().o == b"test"
+
+
 def test_bytes_to_ascii():
     assert Chepy([116, 101, 115, 116]).bytes_to_ascii().o == "test"
 

@@ -1,6 +1,8 @@
 from ..core import ChepyCore as ChepyCore, ChepyDecorators as ChepyDecorators
 from typing import Any
 
+parsel: Any
+
 class Extractors(ChepyCore):
     def __init__(self, *data: Any) -> None: ...
     state: Any = ...

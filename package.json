@@ -1,0 +1,30 @@
+{
+  "name": "chepy",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">     <img src=\"https://raw.githubusercontent.com/securisec/chepy/master/logo.png\" width=\"65%\"> </p>",
+  "main": "index.js",
+  "husky": {
+    "pre-commit": "stubgen -o . -p chepy"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/securisec/chepy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/securisec/chepy/issues"
+  },
+  "homepage": "https://github.com/securisec/chepy#readme",
+  "devDependencies": {
+    "husky": "^4.3.8"
+  }
+}

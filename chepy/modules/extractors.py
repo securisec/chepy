@@ -1,8 +1,9 @@
+import lazy_import
 import ujson
 import regex as re
 import jsonpath_rw
 from urllib.parse import urlparse as _pyurlparse
-from parsel import Selector
+parsel = lazy_import.lazy_module("parsel")
 from ..core import ChepyCore, ChepyDecorators
 
 
@@ -12,7 +13,7 @@ class Extractors(ChepyCore):
 
     def _parsel_obj(self):
         """Returns a parsel.Selector object"""
-        return Selector(self._convert_to_str())
+        return parsel.Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
     def extract_hashes(self):
@@ -219,7 +220,7 @@ class Extractors(ChepyCore):
             "Example Domain"
         """
         self.state = (
-            Selector(self._convert_to_str(), namespaces=namespaces)
+            parsel.Selector(self._convert_to_str(), namespaces=namespaces)
             .xpath(query)
             .getall()
         )

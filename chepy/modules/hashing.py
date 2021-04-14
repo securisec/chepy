@@ -1,19 +1,32 @@
+import lazy_import
 import binascii
-import hmac
 import hashlib
-import hashid
+
+
+hashid = lazy_import.lazy_module("hashid")
 from typing import Union
+
 from typing_extensions import Literal
-from Crypto.Hash import MD2, MD4, MD5, SHA512, SHA1, SHA256
-from Crypto.Hash import keccak
-from Crypto.Hash import SHAKE128, SHAKE256
-from Crypto.Hash import RIPEMD
-from Crypto.Hash import BLAKE2b, BLAKE2s
-from Crypto.Protocol.KDF import PBKDF2
-from Crypto.Protocol.KDF import bcrypt as _crypto_bcrypt
-from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
-from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
-from crccheck.crc import CrcArc, Crc32, Crc8
+
+hmac = lazy_import.lazy_module("hmac")
+MD2 = lazy_import.lazy_module("Crypto.Hash.MD2")
+MD4 = lazy_import.lazy_module("Crypto.Hash.MD4")
+MD5 = lazy_import.lazy_module("Crypto.Hash.MD5")
+SHA512 = lazy_import.lazy_module("Crypto.Hash.SHA512")
+SHA1 = lazy_import.lazy_module("Crypto.Hash.SHA1")
+SHA256 = lazy_import.lazy_module("Crypto.Hash.SHA256")
+keccak = lazy_import.lazy_module("Crypto.Hash.keccak")
+SHAKE128 = lazy_import.lazy_module("Crypto.Hash.SHAKE128")
+SHAKE256 = lazy_import.lazy_module("Crypto.Hash.SHAKE256")
+RIPEMD = lazy_import.lazy_module("Crypto.Hash.RIPEMD")
+BLAKE2s = lazy_import.lazy_module("Crypto.Hash.BLAKE2s")
+BLAKE2b = lazy_import.lazy_module("Crypto.Hash.BLAKE2b")
+from crccheck.crc import Crc8, Crc32, CrcArc
+# from Crypto.Protocol.KDF import PBKDF2
+KDF = lazy_import.lazy_module("Crypto.Protocol.KDF")
+# from Crypto.Protocol.KDF import bcrypt as _crypto_bcrypt
+# from Crypto.Protocol.KDF import bcrypt_check as _crypto_bcrypt_check
+# from Crypto.Protocol.KDF import scrypt as _crypto_scrypt
 
 from ..core import ChepyCore, ChepyDecorators
 
@@ -608,17 +621,17 @@ class Hashing(ChepyCore):
             salt = binascii.unhexlify(salt)
 
         if hash_type == "md5":
-            h = PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=MD5)
+            h = KDF.PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=MD5)
         elif hash_type == "sha1":
-            h = PBKDF2(
+            h = KDF.PBKDF2(
                 password, salt, key_size, count=iterations, hmac_hash_module=SHA1
             )
         elif hash_type == "sha256":
-            h = PBKDF2(
+            h = KDF.PBKDF2(
                 password, salt, key_size, count=iterations, hmac_hash_module=SHA256
             )
         elif hash_type == "sha512":
-            h = PBKDF2(
+            h = KDF.PBKDF2(
                 password, salt, key_size, count=iterations, hmac_hash_module=SHA512
             )
         else:  # pragma: no cover
@@ -648,7 +661,7 @@ class Hashing(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = _crypto_bcrypt(self._convert_to_str(), cost=rounds)
+        self.state = KDF.bcrypt(self._convert_to_str(), cost=rounds)
         return self
 
     @ChepyDecorators.call_stack
@@ -669,7 +682,7 @@ class Hashing(ChepyCore):
             True
         """
         try:
-            if _crypto_bcrypt_check(self._convert_to_str(), hash) is None:
+            if KDF.bcrypt_check(self._convert_to_str(), hash) is None:
                 self.state = True
                 return self
             else:  # pragma: no cover
@@ -705,7 +718,7 @@ class Hashing(ChepyCore):
             "f352f3374cf4e344dde4108b96985248"
         """
         assert N < 32, "N must be less than 32"
-        self.state = _crypto_scrypt(
+        self.state = KDF.scrypt(
             self._convert_to_bytes(), salt=salt, key_len=key_length, N=2 ** N, r=r, p=p
         ).hex()
         return self

@@ -1,22 +1,28 @@
-import codecs
-import string
-import itertools
 import base64
 import binascii
-import jwt
+import codecs
+import itertools
+import string
+
+import lazy_import
+
+jwt = lazy_import.lazy_module("jwt")
 import pathlib
-import ujson
+
 import pycipher
 import regex as re
-
+import ujson
+AES = lazy_import.lazy_module("Crypto.Cipher.AES")
+ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
+DES = lazy_import.lazy_module("Crypto.Cipher.DES")
+DES3 = lazy_import.lazy_module("Crypto.Cipher.DES3")
+Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
 from Crypto.Util.Padding import pad, unpad
-from Crypto.Cipher import ARC4
-from Crypto.Cipher import DES, DES3, AES
-from Crypto.Cipher import Blowfish
+
 
 from ..core import ChepyCore, ChepyDecorators
-from .internal.constants import EncryptionConsts
 from ..extras.combinatons import hex_chars
+from .internal.constants import EncryptionConsts
 
 
 class EncryptionEncoding(ChepyCore):

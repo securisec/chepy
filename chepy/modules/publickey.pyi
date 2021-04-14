@@ -1,6 +1,9 @@
 from ..core import ChepyCore as ChepyCore, ChepyDecorators as ChepyDecorators
 from typing import Any
 
+RSA: Any
+OpenSSL: Any
+
 class Publickey(ChepyCore):
     def __init__(self, *data: Any) -> None: ...
     state: Any = ...

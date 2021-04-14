@@ -2,6 +2,22 @@ from ..core import ChepyCore as ChepyCore, ChepyDecorators as ChepyDecorators
 from typing import Any, Union
 from typing_extensions import Literal as Literal
 
+hashid: Any
+hmac: Any
+MD2: Any
+MD4: Any
+MD5: Any
+SHA512: Any
+SHA1: Any
+SHA256: Any
+keccak: Any
+SHAKE128: Any
+SHAKE256: Any
+RIPEMD: Any
+BLAKE2s: Any
+BLAKE2b: Any
+KDF: Any
+
 class Hashing(ChepyCore):
     def __init__(self, *data: Any) -> None: ...
     state: Any = ...

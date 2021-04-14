@@ -1,5 +1,6 @@
-from OpenSSL import crypto as _pyssl_crypto
-from Crypto.PublicKey import RSA
+import lazy_import
+RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
+OpenSSL = lazy_import.lazy_module("OpenSSL")
 
 from ..core import ChepyCore, ChepyDecorators
 
@@ -71,8 +72,8 @@ class Publickey(ChepyCore):
                 "pubkey": {"bits": 1024},
             }
         """
-        cert = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_PEM, self._convert_to_str()
+        cert = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, self._convert_to_str()
         )
         info = self._convert_cert_to_obj(cert)
         self.state = info
@@ -90,8 +91,8 @@ class Publickey(ChepyCore):
         Returns:
             Chepy: A Chepy object.
         """
-        cert = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
+        cert = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_ASN1, self._convert_to_bytes()
         )
         info = self._convert_cert_to_obj(cert)
         self.state = info
@@ -104,10 +105,10 @@ class Publickey(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        crt_obj = _pyssl_crypto.load_certificate(_pyssl_crypto.FILETYPE_PEM, self.state)
+        crt_obj = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, self.state)
         pub_key_object = crt_obj.get_pubkey()
-        pub_key_string = _pyssl_crypto.dump_publickey(
-            _pyssl_crypto.FILETYPE_PEM, pub_key_object
+        pub_key_string = OpenSSL.crypto.dump_publickey(
+            OpenSSL.crypto.FILETYPE_PEM, pub_key_object
         )
         self.state = pub_key_string
         return self
@@ -122,11 +123,11 @@ class Publickey(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        cert_pem = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_PEM, self.state
+        cert_pem = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, self.state
         )
-        self.state = _pyssl_crypto.dump_certificate(
-            _pyssl_crypto.FILETYPE_ASN1, cert_pem
+        self.state = OpenSSL.crypto.dump_certificate(
+            OpenSSL.crypto.FILETYPE_ASN1, cert_pem
         )
         return self
 
@@ -154,11 +155,11 @@ class Publickey(ChepyCore):
             igbV1IJdKTBAiZzaOQ==
             -----END CERTIFICATE-----
         """
-        cert_pem = _pyssl_crypto.load_certificate(
-            _pyssl_crypto.FILETYPE_ASN1, self._convert_to_bytes()
+        cert_pem = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_ASN1, self._convert_to_bytes()
         )
-        self.state = _pyssl_crypto.dump_certificate(
-            _pyssl_crypto.FILETYPE_PEM, cert_pem
+        self.state = OpenSSL.crypto.dump_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, cert_pem
         )
         return self
 
@@ -207,13 +208,13 @@ class Publickey(ChepyCore):
         """
         if isinstance(password, str):
             password = password.encode()
-        pk12 = _pyssl_crypto.load_pkcs12(self._convert_to_bytes(), password)
+        pk12 = OpenSSL.crypto.load_pkcs12(self._convert_to_bytes(), password)
         self.state = {
-            "private": _pyssl_crypto.dump_privatekey(
-                _pyssl_crypto.FILETYPE_PEM, pk12.get_privatekey()
+            "private": OpenSSL.crypto.dump_privatekey(
+                OpenSSL.crypto.FILETYPE_PEM, pk12.get_privatekey()
             ),
-            "cert": _pyssl_crypto.dump_certificate(
-                _pyssl_crypto.FILETYPE_PEM, pk12.get_certificate()
+            "cert": OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, pk12.get_certificate()
             ),
         }
         return self

@@ -22,7 +22,6 @@ Plugins:
 Methods:
   ☐ windings decoding/encoding ♐︎●︎♋︎♑︎❀︎♏︎📁︎🖮︎🖲︎📂︎♍︎♏︎⌛︎🖰︎♐︎🖮︎📂︎🖰︎📂︎🖰︎🖰︎♍︎📁︎🗏︎🖮︎🖰︎♌︎📂︎♍︎📁︎♋︎🗏︎♌︎♎︎♍︎🖲︎♏︎❝︎ f︎l︎a︎g︎{︎e︎0︎7︎9︎1︎c︎e︎6︎8︎f︎7︎1︎8︎1︎8︎8︎c︎0︎3︎7︎8︎b︎1︎c︎0︎a︎3︎b︎d︎c︎9︎e︎}︎
   ☐ magic method from cyberchef
-  ☐ base 16
   ☐ base 36
   ☐ base 62
   ☐ base 91
@@ -43,6 +42,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ base 16 @project(Methods)
   ✔ protobuf plugin @project(Plugins)
   ✔ string to l33tspeak.  @project(Methods)
   ✔ run script loaded into chepy. script should be a function that takes one arg, and state is passed to arg. fixed function name in script should be passed that can be imported on method call @project(New ideas)

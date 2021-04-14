@@ -62,7 +62,7 @@ class MyPlugin(chepy.core.ChepyCore):
         """another method
         
         Returns:
-            Chepy: The chepy object
+            ChepyPlugin: The chepy object
         """
         self.state = self.state * 20
         return self
@@ -93,7 +93,7 @@ Returns:
 """
 ```
 
-This is an example of Google style docstrings in python. Chepy cli parses these doc strings to show the help message and command completion dynamically. Although this can be omitted, it is strong recommended to have them to leverage the best capabilities of Chepy. 
+This is an example of Google style docstrings in python. Chepy cli parses these doc strings to show the help message and command completion dynamically. Although this can be omitted, it is strong recommended to have them to leverage the best capabilities of Chepy. The return type of `ChepyPlugin` is important for both autocompletion, and also highlighting the method as a plugin method. 
 
 #### Method body
 This could be any code that the method is trying to accomplish

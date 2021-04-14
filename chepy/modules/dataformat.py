@@ -1,10 +1,11 @@
+import lazy_import
 import binascii
 import base64
 import codecs
 import html
 import base58
 import ujson
-import yaml
+yaml = lazy_import.lazy_module("yaml")
 import regex as re
 import hexdump
 from ast import literal_eval
@@ -228,6 +229,26 @@ class DataFormat(ChepyCore):
             "some data"
         """
         self.state = base64.a85decode(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def base16_encode(self):
+        """Encode state in base16
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = base64.b16encode(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def base16_decode(self):
+        """Decode state in base16
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = base64.b16decode(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack

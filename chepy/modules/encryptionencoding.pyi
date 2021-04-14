@@ -3,6 +3,13 @@ from ..extras.combinatons import hex_chars as hex_chars
 from .internal.constants import EncryptionConsts as EncryptionConsts
 from typing import Any
 
+jwt: Any
+AES: Any
+ARC4: Any
+DES: Any
+DES3: Any
+Blowfish: Any
+
 class EncryptionEncoding(ChepyCore):
     def __init__(self, *data: Any) -> None: ...
     state: Any = ...
