@@ -37,7 +37,8 @@ jobs:
         
     - name: Install test requirements
       run: |
-        pip install sphinx recommonmark pytest==6.2.1 pytest-cov bandit pyperclip
+        pip install sphinx recommonmark pytest==6.2.1 pytest-cov bandit pyperclip mypy
+        stubgen -o . -p chepy
         
     - name: Test with pytest
       run: |
@@ -97,6 +98,9 @@ jobs:
         uses: actions/setup-python@v2.2.1
         with:
           python-version: "3.7"
+      - name: Ensure stubs
+        run: |
+          stubgen -o . -p chepy
       - name: build
         run: |
           python setup.py sdist
