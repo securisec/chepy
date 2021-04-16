@@ -5,16 +5,19 @@ import codecs
 import html
 import base58
 import ujson
+
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
 import hexdump
 from ast import literal_eval
-from typing import Union
+from typing import TypeVar, Union
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
 from ..core import ChepyCore, ChepyDecorators
 from chepy.modules.internal.constants import Encoding
+
+DataFormatT = TypeVar("DataFormatT", bound="DataFormat")
 
 
 class DataFormat(ChepyCore):
@@ -22,7 +25,7 @@ class DataFormat(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def eval_state(self):
+    def eval_state(self) -> DataFormatT:
         """Eval state as python.
         Handy when converting string representation
         of objects.
@@ -34,7 +37,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bytes_to_ascii(self):
+    def bytes_to_ascii(self) -> DataFormatT:
         """Convert bytes (array of bytes) to ascii
 
         Returns:
@@ -45,7 +48,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def list_to_str(self, join_by: Union[str, bytes] = " "):
+    def list_to_str(self, join_by: Union[str, bytes] = " ") -> DataFormatT:
         """Join an array by `join_by`
 
         Args:
@@ -63,7 +66,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def str_list_to_list(self):
+    def str_list_to_list(self) -> DataFormatT:
         """Convert a string list to a list
 
         Returns:
@@ -77,7 +80,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def join_list(self, by: Union[str, bytes] = ""):
+    def join_list(self, by: Union[str, bytes] = "") -> DataFormatT:
         """Join a list with specified character
 
         Args:
@@ -93,7 +96,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def json_to_dict(self):
+    def json_to_dict(self) -> DataFormatT:
         """Convert a JSON string to a dict object
 
         Returns:
@@ -110,7 +113,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def dict_to_json(self):
+    def dict_to_json(self) -> DataFormatT:
         """Convert a dict object to a JSON string
 
         Returns:
@@ -125,7 +128,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def yaml_to_json(self):
+    def yaml_to_json(self) -> DataFormatT:
         """Convert yaml to a json string
 
         Returns:
@@ -135,7 +138,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def json_to_yaml(self):
+    def json_to_yaml(self) -> DataFormatT:
         """Convert a json string to yaml structure
 
         Returns:
@@ -156,7 +159,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base58_encode(self):
+    def base58_encode(self) -> DataFormatT:
         """Encode as Base58
 
         Base58 is a notation for encoding arbitrary byte data using a
@@ -175,7 +178,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base58_decode(self):
+    def base58_decode(self) -> DataFormatT:
         """Decode as Base58
 
         Base58 is a notation for encoding arbitrary byte data using a
@@ -194,7 +197,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base85_encode(self):
+    def base85_encode(self) -> DataFormatT:
         """Encode as Base58
 
         Base85 is a notation for encoding arbitrary byte data using a
@@ -213,7 +216,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base85_decode(self):
+    def base85_decode(self) -> DataFormatT:
         """Decode as Base85
 
         Base85 is a notation for encoding arbitrary byte data using a
@@ -232,7 +235,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base16_encode(self):
+    def base16_encode(self) -> DataFormatT:
         """Encode state in base16
 
         Returns:
@@ -242,7 +245,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base16_decode(self):
+    def base16_decode(self) -> DataFormatT:
         """Decode state in base16
 
         Returns:
@@ -252,7 +255,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base32_encode(self):
+    def base32_encode(self) -> DataFormatT:
         """Encode as Base32
 
         Base32 is a notation for encoding arbitrary byte data using a
@@ -271,7 +274,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base32_decode(self):
+    def base32_decode(self) -> DataFormatT:
         """Decode as Base32
 
         Base32 is a notation for encoding arbitrary byte data using a
@@ -286,7 +289,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_int(self):
+    def to_int(self) -> DataFormatT:
         """Converts the string representation of a number into an int
 
         Returns:
@@ -300,7 +303,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_bytes(self):
+    def to_bytes(self) -> DataFormatT:
         """Converts the data in state to bytes
 
         Returns:
@@ -314,7 +317,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_bytes(self):
+    def from_bytes(self) -> DataFormatT:
         """Decodes bytes to string.
 
         Returns:
@@ -324,7 +327,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_encode(self, custom: str = None):
+    def base64_encode(self, custom: str = None) -> DataFormatT:
         """Encode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -358,7 +361,9 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_decode(self, custom: str = None, fix_padding: bool = True):
+    def base64_decode(
+        self, custom: str = None, fix_padding: bool = True
+    ) -> DataFormatT:
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -402,7 +407,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_bytes(self, errors: str = "ignore"):
+    def decode_bytes(self, errors: str = "ignore") -> DataFormatT:
         """Decode bytes to string
 
         Args:
@@ -415,7 +420,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_hex(self):
+    def to_hex(self) -> DataFormatT:
         """Converts a string to its hex representation
 
         Returns:
@@ -429,7 +434,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_hex(self):
+    def from_hex(self) -> DataFormatT:
         """Convert a non delimited hex string to string
 
         Returns:
@@ -443,7 +448,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def hex_to_int(self):
+    def hex_to_int(self) -> DataFormatT:
         """Converts hex into its intiger represantation
 
         Returns:
@@ -467,7 +472,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def hex_to_binary(self):
+    def hex_to_binary(self) -> DataFormatT:
         """Hex to binary hex
 
         Converts a hex string to its binary form. Example:
@@ -484,7 +489,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def hex_to_str(self, ignore: bool = False):
+    def hex_to_str(self, ignore: bool = False) -> DataFormatT:
         """Decodes a hex string to ascii ignoring any decoding errors
 
         Args:
@@ -507,7 +512,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def str_to_hex(self):
+    def str_to_hex(self) -> DataFormatT:
         """Converts a string to a hex string
 
         Returns:
@@ -517,7 +522,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def int_to_hex(self):
+    def int_to_hex(self) -> DataFormatT:
         """Converts an integer into its hex equivalent
 
         Returns:
@@ -531,7 +536,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def int_to_str(self):
+    def int_to_str(self) -> DataFormatT:
         """Converts an integer into a string
 
         Returns:
@@ -541,7 +546,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def binary_to_hex(self):
+    def binary_to_hex(self) -> DataFormatT:
         """Converts binary data into a hex string
 
         Returns:
@@ -551,7 +556,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def normalize_hex(self, is_bytearray=False):
+    def normalize_hex(self, is_bytearray=False) -> DataFormatT:
         """Normalize a hex string
 
         Removes special encoding characters from a hex string like %,
@@ -579,7 +584,7 @@ class DataFormat(ChepyCore):
             return self
 
     @ChepyDecorators.call_stack
-    def str_from_hexdump(self):
+    def str_from_hexdump(self) -> DataFormatT:
         """Extract a string from a hexdump
 
         Returns:
@@ -590,7 +595,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_hexdump(self):
+    def to_hexdump(self) -> DataFormatT:
         """Convert the state to hexdump
 
         Returns:
@@ -600,7 +605,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_hexdump(self):
+    def from_hexdump(self) -> DataFormatT:
         """Convert hexdump back to str
 
         Returns:
@@ -610,7 +615,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def url_encode(self, safe: str = ""):
+    def url_encode(self, safe: str = "") -> DataFormatT:
         """URL encode
 
         Encodes problematic characters into percent-encoding,
@@ -632,7 +637,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def url_decode(self):
+    def url_decode(self) -> DataFormatT:
         """Converts URI/URL percent-encoded characters back to their raw values.
 
         Returns:
@@ -646,7 +651,9 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bytearray_to_str(self, encoding: str = "utf8", errors: str = "replace"):
+    def bytearray_to_str(
+        self, encoding: str = "utf8", errors: str = "replace"
+    ) -> DataFormatT:
         """Convert a python bytearray to string
 
         Args:
@@ -670,7 +677,7 @@ class DataFormat(ChepyCore):
             raise TypeError("State is not a bytearray")
 
     @ChepyDecorators.call_stack
-    def str_to_list(self):
+    def str_to_list(self) -> DataFormatT:
         """Convert string to list
 
         Converts the string in state to an array of individual characyers
@@ -686,7 +693,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def str_to_dict(self):
+    def str_to_dict(self) -> DataFormatT:
         """Convert string to a dictionary
 
         Returns:
@@ -696,7 +703,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_charcode(self, escape_char: str = ""):
+    def to_charcode(self, escape_char: str = "") -> DataFormatT:
         """Convert a string to a list of unicode charcode
 
         Converts text to its unicode character code equivalent.
@@ -721,7 +728,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_charcode(self, prefix: str = ""):
+    def from_charcode(self, prefix: str = "") -> DataFormatT:
         """Convert array of unicode chars to string
 
         Args:
@@ -742,7 +749,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_decimal(self):
+    def to_decimal(self) -> DataFormatT:
         """Convert charactes to decimal
 
         Returns:
@@ -756,7 +763,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_decimal(self):
+    def from_decimal(self) -> DataFormatT:
         """Convert a list of decimal numbers to string
 
         Returns:
@@ -770,7 +777,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_binary(self):
+    def to_binary(self) -> DataFormatT:
         """Convert string characters to binary
 
         Returns:
@@ -784,7 +791,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_binary(self):
+    def from_binary(self) -> DataFormatT:
         """Convert a list of binary numbers to string
 
         Returns:
@@ -806,7 +813,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_octal(self):
+    def to_octal(self) -> DataFormatT:
         """Convert string characters to octal
 
         Returns:
@@ -820,7 +827,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_octal(self):
+    def from_octal(self) -> DataFormatT:
         """Convert a list of octal numbers to string
 
         Returns:
@@ -834,7 +841,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_html_entity(self):
+    def to_html_entity(self) -> DataFormatT:
         """Encode html entities
 
         Encode special html characters like & > < etc
@@ -850,7 +857,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_html_entity(self):
+    def from_html_entity(self) -> DataFormatT:
         """Decode html entities
 
         Decode special html characters like & > < etc
@@ -866,7 +873,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_punycode(self):
+    def to_punycode(self) -> DataFormatT:
         """Encode to punycode
 
         Returns:
@@ -880,7 +887,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_punycode(self):
+    def from_punycode(self) -> DataFormatT:
         """Decode to punycode
 
         Returns:
@@ -894,7 +901,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_bruteforce(self):
+    def encode_bruteforce(self) -> DataFormatT:
         """Bruteforce the various encoding for a string
 
         Enumerates all supported text encodings for the input,
@@ -937,7 +944,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_bruteforce(self):
+    def decode_bruteforce(self) -> DataFormatT:
         """Bruteforce the various decoding for a string
 
         Enumerates all supported text encodings for the input,
@@ -984,7 +991,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_braille(self):
+    def to_braille(self) -> DataFormatT:
         """Convery text to six-dot braille symbols
 
         Returns:
@@ -999,7 +1006,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_braille(self):
+    def from_braille(self) -> DataFormatT:
         """Convery text to six-dot braille symbols
 
         Returns:
@@ -1014,7 +1021,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def trim(self):
+    def trim(self) -> DataFormatT:
         """Trim string. Removes whitespaces
 
         Returns:

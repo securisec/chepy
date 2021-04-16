@@ -1,10 +1,15 @@
 import collections
+import ipaddress
 import socket
 import ssl
-import ipaddress
-import regex as re
 import urllib.parse as _py_urlparse
+from typing import TypeVar
+
+import regex as re
+
 from ..core import ChepyCore, ChepyDecorators
+
+NetworkingT = TypeVar("NetworkingT", bound="Networking")
 
 
 class Networking(ChepyCore):
@@ -12,7 +17,7 @@ class Networking(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def defang_url(self):
+    def defang_url(self) -> NetworkingT:
         """Make a URL harmless
 
         Takes a Universal Resource Locator (URL) and 'Defangs' it;
@@ -32,7 +37,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def refang_url(self):
+    def refang_url(self) -> NetworkingT:
         """Refangs a URL so that it is clickable
 
         Returns:
@@ -47,7 +52,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def defang_ip(self):
+    def defang_ip(self) -> NetworkingT:
         """Make an IP address harmless
 
         Takes a IPv4 or IPv6 address and 'Defangs' it, meaning the
@@ -71,7 +76,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def refang_ip(self):
+    def refang_ip(self) -> NetworkingT:
         """Refangs an IP address
 
         Returns:
@@ -85,7 +90,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_uri(self):
+    def parse_uri(self) -> NetworkingT:
         """Parse a URI
 
         Returns:
@@ -114,7 +119,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_ip_range(self):
+    def parse_ip_range(self) -> NetworkingT:
         """Enumerate IP address in a CIDR range
 
         Returns:
@@ -136,7 +141,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_ipv6(self):
+    def parse_ipv6(self) -> NetworkingT:
         """Get longhand and shorthand of IPv6
 
         Returns:
@@ -154,7 +159,7 @@ class Networking(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def get_ssl_cert(self, port: int = 443):
+    def get_ssl_cert(self, port: int = 443) -> NetworkingT:
         """Get the server side SSL certificate for a domain
 
         Args:

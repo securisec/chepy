@@ -1,16 +1,18 @@
-import emoji
 import unicodedata
+from typing import TypeVar
+
+import emoji
 import regex as re
 
 from ..core import ChepyCore, ChepyDecorators
 
-
+LanguageT = TypeVar("LanguageT", bound="Language")
 class Language(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def unicode_chrs_by_lang(self, lang: str):
+    def unicode_chrs_by_lang(self, lang: str) -> LanguageT:
         """Detect language specific characters
         
         Detect characters from varios Unicode code point ids. Example 
@@ -32,7 +34,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def find_emojis(self):
+    def find_emojis(self) -> LanguageT:
         """Find emojis, symbols, pictographs, map symbols and flags
         
         Returns:
@@ -42,7 +44,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_utf_16_le(self):
+    def encode_utf_16_le(self) -> LanguageT:
         """Encode string as UTF16LE (1200). 
         
         Returns:
@@ -54,7 +56,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_utf_16_le(self):
+    def decode_utf_16_le(self) -> LanguageT:
         """Decode string as UTF16LE (1200). 
         
         Returns:
@@ -64,7 +66,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_utf_16_be(self):
+    def encode_utf_16_be(self) -> LanguageT:
         """Encode string as UTF16BE (1201). 
         
         Returns:
@@ -76,7 +78,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_utf_16_be(self):
+    def decode_utf_16_be(self) -> LanguageT:
         """Decode string as UTF16BE (1201). 
         
         Returns:
@@ -86,7 +88,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_utf_7(self):
+    def encode_utf_7(self) -> LanguageT:
         """Encode string as UTF7. 
         
         Returns:
@@ -96,7 +98,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_utf_7(self):
+    def decode_utf_7(self) -> LanguageT:
         """Decode string as UTF7. 
         
         Returns:
@@ -106,7 +108,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp500(self):
+    def encode_cp500(self) -> LanguageT:
         """Encode string as EBCDIC-CP-BE, EBCDIC-CP-CH, IBM500 or CP500. 
         Western European languages. 
         
@@ -117,7 +119,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp500(self):
+    def decode_cp500(self) -> LanguageT:
         """Decode string as EBCDIC-CP-BE, EBCDIC-CP-CH, IBM500 or CP500. 
         Western European languages.
         
@@ -128,7 +130,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp037(self):
+    def encode_cp037(self) -> LanguageT:
         """Encode IBM037, IBM039. English languages.
         
         Returns:
@@ -138,7 +140,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp037(self):
+    def decode_cp037(self) -> LanguageT:
         """Decode IBM037, IBM039. English languages
         
         Returns:
@@ -148,7 +150,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp874(self):
+    def encode_cp874(self) -> LanguageT:
         """Encode Windows-874 Thai (874)
         
         Returns:
@@ -158,7 +160,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp874(self):
+    def decode_cp874(self) -> LanguageT:
         """Decode Windows-874 Thai (874)
         
         Returns:
@@ -168,7 +170,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp932(self):
+    def encode_cp932(self) -> LanguageT:
         """Encode Japanese Shift-JIS (932), 932, ms932, mskanji, ms-kanji	
         
         Returns:
@@ -178,7 +180,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp932(self):
+    def decode_cp932(self) -> LanguageT:
         """Decode Japanese Shift-JIS (932), 932, ms932, mskanji, ms-kanji	
         
         Returns:
@@ -188,7 +190,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_gbk(self):
+    def encode_gbk(self) -> LanguageT:
         """Encode Simplified Chinese GBK (936), 936, cp936, ms936
         
         Returns:
@@ -198,7 +200,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_gbk(self):
+    def decode_gbk(self) -> LanguageT:
         """Decode Simplified Chinese GBK (936), 936, cp936, ms936
         
         Returns:
@@ -208,7 +210,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_gb2312(self):
+    def encode_gb2312(self) -> LanguageT:
         """Encode Simplified Chinese GB2312 (20936), chinese, csiso58gb231280, 
         euc-cn, euccn, eucgb2312-cn, gb2312-1980, gb2312-80, iso-ir-58
         
@@ -219,7 +221,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_gb2312(self):
+    def decode_gb2312(self) -> LanguageT:
         """Decode Simplified Chinese GB2312 (20936), chinese, csiso58gb231280, 
         euc-cn, euccn, eucgb2312-cn, gb2312-1980, gb2312-80, iso-ir-58
         
@@ -230,7 +232,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp949(self):
+    def encode_cp949(self) -> LanguageT:
         """Encode Korean (949), 949, ms949, uhc
         
         Returns:
@@ -240,7 +242,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp949(self):
+    def decode_cp949(self) -> LanguageT:
         """Decode Korean (949), 949, ms949, uhc
         
         Returns:
@@ -250,7 +252,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp950(self):
+    def encode_cp950(self) -> LanguageT:
         """Encode Traditional Chinese Big5 (950), 950, ms950
         
         Returns:
@@ -260,7 +262,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp950(self):
+    def decode_cp950(self) -> LanguageT:
         """Decode Traditional Chinese Big5 (950), 950, ms950
         
         Returns:
@@ -270,7 +272,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1250(self):
+    def encode_cp1250(self) -> LanguageT:
         """Encode Windows-1250 Central / Eastern European (1250), windows-1250	
         
         Returns:
@@ -280,7 +282,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1250(self):
+    def decode_cp1250(self) -> LanguageT:
         """Decode Windows-1250 Central / Eastern European (1250), windows-1250	
         
         Returns:
@@ -290,7 +292,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1251(self):
+    def encode_cp1251(self) -> LanguageT:
         """Encode Windows-1251 Cyrillic (1251), windows-1251
         
         Returns:
@@ -300,7 +302,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1251(self):
+    def decode_cp1251(self) -> LanguageT:
         """Decode Windows-1251 Cyrillic (1251), windows-1251
         
         Returns:
@@ -310,7 +312,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1252(self):
+    def encode_cp1252(self) -> LanguageT:
         """Encode Windows-1252 Latin (1252)
         
         Returns:
@@ -320,7 +322,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1252(self):
+    def decode_cp1252(self) -> LanguageT:
         """Decode Windows-1252 Latin (1252)
         
         Returns:
@@ -330,7 +332,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1253(self):
+    def encode_cp1253(self) -> LanguageT:
         """Encode Windows-1253 Greek (1253)
         
         Returns:
@@ -340,7 +342,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1253(self):
+    def decode_cp1253(self) -> LanguageT:
         """Decode Windows-1253 Greek (1253)
         
         Returns:
@@ -350,7 +352,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1254(self):
+    def encode_cp1254(self) -> LanguageT:
         """Encode Windows-1254 Turkish (1254)
         
         Returns:
@@ -360,7 +362,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1254(self):
+    def decode_cp1254(self) -> LanguageT:
         """Decode Windows-1254 Turkish (1254)
         
         Returns:
@@ -370,7 +372,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1255(self):
+    def encode_cp1255(self) -> LanguageT:
         """Encode Windows-1255 Hebrew (1255)
         
         Returns:
@@ -380,7 +382,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1255(self):
+    def decode_cp1255(self) -> LanguageT:
         """Decode Windows-1255 Hebrew (1255)
         
         Returns:
@@ -390,7 +392,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1256(self):
+    def encode_cp1256(self) -> LanguageT:
         """Encode Windows-1256 Arabic (1256)
         
         Returns:
@@ -400,7 +402,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1256(self):
+    def decode_cp1256(self) -> LanguageT:
         """Decode Windows-1256 Arabic (1256)
         
         Returns:
@@ -410,7 +412,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1257(self):
+    def encode_cp1257(self) -> LanguageT:
         """Encode Windows-1257 Baltic (1257)
         
         Returns:
@@ -420,7 +422,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1257(self):
+    def decode_cp1257(self) -> LanguageT:
         """Decode Windows-1257 Baltic (1257)
         
         Returns:
@@ -430,7 +432,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_cp1258(self):
+    def encode_cp1258(self) -> LanguageT:
         """Encode Windows-1258 Vietnam (1258)
         
         Returns:
@@ -440,7 +442,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_cp1258(self):
+    def decode_cp1258(self) -> LanguageT:
         """Decode Windows-1258 Vietnam (1258)
         
         Returns:
@@ -450,7 +452,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_2(self):
+    def encode_iso8859_2(self) -> LanguageT:
         """Encode ISO-8859-2 Latin 2 Central European (28592)
         
         Returns:
@@ -462,7 +464,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_2(self):
+    def decode_iso8859_2(self) -> LanguageT:
         """Decode ISO-8859-2 Latin 2 Central European (28592)
         
         Returns:
@@ -472,7 +474,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_3(self):
+    def encode_iso8859_3(self) -> LanguageT:
         """Encode ISO-8859-3 Latin 3 South European (28593)
         
         Returns:
@@ -484,7 +486,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_3(self):
+    def decode_iso8859_3(self) -> LanguageT:
         """Decode ISO-8859-3 Latin 3 South European (28593)
         
         Returns:
@@ -494,7 +496,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_4(self):
+    def encode_iso8859_4(self) -> LanguageT:
         """Encode ISO-8859-4 Latin 4 North European (28594)
         
         Returns:
@@ -506,7 +508,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_4(self):
+    def decode_iso8859_4(self) -> LanguageT:
         """Decode ISO-8859-4 Latin 4 North European (28594)
         
         Returns:
@@ -516,7 +518,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_5(self):
+    def encode_iso8859_5(self) -> LanguageT:
         """Encode ISO-8859-5 Latin/Cyrillic (28595)
         
         Returns:
@@ -528,7 +530,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_5(self):
+    def decode_iso8859_5(self) -> LanguageT:
         """Decode ISO-8859-5 Latin/Cyrillic (28595)
         
         Returns:
@@ -538,7 +540,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_6(self):
+    def encode_iso8859_6(self) -> LanguageT:
         """Encode ISO-8859-6 Latin/Arabic (28596)
         
         Returns:
@@ -550,7 +552,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_6(self):
+    def decode_iso8859_6(self) -> LanguageT:
         """Decode ISO-8859-6 Latin/Arabic (28596)
         
         Returns:
@@ -560,7 +562,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_7(self):
+    def encode_iso8859_7(self) -> LanguageT:
         """Encode ISO-8859-7 Latin/Greek (28597)
         
         Returns:
@@ -572,7 +574,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_7(self):
+    def decode_iso8859_7(self) -> LanguageT:
         """Decode ISO-8859-7 Latin/Greek (28597)
         
         Returns:
@@ -582,7 +584,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_8(self):
+    def encode_iso8859_8(self) -> LanguageT:
         """Encode ISO-8859-8 Latin/Hebrew (28598)
         
         Returns:
@@ -594,7 +596,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_8(self):
+    def decode_iso8859_8(self) -> LanguageT:
         """Decode ISO-8859-8 Latin/Hebrew (28598)
         
         Returns:
@@ -604,7 +606,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_9(self):
+    def encode_iso8859_9(self) -> LanguageT:
         """Encode ISO-8859-9 Latin 5 Turkish (28599)
         
         Returns:
@@ -616,7 +618,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_9(self):
+    def decode_iso8859_9(self) -> LanguageT:
         """Decode ISO-8859-9 Latin 5 Turkish (28599)
         
         Returns:
@@ -626,7 +628,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_10(self):
+    def encode_iso8859_10(self) -> LanguageT:
         """Encode ISO-8859-10 Latin 6 Nordic (28600)
         
         Returns:
@@ -638,7 +640,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_10(self):
+    def decode_iso8859_10(self) -> LanguageT:
         """Decode ISO-8859-10 Latin 6 Nordic (28600)
         
         Returns:
@@ -648,7 +650,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_11(self):
+    def encode_iso8859_11(self) -> LanguageT:
         """Encode ISO-8859-11 Latin/Thai (28601)
         
         Returns:
@@ -660,7 +662,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_11(self):
+    def decode_iso8859_11(self) -> LanguageT:
         """Decode ISO-8859-11 Latin/Thai (28601)
         
         Returns:
@@ -670,7 +672,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_13(self):
+    def encode_iso8859_13(self) -> LanguageT:
         """Encode ISO-8859-13 Latin 7 Baltic Rim (28603)
         
         Returns:
@@ -682,7 +684,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_13(self):
+    def decode_iso8859_13(self) -> LanguageT:
         """Decode ISO-8859-13 Latin 7 Baltic Rim (28603)
         
         Returns:
@@ -692,7 +694,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_14(self):
+    def encode_iso8859_14(self) -> LanguageT:
         """Encode ISO-8859-14 Latin 8 Celtic (28604)
         
         Returns:
@@ -704,7 +706,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_14(self):
+    def decode_iso8859_14(self) -> LanguageT:
         """Decode ISO-8859-14 Latin 8 Celtic (28604)
         
         Returns:
@@ -714,7 +716,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode_iso8859_15(self):
+    def encode_iso8859_15(self) -> LanguageT:
         """Encode ISO-8859-15 Latin 9 (28605)
         
         Returns:
@@ -726,7 +728,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode_iso8859_15(self):
+    def decode_iso8859_15(self) -> LanguageT:
         """Decode ISO-8859-15 Latin 9 (28605)
         
         Returns:
@@ -736,7 +738,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def remove_diacritics(self):
+    def remove_diacritics(self) -> LanguageT:
         """Replaces accented characters latin character equivalent.
         
         Returns:
@@ -748,7 +750,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unicode_to_str(self):
+    def unicode_to_str(self) -> LanguageT:
         """Escape any \\u characters to its proper unicode representation
         
         Returns:

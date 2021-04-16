@@ -1,12 +1,15 @@
-import lazy_import
 import binascii
 import hashlib
 
+import lazy_import
 
 hashid = lazy_import.lazy_module("hashid")
-from typing import Union
+from typing import TypeVar, Union
 
+from crccheck.crc import Crc8, Crc32, CrcArc
 from typing_extensions import Literal
+
+HashingT = TypeVar("HashingT", bound="Hashing")
 
 hmac = lazy_import.lazy_module("hmac")
 MD2 = lazy_import.lazy_module("Crypto.Hash.MD2")
@@ -21,7 +24,7 @@ SHAKE256 = lazy_import.lazy_module("Crypto.Hash.SHAKE256")
 RIPEMD = lazy_import.lazy_module("Crypto.Hash.RIPEMD")
 BLAKE2s = lazy_import.lazy_module("Crypto.Hash.BLAKE2s")
 BLAKE2b = lazy_import.lazy_module("Crypto.Hash.BLAKE2b")
-from crccheck.crc import Crc8, Crc32, CrcArc
+
 # from Crypto.Protocol.KDF import PBKDF2
 KDF = lazy_import.lazy_module("Crypto.Protocol.KDF")
 # from Crypto.Protocol.KDF import bcrypt as _crypto_bcrypt
@@ -36,7 +39,7 @@ class Hashing(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def identify_hash(self):
+    def identify_hash(self) -> HashingT:
         """Identify hash type
 
         Tries to determine information about a given hash and suggests which
@@ -62,7 +65,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha1(self):
+    def sha1(self) -> HashingT:
         """Get SHA1 hash
 
         The SHA (Secure Hash Algorithm) hash functions were designed by the NSA.
@@ -81,7 +84,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha2_256(self):
+    def sha2_256(self) -> HashingT:
         """Get SHA2-256 hash
 
         The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
@@ -104,7 +107,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha2_512(self):
+    def sha2_512(self) -> HashingT:
         """Get SHA2-512 hash
 
         The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
@@ -127,7 +130,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha2_512_truncate(self, truncate: int = 256):
+    def sha2_512_truncate(self, truncate: int = 256) -> HashingT:
         """Get SHA2-512/bits hash
 
         The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
@@ -151,7 +154,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha2_384(self):
+    def sha2_384(self) -> HashingT:
         """Get SHA2-384 hash
 
         The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
@@ -170,7 +173,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha2_224(self):
+    def sha2_224(self) -> HashingT:
         """Get SHA2-224 hash
 
         The SHA-2 (Secure Hash Algorithm 2) hash functions were designed by the NSA. SHA-2
@@ -193,7 +196,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha3_512(self):
+    def sha3_512(self) -> HashingT:
         """Get SHA3-512 hash
 
         The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
@@ -209,7 +212,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha3_256(self):
+    def sha3_256(self) -> HashingT:
         """Get SHA3-256 hash
 
         The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
@@ -225,7 +228,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha3_384(self):
+    def sha3_384(self) -> HashingT:
         """Get SHA3-384 hash
 
         The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
@@ -241,7 +244,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sha3_224(self):
+    def sha3_224(self) -> HashingT:
         """Get SHA2-224 hash
 
         The SHA-3 (Secure Hash Algorithm 3) hash functions were released by NIST on August 5, 2015.
@@ -257,7 +260,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def md2(self):
+    def md2(self) -> HashingT:
         """Get MD2 hash
 
         The MD2 (Message-Digest 2) algorithm is a cryptographic hash function developed by
@@ -274,7 +277,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def md4(self):
+    def md4(self) -> HashingT:
         """Get MD4 hash
 
         The MD4 (Message-Digest 4) algorithm is a cryptographic hash function
@@ -290,7 +293,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def md5(self):
+    def md5(self) -> HashingT:
         """Get MD5 hash
 
         MD5 (Message-Digest 5) is a widely used hash function. It has been used
@@ -312,7 +315,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def keccak_512(self):
+    def keccak_512(self) -> HashingT:
         """Get KECCAK-512 hash
 
         The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
@@ -329,7 +332,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def keccak_384(self):
+    def keccak_384(self) -> HashingT:
         """Get KECCAK-384 hash
 
         The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
@@ -346,7 +349,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def keccak_256(self):
+    def keccak_256(self) -> HashingT:
         """Get KECCAK-256 hash
 
         The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
@@ -363,7 +366,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def keccak_224(self):
+    def keccak_224(self) -> HashingT:
         """Get KECCAK-224 hash
 
         The Keccak hash algorithm was designed by Guido Bertoni, Joan Daemen,
@@ -380,7 +383,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def shake_256(self, size: int = 64):
+    def shake_256(self, size: int = 64) -> HashingT:
         """Get Shake-256 hash
 
         Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm,
@@ -398,7 +401,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def shake_128(self, size: int = 64):
+    def shake_128(self, size: int = 64) -> HashingT:
         """Get Shake-128 hash
 
         Shake is an Extendable Output Function (XOF) of the SHA-3 hash algorithm,
@@ -416,7 +419,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def ripemd_160(self):
+    def ripemd_160(self) -> HashingT:
         """Get RIPEMD-160 hash
 
         RIPEMD (RACE Integrity Primitives Evaluation Message Digest) is a family of
@@ -434,7 +437,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def blake_2b(self, bits: int = 256, key: bytes = ""):
+    def blake_2b(self, bits: int = 256, key: bytes = "") -> HashingT:
         """Get Balke-2b hash
 
         Performs BLAKE2b hashing on the input. BLAKE2b is a flavour of the
@@ -466,7 +469,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def blake_2s(self, bits: int = 256, key: bytes = ""):
+    def blake_2s(self, bits: int = 256, key: bytes = "") -> HashingT:
         """Get Blake-2s hash
 
         Performs BLAKE2s hashing on the input. BLAKE2s is a flavour of
@@ -492,7 +495,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def crc8_checksum(self):
+    def crc8_checksum(self) -> HashingT:
         """Get CRC8 checksum
 
         A cyclic redundancy check (CRC) is an error-detecting code commonly
@@ -506,7 +509,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def crc16_checksum(self):
+    def crc16_checksum(self) -> HashingT:
         """Get CRC16 checksum
 
         A cyclic redundancy check (CRC) is an error-detecting code commonly
@@ -520,7 +523,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def crc32_checksum(self):
+    def crc32_checksum(self) -> HashingT:
         """Get CRC32 checksum
 
         A cyclic redundancy check (CRC) is an error-detecting code commonly
@@ -538,7 +541,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def hmac_hash(self, key: bytes = b"", digest: str = "sha1"):
+    def hmac_hash(self, key: bytes = b"", digest: str = "sha1") -> HashingT:
         """Get HMAC hash
 
         HMAC hash the state
@@ -621,7 +624,9 @@ class Hashing(ChepyCore):
             salt = binascii.unhexlify(salt)
 
         if hash_type == "md5":
-            h = KDF.PBKDF2(password, salt, key_size, count=iterations, hmac_hash_module=MD5)
+            h = KDF.PBKDF2(
+                password, salt, key_size, count=iterations, hmac_hash_module=MD5
+            )
         elif hash_type == "sha1":
             h = KDF.PBKDF2(
                 password, salt, key_size, count=iterations, hmac_hash_module=SHA1
@@ -646,7 +651,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bcrypt_hash(self, rounds: int = 10):
+    def bcrypt_hash(self, rounds: int = 10) -> HashingT:
         """Get Bcrypt hash
 
         bcrypt is a password hashing function designed by Niels Provos and David Mazières,
@@ -665,7 +670,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bcrypt_compare(self, hash: str):
+    def bcrypt_compare(self, hash: str) -> HashingT:
         """Compare Bcrypt hash
 
         Tests whether the provided hash matches the given string at init.

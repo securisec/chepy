@@ -53,6 +53,7 @@ jobs:
         pip install .
         pytest --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
+
     - name: Test plugins ubuntu
       if: contains(matrix.os, 'ubuntu')
       run: |
@@ -62,6 +63,7 @@ jobs:
         pip install .
         pytest --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
+        
     - name: Test plugins windows
       if: matrix.os == 'windows-latest'
       run: |
@@ -76,7 +78,7 @@ jobs:
         bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
         
     - name: Test docs
-      if: ${{ !env.ACT }}
+      if: ${{ !env.ACT }} && contains(matrix.os, 'ubuntu')
       run: |
         make -C docs/ clean html
         

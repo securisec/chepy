@@ -1,6 +1,9 @@
+from typing import TypeVar
 from uuid import uuid4
 
 from ..core import ChepyCore, ChepyDecorators
+
+OtherT = TypeVar("OtherT", bound="Other")
 
 
 class Other(ChepyCore):
@@ -8,7 +11,7 @@ class Other(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def generate_uuid(self) -> str:
+    def generate_uuid(self) -> OtherT:
         """Generate v4 UUID
 
         Generates an RFC 4122 version 4 compliant Universally Unique Identifier

@@ -1,7 +1,11 @@
 import io
-from typing import List, Tuple
-from PIL import Image, ImageFilter, ImageOps, ImageDraw, ImageEnhance
+from typing import List, Tuple, TypeVar
+
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
+
 from ..core import ChepyCore, ChepyDecorators
+
+MultimediaT = TypeVar("MultimediaT", bound="Multimedia")
 
 
 class Multimedia(ChepyCore):
@@ -62,7 +66,7 @@ class Multimedia(ChepyCore):
         extension: str = "png",
         resample: str = "nearest",
         quality: int = 100,
-    ):
+    ) -> MultimediaT:
         """Resize an image.
 
         Args:
@@ -101,7 +105,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def split_color_channels(self, extension: str = "png"):
+    def split_color_channels(self, extension: str = "png") -> MultimediaT:
         """Split an image into its red, green and blue channels
 
         Args:
@@ -150,7 +154,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rotate_image(self, rotate_by: int, extension: str = "png"):
+    def rotate_image(self, rotate_by: int, extension: str = "png") -> MultimediaT:
         """Rotate an image
 
         Args:
@@ -176,7 +180,7 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def blur_image(
         self, extension: str = "png", gaussian: bool = False, radius: int = 2
-    ):
+    ) -> MultimediaT:
         """Blur an image
 
         Args:
@@ -208,7 +212,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def grayscale_image(self, extension: str = "png"):
+    def grayscale_image(self, extension: str = "png") -> MultimediaT:
         """Grayscale an image
 
         Args:
@@ -229,7 +233,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def invert_image(self, extension: str = "png"):
+    def invert_image(self, extension: str = "png") -> MultimediaT:
         """Invert the colors of the image
 
         Args:
@@ -251,7 +255,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def image_opacity(self, level: int, extension: str = "png"):
+    def image_opacity(self, level: int, extension: str = "png") -> MultimediaT:
         """Change the opacity of an image
 
         Args:
@@ -270,7 +274,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def image_contrast(self, factor: int, extension: str = "png"):
+    def image_contrast(self, factor: int, extension: str = "png") -> MultimediaT:
         """Change image contrast
 
         Args:
@@ -289,7 +293,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def image_brightness(self, factor: int, extension: str = "png"):
+    def image_brightness(self, factor: int, extension: str = "png") -> MultimediaT:
         """Change image brightness
 
         Args:
@@ -308,7 +312,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def image_sharpness(self, factor: int, extension: str = "png"):
+    def image_sharpness(self, factor: int, extension: str = "png") -> MultimediaT:
         """Change image sharpness
 
         Args:
@@ -327,7 +331,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def image_color(self, factor: int, extension: str = "png"):
+    def image_color(self, factor: int, extension: str = "png") -> MultimediaT:
         """Change image color
 
         Args:
@@ -350,7 +354,7 @@ class Multimedia(ChepyCore):
         self,
         art_width: int = 120,
         chars: List[str] = ["B", "S", "#", "&", "@", "$", "%", "*", "!", ":", "."],
-    ):  # pragma: no cover
+    ) -> MultimediaT:  # pragma: no cover
         """Convert image to ascii art
 
         `Reference: <https://dev.to/anuragrana/generating-ascii-art-from-colored-image-using-python-4ace>`__
@@ -423,7 +427,7 @@ class Multimedia(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def convert_image(self, format_to: str):
+    def convert_image(self, format_to: str) -> MultimediaT:
         """Change image format.
 
         Example, convert png to jpeg
@@ -460,7 +464,7 @@ class Multimedia(ChepyCore):
         extension: str = "png",
         coordinates: Tuple[int, int] = (0, 0),
         color: Tuple[int, int, int] = (0, 0, 0),
-    ):
+    ) -> MultimediaT:
         """Add text to an image
 
         Args:
@@ -495,7 +499,7 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def lsb_dump_by_channel(
         self, channel: str = "r", column_first: bool = False
-    ):  # pragma: no cover
+    ) -> MultimediaT:  # pragma: no cover
         """Dump LSB from a specific color channel
 
         Args:
@@ -536,7 +540,7 @@ class Multimedia(ChepyCore):
     @ChepyDecorators.call_stack
     def msb_dump_by_channel(
         self, channel: str = "r", column_first: bool = False
-    ):  # pragma: no cover
+    ) -> MultimediaT:  # pragma: no cover
         """Dump MSB from a specific color channel
 
         Args:

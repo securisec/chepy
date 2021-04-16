@@ -1,13 +1,16 @@
 import difflib
-import regex as re
-import exrex
 from collections import OrderedDict
-from typing import Any, Union
+from typing import Any, TypeVar, Union
+
+import chepy.modules.internal.colors as _int_colors
+import exrex
 import pydash
+import regex as re
 
 from ..core import ChepyCore, ChepyDecorators
 from .exceptions import StateNotDict, StateNotList
-import chepy.modules.internal.colors as _int_colors
+
+UtilsT = TypeVar("UtilsT", bound="Utils")
 
 
 class Utils(ChepyCore):
@@ -15,7 +18,7 @@ class Utils(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def reverse(self, count: int = 1):
+    def reverse(self, count: int = 1) -> UtilsT:
         """Reverses a string
 
         Args:
@@ -40,7 +43,7 @@ class Utils(ChepyCore):
             return self
 
     @ChepyDecorators.call_stack
-    def count_occurances(self, regex: str, case_sensitive: bool = False):
+    def count_occurances(self, regex: str, case_sensitive: bool = False) -> UtilsT:
         """Counts occurances of the regex.
 
         Counts the number of times the provided string occurs.
@@ -99,7 +102,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def remove_nullbytes(self):
+    def remove_nullbytes(self) -> UtilsT:
         """Remove null \\x00 byes from binary data
 
         Returns:
@@ -150,7 +153,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def split_by(self, pattern: str = "\n", trim=True):
+    def split_by(self, pattern: str = "\n", trim=True) -> UtilsT:
         """Split a string by the given pattern
 
         Args:
@@ -169,7 +172,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def split_by_n(self, n: int):
+    def split_by_n(self, n: int) -> UtilsT:
         """Split a string by n characters.
 
         Args:
@@ -186,7 +189,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def select_every_n(self, n: int, start: int = 0):
+    def select_every_n(self, n: int, start: int = 0) -> UtilsT:
         """Select every nth item from a list or string.
 
         Index starts at 0
@@ -206,7 +209,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unique(self):
+    def unique(self) -> UtilsT:
         """Get an array of unique list items
 
         Raises:
@@ -220,7 +223,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sort_list(self, reverse: bool = False):
+    def sort_list(self, reverse: bool = False) -> UtilsT:
         """Sort a list
 
         Args:
@@ -243,7 +246,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sort_dict_key(self, reverse: bool = False):
+    def sort_dict_key(self, reverse: bool = False) -> UtilsT:
         """Sort a dictionary by key
 
         Args:
@@ -262,7 +265,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sort_dict_value(self, reverse=False):
+    def sort_dict_value(self, reverse=False) -> UtilsT:
         """Sort dictionary by value
 
         Args:
@@ -292,7 +295,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def filter_list(self, by: Union[str, dict], regex: bool = True):
+    def filter_list(self, by: Union[str, dict], regex: bool = True) -> UtilsT:
         """Filter a list by a string regex or dict key
 
         Args:
@@ -320,7 +323,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def filter_list_by_length(self, length: int, exact: bool = False):
+    def filter_list_by_length(self, length: int, exact: bool = False) -> UtilsT:
         """Filter a list by length by specifying minimum length.
 
         It will also return items that exceed the specified length.
@@ -340,7 +343,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def filter_dict_key(self, by: str):
+    def filter_dict_key(self, by: str) -> UtilsT:
         """Filter dictionary by key
 
         Args:
@@ -360,7 +363,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def filter_dict_value(self, by: str):
+    def filter_dict_value(self, by: str) -> UtilsT:
         """Filter dictionary by value.
 
         This method does descend into nested dictionary values.
@@ -382,7 +385,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def slice(self, start: int = 0, end: int = None):
+    def slice(self, start: int = 0, end: int = None) -> UtilsT:
         """Returns the specified slice
 
         Args:
@@ -400,7 +403,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def find_replace(self, pattern: str, repl: str, ignore_case=True):
+    def find_replace(self, pattern: str, repl: str, ignore_case=True) -> UtilsT:
         """Replace matched pattern with repln
 
         Args:
@@ -422,7 +425,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def escape_string(self):
+    def escape_string(self) -> UtilsT:
         """Escape all special characters in a string
 
         Returns:
@@ -432,7 +435,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unescape_string(self):
+    def unescape_string(self) -> UtilsT:
         """Unescape \\ from a string
 
         Returns:
@@ -446,7 +449,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def color_hex_to_rgb(self):
+    def color_hex_to_rgb(self) -> UtilsT:
         """Convert hex color to rgb
 
         Returns:
@@ -502,7 +505,7 @@ class Utils(ChepyCore):
         else:
             matcher = difflib.SequenceMatcher(None, data, self._convert_to_str())
 
-        def process_tag(tag, i1, i2, j1, j2):  # pragma: no cover
+        def process_tag(tag, i1, i2, j1, j2) -> UtilsT:  # pragma: no cover
             if tag == "replace":
                 if colors:
                     return _int_colors.blue(matcher.b[j1:j2])
@@ -526,7 +529,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def pad(self, width: int, direction: str = "left", char: str = " "):
+    def pad(self, width: int, direction: str = "left", char: str = " ") -> UtilsT:
         """Pad string with a character
 
         Args:
@@ -562,7 +565,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def count(self):
+    def count(self) -> UtilsT:
         """Count anything
 
         Returns:
@@ -572,7 +575,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def set(self):
+    def set(self) -> UtilsT:
         """Get an array of unique values
 
         Returns:
@@ -582,7 +585,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def regex_to_str(self, all_combo: bool = False):
+    def regex_to_str(self, all_combo: bool = False) -> UtilsT:
         """Convert a regex to a matching string
 
         Args:

@@ -1,6 +1,10 @@
+from typing import TypeVar
+
 import regex as re
 
-from ..core import ChepyDecorators, ChepyCore
+from ..core import ChepyCore, ChepyDecorators
+
+SearchT = TypeVar("SearchT", bound="Search")
 
 
 class Search(ChepyCore):
@@ -13,7 +17,7 @@ class Search(ChepyCore):
     """
 
     @ChepyDecorators.call_stack
-    def search(self, pattern: str):
+    def search(self, pattern: str) -> SearchT:
         """Search. Group matches are returned as tuples.
 
         Args:
@@ -30,7 +34,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_ctf_flags(self, prefix: str, postfix: str = ".+?\{*\}"):
+    def search_ctf_flags(self, prefix: str, postfix: str = ".+?\{*\}") -> SearchT:
         """Search CTF style flags.
 
         This by default assumes that the flag format is similar
@@ -52,7 +56,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_slack_tokens(self):
+    def search_slack_tokens(self) -> SearchT:
         """Search slack tokens
 
         Returns:
@@ -69,7 +73,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_slack_webhook(self):
+    def search_slack_webhook(self) -> SearchT:
         """Search slack webhook
 
         Returns:
@@ -82,7 +86,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_private_key(self):
+    def search_private_key(self) -> SearchT:
         """Search varios private key headers
 
         Returns:
@@ -94,7 +98,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_twilio_key(self):
+    def search_twilio_key(self) -> SearchT:
         """Search for Twilio api key
 
         Returns:
@@ -104,7 +108,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_aws_key(self):
+    def search_aws_key(self) -> SearchT:
         """Search for AWS key id
 
         Returns:

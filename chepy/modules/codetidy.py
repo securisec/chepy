@@ -1,3 +1,4 @@
+from typing import TypeVar
 import lazy_import
 
 import ujson
@@ -8,13 +9,15 @@ import regex as re
 from lxml import etree
 from ..core import ChepyCore, ChepyDecorators
 
+CodeTidyT = TypeVar("CodeTidyT", bound="CodeTidy")
+
 
 class CodeTidy(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def minify_json(self):
+    def minify_json(self) -> CodeTidyT:
         """Minify JSON string
 
         Returns:
@@ -28,7 +31,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def beautify_json(self, indent: int = 2):
+    def beautify_json(self, indent: int = 2) -> CodeTidyT:
         """Beautify minified JSON
 
         Args:
@@ -45,7 +48,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def minify_xml(self):
+    def minify_xml(self) -> CodeTidyT:
         """Minify XML string
 
         Returns:
@@ -62,7 +65,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def beautify_xml(self):
+    def beautify_xml(self) -> CodeTidyT:
         """Beautify compressed XML
 
         Returns:
@@ -78,7 +81,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def php_deserialize(self):
+    def php_deserialize(self) -> CodeTidyT:
         """Deserialize php to dict
 
         Deserializes PHP serialized data, outputting keyed arrays as a python dict.
@@ -95,7 +98,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_upper_case(self, by: str = "all"):
+    def to_upper_case(self, by: str = "all") -> CodeTidyT:
         """Convert string to uppercase
 
         Args:
@@ -134,7 +137,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_lower_case(self):
+    def to_lower_case(self) -> CodeTidyT:
         """Convert string to lowercase
 
         Converts every character in the input to lower case.
@@ -150,7 +153,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_snake_case(self):
+    def to_snake_case(self) -> CodeTidyT:
         """Convert string to snake case
 
         Converts the input string to snake case. Snake case is all lower case
@@ -168,7 +171,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_camel_case(self, ignore_space: bool = False):
+    def to_camel_case(self, ignore_space: bool = False) -> CodeTidyT:
         """Convert string to camel case
 
         Converts the input string to camel case. Camel case is all lower case
@@ -196,7 +199,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_kebab_case(self):
+    def to_kebab_case(self) -> CodeTidyT:
         """Convert string to kebab case
 
         Converts the input string to kebab case. Kebab case is all lower case
@@ -213,7 +216,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def swap_case(self):
+    def swap_case(self) -> CodeTidyT:
         """Swap case in a string
 
         Returns:
@@ -227,7 +230,7 @@ class CodeTidy(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_leetspeak(self, special_chars: bool = True):
+    def to_leetspeak(self, special_chars: bool = True) -> CodeTidyT:
         """Convert string to l33t speak
 
         Args:

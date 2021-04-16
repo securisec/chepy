@@ -1,6 +1,10 @@
 import time
 from datetime import datetime
+from typing import TypeVar
+
 from ..core import ChepyCore, ChepyDecorators
+
+DateTimeT = TypeVar("DateTimeT", bound="DateTime")
 
 
 class DateTime(ChepyCore):
@@ -8,7 +12,7 @@ class DateTime(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def from_unix_ts(self):
+    def from_unix_ts(self) -> DateTimeT:
         """Convert UNIX timestamp to datetime
 
         Returns:
@@ -22,7 +26,7 @@ class DateTime(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_unix_ts(self):  # pragma: no cover
+    def to_unix_ts(self) -> DateTimeT:  # pragma: no cover
         """Convert datetime string to unix ts
 
         The format for the string is %a %b %d %H:%M:%S %Y, which is equivalent to

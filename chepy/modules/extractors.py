@@ -1,10 +1,15 @@
-import lazy_import
-import ujson
-import regex as re
-import jsonpath_rw
+from typing import TypeVar
 from urllib.parse import urlparse as _pyurlparse
+
+import jsonpath_rw
+import lazy_import
+import regex as re
+import ujson
+
 parsel = lazy_import.lazy_module("parsel")
 from ..core import ChepyCore, ChepyDecorators
+
+ExtractorsT = TypeVar("ExtractorsT", bound="Extractors")
 
 
 class Extractors(ChepyCore):
@@ -16,7 +21,7 @@ class Extractors(ChepyCore):
         return parsel.Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
-    def extract_hashes(self):
+    def extract_hashes(self) -> ExtractorsT:
         """Extract md5, sha1, sha256 and sha512 hashes
 
         Returns:
@@ -46,7 +51,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_strings(self, length: int = 4):
+    def extract_strings(self, length: int = 4) -> ExtractorsT:
         """Extract strings from state
 
         Args:
@@ -72,7 +77,9 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_ips(self, invalid: bool = False, is_binary: bool = False):
+    def extract_ips(
+        self, invalid: bool = False, is_binary: bool = False
+    ) -> ExtractorsT:
         """Extract ipv4 and ipv6 addresses
 
         Args:
@@ -98,7 +105,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_email(self, is_binary: bool = False):
+    def extract_email(self, is_binary: bool = False) -> ExtractorsT:
         """Extract email
 
         Args:
@@ -129,7 +136,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_mac_address(self, is_binary: bool = False):
+    def extract_mac_address(self, is_binary: bool = False) -> ExtractorsT:
         """Extract MAC addresses
 
         Args:
@@ -154,7 +161,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_urls(self, is_binary: bool = False):
+    def extract_urls(self, is_binary: bool = False) -> ExtractorsT:
         """Extract urls including http, file, ssh and ftp
 
         Args:
@@ -179,7 +186,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_domains(self, is_binary: bool = False):
+    def extract_domains(self, is_binary: bool = False) -> ExtractorsT:
         """Extract domains
 
         Args:
@@ -201,7 +208,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def xpath_selector(self, query: str, namespaces: str = None):
+    def xpath_selector(self, query: str, namespaces: str = None) -> ExtractorsT:
         """Extract data using valid xpath selectors
 
         Args:
@@ -227,7 +234,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def css_selector(self, query: str):
+    def css_selector(self, query: str) -> ExtractorsT:
         """Extract data using valid CSS selectors
 
         Args:
@@ -248,7 +255,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def jpath_selector(self, query: str):
+    def jpath_selector(self, query: str) -> ExtractorsT:
         """Query JSON with jpath query
 
         `Reference <https://goessner.net/articles/JsonPath/index.html#e2>`__
@@ -274,7 +281,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def html_comments(self):
+    def html_comments(self) -> ExtractorsT:
         """Extract html comments
 
         Returns:
@@ -286,7 +293,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def javascript_comments(self):
+    def javascript_comments(self) -> ExtractorsT:
         """Extract javascript comments
 
         Some false positives is expected because of inline // comments
@@ -300,7 +307,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def html_tags(self, tag: str):
+    def html_tags(self, tag: str) -> ExtractorsT:
         """Extract tags from html along with their attributes
 
         Args:
@@ -330,7 +337,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_google_api(self):
+    def extract_google_api(self) -> ExtractorsT:
         """Extract Goolge api keys
 
         Returns:
@@ -340,7 +347,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_google_captcha(self):
+    def extract_google_captcha(self) -> ExtractorsT:
         """Extract Goolge captcha keys
 
         Returns:
@@ -350,7 +357,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_google_oauth(self):
+    def extract_google_oauth(self) -> ExtractorsT:
         """Extract Goolge oauth keys
 
         Returns:
@@ -360,7 +367,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_aws_keyid(self):
+    def extract_aws_keyid(self) -> ExtractorsT:
         """Extract AWS key ids
 
         Returns:
@@ -370,7 +377,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_aws_s3_url(self):
+    def extract_aws_s3_url(self) -> ExtractorsT:
         """Extract AWS S3 URLs
 
         Returns:
@@ -383,7 +390,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_facebook_access_token(self):
+    def extract_facebook_access_token(self) -> ExtractorsT:
         """Extract Facebook access tokens
 
         Returns:
@@ -393,7 +400,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_auth_basic(self):
+    def extract_auth_basic(self) -> ExtractorsT:
         """Extract basic authentication tokens
 
         Returns:
@@ -405,7 +412,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_auth_bearer(self):
+    def extract_auth_bearer(self) -> ExtractorsT:
         """Extract bearer authentication tokens
 
         Returns:
@@ -417,7 +424,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_mailgun_api(self):
+    def extract_mailgun_api(self) -> ExtractorsT:
         """Extract Mailgun API key
 
         Returns:
@@ -427,7 +434,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_twilio_api(self):
+    def extract_twilio_api(self) -> ExtractorsT:
         """Extract Twilio API key
 
         Returns:
@@ -437,7 +444,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_twilio_sid(self):
+    def extract_twilio_sid(self) -> ExtractorsT:
         """Extract Twilio account or app sid
 
         Returns:
@@ -447,7 +454,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_paypal_bt(self):
+    def extract_paypal_bt(self) -> ExtractorsT:
         """Extract Paypal braintree access token
 
         Returns:
@@ -460,7 +467,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_square_oauth(self):
+    def extract_square_oauth(self) -> ExtractorsT:
         """Extract Square oauth secret token
 
         Returns:
@@ -470,7 +477,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_square_access(self):
+    def extract_square_access(self) -> ExtractorsT:
         """Extract Square access token
 
         Returns:
@@ -480,7 +487,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_stripe_api(self):
+    def extract_stripe_api(self) -> ExtractorsT:
         """Extract Stripe standard or restricted api token
 
         Returns:
@@ -490,7 +497,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_github(self):
+    def extract_github(self) -> ExtractorsT:
         """Extract Github access token
 
         Returns:
@@ -502,7 +509,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_rsa_private(self):
+    def extract_rsa_private(self) -> ExtractorsT:
         """Extract RSA private key
 
         Returns:
@@ -514,7 +521,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_dsa_private(self):
+    def extract_dsa_private(self) -> ExtractorsT:
         """Extract DSA private key
 
         Returns:
@@ -526,7 +533,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_jwt_token(self):
+    def extract_jwt_token(self) -> ExtractorsT:
         """Extract JWT token
 
         Returns:
@@ -539,7 +546,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_base64(self, min: int = 20):
+    def extract_base64(self, min: int = 20) -> ExtractorsT:
         """Extract base64 encoded strings
 
         Args:

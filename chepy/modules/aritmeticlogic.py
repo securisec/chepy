@@ -1,8 +1,12 @@
 import binascii
 import statistics
+from typing import TypeVar
 
 from ..core import ChepyCore, ChepyDecorators
 from .exceptions import StateNotList
+
+
+AritmeticLogicT = TypeVar("AritmeticLogicT", bound="AritmeticLogic")
 
 
 class AritmeticLogic(ChepyCore):
@@ -16,7 +20,7 @@ class AritmeticLogic(ChepyCore):
             return n
 
     @ChepyDecorators.call_stack
-    def str_bit_shift_right(self, amount: int):
+    def str_bit_shift_right(self, amount: int) -> AritmeticLogicT:
         """Bit shift string right
 
         Args:
@@ -31,7 +35,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def add(self, n: int):
+    def add(self, n: int) -> AritmeticLogicT:
         """Add a number to the state
 
         Args:
@@ -46,7 +50,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def subtract(self, n: int):
+    def subtract(self, n: int) -> AritmeticLogicT:
         """Subtract a number to the state
 
         Args:
@@ -61,7 +65,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def multiply(self, n: int):
+    def multiply(self, n: int) -> AritmeticLogicT:
         """Multiply a number to the state
 
         Args:
@@ -76,7 +80,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def divide(self, n: int):
+    def divide(self, n: int) -> AritmeticLogicT:
         """Divide a number to the state
 
         Args:
@@ -91,7 +95,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def power(self, n: int):
+    def power(self, n: int) -> AritmeticLogicT:
         """Convert state to the n power of
 
         Args:
@@ -106,7 +110,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def sum(self):
+    def sum(self) -> AritmeticLogicT:
         """Calculate the sum of the state
 
         Returns:
@@ -118,7 +122,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def mean(self):
+    def mean(self) -> AritmeticLogicT:
         """Calculate the mean of the state
 
         Returns:
@@ -130,7 +134,7 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def median(self):
+    def median(self) -> AritmeticLogicT:
         """Calculate the median of the state
 
         Returns:

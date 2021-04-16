@@ -1,12 +1,16 @@
-import io
+import binascii
 import bz2
 import gzip
+import io
 import lzma
 import tarfile
-import zlib
 import zipfile
-import binascii
+import zlib
+from typing import TypeVar
+
 from ..core import ChepyCore, ChepyDecorators
+
+CompressionT = TypeVar("CompressionT", bound="Compression")
 
 
 class Compression(ChepyCore):
@@ -17,7 +21,7 @@ class Compression(ChepyCore):
         assert mode in ["gz", "bz2", "xz", ""], "Valid modes are gz, bz2, xz"
 
     @ChepyDecorators.call_stack
-    def fix_zip_header(self):
+    def fix_zip_header(self) -> CompressionT:
         """Fix the first 4 bytes of a zip file
 
         Returns:
@@ -29,7 +33,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def zip_info(self):
+    def zip_info(self) -> CompressionT:
         """Gets various information about a zip file
 
         This includes information about all the files inside the
@@ -56,7 +60,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def zip_list_files(self):
+    def zip_list_files(self) -> CompressionT:
         """Get a list of files inside the zip archive
 
         Returns:
@@ -71,7 +75,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unzip_one(self, file: str, password: str = None):
+    def unzip_one(self, file: str, password: str = None) -> CompressionT:
         """Unzip one file from zipfile
 
         Use zip_list_files to get all the filenames within the zip archive
@@ -98,7 +102,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unzip_all(self, password: str = None):
+    def unzip_all(self, password: str = None) -> CompressionT:
         """Unzip all files from zipfile into the state
 
         Args:
@@ -120,7 +124,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def create_zip_file(self, file_name: str):
+    def create_zip_file(self, file_name: str) -> CompressionT:
         """Create a zip archive with data from state
 
         Args:
@@ -141,7 +145,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def tar_list_files(self, mode: str = ""):
+    def tar_list_files(self, mode: str = "") -> CompressionT:
         """Get file information inside a tar archive
 
         Args:
@@ -160,7 +164,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def tar_extract_one(self, filename: str, mode: str = ""):
+    def tar_extract_one(self, filename: str, mode: str = "") -> CompressionT:
         """Extract one file from inside a tar archive
 
         Args:
@@ -180,7 +184,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def tar_extract_all(self, mode: str = ""):
+    def tar_extract_all(self, mode: str = "") -> CompressionT:
         """Extract one file from inside a tar archive
 
         Args:
@@ -199,7 +203,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def tar_compress(self, filename: str, mode: str = "gz"):
+    def tar_compress(self, filename: str, mode: str = "gz") -> CompressionT:
         """Compress the state into a tar compressed object.
 
         Args:
@@ -224,7 +228,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def gzip_compress(self, file_name: str = None):
+    def gzip_compress(self, file_name: str = None) -> CompressionT:
         """Create a gz archive with data from state
 
         Args:
@@ -246,7 +250,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def gzip_decompress(self):
+    def gzip_decompress(self) -> CompressionT:
         """Decompress a gzip archive
 
         Returns:
@@ -256,7 +260,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bzip_compress(self):
+    def bzip_compress(self) -> CompressionT:
         """Compress the state into bz2 archive
 
         Returns:
@@ -277,7 +281,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bzip_decompress(self):
+    def bzip_decompress(self) -> CompressionT:
         """Decompress a bz2 archive
 
         Returns:
@@ -287,7 +291,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def zlib_compress(self, level: int = 9):
+    def zlib_compress(self, level: int = 9) -> CompressionT:
         """Compress using zlib
 
         Args:
@@ -304,7 +308,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def zlib_decompress(self):
+    def zlib_decompress(self) -> CompressionT:
         """Zlib decompression
 
         Returns:
@@ -321,7 +325,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def lzma_compress(self):
+    def lzma_compress(self) -> CompressionT:
         """Compress using xz lzma
 
         Returns:
@@ -331,7 +335,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def lzma_decompress(self):
+    def lzma_decompress(self) -> CompressionT:
         """Decompress lzma compressed data
 
         Returns:
@@ -341,7 +345,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def raw_inflate(self):
+    def raw_inflate(self) -> CompressionT:
         """Raw inflate data
 
         Returns:
@@ -351,7 +355,7 @@ class Compression(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def raw_deflate(self):
+    def raw_deflate(self) -> CompressionT:
         """Raw deflate data
 
         Returns:

@@ -1,6 +1,10 @@
+from typing import TypeVar
+
 import regex as re
 
 from ..core import ChepyCore, ChepyDecorators
+
+LinksT = TypeVar("LinksT", bound="Links")
 
 
 class Links(ChepyCore):
@@ -8,7 +12,7 @@ class Links(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def pastebin_to_raw(self):
+    def pastebin_to_raw(self) -> LinksT:
         """Convert a pastebin link to raw pastebin link
 
         Returns:
@@ -22,7 +26,7 @@ class Links(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def github_to_raw(self):
+    def github_to_raw(self) -> LinksT:
         """Convert a github link to raw github link
 
         Returns:

@@ -1,8 +1,13 @@
+from typing import TypeVar
+
 import lazy_import
+
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
 OpenSSL = lazy_import.lazy_module("OpenSSL")
 
 from ..core import ChepyCore, ChepyDecorators
+
+PublickeyT = TypeVar("PublickeyT", bound="Publickey")
 
 
 class Publickey(ChepyCore):
@@ -42,7 +47,7 @@ class Publickey(ChepyCore):
         return info
 
     @ChepyDecorators.call_stack
-    def parse_x509_pem(self):
+    def parse_x509_pem(self) -> PublickeyT:
         """Parse X509 cert in PEM format
 
         X.509 is an ITU-T standard for a public key infrastructure (PKI)
@@ -80,7 +85,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_x509_der_hex(self):
+    def parse_x509_der_hex(self) -> PublickeyT:
         """Parse X509 cert in DER format
 
         X.509 is an ITU-T standard for a public key infrastructure (PKI)
@@ -99,13 +104,15 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def public_from_x509(self):
+    def public_from_x509(self) -> PublickeyT:
         """Get public key from x509 certificate
 
         Returns:
             Chepy: The Chepy object.
         """
-        crt_obj = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, self.state)
+        crt_obj = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, self.state
+        )
         pub_key_object = crt_obj.get_pubkey()
         pub_key_string = OpenSSL.crypto.dump_publickey(
             OpenSSL.crypto.FILETYPE_PEM, pub_key_object
@@ -114,7 +121,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def pem_to_der_hex(self):
+    def pem_to_der_hex(self) -> PublickeyT:
         """Convert PEM cert to DER format
 
         Converts PEM (Privacy Enhanced Mail) format to a hexadecimal
@@ -132,7 +139,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def der_hex_to_pem(self):
+    def der_hex_to_pem(self) -> PublickeyT:
         """Convert DER format to PEM cert.
 
         Converts a hexadecimal DER (Distinguished Encoding Rules)
@@ -164,7 +171,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_public_pem(self):
+    def parse_public_pem(self) -> PublickeyT:
         """Parse pubkey PEM to get n and e
 
         Returns:
@@ -179,7 +186,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def parse_private_pem(self):
+    def parse_private_pem(self) -> PublickeyT:
         """Parse private key PEM
 
         Returns:
@@ -197,7 +204,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def dump_pkcs12_cert(self, password: str):
+    def dump_pkcs12_cert(self, password: str) -> PublickeyT:
         """Get the private key and cert from pkcs12 cert
 
         Args:

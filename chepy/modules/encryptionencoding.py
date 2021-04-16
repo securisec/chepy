@@ -3,6 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
+from typing import TypeVar
 
 import lazy_import
 
@@ -12,6 +13,7 @@ import pathlib
 import pycipher
 import regex as re
 import ujson
+
 AES = lazy_import.lazy_module("Crypto.Cipher.AES")
 ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
 DES = lazy_import.lazy_module("Crypto.Cipher.DES")
@@ -19,10 +21,11 @@ DES3 = lazy_import.lazy_module("Crypto.Cipher.DES3")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
 from Crypto.Util.Padding import pad, unpad
 
-
 from ..core import ChepyCore, ChepyDecorators
 from ..extras.combinatons import hex_chars
 from .internal.constants import EncryptionConsts
+
+EncryptionEncodingT = TypeVar("EncryptionEncodingT", bound="EncryptionEncoding")
 
 
 class EncryptionEncoding(ChepyCore):
@@ -42,7 +45,9 @@ class EncryptionEncoding(ChepyCore):
     def __check_mode(self, mode) -> None:
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
-    def _convert_key(self, key, iv, hex_key, hex_iv):  # pragma: no cover
+    def _convert_key(
+        self, key, iv, hex_key, hex_iv
+    ) -> EncryptionEncodingT:  # pragma: no cover
         if isinstance(key, str):
             key = key.encode()
         if hex_key:
@@ -56,7 +61,7 @@ class EncryptionEncoding(ChepyCore):
         return key, iv
 
     @ChepyDecorators.call_stack
-    def rotate(self, rotate_by: int):
+    def rotate(self, rotate_by: int) -> EncryptionEncodingT:
         """Rotate string by provided number
 
         Args:
@@ -80,7 +85,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rotate_bruteforce(self):
+    def rotate_bruteforce(self) -> EncryptionEncodingT:
         """Brute force rotation from 1 to 26.
         Returned value is a dict where key is the rotation count.
 
@@ -112,7 +117,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_13(self):
+    def rot_13(self) -> EncryptionEncodingT:
         """ROT-13 encoding
 
         A simple caesar substitution cipher which rotates alphabet
@@ -125,7 +130,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_47(self):
+    def rot_47(self) -> EncryptionEncodingT:
         """ROT 47 encoding
 
         A slightly more complex variation of a caesar cipher, which includes
@@ -149,7 +154,9 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def xor(self, key: str, key_type: str = "hex", ascii: bool = False):
+    def xor(
+        self, key: str, key_type: str = "hex", ascii: bool = False
+    ) -> EncryptionEncodingT:
         """XOR state with a key
 
         Valid key formats are utf, hex and base64. Simple XOR cipher is a type
@@ -204,7 +211,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def xor_bruteforce(self, length: int = 100):
+    def xor_bruteforce(self, length: int = 100) -> EncryptionEncodingT:
         """Brute force single byte xor
 
         For multibyte xor bruteforce, use chepy.extras.crypto_extras.xor_bruteforce_multi
@@ -242,7 +249,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def jwt_decode(self):
+    def jwt_decode(self) -> EncryptionEncodingT:
         """Decode a JWT token. Does not verify
 
         Returns:
@@ -255,7 +262,9 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def jwt_verify(self, secret: str, algorithm: list = ["HS256"]):
+    def jwt_verify(
+        self, secret: str, algorithm: list = ["HS256"]
+    ) -> EncryptionEncodingT:
         """Verify JWT token
 
         Args:
@@ -271,7 +280,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def jwt_sign(self, secret: str, algorithms: str = "HS256"):
+    def jwt_sign(self, secret: str, algorithms: str = "HS256") -> EncryptionEncodingT:
         """Sign a json/dict object in JWT
 
         Args:
@@ -324,7 +333,7 @@ class EncryptionEncoding(ChepyCore):
                 return self
 
     @ChepyDecorators.call_stack
-    def rc4_encrypt(self, key: str, hex_key: bool = False):
+    def rc4_encrypt(self, key: str, hex_key: bool = False) -> EncryptionEncodingT:
         """Encrypt raw state with RC4
 
         Args:
@@ -347,7 +356,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rc4_decrypt(self, key: str, hex_key: bool = False):
+    def rc4_decrypt(self, key: str, hex_key: bool = False) -> EncryptionEncodingT:
         """Decrypt raw state with RC4
 
         Args:
@@ -846,7 +855,7 @@ class EncryptionEncoding(ChepyCore):
             return self
 
     @ChepyDecorators.call_stack
-    def vigenere_encode(self, key: str):
+    def vigenere_encode(self, key: str) -> EncryptionEncodingT:
         """Encode with Vigenere ciper
 
         Args:
@@ -863,7 +872,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def vigenere_decode(self, key: str):
+    def vigenere_decode(self, key: str) -> EncryptionEncodingT:
         """Decode Vigenere ciper
 
         Args:
@@ -880,7 +889,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def affine_encode(self, a: int = 1, b: int = 1):
+    def affine_encode(self, a: int = 1, b: int = 1) -> EncryptionEncodingT:
         """Encode with Affine ciper
 
         Args:
@@ -898,7 +907,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def affine_decode(self, a: int = 1, b: int = 1):
+    def affine_decode(self, a: int = 1, b: int = 1) -> EncryptionEncodingT:
         """Decode Affine ciper
 
         Args:
@@ -916,7 +925,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def atbash_encode(self):
+    def atbash_encode(self) -> EncryptionEncodingT:
         """Encode with Atbash ciper
 
         Returns:
@@ -930,7 +939,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def atbash_decode(self):
+    def atbash_decode(self) -> EncryptionEncodingT:
         """Decode Atbash ciper
 
         Returns:
