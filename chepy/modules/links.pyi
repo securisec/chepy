@@ -1,4 +1,4 @@
-from ..core import ChepyCore as ChepyCore, ChepyDecorators as ChepyDecorators
+from ..core import ChepyCore
 from typing import Any, TypeVar
 
 LinksT = TypeVar('LinksT', bound='Links')

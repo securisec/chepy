@@ -1,6 +1,3 @@
-from chepy import Chepy as Chepy
-from chepy.config import ChepyConfig as ChepyConfig
-from chepy.modules.internal.colors import red as red, yellow as yellow, yellow_background as yellow_background
 from prompt_toolkit.completion import Completer
 from typing import Any
 

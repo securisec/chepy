@@ -592,7 +592,7 @@ class Hashing(ChepyCore):
         salt: Union[str, bytes],
         key_size: int = 256,
         iterations: int = 1000,
-        hash_type: Literal["md5", "sha1", "sha256", "sh512"] = "sha1",
+        hash_type: Literal["md5", "sha1", "sha256", "sha512"] = "sha1",
         hex_salt: bool = True,
         show_full_key: bool = False,
     ):
