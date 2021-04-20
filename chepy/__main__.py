@@ -36,7 +36,7 @@ prompt_colors = config.prompt_colors.split()
 def get_style():
     return Style.from_dict(
         {
-            "completion-menu.completion.current": "bg:#00aaaa #000000",
+            "completion-menu.completion.current": "bg:{}".format(config.prompt_search_background),
             # "completion-menu.completion": "bg:#008888 #ffffff",
             "completion-menu.completion.fuzzymatch.outside": "fg:#00aaaa",
             "prompt1": "{} bold".format(prompt_colors[0]),
@@ -339,3 +339,7 @@ def main():
         except KeyboardInterrupt:
             print(green("\nOKBye"))
             sys.exit()
+        except EOFError:
+            print(green("\nOKBye"))
+            sys.exit()
+

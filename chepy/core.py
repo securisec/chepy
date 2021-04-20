@@ -1,21 +1,20 @@
-import lazy_import
-
-import sys
 import base64
 import binascii
-import pathlib
-import webbrowser
-import logging
 import inspect
 import io
 import itertools
+import logging
+import pathlib
 import subprocess
-from importlib.machinery import SourceFileLoader
+import sys
+import webbrowser
 from configparser import ConfigParser
-from urllib.parse import urljoin
+from importlib.machinery import SourceFileLoader
 from pprint import pformat
-from typing import Any, Tuple, List, Union
+from typing import Any, List, Mapping, Tuple, Union
+from urllib.parse import urljoin
 
+import lazy_import
 import pyperclip
 import ujson
 
@@ -23,7 +22,7 @@ jsonpickle = lazy_import.lazy_module("jsonpickle")
 import regex as re
 from decorator import decorator
 
-from .modules.internal.colors import yellow, cyan, green, magenta, blue, red
+from .modules.internal.colors import blue, cyan, green, magenta, red, yellow
 
 
 class ChepyDecorators(object):
@@ -866,6 +865,31 @@ class ChepyCore(object):
             f.write(self.state)
         self._info_logger("File written to {}".format(self._abs_path(path)))
         return None
+
+    def run_recipe(self, recipes: List[Mapping[str, Union[str, Mapping[str, Any]]]]):
+        """Run a recipe on the state. All arguments including optional needs to
+        be specified for a recipe.
+
+        Args:
+            recipes (List[Mapping[str, Union[str, Mapping[str, Any]]]]): An array of recipes.
+                Recipes are in the format {'function': 'function_name', 'args': {'arg_name': 'arg_val'}}
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy('bG9sCg==').run_recipe([{"function":"base64_decode","args":{"custom":None,"fix_padding":True}}]])
+            >>> lol
+            In this example, we are calling the base64 decode method on the state.
+        """
+        for recipe in recipes:
+            function = recipe["function"]
+            args = recipe["args"]
+            if len(args) > 0:
+                getattr(self, function)(**args)
+            else:
+                getattr(self, function)()
+        return self
 
     def save_recipe(self, path: str):
         """Save the current recipe

@@ -135,6 +135,23 @@ def test_load_file_binary():
     assert type(Chepy("tests/files/pkcs12").load_file(True).o) == bytearray
 
 
+def test_run_recipe():
+    assert (
+        Chepy("bG9sCg==")
+        .run_recipe(
+            recipes=[
+                {
+                    "function": "base64_decode",
+                    "args": {"custom": None, "fix_padding": True},
+                },
+                {"function": "swap_case", "args": {}},
+            ]
+        )
+        .o
+        == "LOL\n"
+    )
+
+
 def test_recipe():
     temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
     Chepy(

@@ -36,6 +36,10 @@ Controls the color of the cli methods. Defaults to *#00d700*
 Controls the color of the plugin methods. Defaults to *#30d8ff*
 ### Cli.cli_info_color
 Controls the color of the output from `cli_*` methods. Defaults to *#ffb4ad*
+### Cli.prompt_search_background
+Background background color for cli selection. Defaults to *#00aaaa #000000*
+### Cli.prompt_search_fuzzy
+Background background color for cli fuzzy match. Defaults to *#00aaaa*
 
 
 ### chepy_history
