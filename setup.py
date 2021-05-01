@@ -1,5 +1,4 @@
 # pylint: disable=undefined-variable
-import sys
 from setuptools import setup, find_packages
 from os import path
 

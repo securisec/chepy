@@ -253,7 +253,7 @@ def cli_pretty_print(fire: object):
         fire (object): The fire object
     """
     if fire is not None and isinstance(fire, Chepy):
-        print_in_colors(pprint.pprint(fire.state))
+        print_in_colors(pprint.pformat(fire.state))
     else:
         print(red("Nope. That didnt work.."))
 

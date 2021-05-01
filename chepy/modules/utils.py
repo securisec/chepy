@@ -1,6 +1,6 @@
 import difflib
 from collections import OrderedDict
-from typing import Any, TypeVar, Union
+from typing import TypeVar, Union
 
 import chepy.modules.internal.colors as _int_colors
 import exrex

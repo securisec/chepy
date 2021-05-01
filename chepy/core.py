@@ -47,7 +47,7 @@ class ChepyDecorators(object):
         func_sig["args"] = func_arguments
         func_self._stack.append(func_sig)
 
-        return func(*args, **kwargs)
+        return func(*args, **kwargs) # lgtm [py/call-to-non-callable]
 
 
 class ChepyCore(object):
@@ -994,7 +994,7 @@ class ChepyCore(object):
         )
 
         for _ in range(int(iterations)):
-            d = getattr(self, callback)(**args)
+            getattr(self, callback)(**args)
 
         self._stack = self._stack[: stack_loop_index + 1]
         return self
