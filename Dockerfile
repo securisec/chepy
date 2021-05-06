@@ -23,7 +23,7 @@ RUN sed -i 's/enableplugins = false/enableplugins = true/' /root/.chepy/chepy.co
 RUN cd /chepy/ && pytest --disable-pytest-warnings tests_plugins/
 RUN python -c "from chepy import Chepy"
 
-RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404
+RUN cd /chepy/ && bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404,B608
 RUN rm -rf /chepy/tests \
     && rm -rf /chepy/build \
     && rm -rf /chepy/dist \
