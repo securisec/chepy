@@ -4,7 +4,7 @@ import inspect
 import io
 import itertools
 import logging
-import pathlib
+from pathlib import Path
 import subprocess
 import sys
 import webbrowser
@@ -47,7 +47,7 @@ class ChepyDecorators(object):
         func_sig["args"] = func_arguments
         func_self._stack.append(func_sig)
 
-        return func(*args, **kwargs) # lgtm [py/call-to-non-callable]
+        return func(*args, **kwargs)  # lgtm [py/call-to-non-callable]
 
 
 class ChepyCore(object):
@@ -151,7 +151,7 @@ class ChepyCore(object):
         Returns:
             object: Path object
         """
-        return pathlib.Path(path).expanduser().absolute()
+        return Path(path).expanduser().absolute()
 
     def _info_logger(self, data: str) -> None:
         """Just a binding for logger.info
@@ -796,7 +796,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object.
         """
-        files = [x for x in pathlib.Path(self.state).glob(pattern) if x.is_file()]
+        files = [x for x in Path(self.state).glob(pattern) if x.is_file()]
         self.states = {x[0]: str(x[1]) for x in enumerate(files) if x[1].is_file()}
         return self
 
@@ -815,7 +815,7 @@ class ChepyCore(object):
             >>> # at the moment, the state only contains the string "/path/to/file"
             >>> c.load_file() # this will load the file content into the state
         """
-        path = pathlib.Path(str(self.state)).expanduser().absolute()
+        path = Path(str(self.state)).expanduser().absolute()
         if binary_mode:
             with open(path, "rb") as f:
                 self.states[self._current_index] = bytearray(f.read())
@@ -1192,7 +1192,7 @@ class ChepyCore(object):
             None
         """
         assert enable in ["true", "false"], "Valid values are true and false"
-        conf_path = pathlib.Path().home() / ".chepy" / "chepy.conf"
+        conf_path = Path().home() / ".chepy" / "chepy.conf"
         c = ConfigParser()
         c.read(conf_path)
         c.set("Plugins", "enableplugins", enable)
@@ -1224,7 +1224,7 @@ class ChepyCore(object):
         """
         expand_path = self._abs_path(path)
         if expand_path.exists():
-            conf_path = pathlib.Path().home() / ".chepy" / "chepy.conf"
+            conf_path = Path().home() / ".chepy" / "chepy.conf"
             c = ConfigParser()
             c.read(conf_path)
             c.set("Plugins", "pluginpath", str(expand_path))

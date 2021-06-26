@@ -1029,3 +1029,26 @@ class DataFormat(ChepyCore):
         """
         self.state = self._convert_to_str().strip()
         return self
+
+    @ChepyDecorators.call_stack
+    def convert_to_nato(self, join_by: str = " ") -> DataFormatT:
+        """Convert string to NATO phonetic format.
+
+        Example: abc = Alpha Bravo Charlie
+
+        Args:
+            join_by (str, optional): [description]. Defaults to " ".
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        nato_chars = Encoding.NATO_CONSTANTS_DICT
+        hold = []
+        data: str = self._convert_to_str()
+        for d in data:
+            if d.isalpha():
+                hold.append(nato_chars[d.upper()])
+            else:
+                hold.append(d)
+        self.state = join_by.join(hold)
+        return self

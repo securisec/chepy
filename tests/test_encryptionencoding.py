@@ -55,24 +55,19 @@ def test_xor_bruteforce():
 
 
 def test_jwt_decode():
-    assert (
-        Chepy(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmF\
+    assert Chepy(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmF\
             tZSI6IkFtYXppbmcgSGF4eDByIiwiZXhwIjoiMTQ2NjI3MDcyMiIsImFkbWluIjp0\
                 cnVlfQ.UL9Pz5HbaMdZCV9cS9OcpccjrlkcmLovL2A2aiKiAOY"
-        )
-        .jwt_decode()
-        .o
-        == {
-            "payload": {
-                "sub": "1234567890",
-                "name": "Amazing Haxx0r",
-                "exp": "1466270722",
-                "admin": True,
-            },
-            "header": {"alg": "HS256", "typ": "JWT"},
-        }
-    )
+    ).jwt_decode().o == {
+        "payload": {
+            "sub": "1234567890",
+            "name": "Amazing Haxx0r",
+            "exp": "1466270722",
+            "admin": True,
+        },
+        "header": {"alg": "HS256", "typ": "JWT"},
+    }
 
 
 def test_jwt_sign():
@@ -431,4 +426,21 @@ def test_from_morse_code():
     assert (
         Chepy(".... . .-.. .-.. --- \n.-- --- .-. .-.. -..").from_morse_code().o
         == "HELLO WORLD"
+    )
+
+
+def test_rsa_encrypt_decrypt():
+    assert (
+        Chepy("lol")
+        .rsa_encrypt("tests/files/public.pem")
+        .rsa_decrypt("tests/files/private.pem")
+        .o
+        == b"lol"
+    )
+
+
+def test_rsa_sign():
+    assert (
+        Chepy("lol").rsa_sign("tests/files/private.pem").to_hex().o
+        == b"ae12fa91f12af7e1c04e7893ce43fc76195d30203ad0ab88fac3631feb026ee8832d57584a977fe9f70139d8dd7c74b904643ab11493935c642e563752325c1ecde98a29bfaaa714e513d7c3548e9fbea6f2f2705eec3567f4ba868b3ca16f8ede4155e71b854042810bb836dda031c2e540175f4573103c065311d38b7246a6"
     )

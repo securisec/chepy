@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 import lazy_import
 
@@ -224,4 +224,27 @@ class Publickey(ChepyCore):
                 OpenSSL.crypto.FILETYPE_PEM, pk12.get_certificate()
             ),
         }
+        return self
+
+    @ChepyDecorators.call_stack
+    def generate_rsa_keypair(
+        self,
+        bits: int = 1024,
+        format: Literal["PEM", "DER"] = "PEM",
+        passphrase: str = None,
+    ) -> PublickeyT:
+        """Generate RSA key pair
+
+        Args:
+            bits (int, optional): Length of keys. Defaults to 1024.
+            format (Literal[, optional): Output format type. Defaults to 'PEM'.
+            passphrase (str, optional): Passphrase for keys. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = RSA.generate(bits)
+        pub = key.public_key().exportKey(passphrase=passphrase, format=format)
+        priv = key.exportKey(passphrase=passphrase, format=format)
+        self.state = {"public": pub, "private": priv}
         return self

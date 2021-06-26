@@ -101,8 +101,7 @@ def test_pkcs12():
         .read_file()
         .dump_pkcs12_cert("mimikatz")
         .get_by_key("private")
-        .o
-        .decode()
+        .o.decode()
     )
 
 
@@ -130,3 +129,8 @@ def test_public_from_x509():
         == b"-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDUvpx5Xe2+Qe0wcjm87Cv5yNb8\nfTIg2H09gfL4JL0yatfXal7+bUUtqkxS7keBBkAqu2V1xxvdaIZA2muz9Zx7WDyG\na8PSkBd9+KND6+O8dVTeX66nWhwvog+nGtBXPRvOlDiwxErQJ1mCN/jLgcvXzyow\n2BgY5kGC20VfGjPjVQIDAQAB\n-----END PUBLIC KEY-----\n"
     )
 
+
+def test_generate_rsa_keypair():
+    k = Chepy("").generate_rsa_keypair().o
+    assert b"PUBLIC" in k["public"]
+    assert b"PRIVATE" in k["private"]

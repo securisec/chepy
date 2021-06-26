@@ -339,3 +339,7 @@ def test_to_hexdump():
 
 def test_from_hexdump():
     assert Chepy("some").to_hexdump().from_hexdump().o == b"some"
+
+
+def test_nato_convert():
+    assert Chepy("abc:1").convert_to_nato().o == "Alpha Bravo Charlie : 1"

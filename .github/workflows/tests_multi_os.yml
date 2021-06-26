@@ -11,7 +11,9 @@ jobs:
       max-parallel: 6
       matrix:
         os: [ubuntu-18.04, windows-latest, macOS-latest]
-        python-version: ["3.8", "3.9"]
+        python-version: 
+          - "3.8"
+          # - "3.9"
 
     steps:
     - uses: actions/checkout@v2.3.4

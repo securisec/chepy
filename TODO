@@ -6,6 +6,14 @@ Code:
 New ideas:
   ☐ rubber ducky encode/decode
   ☐ save registers https://t.co/pBNRufibY8?amp=1 
+  ✔ convert to nato alphabets: a = alpha, b = bravo
+  ☐ cbor encode/decode https://github.com/agronholm/cbor2 (plugin)
+  ☐ fuzzy search
+  ✔ rsa sign/verify
+  ✔ rsa generate random key (private and public)
+  ✔ rsa encrypt/decrpt
+  ☐ pgp, generate, encrypt, decrypt, verify
+  ☐ swap little and big endian
 
 Cli:
   ☐ optionally show output window in a split screen window

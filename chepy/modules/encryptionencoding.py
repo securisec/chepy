@@ -18,8 +18,12 @@ AES = lazy_import.lazy_module("Crypto.Cipher.AES")
 ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
 DES = lazy_import.lazy_module("Crypto.Cipher.DES")
 DES3 = lazy_import.lazy_module("Crypto.Cipher.DES3")
+RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
+Hash = lazy_import.lazy_module("Crypto.Hash")
+PKCS1_15 = lazy_import.lazy_module("Crypto.Signature.pkcs1_15")
+PKCS1_OAEP = lazy_import.lazy_module("Crypto.Cipher.PKCS1_OAEP")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
-from Crypto.Util.Padding import pad, unpad
+Padding = lazy_import.lazy_module("Crypto.Util.Padding")
 
 from ..core import ChepyCore, ChepyDecorators
 from ..extras.combinatons import hex_chars
@@ -423,11 +427,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = DES.new(key, mode=DES.MODE_ECB)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = DES.new(key, mode=DES.MODE_CTR, nonce=b"")
@@ -478,11 +482,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
             cipher = DES.new(key, mode=DES.MODE_ECB)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "CTR":
             cipher = DES.new(key, mode=DES.MODE_CTR, nonce=b"")
@@ -532,11 +536,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = DES3.new(key, mode=DES3.MODE_ECB)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
@@ -589,11 +593,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
             cipher = DES3.new(key, mode=DES3.MODE_ECB)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "CTR":
             cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
@@ -650,11 +654,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 16))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 16))
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 16))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 16))
             return self
         elif mode == "CTR":
             cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
@@ -723,11 +727,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
             return self
         elif mode == "CTR":
             cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
@@ -783,11 +787,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "ECB":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_ECB)
-            self.state = cipher.encrypt(pad(self._convert_to_bytes(), 8))
+            self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 8))
             return self
         elif mode == "CTR":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
@@ -839,11 +843,11 @@ class EncryptionEncoding(ChepyCore):
 
         if mode == "CBC":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "ECB":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_ECB)
-            self.state = unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
         elif mode == "CTR":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CTR, nonce=b"")
@@ -1019,3 +1023,72 @@ class EncryptionEncoding(ChepyCore):
                 decode += morse_code_dict.get(chars)
         self.state = decode
         return self
+
+    @ChepyDecorators.call_stack
+    def rsa_encrypt(self, pub_key_path: str) -> EncryptionEncodingT:
+        """Encrypt data with RSA Public key in PEM format
+
+        Args:
+            pub_key_path (str): Path to Public key
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        with open(str(self._abs_path(pub_key_path)), "r") as f:
+            pub_key = f.read()
+            key = RSA.importKey(pub_key)
+            cipher = PKCS1_OAEP.new(key)
+            self.state = cipher.encrypt(self._convert_to_bytes())
+            return self
+
+    @ChepyDecorators.call_stack
+    def rsa_decrypt(self, priv_key_path: str) -> EncryptionEncodingT:
+        """Decrypt data with RSA Private key in PEM format
+
+        Args:
+            priv_key_path (str): Path to Private key
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        with open(str(self._abs_path(priv_key_path)), "r") as f:
+            priv_key = f.read()
+            key = RSA.importKey(priv_key)
+            cipher = PKCS1_OAEP.new(key)
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+
+    @ChepyDecorators.call_stack
+    def rsa_sign(self, priv_key_path: str) -> EncryptionEncodingT:
+        """Sign data in state with RSA Private key in PEM format
+
+        Args:
+            priv_key_path (str): Path to Private key
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        with open(str(self._abs_path(priv_key_path)), "r") as f:
+            priv_key = f.read()
+            key = RSA.importKey(priv_key)
+            h = Hash.SHA256.new(self._convert_to_bytes())
+            self.state = PKCS1_15.new(key).sign(h)
+            return self
+
+    @ChepyDecorators.call_stack
+    def rsa_verify(self, signature: bytes, public_key_path: str) -> EncryptionEncodingT: # pragma: no cover
+        """Verify data in state with RSA Public key in PEM format
+
+        Args:
+            signature (bytes): The signature as bytes
+            public_key_path (str): Path to Private key
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        with open(str(self._abs_path(public_key_path)), "r") as f:
+            pub_key = f.read()
+            key = RSA.importKey(pub_key)
+            h = Hash.SHA256.new(self._convert_to_bytes())
+            self.state = PKCS1_15.new(key).verify(h, signature)
+            return self
