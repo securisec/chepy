@@ -134,3 +134,9 @@ def test_generate_rsa_keypair():
     k = Chepy("").generate_rsa_keypair().o
     assert b"PUBLIC" in k["public"]
     assert b"PRIVATE" in k["private"]
+
+
+def test_generate_ecc_keypair():
+    k = Chepy("").generate_ecc_keypair().o
+    assert "PUBLIC" in k["public"]
+    assert "PRIVATE" in k["private"]

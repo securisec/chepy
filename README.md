@@ -4,7 +4,7 @@
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
 ![](https://img.shields.io/travis/com/securisec/chepy?logo=travis)
-[![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)](https://hub.docker.com/r/securisec/chepy)
+<!-- [![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)](https://hub.docker.com/r/securisec/chepy) -->
 
 [![](https://img.shields.io/readthedocs/chepy.svg?logo=read-the-docs&label=Docs)](http://chepy.readthedocs.io/en/latest/)
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)

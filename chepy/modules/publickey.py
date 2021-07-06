@@ -3,6 +3,7 @@ from typing import Literal, TypeVar
 import lazy_import
 
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
+ECC = lazy_import.lazy_module("Crypto.PublicKey.ECC")
 OpenSSL = lazy_import.lazy_module("OpenSSL")
 
 from ..core import ChepyCore, ChepyDecorators
@@ -246,5 +247,26 @@ class Publickey(ChepyCore):
         key = RSA.generate(bits)
         pub = key.public_key().exportKey(passphrase=passphrase, format=format)
         priv = key.exportKey(passphrase=passphrase, format=format)
+        self.state = {"public": pub, "private": priv}
+        return self
+
+    @ChepyDecorators.call_stack
+    def generate_ecc_keypair(
+        self,
+        curve: Literal['p256', 'p384', 'p521'] = 'p256',
+        format: Literal["PEM", "DER"] = "PEM"
+    ) -> PublickeyT:
+        """Generate RSA key pair
+
+        Args:
+            curve (Literal[, optional): Curve for keys. Defaults to p256.
+            format (Literal[, optional): Output format type. Defaults to 'PEM'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = ECC.generate(curve=curve)
+        pub = key.public_key().export_key(format=format)
+        priv = key.export_key(format=format)
         self.state = {"public": pub, "private": priv}
         return self

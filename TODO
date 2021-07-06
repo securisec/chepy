@@ -6,12 +6,9 @@ Code:
 New ideas:
   ☐ rubber ducky encode/decode
   ☐ save registers https://t.co/pBNRufibY8?amp=1 
-  ✔ convert to nato alphabets: a = alpha, b = bravo
   ☐ cbor encode/decode https://github.com/agronholm/cbor2 (plugin)
   ☐ fuzzy search
-  ✔ rsa sign/verify
-  ✔ rsa generate random key (private and public)
-  ✔ rsa encrypt/decrpt
+  ✔ ecc generate
   ☐ pgp, generate, encrypt, decrypt, verify
   ☐ swap little and big endian
 
@@ -49,6 +46,10 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ convert to nato alphabets: a = alpha, b = bravo @project(New ideas)
+  ✔ rsa sign/verify @project(New ideas)
+  ✔ rsa generate random key (private and public) @project(New ideas)
+  ✔ rsa encrypt/decrpt @project(New ideas)
   ✔ sqlite plugin @project(Plugins)
   ✔ base 16 @project(Methods)
   ✔ protobuf plugin @project(Plugins)
