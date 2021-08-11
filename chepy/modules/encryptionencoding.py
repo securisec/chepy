@@ -304,7 +304,7 @@ class EncryptionEncoding(ChepyCore):
     @ChepyDecorators.call_stack
     def jwt_bruteforce(
         self, wordlist: str, b64_encode: bool = False, algorithm: list = ["HS256"]
-    ):
+    ) -> EncryptionEncodingT:
         """Brute force JWT token secret
 
         This method will use the provided wordlist to try and bruteforce the
@@ -390,7 +390,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Encrypt raw state with DES
 
         DES is a previously dominant algorithm for encryption, and was published
@@ -450,7 +450,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
 
         DES is a previously dominant algorithm for encryption, and was published
@@ -505,7 +505,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Encrypt raw state with Triple DES
 
         Triple DES applies DES three times to each block to increase key size. Key:
@@ -559,7 +559,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
 
         Triple DES applies DES three times to each block to increase key size. Key:
@@ -616,7 +616,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Encrypt raw state with AES
 
         Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
@@ -685,7 +685,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
 
         Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
@@ -758,7 +758,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Encrypt raw state with Blowfish
 
         Blowfish is a symmetric-key block cipher designed in 1993 by
@@ -810,7 +810,7 @@ class EncryptionEncoding(ChepyCore):
         mode: str = "CBC",
         hex_key: bool = False,
         hex_iv: bool = True,
-    ):
+    ) -> EncryptionEncodingT:
         """Encrypt raw state with Blowfish
 
         Blowfish is a symmetric-key block cipher designed in 1993 by
@@ -963,7 +963,7 @@ class EncryptionEncoding(ChepyCore):
         dash: str = "-",
         letter_delim: str = " ",
         word_delim: str = "\n",
-    ):
+    ) -> EncryptionEncodingT:
         """Encode string to morse code
 
         Args:
@@ -993,7 +993,7 @@ class EncryptionEncoding(ChepyCore):
         dash: str = "-",
         letter_delim: str = " ",
         word_delim: str = "\n",
-    ):
+    ) -> EncryptionEncodingT:
         """Decode morse code
 
         Args:
