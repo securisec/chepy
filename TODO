@@ -8,9 +8,10 @@ New ideas:
   ☐ save registers https://t.co/pBNRufibY8?amp=1 
   ☐ cbor encode/decode https://github.com/agronholm/cbor2 (plugin)
   ☐ fuzzy search
-  ✔ ecc generate
   ☐ pgp, generate, encrypt, decrypt, verify
   ☐ swap little and big endian
+
+Bug:
 
 Cli:
   ☐ optionally show output window in a split screen window
@@ -32,9 +33,6 @@ Methods:
   ☐ base 92
 
 Github Actions:
-  ☐ build pyinstaller artifact for osx
-  ☐ build pyinstaller artifact for linux
-  ☐ build pyinstaller artifact for windows
 
 Distribution:
   ☐ request to add to kali
@@ -46,6 +44,10 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ build pyinstaller artifact for osx, linux, windows @project(Github Actions)
+  ✔ @high from morse word delimiter is broken - .... . / ..-. .-.. .- --. / .. ... / --- .--- --.- -..- . -.-- ...-- ..- -- --.. ..... .-- .. -- .-.. . .-.. ..... ....- - .- ..... -.- --... --- .- --.. - --. ..--- ..--- --... --. -... --.. ..-. -.... -. .-.. --.- .--. . --... - -.... .--. --.. --... .-.. ..... - --. -.-. -. -.. -... -- -- ...-- -.. .- -. .-.. ..... / -... .- ... . ...-- ..--- @project(Bug)
+  ✔ ecc generate @project(New ideas)
+  ✔ strip/replace method @project(New ideas)
   ✔ convert to nato alphabets: a = alpha, b = bravo @project(New ideas)
   ✔ rsa sign/verify @project(New ideas)
   ✔ rsa generate random key (private and public) @project(New ideas)

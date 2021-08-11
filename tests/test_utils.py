@@ -62,9 +62,15 @@ def test_remove_nullbytes():
     )
 
 
-def test_split_by():
+def test_split_by_char():
+    assert len(Chepy("some lol random lolol data").split_by_char("lo").o) == 4
+
+
+def test_split_by_regex():
     assert len(Chepy("some lol random lolol data").split_by_regex("lo").o) == 4
-    assert len(Chepy("some lol random lolol data").split_by_regex("lo", trim=False).o) == 4
+    assert (
+        len(Chepy("some lol random lolol data").split_by_regex("lo", trim=False).o) == 4
+    )
 
 
 def test_split_by_n():
@@ -143,6 +149,10 @@ def test_slice():
     assert Chepy("some data").slice(3, 6).o == "e d"
 
 
+def test_strip():
+    assert Chepy("some some data").strip(r"some\s").o == "data"
+
+
 def test_find_replace():
     assert Chepy("some some data").find_replace(r"some\s", "data").o == "datadatadata"
 
@@ -195,4 +205,3 @@ def test_filter_list_by_length():
 def test_regex_to_str():
     assert len(Chepy("lol([a-c])").regex_to_str().o) == 4
     assert len(Chepy("lol([a-c])").regex_to_str(all_combo=True).o) == 3
-

@@ -1011,14 +1011,13 @@ class EncryptionEncoding(ChepyCore):
             morse_code_dict[k] = v.replace(".", dot).replace("-", dash)
 
         morse_code_dict = {value: key for key, value in morse_code_dict.items()}
-
         for chars in self._convert_to_str().split(letter_delim):
             if word_delim in chars:
-                print("here", chars)
                 chars = re.sub(word_delim, "", chars, re.I)
-                print(chars)
                 if morse_code_dict.get(chars) is not None:
                     decode += " " + morse_code_dict.get(chars)
+                else:  # pragma: no cover
+                    decode += " " + chars
             else:
                 decode += morse_code_dict.get(chars)
         self.state = decode
@@ -1076,7 +1075,9 @@ class EncryptionEncoding(ChepyCore):
             return self
 
     @ChepyDecorators.call_stack
-    def rsa_verify(self, signature: bytes, public_key_path: str) -> EncryptionEncodingT: # pragma: no cover
+    def rsa_verify(
+        self, signature: bytes, public_key_path: str
+    ) -> EncryptionEncodingT:  # pragma: no cover
         """Verify data in state with RSA Public key in PEM format
 
         Args:

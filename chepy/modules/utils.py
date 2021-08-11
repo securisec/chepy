@@ -153,7 +153,7 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def split(self, delimiter: str = " ") -> UtilsT:
+    def split_by_char(self, delimiter: str = " ") -> UtilsT:
         """Split a string by a delimiter
 
         Args:
@@ -413,6 +413,27 @@ class Utils(ChepyCore):
             "e d"
         """
         self.state = self.state[start:end]
+        return self
+
+    @ChepyDecorators.call_stack
+    def strip(self, pattern: str, ignore_case=True) -> UtilsT:
+        """Strip matched pattern
+
+        Args:
+            pattern (str): Required. Pattern to search
+            ignore_case (bool, optional): Case insensitive. Defaults to True.
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("some some data").strip(r"some\s").o
+            "data"
+        """
+        flags = 0
+        if ignore_case:
+            flags = re.IGNORECASE
+        self.state = re.sub(pattern, "", self._convert_to_str(), flags=flags)
         return self
 
     @ChepyDecorators.call_stack
