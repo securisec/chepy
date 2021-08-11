@@ -63,8 +63,8 @@ def test_remove_nullbytes():
 
 
 def test_split_by():
-    assert len(Chepy("some lol random lolol data").split_by("lo").o) == 4
-    assert len(Chepy("some lol random lolol data").split_by("lo", trim=False).o) == 4
+    assert len(Chepy("some lol random lolol data").split_by_regex("lo").o) == 4
+    assert len(Chepy("some lol random lolol data").split_by_regex("lo", trim=False).o) == 4
 
 
 def test_split_by_n():

@@ -194,6 +194,10 @@ def test_join_list():
     assert Chepy(["a", "b", "c"]).join_list(":").o == "a:b:c"
 
 
+def test_join():
+    assert Chepy(["a", "b", "c"]).join(":").o == "a:b:c"
+
+
 def test_to_int():
     assert Chepy("1").to_int().o == 1
 

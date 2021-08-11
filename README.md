@@ -3,7 +3,7 @@
 </p>
 
 ![](https://github.com/securisec/chepy/workflows/tests/badge.svg)
-![](https://img.shields.io/travis/com/securisec/chepy?logo=travis)
+<!-- ![](https://img.shields.io/travis/com/securisec/chepy?logo=travis) -->
 <!-- [![](https://img.shields.io/docker/cloud/build/securisec/chepy?logo=docker)](https://hub.docker.com/r/securisec/chepy) -->
 
 [![](https://img.shields.io/readthedocs/chepy.svg?logo=read-the-docs&label=Docs)](http://chepy.readthedocs.io/en/latest/)
@@ -16,7 +16,7 @@
 ![](https://img.shields.io/github/license/securisec/chepy?label=License)
 
 [![](https://pepy.tech/badge/chepy)](https://pepy.tech/project/chepy)
-![](https://img.shields.io/docker/pulls/securisec/chepy?label=Docker%20pull&logo=docker)
+<!-- ![](https://img.shields.io/docker/pulls/securisec/chepy?label=Docker%20pull&logo=docker) -->
 
 
 # Chepy

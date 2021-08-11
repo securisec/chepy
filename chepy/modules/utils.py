@@ -153,8 +153,21 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def split_by(self, pattern: str = "\n", trim=True) -> UtilsT:
-        """Split a string by the given pattern
+    def split(self, delimiter: str = " ") -> UtilsT:
+        """Split a string by a delimiter
+
+        Args:
+            delimiter (str, optional): Delimiter to split by. Defaults to " ".
+
+        Returns:
+            UtilsT: The Chepy object.
+        """
+        self.state = self._convert_to_str().split(delimiter)
+        return self
+
+    @ChepyDecorators.call_stack
+    def split_by_regex(self, pattern: str = "\n", trim=True) -> UtilsT:
+        """Split a string by the given regex pattern
 
         Args:
             pattern (str, optional): Pattern to split by. Defaults to '\\n'.
