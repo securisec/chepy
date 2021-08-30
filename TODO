@@ -44,6 +44,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ strip ansi color codes @project(New ideas)
   ✔ build pyinstaller artifact for osx, linux, windows @project(Github Actions)
   ✔ @high from morse word delimiter is broken - .... . / ..-. .-.. .- --. / .. ... / --- .--- --.- -..- . -.-- ...-- ..- -- --.. ..... .-- .. -- .-.. . .-.. ..... ....- - .- ..... -.- --... --- .- --.. - --. ..--- ..--- --... --. -... --.. ..-. -.... -. .-.. --.- .--. . --... - -.... .--. --.. --... .-.. ..... - --. -.-. -. -.. -... -- -- ...-- -.. .- -. .-.. ..... / -... .- ... . ...-- ..--- @project(Bug)
   ✔ ecc generate @project(New ideas)

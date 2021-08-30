@@ -149,6 +149,10 @@ def test_slice():
     assert Chepy("some data").slice(3, 6).o == "e d"
 
 
+def test_strip_ansi():
+    assert Chepy("[38;2;92;207;230m;-- main:[0m").strip_ansi().o == ";-- main:"
+
+
 def test_strip():
     assert Chepy("some some data").strip(r"some\s").o == "data"
 

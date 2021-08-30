@@ -416,6 +416,24 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def strip_ansi(self) -> UtilsT:
+        """Strip ANSI escape codes from string
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("\033[31mThis is a string\033[0m").strip_ansi().o
+            "This is a string"
+        """
+        self.state = re.sub(
+            "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))",
+            "",
+            self._convert_to_str(),
+        )
+        return self
+
+    @ChepyDecorators.call_stack
     def strip(self, pattern: str, ignore_case=True) -> UtilsT:
         """Strip matched pattern
 
