@@ -2,7 +2,7 @@ from chepy import Chepy
 
 
 def test_minify_json():
-    assert len(Chepy("tests/files/test.json").load_file().minify_json().o) == 5664
+    assert len(Chepy("tests/files/test.json").load_file().minify_json().o) == 5648
 
 
 def test_beautify_json():

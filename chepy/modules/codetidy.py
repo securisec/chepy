@@ -1,7 +1,7 @@
 from typing import TypeVar
 import lazy_import
 
-import ujson
+import json
 
 pydash = lazy_import.lazy_module("pydash")
 import phpserialize
@@ -27,7 +27,7 @@ class CodeTidy(ChepyCore):
             >>> c = Chepy("/path/to/file.json").load_file()
             >>> print(c.minify_json())
         """
-        self.state = ujson.dumps(ujson.loads(self._convert_to_str()))
+        self.state = json.dumps(json.loads(self._convert_to_str()), separators=(',', ':'))
         return self
 
     @ChepyDecorators.call_stack
@@ -44,7 +44,7 @@ class CodeTidy(ChepyCore):
             >>> c = Chepy("/path/to/file.json").load_file()
             >>> print(c.beautify_json(indent=4))
         """
-        self.state = ujson.dumps(ujson.loads(self._convert_to_str()), indent=indent)
+        self.state = json.dumps(json.loads(self._convert_to_str()), indent=indent)
         return self
 
     @ChepyDecorators.call_stack

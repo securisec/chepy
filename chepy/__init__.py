@@ -1,5 +1,3 @@
-import re
-
 from docstring_parser import parse as _doc_parse
 
 from .modules.aritmeticlogic import AritmeticLogic
@@ -44,6 +42,7 @@ class Chepy(
     Utils,
     *_plugins
 ):
+    """Chepy class that exposes all functionality of Chepy and its plugins."""
     pass
 
 

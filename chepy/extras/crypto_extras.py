@@ -1,5 +1,7 @@
-import ujson
+import json
 from typing import Iterator, Dict
+from binascii import hexlify
+from itertools import cycle
 from urllib.request import urlopen
 from Crypto.PublicKey import RSA
 
@@ -9,31 +11,31 @@ from chepy import Chepy
 
 def factordb(n: int) -> dict:  # pragma: no cover
     """Query the factordb api and get primes if available
-    
+
     Args:
         n (int): n is the modulus for the public key and the private keys
-    
+
     Returns:
         dict: response from api as a dictionary. None if status code is not 200
     """
     res = urlopen("http://factordb.com/api/?query={}".format(str(n)))
     if res.status != 200:
         return None
-    return ujson.loads(res.read().decode())
+    return json.loads(res.read().decode())
 
 
 def construct_private_key(
     n: int, e: int, d: int, format: str = "PEM", passphrase: str = None
 ) -> str:  # pragma: no cover
     """Construct a private key given n, e and d
-    
+
     Args:
         n (int): n
         e (int): e
         d (int): d
         format (str, optional): Supports PEM, DER and OpenSSH. Defaults to "PEM".
         passphrase (str, optional): [description]. Defaults to None.
-    
+
     Returns:
         str: Private key
     """
@@ -48,9 +50,9 @@ def construct_private_key(
 def xor_bruteforce_multi(
     data: str, min: int = 0, max: int = None, errors: str = "backslashreplace"
 ) -> Iterator[Dict[str, str]]:
-    """Bruteforce multibyte xor encryption. For faster results, use pypy3. 
+    """Bruteforce multibyte xor encryption. For faster results, use pypy3.
     It is important to set the min and max values if the key size is known.
-    
+
     Args:
         data (str): XORed data
         min (int, optional): Minimum key length. Default will start at 1 byte
@@ -58,12 +60,12 @@ def xor_bruteforce_multi(
         max (int, optional): Maximum key length. Maximum value is 257 bytes. Defaults to None.
         errors (str, optional): How should the errors be handled? Defaults to backslashreplace.
             Valid options are replace, ignore, backslashreplace
-    
+
     Returns:
         Iterator[Dict[str, str]]: A dictionary where key is key, and value is xored data
-    
+
     Yields:
-        Iterator[Dict[str, str]]: A generator which contains a dictionary with the 
+        Iterator[Dict[str, str]]: A generator which contains a dictionary with the
             keys: `key` and `out`
     """
     for key in generate_combo(
@@ -73,3 +75,25 @@ def xor_bruteforce_multi(
             "key": key,
             "out": Chepy(data).xor(key).bytearray_to_str(errors=errors).o,
         }
+
+
+def xor_two_files(file1: str, file2: str) -> bytes: # pragma: no cover
+    # TODO
+    pass
+
+
+def xor(data: bytes, key: bytes) -> bytes: # pragma: no cover
+    """XOR data with a hex key
+
+    Args:
+        data (bytes): Data to be xored
+        key (bytes): Hex key to xor data with
+
+    Returns:
+        bytes: XORed data
+
+    Example:
+        >>> xor(b"hello", unhexlify(b"aabbccdd"))
+        b'c2dea0b1c5'
+    """
+    return hexlify(bytes(a ^ b for a, b in zip(data, cycle(key))))

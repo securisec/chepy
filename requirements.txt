@@ -25,4 +25,3 @@ python-editor
 PyYAML
 regex
 typing_extensions
-ujson

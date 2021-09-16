@@ -13,6 +13,9 @@ New ideas:
 
 Bug:
 
+Extras:
+  ☐ xor two files
+
 Cli:
   ☐ optionally show output window in a split screen window
   ☐ lower the chepy prompt lower. that empty space is not being used
@@ -44,6 +47,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ xor data with key @project(Utility)
   ✔ strip ansi color codes @project(New ideas)
   ✔ build pyinstaller artifact for osx, linux, windows @project(Github Actions)
   ✔ @high from morse word delimiter is broken - .... . / ..-. .-.. .- --. / .. ... / --- .--- --.- -..- . -.-- ...-- ..- -- --.. ..... .-- .. -- .-.. . .-.. ..... ....- - .- ..... -.- --... --- .- --.. - --. ..--- ..--- --... --. -... --.. ..-. -.... -. .-.. --.- .--. . --... - -.... .--. --.. --... .-.. ..... - --. -.-. -. -.. -... -- -- ...-- -.. .- -. .-.. ..... / -... .- ... . ...-- ..--- @project(Bug)

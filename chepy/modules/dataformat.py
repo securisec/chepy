@@ -4,7 +4,7 @@ import base64
 import codecs
 import html
 import base58
-import ujson
+import json
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -76,7 +76,7 @@ class DataFormat(ChepyCore):
             >>> Chepy("[1,2,'lol', true]").str_list_to_list().o
             [1, 2, "lol", True]
         """
-        self.state = ujson.loads(re.sub(r"'", '"', self._convert_to_str()))
+        self.state = json.loads(re.sub(r"'", '"', self._convert_to_str()))
         return self
 
     @ChepyDecorators.call_stack
@@ -125,7 +125,7 @@ class DataFormat(ChepyCore):
                 "a": ["list", 1, True],
             }
         """
-        self.state = ujson.loads(self._convert_to_str())
+        self.state = json.loads(self._convert_to_str())
         return self
 
     @ChepyDecorators.call_stack
@@ -140,7 +140,7 @@ class DataFormat(ChepyCore):
             '{"some":"data","a":["list",1,true]}'
         """
         assert isinstance(self.state, dict), "Not a dict object"
-        self.state = ujson.dumps(self.state)
+        self.state = json.dumps(self.state)
         return self
 
     @ChepyDecorators.call_stack
@@ -150,7 +150,7 @@ class DataFormat(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = ujson.dumps(yaml.safe_load(self.state))
+        self.state = json.dumps(yaml.safe_load(self.state))
         return self
 
     @ChepyDecorators.call_stack
@@ -166,7 +166,7 @@ class DataFormat(ChepyCore):
                 return super(ChepyYamlDumper, self).increase_indent(flow, False)
 
         self.state = yaml.dump(
-            ujson.loads(self.state),
+            json.loads(self.state),
             Dumper=ChepyYamlDumper,
             default_flow_style=False,
             sort_keys=False,

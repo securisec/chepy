@@ -16,7 +16,7 @@ from urllib.parse import urljoin
 
 import lazy_import
 import pyperclip
-import ujson
+import json
 
 jsonpickle = lazy_import.lazy_module("jsonpickle")
 import regex as re
@@ -130,7 +130,7 @@ class ChepyCore(object):
         Returns:
             Any: unpickeled JSON as a python object.
         """
-        return ujson.loads(jsonpickle.encode(obj, unpicklable=True))
+        return json.loads(jsonpickle.encode(obj, unpicklable=True))
 
     def _load_as_file(self) -> object:
         """This method is used when a function or a method expects
@@ -910,7 +910,7 @@ class ChepyCore(object):
             NzM2ZjZkNjUyMDY0NjE3NDYx
         """
         with self._abs_path(path) as f:
-            f.write_text(ujson.dumps(self._stack))
+            f.write_text(json.dumps(self._stack))
         self._info_logger("Saved recipe to {}".format(str(path)))
         return self
 
@@ -928,7 +928,7 @@ class ChepyCore(object):
             NzM2ZjZkNjUyMDY0NjE3NDYx
         """
         with self._abs_path(path) as f:
-            recipes = ujson.loads(f.read_text())
+            recipes = json.loads(f.read_text())
             for recipe in recipes:
                 function = recipe["function"]
                 args = recipe["args"]
@@ -1030,7 +1030,7 @@ class ChepyCore(object):
             )
         )
         if isinstance(args, str):  # pragma: no cover
-            args = ujson.loads(args)
+            args = json.loads(args)
         try:
             for index, data in enumerate(current_state):
                 self.state = current_state[index]
@@ -1087,10 +1087,10 @@ class ChepyCore(object):
         )
 
         if isinstance(keys, str):  # pragma: no cover
-            keys = ujson.loads(keys)
+            keys = json.loads(keys)
 
         if isinstance(args, str):  # pragma: no cover
-            args = ujson.loads(args)
+            args = json.loads(args)
         try:
             dict_keys = current_state.keys()
             for key in keys:

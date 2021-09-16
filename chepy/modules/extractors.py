@@ -4,7 +4,7 @@ from urllib.parse import urlparse as _pyurlparse
 import jsonpath_rw
 import lazy_import
 import regex as re
-import ujson
+import json
 
 parsel = lazy_import.lazy_module("parsel")
 from ..core import ChepyCore, ChepyDecorators
@@ -276,7 +276,7 @@ class Extractors(ChepyCore):
         """
         self.state = list(
             j.value
-            for j in jsonpath_rw.parse(query).find(ujson.loads(self._convert_to_str()))
+            for j in jsonpath_rw.parse(query).find(json.loads(self._convert_to_str()))
         )
         return self
 

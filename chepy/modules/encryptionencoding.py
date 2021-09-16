@@ -12,7 +12,7 @@ import pathlib
 
 import pycipher
 import regex as re
-import ujson
+import json
 
 AES = lazy_import.lazy_module("Crypto.Cipher.AES")
 ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
@@ -297,7 +297,7 @@ class EncryptionEncoding(ChepyCore):
         if isinstance(self.state, dict):
             data = self.state
         elif isinstance(self.state, str):
-            data = ujson.loads(self.state)
+            data = json.loads(self.state)
         self.state = jwt.encode(data, key=secret, algorithm=algorithms)
         return self
 
