@@ -1,9 +1,10 @@
+import lazy_import
 import difflib
 from collections import OrderedDict
 from typing import TypeVar, Union
 
 import chepy.modules.internal.colors as _int_colors
-import exrex
+exrex = lazy_import.lazy_module("exrex")
 import pydash
 import regex as re
 

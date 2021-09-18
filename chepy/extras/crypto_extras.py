@@ -1,6 +1,6 @@
 import json
-from typing import Iterator, Dict
-from binascii import hexlify
+from typing import Iterator, Dict, List, Union
+from binascii import hexlify, unhexlify
 from itertools import cycle
 from urllib.request import urlopen
 from Crypto.PublicKey import RSA
@@ -77,12 +77,12 @@ def xor_bruteforce_multi(
         }
 
 
-def xor_two_files(file1: str, file2: str) -> bytes: # pragma: no cover
+def xor_two_files(file1: str, file2: str) -> bytes:  # pragma: no cover
     # TODO
     pass
 
 
-def xor(data: bytes, key: bytes) -> bytes: # pragma: no cover
+def xor(data: bytes, key: bytes) -> bytes:  # pragma: no cover
     """XOR data with a hex key
 
     Args:
@@ -97,3 +97,33 @@ def xor(data: bytes, key: bytes) -> bytes: # pragma: no cover
         b'c2dea0b1c5'
     """
     return hexlify(bytes(a ^ b for a, b in zip(data, cycle(key))))
+
+
+def one_time_pad_crib(
+    cipherText1: Union[bytes, str], cipherText2: Union[bytes, str], crib: bytes
+) -> List[str]:
+    """One time pad crib attack.
+
+    Args:
+        cipherText1 (Union[bytes, str]): Cipher text 1 as hex
+        cipherText2 (Union[bytes, str]): Cipher text 2 as hex
+        crib (bytes): Crib (known text) as bytes
+
+    Returns:
+        List[str]: List of possible plaintexts
+    """
+    cipherText1 = unhexlify(cipherText1)
+    cipherText2 = unhexlify(cipherText2)
+    xored = bytearray(a ^ b for a, b in zip(cipherText1, cipherText2))
+    hold = []
+    for offset in range(0, len(xored) - len(crib) + 1):
+        piece = xored[offset : offset + len(crib)]
+        piece = bytearray(a ^ b for a, b in zip(crib, piece))
+        if all(32 <= c <= 126 for c in piece):
+            piece = (
+                ("." * offset)
+                + piece.decode()
+                + ("." * (len(xored) - len(crib) - offset))
+            )
+            hold.append(piece)
+    return hold

@@ -47,6 +47,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ crib dragging @project(New ideas)
   ✔ xor data with key @project(Utility)
   ✔ strip ansi color codes @project(New ideas)
   ✔ build pyinstaller artifact for osx, linux, windows @project(Github Actions)
