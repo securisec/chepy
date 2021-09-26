@@ -10,6 +10,8 @@ New ideas:
   ☐ fuzzy search
   ☐ pgp, generate, encrypt, decrypt, verify
   ☐ swap little and big endian
+  ☐ ignore error method
+  ☐ swap bytes
 
 Bug:
 
@@ -47,6 +49,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ convert int to specified base. like int(.., base) @project(New ideas)
   ✔ crib dragging @project(New ideas)
   ✔ xor data with key @project(Utility)
   ✔ strip ansi color codes @project(New ideas)

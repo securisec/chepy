@@ -52,7 +52,8 @@ education: |
     BSc in the Internet of Things
 """
     assert (
-        Chepy(data).yaml_to_json().o != ""
+        Chepy(data).yaml_to_json().o
+        != ""
         # == '{"name":"Martin D\'vloper","job":"Developer","skill":"Elite","employed":true,"foods":["Apple","Orange","Strawberry","Mango"],"languages":{"perl":"Elite","python":"Elite","pascal":"Lame"},"education":"4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
     )
 
@@ -347,3 +348,7 @@ def test_from_hexdump():
 
 def test_nato_convert():
     assert Chepy("abc:1").convert_to_nato().o == "Alpha Bravo Charlie : 1"
+
+
+def test_swap_strings():
+    assert Chepy("oY u").swap_strings(2).o == "You "

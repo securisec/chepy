@@ -1,6 +1,6 @@
 import binascii
 import statistics
-from typing import TypeVar
+from typing import TypeVar, Union
 
 from ..core import ChepyCore, ChepyDecorators
 from .exceptions import StateNotList
@@ -143,4 +143,17 @@ class AritmeticLogic(ChepyCore):
         assert isinstance(self.state, list), StateNotList()
         numbers = list(self.__hex_to_int(x) for x in self.state)
         self.state = statistics.median(numbers)
+        return self
+
+    @ChepyDecorators.call_stack
+    def int_to_base(self, base: Union[int, str]) -> AritmeticLogicT:
+        """Convert the state to a different base
+        
+        Args:
+            base (int): Base to convert to
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = int(self.state, base)
         return self

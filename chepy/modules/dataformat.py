@@ -1068,3 +1068,18 @@ class DataFormat(ChepyCore):
                 hold.append(d)
         self.state = join_by.join(hold)
         return self
+
+    @ChepyDecorators.call_stack
+    def swap_strings(self, by: int) -> DataFormatT:
+        """Swap characters in string
+
+        Args:
+            by (int): Number of bytes to swap
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        t = list(self.state)
+        t[::by], t[1::by] = t[1::by], t[::by]
+        self.state = "".join(t)
+        return self

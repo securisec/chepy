@@ -36,3 +36,6 @@ def test_median():
 def test_subtract():
     assert Chepy(["0x02", "0x04"]).loop_list("subtract", {"n": 1}).o == [1, 3]
 
+
+def test_int_to_base():
+    assert Chepy("067165").int_to_base(8).o == 28277
