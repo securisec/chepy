@@ -352,3 +352,16 @@ def test_nato_convert():
 
 def test_swap_strings():
     assert Chepy("oY u").swap_strings(2).o == "You "
+
+
+def test_to_string():
+    assert Chepy(1).to_string().o == "1"
+
+
+def test_select():
+    assert Chepy("abcd").select(0, 2).o == "ab"
+    assert Chepy("abcd").select(2).o == "cd"
+
+
+def test_length():
+    assert Chepy("abcd").length().o == 4

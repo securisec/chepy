@@ -49,6 +49,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ fork for each @project(New ideas)
   ✔ convert int to specified base. like int(.., base) @project(New ideas)
   ✔ crib dragging @project(New ideas)
   ✔ xor data with key @project(Utility)

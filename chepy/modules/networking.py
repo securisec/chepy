@@ -182,6 +182,7 @@ class Networking(ChepyCore):
         domain = re.sub("^\w+://", "", self._convert_to_str())
         with socket.create_connection((domain, port)) as sock:
             context = ssl.create_default_context()
+            context.check_hostname = False
             with context.wrap_socket(sock, server_hostname=domain) as sslsock:
                 cert = sslsock.getpeercert()
                 final = {}

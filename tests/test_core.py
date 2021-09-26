@@ -224,3 +224,10 @@ def test_load_from_url():
         )
         == bytes
     )
+
+
+def test_for_each():
+    assert Chepy(["41", "42"]).for_each([("from_hex",), ("to_hex",)]).o == [
+        b"41",
+        b"42",
+    ]

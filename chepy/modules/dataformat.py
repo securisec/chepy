@@ -1083,3 +1083,40 @@ class DataFormat(ChepyCore):
         t[::by], t[1::by] = t[1::by], t[::by]
         self.state = "".join(t)
         return self
+
+    @ChepyDecorators.call_stack
+    def to_string(self) -> DataFormatT:
+        """Convert to string
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        self.state = self._convert_to_str()
+        return self
+
+    @ChepyDecorators.call_stack
+    def select(self, start: int, end: int = None) -> DataFormatT:
+        """Get an item by specifying an index
+
+        Args:
+            start (int): Starting index number to get
+            end (int, optional): Ending index number to get. If none specified, will be end of item. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if end is None:
+            self.state = self.state[start:]
+        else:
+            self.state = self.state[start:end]
+        return self
+
+    @ChepyDecorators.call_stack
+    def length(self) -> DataFormatT:
+        """Get the length of the current state as string
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = len(self.state)
+        return self

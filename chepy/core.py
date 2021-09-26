@@ -51,7 +51,7 @@ class ChepyDecorators(object):
 
 
 class ChepyCore(object):
-    """The `ChepyCore` class for Chepy is primarily used as an interface
+    """The ChepyCore class for Chepy is primarily used as an interface
     for all the current modules/classes in Chepy, or for plugin development.
     The `ChepyCore` class is what provides the various attributes like **states**,
     **buffers**, etc and is required to use and extend Chepy.
@@ -229,6 +229,53 @@ class ChepyCore(object):
                     self.states[i] = getattr(self, method_name)(**method[1]).o
                 else:
                     self.states[i] = getattr(self, method_name)().o
+        return self
+
+    def for_each(self, methods: List[Tuple[Union[str, object], dict]]):
+        """Run multiple methods on current state if it is a list
+
+        Method names in a list of tuples. If using in the cli,
+        this should not contain any spaces.
+
+        Args:
+            methods (List[Tuple[Union[str, object], dict]]): Required.
+                List of tuples
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            This method takes an array of method names and their args as an list of
+            tuples; the first value of the tuple is the method name as either a string,
+            or as an object, and the second value is a ditionary of arguments. The keys of
+            in the dictionary are method argument names, while the values are argument
+            values.
+
+            >>> from chepy import Chepy
+            >>> c = Chepy(['41', '42'])
+            >>> c.for_each([("from_hex",), ("to_hex",)])
+            >>> # this is how to use fork methods with a string
+            >>> c.for([(c.from_hex,), (c.to_hex,)])
+            >>> # This is how to use fork using methods
+            >>> print(c)
+            ['41', '42']
+        """
+        assert isinstance(self.state, list), "Current state is not a list"
+        hold = self.state
+        for i, val in enumerate(hold):
+            self.state = val
+            for method in methods:
+                if type(method[0]).__name__ == "method":
+                    method_name = method[0].__name__  # pragma: no cover
+                elif isinstance(method[0], str):
+                    method_name = method[0]
+                if len(method) > 1:
+                    hold[i] = getattr(self, method_name)(
+                        **method[1]
+                    ).o  # pragma: no cover
+                else:
+                    hold[i] = getattr(self, method_name)().o
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack
