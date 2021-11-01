@@ -12,6 +12,9 @@ New ideas:
   ☐ swap little and big endian
   ☐ ignore error method
   ☐ swap bytes
+  ☐ split by newline
+  ☐ @high disable plugins from code
+  ☐ string to leetcode
 
 Bug:
 
