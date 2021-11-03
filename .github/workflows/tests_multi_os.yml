@@ -77,7 +77,7 @@ jobs:
 
     - name: Test with bandit
       run: |
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404,B608
+        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404,B608,B311
         
     - name: Test docs
       if: ${{ !env.ACT }} && contains(matrix.os, 'ubuntu')
