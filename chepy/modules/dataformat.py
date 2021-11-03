@@ -5,6 +5,7 @@ import codecs
 import html
 import base58
 import json
+from random import randint
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -1119,4 +1120,34 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = len(self.state)
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_leetcode(self, replace_space: str = "") -> DataFormatT:
+        """Convert to leetcode. Reference
+        Reference github.com/ss8651twtw/CTF-flag-generator
+
+        Args:
+            replace_space (str, optional): Replace spaces with specified char. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        def change(c):
+            if replace_space and c == " ":
+                return replace_space
+            if c.isalpha():
+                c = c.upper()
+                char_set = Encoding.LEETCODE[ord(c) - ord("A")]
+                new_c = char_set[randint(0, len(char_set) - 1)]
+                return new_c
+            else:
+                return c
+
+        hold = ""
+        string = self._convert_to_str()
+        for s in string:
+            hold += change(s)
+        self.state = hold
         return self

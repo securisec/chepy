@@ -365,3 +365,7 @@ def test_select():
 
 def test_length():
     assert Chepy("abcd").length().o == 4
+
+
+def test_leetcode():
+    assert len(Chepy("ab@ cd").to_leetcode(replace_space="_").o) == 6

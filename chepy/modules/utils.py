@@ -4,6 +4,7 @@ from collections import OrderedDict
 from typing import TypeVar, Union
 
 import chepy.modules.internal.colors as _int_colors
+
 exrex = lazy_import.lazy_module("exrex")
 import pydash
 import regex as re
@@ -200,6 +201,16 @@ class Utils(ChepyCore):
             " s"
         """
         self.state = re.findall(".{1," + str(n) + "}", self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def split_lines(self):
+        """Split a string by newline characters.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self._convert_to_str().split()
         return self
 
     @ChepyDecorators.call_stack

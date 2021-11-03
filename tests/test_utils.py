@@ -77,6 +77,20 @@ def test_split_by_n():
     assert Chepy("some string").split_by_n(2).o[2] == " s"
 
 
+def test_split_lines():
+    assert (
+        len(
+            Chepy(
+                """hello
+    world"""
+            )
+            .split_lines()
+            .o
+        )
+        == 2
+    )
+
+
 def test_select_n():
     assert Chepy(["a", 1, "lol", "", True]).select_every_n(3).o == ["a", ""]
 

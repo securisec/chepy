@@ -12,9 +12,7 @@ New ideas:
   ☐ swap little and big endian
   ☐ ignore error method
   ☐ swap bytes
-  ☐ split by newline
   ☐ @high disable plugins from code
-  ☐ string to leetcode
 
 Bug:
 
@@ -52,39 +50,6 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
-  ✔ fork for each @project(New ideas)
-  ✔ convert int to specified base. like int(.., base) @project(New ideas)
-  ✔ crib dragging @project(New ideas)
-  ✔ xor data with key @project(Utility)
-  ✔ strip ansi color codes @project(New ideas)
-  ✔ build pyinstaller artifact for osx, linux, windows @project(Github Actions)
-  ✔ @high from morse word delimiter is broken - .... . / ..-. .-.. .- --. / .. ... / --- .--- --.- -..- . -.-- ...-- ..- -- --.. ..... .-- .. -- .-.. . .-.. ..... ....- - .- ..... -.- --... --- .- --.. - --. ..--- ..--- --... --. -... --.. ..-. -.... -. .-.. --.- .--. . --... - -.... .--. --.. --... .-.. ..... - --. -.-. -. -.. -... -- -- ...-- -.. .- -. .-.. ..... / -... .- ... . ...-- ..--- @project(Bug)
-  ✔ ecc generate @project(New ideas)
-  ✔ strip/replace method @project(New ideas)
-  ✔ convert to nato alphabets: a = alpha, b = bravo @project(New ideas)
-  ✔ rsa sign/verify @project(New ideas)
-  ✔ rsa generate random key (private and public) @project(New ideas)
-  ✔ rsa encrypt/decrpt @project(New ideas)
-  ✔ sqlite plugin @project(Plugins)
-  ✔ base 16 @project(Methods)
-  ✔ protobuf plugin @project(Plugins)
-  ✔ string to l33tspeak.  @project(Methods)
-  ✔ run script loaded into chepy. script should be a function that takes one arg, and state is passed to arg. fixed function name in script should be passed that can be imported on method call @project(New ideas)
-  ✔ use $EDITOR to open state in an editor https://github.com/fmoo/python-editor. @project(Cli)
-  ✔ run command method to save output to state @project(New ideas)
-  ✔ use lazy-import to increase performance @project(Code)
-  ✔ rotate bruteforce @project(New ideas)
-  ✔ derive pbkdf2 key @project(New ideas)
-  ✔ fix zip header @project(New ideas)
-  ✘ switch to mypy as linter @project(Code)
-  ✔ load_file with binary flag @project(Enhance)
-  ✔ incorrect padding in base64 @project(Enhance)
-  ✔ optionally disable with arg @project(Enhance)
-  ✔ exrex for regex based generation. arg for all combos @project(Methods)
-  ✔ raw inflate and deflate @project(Methods)
-  ✔ extract base64 method @project(Methods)
-  ✔ sort dict by key or value @project(Methods)
-  ✔ Change sort list to be able to sort by any data type @project(Methods)
-  ✔ loop method to loop over the same thing @project(Methods)
-  ✔ get help for a method with ? @project(Cli)
-  ✔ allow comments in cli @project(Cli)
+  ✔ split by newline @project(New ideas)
+  ✔ string to leetcode @project(New ideas)
+  
