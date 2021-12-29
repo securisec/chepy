@@ -3,7 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 import lazy_import
 
@@ -159,7 +159,7 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def xor(
-        self, key: str, key_type: str = "hex", ascii: bool = False
+        self, key: str, key_type: Literal['hex', 'utf', 'base64'] = "hex", ascii: bool = False
     ) -> EncryptionEncodingT:
         """XOR state with a key
 
