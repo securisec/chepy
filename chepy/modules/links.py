@@ -1,3 +1,4 @@
+import base64
 from typing import TypeVar
 
 import regex as re
@@ -45,4 +46,23 @@ class Links(ChepyCore):
                 self._convert_to_str(),
             ),
         )
+        return self
+
+    @ChepyDecorators.call_stack
+    def google_search_ei_to_epoch(self) -> LinksT:
+        """Convert a google search ei query param to epoch
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("Bh8hYqykHc64mAXkkoTgCg==").google_search_ei_to_epoch()
+            1646337798
+        """
+        decoded = base64.urlsafe_b64decode(self._convert_to_str())
+        timestamp = ord(chr(decoded[0]))
+        timestamp += ord(chr(decoded[1])) * 256
+        timestamp += ord(chr(decoded[2])) * 256 ** 2
+        timestamp += ord(chr(decoded[3])) * 256 ** 3
+        self.state = timestamp
         return self

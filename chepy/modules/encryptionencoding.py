@@ -134,11 +134,14 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_47(self) -> EncryptionEncodingT:
+    def rot_47(self, amount: int=14) -> EncryptionEncodingT:
         """ROT 47 encoding
 
         A slightly more complex variation of a caesar cipher, which includes
         ASCII characters from 33 '!' to 126 '~'. Default rotation: 47.
+
+        Args:
+            amount (int, optional): Amount to rotate by. Defaults to 14.
 
         Returns:
             Chepy: The Chepy object.
@@ -151,7 +154,7 @@ class EncryptionEncoding(ChepyCore):
         for i in range(len(self.state)):
             j = ord(self.state[i])
             if j >= 33 and j <= 126:
-                x.append(chr(33 + ((j + 14) % 94)))
+                x.append(chr(33 + ((j + amount) % 94)))
             else:  # pragma: no cover
                 x.append(self.state[i])
         self.state = "".join(x)
