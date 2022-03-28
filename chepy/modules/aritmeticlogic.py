@@ -81,7 +81,8 @@ class AritmeticLogic(ChepyCore):
 
     @ChepyDecorators.call_stack
     def divide(self, n: int) -> AritmeticLogicT:
-        """Divide a number to the state
+        """Divide a number to the state. Chepy is not optimized for float math. 
+        Subsequent methods may fail. 
 
         Args:
             n (int): Number to divide with

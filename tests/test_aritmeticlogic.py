@@ -16,6 +16,9 @@ def test_multiply():
 def test_divide():
     assert Chepy("0x40").divide(2).o == 32
 
+def test_divide_float():
+    assert Chepy("179").divide(178).to_hex().o == b'17b8803f'
+
 
 def test_power():
     assert Chepy("0x02").power(2).o == 4

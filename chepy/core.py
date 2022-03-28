@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 import subprocess
 import sys
+import struct
 import webbrowser
 from configparser import ConfigParser
 from importlib.machinery import SourceFileLoader
@@ -502,6 +503,8 @@ class ChepyCore(object):
             return str(self.state).encode()
         elif isinstance(self.state, bytearray):
             return bytes(self.state)
+        elif isinstance(self.state, float):
+            return bytearray(struct.pack("f", self.state))
         else:  # pragma: no cover
             # todo check more types here
             raise NotImplementedError
@@ -536,6 +539,8 @@ class ChepyCore(object):
             return str(self.state)
         elif isinstance(self.state, bytearray):
             return bytearray(self.state).decode()
+        elif isinstance(self.state, float):
+            return format(self.state, "f")
         else:  # pragma: no cover
             # todo check more types here
             raise NotImplementedError
