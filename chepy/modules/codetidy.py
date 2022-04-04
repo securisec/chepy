@@ -1,12 +1,9 @@
 from typing import TypeVar
-import lazy_import
 
 import json
 
-pydash = lazy_import.lazy_module("pydash")
-import phpserialize
+import pydash
 import regex as re
-from lxml import etree
 from ..core import ChepyCore, ChepyDecorators
 
 CodeTidyT = TypeVar("CodeTidyT", bound="CodeTidy")
@@ -27,7 +24,9 @@ class CodeTidy(ChepyCore):
             >>> c = Chepy("/path/to/file.json").load_file()
             >>> print(c.minify_json())
         """
-        self.state = json.dumps(json.loads(self._convert_to_str()), separators=(',', ':'))
+        self.state = json.dumps(
+            json.loads(self._convert_to_str()), separators=(",", ":")
+        )
         return self
 
     @ChepyDecorators.call_stack
@@ -45,56 +44,6 @@ class CodeTidy(ChepyCore):
             >>> print(c.beautify_json(indent=4))
         """
         self.state = json.dumps(json.loads(self._convert_to_str()), indent=indent)
-        return self
-
-    @ChepyDecorators.call_stack
-    def minify_xml(self) -> CodeTidyT:
-        """Minify XML string
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy("/path/to/file.xml").load_file()
-            >>> print(c.minify_xml())
-        """
-        parser = etree.XMLParser(remove_blank_text=True)
-        self.state = etree.tostring(
-            etree.fromstring(self._convert_to_bytes(), parser=parser)
-        )
-        return self
-
-    @ChepyDecorators.call_stack
-    def beautify_xml(self) -> CodeTidyT:
-        """Beautify compressed XML
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy("/path/to/file.xml").load_file()
-            >>> print(c.beautify_json())
-        """
-        self.state = etree.tostring(
-            etree.fromstring(self._convert_to_bytes()), pretty_print=True
-        )
-        return self
-
-    @ChepyDecorators.call_stack
-    def php_deserialize(self) -> CodeTidyT:
-        """Deserialize php to dict
-
-        Deserializes PHP serialized data, outputting keyed arrays as a python dict.
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy('a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}')
-            >>> c.php_deserialize()
-            {1: b'elem 1', 2: b'elem 2', 3: b' elem 3'}
-        """
-        self.state = phpserialize.loads(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack

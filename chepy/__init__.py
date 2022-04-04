@@ -10,7 +10,6 @@ from .modules.extractors import Extractors
 from .modules.hashing import Hashing
 from .modules.language import Language
 from .modules.links import Links
-from .modules.multimedia import Multimedia
 from .modules.networking import Networking
 from .modules.other import Other
 from .modules.publickey import Publickey
@@ -34,7 +33,6 @@ class Chepy(
     Hashing,
     Language,
     Links,
-    Multimedia,
     Networking,
     Other,
     Publickey,

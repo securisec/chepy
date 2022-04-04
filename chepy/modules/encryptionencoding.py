@@ -10,7 +10,6 @@ import lazy_import
 jwt = lazy_import.lazy_module("jwt")
 import pathlib
 
-import pycipher
 import regex as re
 import json
 
@@ -24,6 +23,7 @@ PKCS1_15 = lazy_import.lazy_module("Crypto.Signature.pkcs1_15")
 PKCS1_OAEP = lazy_import.lazy_module("Crypto.Cipher.PKCS1_OAEP")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
 Padding = lazy_import.lazy_module("Crypto.Util.Padding")
+pycipher = lazy_import.lazy_module("pycipher")
 
 from ..core import ChepyCore, ChepyDecorators
 from ..extras.combinatons import hex_chars

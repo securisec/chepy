@@ -256,7 +256,7 @@ class ChepyCore(object):
             >>> c = Chepy(['41', '42'])
             >>> c.for_each([("from_hex",), ("to_hex",)])
             >>> # this is how to use fork methods with a string
-            >>> c.for([(c.from_hex,), (c.to_hex,)])
+            >>> c.for_each([(c.from_hex,), (c.to_hex,)])
             >>> # This is how to use fork using methods
             >>> print(c)
             ['41', '42']
@@ -539,7 +539,7 @@ class ChepyCore(object):
             return str(self.state)
         elif isinstance(self.state, bytearray):
             return bytearray(self.state).decode()
-        elif isinstance(self.state, float):
+        elif isinstance(self.state, float): # pragma: no cover
             return format(self.state, "f")
         else:  # pragma: no cover
             # todo check more types here

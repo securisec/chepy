@@ -1,12 +1,8 @@
 from typing import TypeVar
 from urllib.parse import urlparse as _pyurlparse
 
-import jsonpath_rw
-import lazy_import
 import regex as re
-import json
 
-parsel = lazy_import.lazy_module("parsel")
 from ..core import ChepyCore, ChepyDecorators
 
 ExtractorsT = TypeVar("ExtractorsT", bound="Extractors")
@@ -15,10 +11,6 @@ ExtractorsT = TypeVar("ExtractorsT", bound="Extractors")
 class Extractors(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
-
-    def _parsel_obj(self):
-        """Returns a parsel.Selector object"""
-        return parsel.Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
     def extract_hashes(self) -> ExtractorsT:
@@ -205,79 +197,6 @@ class Extractors(ChepyCore):
                 if x.startswith(b"http")
             )
         self.state = matched
-        return self
-
-    @ChepyDecorators.call_stack
-    def xpath_selector(self, query: str, namespaces: str = None) -> ExtractorsT:
-        """Extract data using valid xpath selectors
-
-        Args:
-            query (str): Required. Xpath query
-            namespaces (str, optional): Namespace. Applies for XML data. Defaults to None.
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy("http://example.com")
-            >>> c.http_request()
-            >>> c.xpath_selector("//title/text()")
-            >>> c.get_by_index(0)
-            >>> c.o
-            "Example Domain"
-        """
-        self.state = (
-            parsel.Selector(self._convert_to_str(), namespaces=namespaces)
-            .xpath(query)
-            .getall()
-        )
-        return self
-
-    @ChepyDecorators.call_stack
-    def css_selector(self, query: str) -> ExtractorsT:
-        """Extract data using valid CSS selectors
-
-        Args:
-            query (str): Required. CSS query
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy("http://example.com")
-            >>> c.http_request()
-            >>> c.css_selector("title")
-            >>> c.get_by_index(0)
-            >>> c.o
-            "<title>Example Domain</title>"
-        """
-        self.state = self._parsel_obj().css(query).getall()
-        return self
-
-    @ChepyDecorators.call_stack
-    def jpath_selector(self, query: str) -> ExtractorsT:
-        """Query JSON with jpath query
-
-        `Reference <https://goessner.net/articles/JsonPath/index.html#e2>`__
-
-        Args:
-            query (str): Required. Query. For reference, see the help
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> c = Chepy("tests/files/test.json")
-            >>> c.load_file()
-            >>> c.jpath_selector("[*].name.first")
-            >>> c.get_by_index(2)
-            >>> c.o
-            "Long"
-        """
-        self.state = list(
-            j.value
-            for j in jsonpath_rw.parse(query).find(json.loads(self._convert_to_str()))
-        )
         return self
 
     @ChepyDecorators.call_stack

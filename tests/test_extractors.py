@@ -1,4 +1,3 @@
-from pathlib import Path
 from chepy import Chepy
 
 
@@ -64,39 +63,6 @@ def test_extract_domains():
             .o
         )
         == 3
-    )
-
-
-def test_xpath():
-    assert (
-        Chepy("tests/files/test.html")
-        .load_file()
-        .xpath_selector("//title/text()")
-        .get_by_index(0)
-        .o
-        == "Example Domain"
-    )
-
-
-def test_css():
-    assert (
-        Chepy("http://example.com")
-        .http_request()
-        .css_selector("title")
-        .get_by_index(0)
-        .o
-        == "<title>Example Domain</title>"
-    )
-
-
-def test_jpath():
-    assert (
-        Chepy("tests/files/test.json")
-        .load_file()
-        .jpath_selector("[*].name.first")
-        .get_by_index(2)
-        .o
-        == "Long"
     )
 
 
@@ -259,4 +225,3 @@ def test_extract_b64():
     when an unknown printer took a galley of type c2VjdXJpc2VjLnRlc3QuZGF0YQo= and scrambled it to make a type specimen book. 
     """
     assert Chepy(data).extract_base64().o == "c2VjdXJpc2VjLnRlc3QuZGF0YQo="
-

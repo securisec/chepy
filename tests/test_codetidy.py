@@ -12,23 +12,6 @@ def test_beautify_json():
     )
 
 
-def test_minify_xml():
-    assert len(Chepy("tests/files/test.xml").load_file().minify_xml().o) == 6392
-
-
-def test_beautify_xml():
-    assert (
-        len(Chepy("tests/files/test.xml").load_file().minify_xml().beautify_xml().o)
-        == 7690
-    )
-
-
-def test_php_deserialzie():
-    assert Chepy(
-        'a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}'
-    ).php_deserialize().o == {1: b"elem 1", 2: b"elem 2", 3: b" elem 3"}
-
-
 def test_to_uppercase():
     assert Chepy("some String").to_upper_case(by="word").o == "Some String"
     assert Chepy("some String").to_upper_case(by="sentence").o == "Some string"
