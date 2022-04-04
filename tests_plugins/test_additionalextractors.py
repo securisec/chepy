@@ -49,3 +49,14 @@ def test_beautify_xml():
         len(Chepy("tests/files/test.xml").load_file().minify_xml().beautify_xml().o)
         == 7690
     )
+
+
+def test_html_tag():
+    assert Chepy("tests/files/test.html").load_file().html_tags("p").o == [
+        {"tag": "p", "attributes": {"someval": "someval", "ano-ther": "another"}},
+        {"tag": "p", "attributes": {}},
+    ]
+
+
+def test_html_comments():
+    assert len(Chepy("tests/files/test.html").load_file().html_comments().o) == 3

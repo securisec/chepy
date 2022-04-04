@@ -200,18 +200,6 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def html_comments(self) -> ExtractorsT:
-        """Extract html comments
-
-        Returns:
-            Chepy: The Chepy object.
-        """
-        self.state = list(
-            filter(lambda x: x != "", self._parsel_obj().xpath("//comment()").getall())
-        )
-        return self
-
-    @ChepyDecorators.call_stack
     def javascript_comments(self) -> ExtractorsT:
         """Extract javascript comments
 
@@ -223,36 +211,6 @@ class Extractors(ChepyCore):
         self.state = re.findall(
             r"/\*[\w'\s\r\n\*]*\*/|//[\w\s']*|/\*.+?\*/", self._convert_to_str()
         )
-        return self
-
-    @ChepyDecorators.call_stack
-    def html_tags(self, tag: str) -> ExtractorsT:
-        """Extract tags from html along with their attributes
-
-        Args:
-            tag (str): A HTML tag
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> Chepy("http://example.com").http_request().html_tags('p').o
-            [
-                {'tag': 'p', 'attributes': {}},
-                {'tag': 'p', 'attributes': {}},
-                {'tag': 'p', 'attributes': {}}
-            ]
-        """
-        tags = []
-
-        for element in self._parsel_obj().xpath("//{}".format(tag)):
-            attributes = []
-            for index, attribute in enumerate(element.xpath("@*"), start=1):
-                attribute_name = element.xpath("name(@*[%d])" % index).extract_first()
-                attributes.append((attribute_name, attribute.extract()))
-            tags.append({"tag": tag, "attributes": dict(attributes)})
-
-        self.state = tags
         return self
 
     @ChepyDecorators.call_stack

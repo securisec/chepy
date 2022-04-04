@@ -66,19 +66,8 @@ def test_extract_domains():
     )
 
 
-def test_html_comments():
-    assert len(Chepy("tests/files/test.html").load_file().html_comments().o) == 3
-
-
 def test_js_comments():
     assert len(Chepy("tests/files/test.js").load_file().javascript_comments().o) == 3
-
-
-def test_html_tag():
-    assert Chepy("tests/files/test.html").load_file().html_tags("p").o == [
-        {"tag": "p", "attributes": {"someval": "someval", "ano-ther": "another"}},
-        {"tag": "p", "attributes": {}},
-    ]
 
 
 def test_extract_basicauth():
