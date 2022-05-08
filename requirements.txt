@@ -7,7 +7,6 @@ emoji
 exrex
 fire==0.4.0
 lazy-import
-hashid
 hexdump
 jsonpickle
 prompt_toolkit>=2.0.8
