@@ -13,7 +13,7 @@ prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
 pydash
-pyjwt==1.7.1
+pyjwt==2.4.0
 pyOpenSSL
 pyperclip
 python-editor
