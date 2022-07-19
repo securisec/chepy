@@ -62,7 +62,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("utf_16_le")
+        self.state = self._convert_to_bytes().decode("utf_16_le", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -84,7 +84,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("utf_16_be")
+        self.state = self._convert_to_bytes().decode("utf_16_be", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -104,7 +104,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("utf_7")
+        self.state = self._convert_to_bytes().decode("utf_7", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -126,7 +126,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp500")
+        self.state = self._convert_to_bytes().decode("cp500", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -146,7 +146,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp037")
+        self.state = self._convert_to_bytes().decode("cp037", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -166,7 +166,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp874")
+        self.state = self._convert_to_bytes().decode("cp874", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -186,7 +186,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp932")
+        self.state = self._convert_to_bytes().decode("cp932", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -206,7 +206,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("gbk")
+        self.state = self._convert_to_bytes().decode("gbk", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -228,7 +228,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("gb2312")
+        self.state = self._convert_to_bytes().decode("gb2312", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -248,7 +248,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp949")
+        self.state = self._convert_to_bytes().decode("cp949", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -268,7 +268,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp950")
+        self.state = self._convert_to_bytes().decode("cp950", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -288,7 +288,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1250")
+        self.state = self._convert_to_bytes().decode("cp1250", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -308,7 +308,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1251")
+        self.state = self._convert_to_bytes().decode("cp1251", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -328,7 +328,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1252")
+        self.state = self._convert_to_bytes().decode("cp1252", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -348,7 +348,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1253")
+        self.state = self._convert_to_bytes().decode("cp1253", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -368,7 +368,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1254")
+        self.state = self._convert_to_bytes().decode("cp1254", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -388,7 +388,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1255")
+        self.state = self._convert_to_bytes().decode("cp1255", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -408,7 +408,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1256")
+        self.state = self._convert_to_bytes().decode("cp1256", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -428,7 +428,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1257")
+        self.state = self._convert_to_bytes().decode("cp1257", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -448,7 +448,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("cp1258")
+        self.state = self._convert_to_bytes().decode("cp1258", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -470,7 +470,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_2")
+        self.state = self._convert_to_bytes().decode("iso8859_2", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -492,7 +492,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_3")
+        self.state = self._convert_to_bytes().decode("iso8859_3", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -514,7 +514,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_4")
+        self.state = self._convert_to_bytes().decode("iso8859_4", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -536,7 +536,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_5")
+        self.state = self._convert_to_bytes().decode("iso8859_5", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -558,7 +558,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_6")
+        self.state = self._convert_to_bytes().decode("iso8859_6", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -580,7 +580,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_7")
+        self.state = self._convert_to_bytes().decode("iso8859_7", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -602,7 +602,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_8")
+        self.state = self._convert_to_bytes().decode("iso8859_8", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -624,7 +624,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_9")
+        self.state = self._convert_to_bytes().decode("iso8859_9", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -646,7 +646,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_10")
+        self.state = self._convert_to_bytes().decode("iso8859_10", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -668,7 +668,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_11")
+        self.state = self._convert_to_bytes().decode("iso8859_11", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -690,7 +690,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_13")
+        self.state = self._convert_to_bytes().decode("iso8859_13", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -712,7 +712,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_14")
+        self.state = self._convert_to_bytes().decode("iso8859_14", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -734,7 +734,7 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object. 
         """
-        self.state = self._convert_to_bytes().decode("iso8859_15")
+        self.state = self._convert_to_bytes().decode("iso8859_15", errors='backslashreplace')
         return self
 
     @ChepyDecorators.call_stack
@@ -756,5 +756,5 @@ class Language(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self._convert_to_bytes().decode("unicode-escape")
+        self.state = self._convert_to_bytes().decode("unicode-escape", errors='backslashreplace')
         return self

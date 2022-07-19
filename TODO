@@ -2,6 +2,7 @@ Fix:
 
 Code:
   ☐ add more examples in docstrings
+  ☐ Luhn validator https://guptaavi352.medium.com/ctflearn-writeups-9f247c2fe94c
 
 New ideas:
   ☐ rubber ducky encode/decode

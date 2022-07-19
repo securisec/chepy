@@ -135,6 +135,10 @@ def test_load_file_binary():
     assert type(Chepy("tests/files/pkcs12").load_file(True).o) == bytearray
 
 
+def test_show_recipe():
+    assert Chepy("4142").from_hex()._stack == [{"function": "from_hex", "args": {}}]
+
+
 def test_run_recipe():
     assert (
         Chepy("bG9sCg==")

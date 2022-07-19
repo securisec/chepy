@@ -966,6 +966,15 @@ class ChepyCore(object):
         self._info_logger("Saved recipe to {}".format(str(path)))
         return self
 
+    def show_recipe(self):
+        """
+        Show the current recipe
+
+        Returns:
+            dict: The current recipe
+        """
+        return self._stack
+
     def load_recipe(self, path: str):
         """Load and run a recipe
 

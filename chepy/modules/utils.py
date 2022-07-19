@@ -122,7 +122,7 @@ class Utils(ChepyCore):
         dotall: bool = False,
         unicode: bool = False,
         extended: bool = False,
-    ):
+    ) -> UtilsT:
         """Regex search on current data
 
         Args:
