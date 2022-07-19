@@ -3,7 +3,7 @@ colorama
 crccheck
 decorator
 docstring-parser
-emoji
+emoji==2.0.0
 exrex
 fire==0.4.0
 lazy-import
