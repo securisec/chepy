@@ -369,3 +369,15 @@ def test_length():
 
 def test_leetcode():
     assert len(Chepy("ab@ cd").to_leetcode(replace_space="_").o) == 6
+
+
+def test_translate():
+    assert (
+        Chepy("synt{q41q8pq98s00o204r9800998rps8427r}")
+        .translate(
+            "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm",
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        )
+        .o
+        == "flag{d41d8cd98f00b204e9800998ecf8427e}"
+    )

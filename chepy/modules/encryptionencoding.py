@@ -166,21 +166,6 @@ class EncryptionEncoding(ChepyCore):
     ) -> EncryptionEncodingT:
         """XOR state with a key
 
-        Valid key formats are utf, hex and base64. Simple XOR cipher is a type
-        of additive cipher based on logical operation xor, which operates according
-        to the following principles.
-
-        (A * B) + (!A * !B)
-
-        A  B  A XOR B
-        0  0     0
-        1  0     1
-        0  1     1
-        1  1     0
-
-        The main advantage of xor chipher is that the encyption is reversible with t
-        he same logical operation.
-
         Args:
             key (str): Required. The key to xor by
             key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".

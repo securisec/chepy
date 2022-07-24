@@ -1151,3 +1151,20 @@ class DataFormat(ChepyCore):
             hold += change(s)
         self.state = hold
         return self
+
+    @ChepyDecorators.call_stack
+    def translate(self, x: str, y: str) -> DataFormatT:
+        """Replace a subset of specified characters in the state.
+
+        Args:
+            x (str): Chars to replace
+            y (str): Chars to replace with
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert len(x) == len(y), "x and y chars are not of equal length"
+        s = self._convert_to_str()
+        o = s.maketrans(x, y)
+        self.state = s.translate(o)
+        return self
