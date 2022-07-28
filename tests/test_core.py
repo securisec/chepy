@@ -136,7 +136,9 @@ def test_load_file_binary():
 
 
 def test_show_recipe():
-    assert Chepy("4142").from_hex().show_recipe() == [{"function": "from_hex", "args": {}}]
+    assert Chepy("4142").from_hex().show_recipe() == [
+        {"function": "from_hex", "args": {"delimiter": None, "join_by": " "}}
+    ]
 
 
 def test_run_recipe():

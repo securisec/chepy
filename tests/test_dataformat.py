@@ -267,24 +267,19 @@ def test_from_decimal():
 
 
 def test_to_binary():
-    assert Chepy("abc").to_binary().o == ["01100001", "01100010", "01100011"]
+    assert Chepy("abc").to_binary().o == "01100001 01100010 01100011"
 
 
 def test_from_binary():
-    assert Chepy(["01100001", "01100010", "01100011"]).from_binary().o == [
-        "a",
-        "b",
-        "c",
-    ]
-    assert Chepy("01100100011000010111010001100001").from_binary().o == b"data"
+    assert Chepy("011001000110 000101110100 0110000 1").from_binary().o == b"data"
 
 
 def test_to_octal():
-    assert Chepy("abㅎ").to_octal().o == ["141", "142", "30516"]
+    assert Chepy("abㅎ").to_octal().o == "141 142 30516"
 
 
 def test_from_octral():
-    assert Chepy(["141", "142", "30516"]).from_octal().o == ["a", "b", "ㅎ"]
+    assert Chepy("141 142 30516").from_octal().o == "abㅎ"
 
 
 def test_html_encode():

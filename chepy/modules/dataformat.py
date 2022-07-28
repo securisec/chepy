@@ -825,67 +825,79 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_binary(self) -> DataFormatT:
+    def to_binary(self, join_by: str = " ") -> DataFormatT:
         """Convert string characters to binary
+
+        Args:
+            join_by (str, optional): join_by. Defaults to " ".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("abc").to_binary().o
-            ["01100001", "01100010", "01100011"]
+            "01100001 01100010 01100011"
         """
-        self.state = list(format(ord(s), "08b") for s in list(self._convert_to_str()))
+        self.state = join_by.join(
+            list(format(ord(s), "08b") for s in list(self._convert_to_str()))
+        )
         return self
 
     @ChepyDecorators.call_stack
-    def from_binary(self) -> DataFormatT:
+    def from_binary(self, delimiter: str = " ") -> DataFormatT:
         """Convert a list of binary numbers to string
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to " ".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy(["01100001", "01100010", "01100011"]).from_binary().o
-            [
-                "a",
-                "b",
-                "c",
-            ]
+            "abc"
         """
-        if isinstance(self.state, list):
-            self.state = list(chr(int(s, 2)) for s in self.state)
-        else:
-            n = int(self._convert_to_str(), 2)
-            self.state = n.to_bytes((n.bit_length() + 7) // 8, "big")
+        n = int("".join(self._convert_to_str().split(delimiter)), 2)
+        self.state = n.to_bytes((n.bit_length() + 7) // 8, "big")
         return self
 
     @ChepyDecorators.call_stack
-    def to_octal(self) -> DataFormatT:
+    def to_octal(self, join_by: str = " ") -> DataFormatT:
         """Convert string characters to octal
+
+        Args:
+            join_by (str, optional): Join by. Defaults to "".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("abㅎ").to_octal().o
-            ["141", "142", "30516"]
+            "141 142 30516"
         """
-        self.state = list(format(ord(s), "0o") for s in list(self._convert_to_str()))
+        self.state = join_by.join(
+            list(format(ord(s), "0o") for s in list(self._convert_to_str()))
+        )
         return self
 
     @ChepyDecorators.call_stack
-    def from_octal(self) -> DataFormatT:
+    def from_octal(self, delimiter: str = None, join_by: str = "") -> DataFormatT:
         """Convert a list of octal numbers to string
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to None.
+            join_by (str, optional): Join by. Defaults to "".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy(["141", "142", "30516"]).from_octal().o
-            ["a", "b", "ㅎ"]
+            >>> Chepy("141 142").from_octal().o
+            "ab"
         """
-        self.state = list(chr(int(str(s), 8)) for s in self.state)
+        self.state = join_by.join(
+            list(chr(int(str(x), 8)) for x in self._convert_to_str().split(delimiter))
+        )
         return self
 
     @ChepyDecorators.call_stack

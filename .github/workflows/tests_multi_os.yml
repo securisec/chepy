@@ -43,7 +43,7 @@ jobs:
         
     - name: Test with pytest
       run: |
-        pytest --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        pytest -v --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
         coverage report -m
         
     - name: Test plugins osx
@@ -53,7 +53,7 @@ jobs:
         sed -iE '/chepy/d' chepy/chepy_plugins/requirements.txt
         pip install -r chepy/chepy_plugins/requirements.txt
         pip install .
-        pytest --disable-pytest-warnings tests_plugins/
+        pytest -v --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
 
     - name: Test plugins ubuntu
