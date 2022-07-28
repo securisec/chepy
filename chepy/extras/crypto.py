@@ -1,4 +1,3 @@
-import binascii
 import json
 from typing import Iterator, Dict, List, Union
 from binascii import hexlify, unhexlify
@@ -78,19 +77,14 @@ def xor_bruteforce_multi(
         }
 
 
-def xor_two_files(file1: str, file2: str) -> bytes:  # pragma: no cover
-    # TODO
-    pass
-
-
-def xor_key_from_files(
-    f1_path: str, f2_path: str, min: int = 1, max: int = 257
+def xor_repeating_key(
+    data1: bytes, data2: bytes, min: int = 1, max: int = 257
 ) -> Union[bytes, None]:  # pragma: no cover
-    """XOR two files and get the key.
+    """Recover repeating key xor keys.
 
     Args:
-        f1_path (str): File 1 path
-        f2_path (str): File 2 path
+        data1 (bytes): File 1 path
+        data2 (bytes): File 2 path
         min (int, optional): Min chars to test. Defaults to 1.
         max (int, optional): Max chars to test. Defaults to 257.
 
@@ -103,16 +97,14 @@ def xor_key_from_files(
         return None if i == -1 else s[:i]
 
     for i in range(min, max):
-        with open(f1_path, "rb") as f:
-            d1 = f.read(i)
+        d1 = data1[:i]
 
-        with open(f2_path, "rb") as f:
-            d2 = f.read(i)
+        d2 = data2[:i]
 
         x = bytes(a ^ b for a, b in zip(d1, d2))
         o = find_same(x)
         if o is not None:
-            return binascii.hexlify(o)
+            return o
 
 
 def xor(data: bytes, key: bytes) -> bytes:  # pragma: no cover

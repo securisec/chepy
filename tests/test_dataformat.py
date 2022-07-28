@@ -145,10 +145,14 @@ def test_base58_encode():
 
 def test_to_hex():
     assert Chepy("AAA").to_hex().out().decode() == "414141"
+    assert Chepy("AAA").to_hex(delimiter=" ").out().decode() == "41 41 41"
 
 
 def test_from_hex():
     assert Chepy("414141").from_hex().out().decode() == "AAA"
+    assert (
+        Chepy("41;41;41").from_hex(delimiter=";", join_by="%").out().decode() == "A%A%A"
+    )
 
 
 def test_hex_to_int():
@@ -247,19 +251,19 @@ def test_int_to_str():
 
 
 def test_to_charcode():
-    assert Chepy("aㅎ").to_charcode().o == ["61", "314e"]
+    assert Chepy("aㅎ").to_charcode().o == "97 12622"
 
 
 def test_from_charcode():
-    assert Chepy(["314e", "61", "20", "41"]).from_charcode().o == ["ㅎ", "a", " ", "A"]
+    assert Chepy("314e 61 20 41").from_charcode().o == "ㅎa A"
 
 
 def test_to_decimal():
-    assert Chepy("aㅎ").to_decimal().o == [97, 12622]
+    assert Chepy("aㅎ").to_decimal().o == "97 12622"
 
 
 def test_from_decimal():
-    assert Chepy([12622]).from_decimal().o == ["ㅎ"]
+    assert Chepy(12622).from_decimal().o == "ㅎ"
 
 
 def test_to_binary():

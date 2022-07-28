@@ -437,8 +437,11 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_hex(self) -> DataFormatT:
+    def to_hex(self, delimiter: str = "") -> DataFormatT:
         """Converts a string to its hex representation
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to None.
 
         Returns:
             Chepy: The Chepy object.
@@ -447,12 +450,19 @@ class DataFormat(ChepyCore):
             >>> Chepy("AAA").to_hex().out().decode()
             "414141"
         """
-        self.state = binascii.hexlify(self._convert_to_bytes())
+        if delimiter == "":
+            self.state = binascii.hexlify(self._convert_to_bytes())
+        else:
+            self.state = binascii.hexlify(self._convert_to_bytes(), sep=delimiter)
         return self
 
     @ChepyDecorators.call_stack
-    def from_hex(self) -> DataFormatT:
+    def from_hex(self, delimiter: str = None, join_by: str = " ") -> DataFormatT:
         """Convert a non delimited hex string to string
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to None.
+            join_by (str, optional): Join by. Defaults to ' '.
 
         Returns:
             Chepy: The Chepy object.
@@ -461,7 +471,15 @@ class DataFormat(ChepyCore):
             >>> Chepy("414141").from_hex().out()
             b"AAA"
         """
-        self.state = binascii.unhexlify(self._convert_to_bytes())
+        if delimiter is not None:
+            self.state = join_by.encode().join(
+                list(
+                    binascii.unhexlify(x)
+                    for x in self._convert_to_str().split(delimiter)
+                )
+            )
+        else:
+            self.state = binascii.unhexlify(self._convert_to_str())
         return self
 
     @ChepyDecorators.call_stack
@@ -720,77 +738,90 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_charcode(self, escape_char: str = "") -> DataFormatT:
+    def to_charcode(self, join_by: str = " ", base: int = 16) -> DataFormatT:
         """Convert a string to a list of unicode charcode
 
         Converts text to its unicode character code equivalent.
         e.g. Γειά σου becomes 0393 03b5 03b9 03ac 20 03c3 03bf 03c5
 
         Args:
-            escape_char (str, optional): Charcater to prepend with. Example \\u, u etc.
-                @ChepyDecorators.call_stack
-                Defaults to ''
+            join_by (str, optional): String to join the charcodes by. Defaults to ' '.
+            base (int, optional): Base to use for the charcodes. Defaults to 16.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("aㅎ").to_charcode().o
-            ["61", "314e"]
+            >>> Chepy("aㅎ").to_charcode()
+            "61 314e"
         """
-        self.state = list(
-            "{escape}{hex:02x}".format(escape=escape_char, hex=ord(x))
-            for x in list(self._convert_to_str())
-        )
+        hold = []
+        for c in self._convert_to_str():
+            hold.append(str(int(hex(ord(c))[2:], base)))
+        self.state = join_by.join(hold)
         return self
 
     @ChepyDecorators.call_stack
-    def from_charcode(self, prefix: str = "") -> DataFormatT:
+    def from_charcode(
+        self, delimiter: str = " ", join_by: str = "", base: int = 16
+    ) -> DataFormatT:
         """Convert array of unicode chars to string
 
         Args:
-            prefix (str, optional): Any prefix for the charcode. Ex: \\u or u. Defaults to "".
+            delimiter (str, optional): Delimiter. Defaults to " ".
+            join_by (str, optional): Join by. Defaults to "".
+            base (int, optional): Base. Defaults to 16.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy(["314e", "61", "20", "41"]).from_charcode().o
-            ["ㅎ", "a", " ", "A"]
+            >>> Chepy("314e 61 20 41"]).from_charcode().o
+            "ㅎa A"
         """
         out = []
-        for c in self.state:
-            c = re.sub(prefix, "", c)
-            out.append(chr(int(c, 16)))
-        self.state = out
+        for c in self._convert_to_str().split(delimiter):
+            out.append(chr(int(c, base)))
+        self.state = join_by.join(out)
         return self
 
     @ChepyDecorators.call_stack
-    def to_decimal(self) -> DataFormatT:
+    def to_decimal(self, join_by: str = " ") -> DataFormatT:
         """Convert charactes to decimal
+
+        Args:
+            join_by (str, optional): Join the decimal values by this. Defaults to ' '.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("aㅎ").to_decimal().o
-            [97, 12622]
+            '97 12622'
         """
-        self.state = list(ord(s) for s in list(self._convert_to_str()))
+        self.state = join_by.join(
+            str(x) for x in list(ord(s) for s in list(self._convert_to_str()))
+        )
         return self
 
     @ChepyDecorators.call_stack
-    def from_decimal(self) -> DataFormatT:
+    def from_decimal(self, delimiter: str = " ", join_by: str = "") -> DataFormatT:
         """Convert a list of decimal numbers to string
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to " ".
+            join_by (str, optional): Join by. Defaults to "".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy([12622]).from_decimal().o
-            ["ㅎ"]
+            >>> Chepy(12622).from_decimal().o
+            "ㅎ"
         """
-        self.state = list(chr(int(s)) for s in self.state)
+        self.state = join_by.join(
+            list(chr(int(s)) for s in self._convert_to_str().strip().split(delimiter))
+        )
         return self
 
     @ChepyDecorators.call_stack

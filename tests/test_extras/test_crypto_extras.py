@@ -1,4 +1,4 @@
-from chepy.extras.crypto_extras import one_time_pad_crib
+from chepy.extras.crypto import one_time_pad_crib
 
 
 def test_one_time_pad_crib():
