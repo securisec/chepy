@@ -1196,7 +1196,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def translate(self, x: str, y: str) -> DataFormatT:
+    def substitute(self, x: str, y: str) -> DataFormatT:
         """Replace a subset of specified characters in the state.
 
         Args:

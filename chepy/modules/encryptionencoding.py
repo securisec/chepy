@@ -50,16 +50,31 @@ class EncryptionEncoding(ChepyCore):
         assert mode in ["CBC", "OFB", "CTR", "ECB"], "Not a valid mode."
 
     def _convert_key(
-        self, key, iv, hex_key, hex_iv
+        self, key, iv, key_format: str, iv_format: str
     ) -> EncryptionEncodingT:  # pragma: no cover
         if isinstance(key, str):
             key = key.encode()
-        if hex_key:
+        # modify key according to mode
+        if key_format == "hex":
             key = binascii.unhexlify(key)
+        if key_format == "base64" or key_format == "b64":
+            key = base64.b64decode(key)
+        if key_format == "utf-8" or key_format == "utf8":
+            key = key.decode().encode("utf-8")
+        if key_format == "latin-1":
+            key = key.decode().encode("latin-1")
+
+        # modify iv according to mode
         if isinstance(iv, str):
             iv = iv.encode()
-        if hex_iv:
+        if iv_format == "hex":
             iv = binascii.unhexlify(iv)
+        if iv_format == "base64" or iv_format == "b64":
+            iv = base64.b64decode(iv)
+        if iv_format == "utf-8" or iv_format == "utf8":
+            key = key.decode().encode("utf-8")
+        if iv_format == "latin-1":
+            key = key.decode().encode("latin-1")
         else:
             iv = binascii.unhexlify(binascii.hexlify(iv))
         return key, iv
@@ -134,7 +149,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_47(self, amount: int=14) -> EncryptionEncodingT:
+    def rot_47(self, amount: int = 14) -> EncryptionEncodingT:
         """ROT 47 encoding
 
         A slightly more complex variation of a caesar cipher, which includes
@@ -162,14 +177,15 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def xor(
-        self, key: str, key_type: Literal['hex', 'utf', 'base64'] = "hex", ascii: bool = False
+        self,
+        key: str,
+        key_type: Literal["hex", "utf", "base64"] = "hex",
     ) -> EncryptionEncodingT:
         """XOR state with a key
 
         Args:
             key (str): Required. The key to xor by
             key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".
-            ascii (bool, optional): If the input is in ascii format
 
         Returns:
             Chepy: The Chepy object.
@@ -191,15 +207,15 @@ class EncryptionEncoding(ChepyCore):
         elif key_type == "base64":
             key = binascii.hexlify(base64.b64decode(key.encode()))
         key = binascii.unhexlify(key)
-        xor = bytearray(b"")
-        if ascii:
+        x = bytearray(b"")
+        try:
             for char, key_val in zip(self._convert_to_str(), itertools.cycle(key)):
-                xor.append(ord(char) ^ key_val)
-        else:
+                x.append(ord(char) ^ key_val)
+        except:
             for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
-                xor.append(char ^ key_val)
+                x.append(char ^ key_val)
 
-        self.state = xor
+        self.state = x
         return self
 
     @ChepyDecorators.call_stack
@@ -325,35 +341,41 @@ class EncryptionEncoding(ChepyCore):
                 return self
 
     @ChepyDecorators.call_stack
-    def rc4_encrypt(self, key: str, hex_key: bool = False) -> EncryptionEncodingT:
+    def rc4_encrypt(self, key: str, key_format: str = "hex") -> EncryptionEncodingT:
         """Encrypt raw state with RC4
 
         Args:
             key (str): Required. Secret key
-            hex_key (bool, optional): If key is in hex. Defaults to False.
+            key_format (str, optional): Key format. Defaults to "hex".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").rc4_encrypt("736563726574", hex_key=True).o
+            >>> Chepy("some data").rc4_encrypt("736563726574").o
             b"9e59bf79a2c0b7d253"
         """
-        if hex_key:
-            key = binascii.unhexlify(key)
         if isinstance(key, str):
             key = key.encode()
+        if key_format == "hex":
+            key = binascii.unhexlify(key)
+        elif key_format == "base64":
+            key = base64.b64decode(key)
+        elif key_format == "utf-16-le":
+            key = key.decode().encode("utf-16-le")
+        elif key_format == "utf-16-be":
+            key = key.decode().encode("utf-16-be")
         cipher = ARC4.new(key)
         self.state = binascii.hexlify(cipher.encrypt(self._convert_to_bytes()))
         return self
 
     @ChepyDecorators.call_stack
-    def rc4_decrypt(self, key: str, hex_key: bool = False) -> EncryptionEncodingT:
+    def rc4_decrypt(self, key: str, key_format: str = "hex") -> EncryptionEncodingT:
         """Decrypt raw state with RC4
 
         Args:
             key (str): Required. Secret key
-            hex_key (bool, optional): If key is in hex. Defaults to False.
+            key_format (str, optional): Key format. Defaults to "hex".
 
         Returns:
             Chepy: The Chepy object.
@@ -362,10 +384,16 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("9e59bf79a2c0b7d253").hex_to_str().rc4_decrypt("secret").o
             b"some data"
         """
-        if hex_key:
-            key = binascii.unhexlify(key)
         if isinstance(key, str):
             key = key.encode()
+        if key_format == "hex":
+            key = binascii.unhexlify(key)
+        elif key_format == "base64":
+            key = base64.b64decode(key)
+        elif key_format == "utf-16-le":
+            key = key.decode().encode("utf-16-le")
+        elif key_format == "utf-16-be":
+            key = key.decode().encode("utf-16-be")
         cipher = ARC4.new(key)
         self.state = cipher.decrypt(self._convert_to_bytes())
         return self
@@ -376,31 +404,23 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Encrypt raw state with DES
-
-        DES is a previously dominant algorithm for encryption, and was published
-        as an official U.S. Federal Information Processing Standard (FIPS). It is
-        now considered to be insecure due to its small key size. DES uses a key
-        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes.
-        You can generate a password-based key using one of the KDF operations.
-        The Initialization Vector should be 8 bytes long. If not entered, it will
-        default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").des_encrypt("70617373776f7264", hex_key=True).o
+            >>> Chepy("some data").des_encrypt("70617373776f7264").o
             b"1ee5cb52954b211d1acd6e79c598baac"
 
             To encrypt using a differnt mode
@@ -411,7 +431,7 @@ class EncryptionEncoding(ChepyCore):
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
@@ -436,25 +456,17 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
-
-        DES is a previously dominant algorithm for encryption, and was published
-        as an official U.S. Federal Information Processing Standard (FIPS). It is
-        now considered to be insecure due to its small key size. DES uses a key
-        length of 8 bytes (64 bits).<br>Triple DES uses a key length of 24 bytes.
-        You can generate a password-based key using one of the KDF operations.
-        The Initialization Vector should be 8 bytes long. If not entered, it will
-        default to 8 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -466,7 +478,7 @@ class EncryptionEncoding(ChepyCore):
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = DES.new(key, mode=DES.MODE_CBC, iv=iv)
@@ -491,24 +503,17 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Encrypt raw state with Triple DES
-
-        Triple DES applies DES three times to each block to increase key size. Key:
-        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length
-        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one
-        of the KDF operations. IV: The Initialization Vector should be 8 bytes long.
-        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB
-        mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -520,7 +525,7 @@ class EncryptionEncoding(ChepyCore):
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
@@ -545,24 +550,17 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
-
-        Triple DES applies DES three times to each block to increase key size. Key:
-        Triple DES uses a key length of 24 bytes (192 bits).<br>DES uses a key length
-        of 8 bytes (64 bits).<br><br>You can generate a password-based key using one
-        of the KDF operations. IV: The Initialization Vector should be 8 bytes long.
-        If not entered, it will default to 8 null bytes. Padding: In CBC and ECB
-        mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -577,7 +575,7 @@ class EncryptionEncoding(ChepyCore):
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
@@ -602,31 +600,18 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "00000000000000000000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Encrypt raw state with AES
-
-        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
-        Standard (FIPS). It was selected after a 5-year process where 15 competing
-        designs were evaluated.
-
-        key: The following algorithms will be used based on the size of the
-            16 bytes = AES-128
-            24 bytes = AES-192
-            32 bytes = AES-256
-
-        You can generate a password-based key using one of the KDF operations.
-        IV: The Initialization Vector should be 16 bytes long. If not entered, it will
-        default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -638,7 +623,7 @@ class EncryptionEncoding(ChepyCore):
 
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
@@ -671,24 +656,10 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "00000000000000000000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Decrypt raw state encrypted with DES.
-
-        Advanced Encryption Standard (AES) is a U.S. Federal Information Processing
-        Standard (FIPS). It was selected after a 5-year process where 15 competing
-        designs were evaluated.<br><br><b>Key:</b> The following algorithms will
-        be used based on the size of the
-
-        key:
-            16 bytes = AES-128
-            24 bytes = AES-192
-            32 bytes = AES-256
-
-        You can generate a password-based key using one of the KDF operations.
-        IV: The Initialization Vector should be 16 bytes long. If not entered, it will
-        default to 16 null bytes. Padding: In CBC and ECB mode, PKCS#7 padding will be used.
 
         Args:
             key (str): Required. The secret key
@@ -704,14 +675,14 @@ class EncryptionEncoding(ChepyCore):
         Examples:
             >>> c = Chepy("5fb8c186394fc399849b89d3b6605fa3")
             >>> c.hex_to_str()
-            >>> c.aes_decrypt("7365637265742070617373776f726421", hex_key=True)
+            >>> c.aes_decrypt("7365637265742070617373776f726421")
             >>> c.o
             b"some data"
         """
 
         assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
@@ -744,22 +715,17 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Encrypt raw state with Blowfish
-
-        Blowfish is a symmetric-key block cipher designed in 1993 by
-        Bruce Schneier and included in a large number of cipher suites
-        and encryption products. AES now receives more attention.
-        IV: The Initialization Vector should be 8 bytes long.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only. Defaults to '0000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -771,7 +737,7 @@ class EncryptionEncoding(ChepyCore):
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)
@@ -796,23 +762,18 @@ class EncryptionEncoding(ChepyCore):
         key: str,
         iv: str = "0000000000000000",
         mode: str = "CBC",
-        hex_key: bool = False,
-        hex_iv: bool = True,
+        key_format: str = "hex",
+        iv_format: str = "hex",
     ) -> EncryptionEncodingT:
         """Encrypt raw state with Blowfish
-
-        Blowfish is a symmetric-key block cipher designed in 1993 by
-        Bruce Schneier and included in a large number of cipher suites
-        and encryption products. AES now receives more attention.
-        IV: The Initialization Vector should be 8 bytes long.
 
         Args:
             key (str): Required. The secret key
             iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
@@ -820,14 +781,14 @@ class EncryptionEncoding(ChepyCore):
         Examples:
             >>> c = Chepy("d9b0a79853f13960fcee3cae16e27884")
             >>> c.hex_to_str()
-            >>> c.blowfish_decrypt("password")
+            >>> c.blowfish_decrypt("password", key_format="utf-8")
             >>> c.o
             b"some data"
         """
 
         self.__check_mode(mode)
 
-        key, iv = self._convert_key(key, iv, hex_key, hex_iv)
+        key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = Blowfish.new(key, mode=Blowfish.MODE_CBC, iv=iv)

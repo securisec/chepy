@@ -370,10 +370,10 @@ def test_leetcode():
     assert len(Chepy("ab@ cd").to_leetcode(replace_space="_").o) == 6
 
 
-def test_translate():
+def test_substitute():
     assert (
         Chepy("synt{q41q8pq98s00o204r9800998rps8427r}")
-        .translate(
+        .substitute(
             "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm",
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
         )
