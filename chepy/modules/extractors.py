@@ -25,6 +25,7 @@ class Extractors(ChepyCore):
             >>> ).extract_hashes()
             {'md5': [b'60b725f10c9c85c70d97880dfe8191b3'], 'sha1': [b'3f786850e387550fdab836ed7e6dc881de23001b'], 'sha256': [], 'sha512': []}
         """
+        # TODO make this more effecient. because at the moment, we are compiling and running this 4 separate times.
         data = self._convert_to_bytes()
         found = {}
         found["md5"] = re.findall(
@@ -43,39 +44,38 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_strings(self, length: int = 4) -> ExtractorsT:
+    def extract_strings(self, length: int = 4, join_by: str='\n') -> ExtractorsT:
         """Extract strings from state
 
         Args:
             length (int, optional): Min length of string. Defaults to 4.
+            join_by (str, optional): String to join by. Defaults to newline.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("tests/files/hello").load_file().extract_strings().o
-            [
-                b'__PAGEZERO',
-                b'__TEXT',
-                b'__text',
-                b'__TEXT',
-                b'__stubs',
-                b'__TEXT',
-                ...
-            ]
+            __PAGEZERO'
+            __TEXT'
+            __text'
+            __TEXT'
+            __stubs'
+            __TEXT'
+            ...
         """
         pattern = b"[^\x00-\x1F\x7F-\xFF]{" + str(length).encode() + b",}"
-        self.state = re.findall(pattern, self._convert_to_bytes())
+        matches = re.findall(pattern, self._convert_to_bytes())
+        self.state = join_by.join([m.decode() for m in matches])
         return self
 
     @ChepyDecorators.call_stack
     def extract_ips(
-        self, invalid: bool = False, is_binary: bool = False
+        self, is_binary: bool = False
     ) -> ExtractorsT:
         """Extract ipv4 and ipv6 addresses
 
         Args:
-            invalid (bool, optional): Include :: addresses. Defaults to False.
             is_binary (bool, optional): The state is in binary format. It will then first
                 extract the strings from it before matching.
 
@@ -116,7 +116,7 @@ class Extractors(ChepyCore):
         pattern = b"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if is_binary:
             matched = list(
-                filter(lambda x: re.search(pattern, x), self.extract_strings().o)
+                filter(lambda x: re.search(pattern, x), self.extract_strings().o.encode().splitlines())
             )
         else:  # pragma: no cover
             matched = list(

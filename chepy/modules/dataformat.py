@@ -5,6 +5,7 @@ import codecs
 import html
 import base58
 import json
+import struct
 from random import randint
 
 yaml = lazy_import.lazy_module("yaml")
@@ -19,6 +20,8 @@ from ..core import ChepyCore, ChepyDecorators
 from chepy.modules.internal.constants import Encoding
 
 DataFormatT = TypeVar("DataFormatT", bound="DataFormat")
+
+
 
 
 class DataFormat(ChepyCore):
@@ -303,6 +306,75 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = base64.b32decode(self.state)
+        return self
+
+    @ChepyDecorators.call_stack
+    def base91_encode(self) -> DataFormatT: # pragma: no cover
+        """Base91 encode
+        Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L69
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        bindata = self._convert_to_bytes()
+        b = 0
+        n = 0
+        out = ""
+        for count in range(len(bindata)):
+            byte = bindata[count : count + 1]
+            b |= struct.unpack("B", byte)[0] << n
+            n += 8
+            if n > 13:
+                v = b & 8191
+                if v > 88:
+                    b >>= 13
+                    n -= 13
+                else:
+                    v = b & 16383
+                    b >>= 14
+                    n -= 14
+                out += Encoding.BASE91_ALPHABET[v % 91] + Encoding.BASE91_ALPHABET[v // 91]
+        if n:
+            out += Encoding.BASE91_ALPHABET[b % 91]
+            if n > 7 or b > 90:
+                out += Encoding.BASE91_ALPHABET[b // 91]
+        self.state = out
+        return self
+
+    @ChepyDecorators.call_stack
+    def base91_decode(self) -> DataFormatT: # pragma: no cover
+        """Decode as Base91
+        Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L42
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        encoded_str = self._convert_to_str()
+        decode_table = dict((v, k) for k, v in enumerate(Encoding.BASE91_ALPHABET))
+        v = -1
+        b = 0
+        n = 0
+        out = bytearray()
+        for strletter in encoded_str:
+            if not strletter in decode_table:
+                continue
+            c = decode_table[strletter]
+            if v < 0:
+                v = c
+            else:
+                v += c * 91
+                b |= v << n
+                n += 13 if (v & 8191) > 88 else 14
+                while True:
+                    out += struct.pack("B", b & 255)
+                    b >>= 8
+                    n -= 8
+                    if not n > 7:
+                        break
+                v = -1
+        if v + 1:
+            out += struct.pack("B", (b | v << n) & 255)
+        self.state = out
         return self
 
     @ChepyDecorators.call_stack
@@ -1210,4 +1282,20 @@ class DataFormat(ChepyCore):
         s = self._convert_to_str()
         o = s.maketrans(x, y)
         self.state = s.translate(o)
+        return self
+
+    @ChepyDecorators.call_stack
+    def remove_nonprintable(self, replace_with: bytes = b"") -> DataFormatT:
+        """Remove non-printable characters from string.
+
+        Args:
+            replace_with (bytes, optional): Replace non-printable characters with this. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(replace_with, str):
+            replace_with = replace_with.encode()
+        data = self._convert_to_bytes()
+        self.state = re.sub(b"[^[:print:]]", replace_with, data)
         return self

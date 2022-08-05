@@ -12,7 +12,7 @@ import webbrowser
 from configparser import ConfigParser
 from importlib.machinery import SourceFileLoader
 from pprint import pformat
-from typing import Any, List, Mapping, Tuple, Union
+from typing import Any, Dict, List, Mapping, Tuple, Union
 from urllib.parse import urljoin
 
 import lazy_import
@@ -95,6 +95,16 @@ class ChepyCore(object):
         self.log_format = "%(levelname)-2s - %(message)s"
         logging.getLogger().setLevel(self.log_level)
         logging.basicConfig(format=self.log_format)
+
+    @property
+    def recipe(self) -> List[Dict[str, Union[str, Dict[str, Any]]]]:
+        """Returns the current recipe. This is a list of dictionaries
+        that contains the method name and the arguments.
+
+        Returns:
+            List[Dict[str, Union[str, Dict[str, Any]]]]: The recipe.
+        """
+        return self._stack
 
     @property
     def state(self):
@@ -965,15 +975,6 @@ class ChepyCore(object):
             f.write_text(json.dumps(self._stack))
         self._info_logger("Saved recipe to {}".format(str(path)))
         return self
-
-    def show_recipe(self):
-        """
-        Show the current recipe
-
-        Returns:
-            dict: The current recipe
-        """
-        return self._stack
 
     def load_recipe(self, path: str):
         """Load and run a recipe

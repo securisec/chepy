@@ -14,7 +14,7 @@ New ideas:
   ☐ ignore error method
   ☐ swap bytes
   ☐ @high disable plugins from code
-  ☐ remove unprintable method
+  homophonic decoder
 
 Bug:
 
@@ -37,7 +37,6 @@ Methods:
   ☐ magic method from cyberchef
   ☐ base 36
   ☐ base 62
-  ☐ base 91
   ☐ base 92
 
 Github Actions:
@@ -52,6 +51,9 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ base 91 @project(Methods)
+  ✔ remove unprintable method @project(New ideas)
+  ✔ qr plugin with aztec, barcodes, qr etc @project(New ideas)
   ✔ 🔥 combine all encoding/decoding methods @project(New ideas)
   ✔ translate function that takes a string the converts the state @project(New ideas)
   ✔ split by newline @project(New ideas)

@@ -27,15 +27,3 @@ class Other(ChepyCore):
         """
         self.state = str(uuid4())
         return self
-
-    # def decode_qr(self):  # pragma: no cover
-    #     """Decode a qr code
-
-    #     This method does require zbar to be installed in the system
-
-    #     Returns:
-    #         Chepy: The Chepy object.
-    #     """
-    #     data = Image.open(self._load_as_file())
-    #     self.state = list(map(lambda x: x.data, _pyzbar_decode(data)))
-    #     return self

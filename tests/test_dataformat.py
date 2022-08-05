@@ -380,3 +380,24 @@ def test_substitute():
         .o
         == "flag{d41d8cd98f00b204e9800998ecf8427e}"
     )
+
+
+def test_remove_nonprintable():
+    assert Chepy(b"aa").remove_nonprintable().o == b"aa"
+    assert (
+        Chepy(
+            "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f"
+        )
+        .remove_nonprintable()
+        .o
+        == b""
+    )
+    assert Chepy("41ae42").from_hex().remove_nonprintable(replace_with=" ").o == b"A B"
+    assert Chepy("41ae42").from_hex().remove_nonprintable(replace_with=b" ").o == b"A B"
+
+
+def test_base91():
+    data = "flag{some_flag}"
+    out = "@iH<,{_{W$OsuxXi%]D"
+    assert Chepy(data).base91_encode().o == out
+    assert Chepy(out).base91_decode().o.decode() == data

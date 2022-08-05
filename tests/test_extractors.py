@@ -2,7 +2,7 @@ from chepy import Chepy
 
 
 def test_extract_strings():
-    assert len(Chepy("tests/files/hello").load_file().extract_strings().o) == 29
+    assert Chepy("tests/files/hello").load_file().extract_strings().o.splitlines()[0] == '__PAGEZERO'
 
 
 def test_extract_hashes():
