@@ -148,7 +148,7 @@ def test_run_recipe():
             recipes=[
                 {
                     "function": "base64_decode",
-                    "args": {"custom": None, "fix_padding": True},
+                    "args": {"custom": None},
                 },
                 {"function": "swap_case", "args": {}},
             ]

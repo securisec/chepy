@@ -112,6 +112,7 @@ def test_base64_encode():
         .o
         == b"QqxhNG/mMKtYPqoz64FVR42="
     )
+    assert Chepy("test").base64_encode(url_safe=True).o == b"dGVzdA=="
 
 
 def test_base64_decode():
@@ -124,6 +125,7 @@ def test_base64_decode():
         .o
         == b"some random? data"
     )
+    assert Chepy("dGVzdA").base64_decode(url_safe=True).o == b"test"
 
 
 def test_decode_bytes():
@@ -401,3 +403,7 @@ def test_base91():
     out = "@iH<,{_{W$OsuxXi%]D"
     assert Chepy(data).base91_encode().o == out
     assert Chepy(out).base91_decode().o.decode() == data
+
+
+def test_swap_endianness():
+    assert Chepy("01020304").swap_endianness().o == "4030201"

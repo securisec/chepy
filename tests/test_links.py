@@ -21,5 +21,5 @@ def test_google_search_ei_to_epoch():
     assert Chepy("Bh8hYqykHc64mAXkkoTgCg==").google_search_ei_to_epoch().o == 1646337798
 
 
-# def test_to_unix_ts():
-#     assert Chepy("Sun Nov 10 17:57:29 2019").to_unix_ts().o == 1573426649
+# def test_to_unix_timestamp():
+#     assert Chepy("Sun Nov 10 17:57:29 2019").to_unix_timestamp().o == 1573426649

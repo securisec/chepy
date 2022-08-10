@@ -14,7 +14,8 @@ New ideas:
   ☐ ignore error method
   ☐ swap bytes
   ☐ @high disable plugins from code
-  homophonic decoder
+  ☐ homophonic decoder
+  ☐ append method for core to add data to the state
 
 Bug:
 

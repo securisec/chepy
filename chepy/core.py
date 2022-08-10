@@ -940,7 +940,7 @@ class ChepyCore(object):
             Chepy: The Chepy object.
 
         Examples:
-            >>> c = Chepy('bG9sCg==').run_recipe([{"function":"base64_decode","args":{"custom":None,"fix_padding":True}}]])
+            >>> c = Chepy('bG9sCg==').run_recipe([{"function":"base64_decode","args":{"custom":None}}]])
             >>> lol
             In this example, we are calling the base64 decode method on the state.
         """

@@ -123,7 +123,7 @@ class Utils(ChepyCore):
         unicode: bool = False,
         extended: bool = False,
     ) -> UtilsT:
-        """Regex search on current data
+        """Regex search on current data. State will be an array of matches.
 
         Args:
             pattern (str): Required. The regex pattern to search by

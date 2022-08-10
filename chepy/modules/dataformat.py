@@ -22,8 +22,6 @@ from chepy.modules.internal.constants import Encoding
 DataFormatT = TypeVar("DataFormatT", bound="DataFormat")
 
 
-
-
 class DataFormat(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
@@ -309,7 +307,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base91_encode(self) -> DataFormatT: # pragma: no cover
+    def base91_encode(self) -> DataFormatT:  # pragma: no cover
         """Base91 encode
         Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L69
 
@@ -333,7 +331,9 @@ class DataFormat(ChepyCore):
                     v = b & 16383
                     b >>= 14
                     n -= 14
-                out += Encoding.BASE91_ALPHABET[v % 91] + Encoding.BASE91_ALPHABET[v // 91]
+                out += (
+                    Encoding.BASE91_ALPHABET[v % 91] + Encoding.BASE91_ALPHABET[v // 91]
+                )
         if n:
             out += Encoding.BASE91_ALPHABET[b % 91]
             if n > 7 or b > 90:
@@ -342,7 +342,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base91_decode(self) -> DataFormatT: # pragma: no cover
+    def base91_decode(self) -> DataFormatT:  # pragma: no cover
         """Decode as Base91
         Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L42
 
@@ -416,7 +416,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_encode(self, custom: str = None) -> DataFormatT:
+    def base64_encode(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
         """Encode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -426,6 +426,7 @@ class DataFormat(ChepyCore):
 
         Args:
             custom (str, optional): Provide a custom charset to base64 with
+            url_safe (bool, optional): Encode with url safe charset.
 
         Returns:
             Chepy: The Chepy object.
@@ -436,6 +437,9 @@ class DataFormat(ChepyCore):
             >>> Chepy("Some data").base64_encode(custom=custom).o
             b'IqxhNG/YMLFV'
         """
+        if url_safe:
+            self.state = base64.urlsafe_b64encode(self._convert_to_bytes())
+            return self
         if custom is not None:
             x = base64.b64encode(self._convert_to_bytes())
             std_base64chars = (
@@ -450,9 +454,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_decode(
-        self, custom: str = None, fix_padding: bool = True
-    ) -> DataFormatT:
+    def base64_decode(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -462,7 +464,7 @@ class DataFormat(ChepyCore):
 
         Args:
             custom (str, optional): Provide a custom charset to base64 with
-            fix_padding (bool, optional): If padding error, add padding. Defaults to True
+            url_safe (bool, optional): If true, decode url safe. Defaults to False
 
         Returns:
             Chepy: The Chepy object.
@@ -474,25 +476,17 @@ class DataFormat(ChepyCore):
             >>> c.out()
             b"some random? data"
         """
+        data = self._convert_to_str()
         if custom is not None:
             std_base64chars = (
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
             )
-            c = self._convert_to_str().translate(str.maketrans(custom, std_base64chars))
-            self.state = base64.b64decode(c.encode())
+            data = data.translate(str.maketrans(custom, std_base64chars))
+        data += "=="
+        if url_safe:
+            self.state = base64.urlsafe_b64decode(data)
         else:
-            try:
-                self.state = base64.b64decode(self._convert_to_bytes())
-            except binascii.Error:
-                if fix_padding:
-                    try:
-                        self._warning_logger("Padding error. Adding =")
-                        self.state = base64.b64decode(self._convert_to_bytes() + b"=")
-                    except binascii.Error:  # pragma: no cover
-                        self._warning_logger("Padding error. Adding ==")
-                        self.state = base64.b64decode(self._convert_to_bytes() + b"==")
-                else:  # pragma: no cover
-                    raise
+            self.state = base64.b64decode(data)
         return self
 
     @ChepyDecorators.call_stack
@@ -1298,4 +1292,19 @@ class DataFormat(ChepyCore):
             replace_with = replace_with.encode()
         data = self._convert_to_bytes()
         self.state = re.sub(b"[^[:print:]]", replace_with, data)
+        return self
+
+    @ChepyDecorators.call_stack
+    def swap_endianness(self) -> DataFormatT:
+        # TODO make this better. this is not inline with cyberchef
+        """Swap endianness of a hex string.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        # check if hex
+        if not re.match(b"^[0-9a-fA-F]+$", data): # pragma: no cover
+            raise ValueError("Data is not hex")
+        self.state = hex(struct.unpack("<I", struct.pack(">I", int(data, 16)))[0])[2:]
         return self
