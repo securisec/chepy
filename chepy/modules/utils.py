@@ -30,7 +30,7 @@ class Utils(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("abcdefg").reverse().output
+            >>> Chepy("abcdefg").reverse().out
             "gfedcba"
         """
         if count == 1:
@@ -58,7 +58,7 @@ class Utils(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").output
+            >>> Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").out
             2
         """
         if case_sensitive:

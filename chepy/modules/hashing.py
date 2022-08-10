@@ -50,7 +50,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").sha1().output
+            >>> Chepy("A").sha1().out
             "6dcd4ce23d88e2ee9568ba546c007c63d9131c1b"
         """
         self.state = hashlib.sha1(self._convert_to_bytes()).hexdigest()
@@ -73,7 +73,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").sha2_256().output
+            >>> Chepy("A").sha2_256().out
             "559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd"
         """
         self.state = hashlib.sha256(self._convert_to_bytes()).hexdigest()
@@ -96,7 +96,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").sha2_512().out()
+            >>> Chepy("A").sha2_512().out
             21b4f4bd9e64ed355c3eb676a28ebedaf6d8f17bdc365995b319097153044080516bd083bfcce66121a3072646994c8430cc382b8dc543e84880183bf856cff5
         """
         self.state = hashlib.sha512(self._convert_to_bytes()).hexdigest()
@@ -162,7 +162,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").sha2_224().out()
+            >>> Chepy("A").sha2_224().out
             "5cfe2cddbb9940fb4d8505e25ea77e763a0077693dbb01b1a6aa94f2"
         """
         self.state = hashlib.sha224(self._convert_to_bytes()).hexdigest()
@@ -279,7 +279,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").md5().output
+            >>> Chepy("A").md5().out
             "7fc56270e7a70fa81a5935b72eacbe29"
         """
         h = MD5.new()
@@ -426,7 +426,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").blake_2b(bits=128, key="key").output
+            >>> Chepy("A").blake_2b(bits=128, key="key").out
             "6d2e4cba3bc564e02d1a76f585a6795d"
         """
         assert bits in [
@@ -458,7 +458,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("A").blake_2s(bits=128, key="key").output
+            >>> Chepy("A").blake_2s(bits=128, key="key").out
             "4e33cc702e9d08c28a5e9691f23bc66a"
         """
         assert bits in [256, 160, 128], "Valid bits are 256, 160, 128"
@@ -507,7 +507,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("a").crc32_checksum().output
+            >>> Chepy("a").crc32_checksum().out
             "e8b7be43"
         """
         self.state = Crc32().process(self._convert_to_bytes()).finalhex()
@@ -692,7 +692,7 @@ class Hashing(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("abc").scrypt_hash(salt="", key_length=16).out()
+            >>> Chepy("abc").scrypt_hash(salt="", key_length=16).out
             "f352f3374cf4e344dde4108b96985248"
         """
         assert N < 32, "N must be less than 32"

@@ -318,7 +318,7 @@ class Compression(ChepyCore):
             >>> c = Chepy("789c0580a10d000008c35ee1b9ca05c104e737b761ca5711e8039a")
             >>> c.hex_to_binary()
             >>> c.zlib_decompress()
-            >>> c.out()
+            >>> c.out
             b"some text"
         """
         self.state = zlib.decompress(self._convert_to_bytes())

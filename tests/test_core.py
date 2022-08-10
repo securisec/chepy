@@ -110,16 +110,6 @@ def test_convert_to_bytearray():
     assert Chepy("a")._convert_to_bytearray() == bytearray(b"a")
 
 
-def test_out_as_str():
-    assert Chepy(b"a").out_as_str() == "a"
-    assert Chepy("a").out_as_str() == "a"
-
-
-def test_out_as_bytes():
-    assert Chepy(b"a").out_as_bytes() == b"a"
-    assert Chepy("a").out_as_bytes() == b"a"
-
-
 def test_write_to_file():
     Chepy("A").write_to_file(".test")
     with open(".test", "r") as f:

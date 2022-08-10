@@ -95,12 +95,12 @@ Because most methods in Chepy returns self, if you run `type` on an output, you 
 ```python
 >>> Chepy("A").to_hex().o
 "41"
->>> Chepy("A").to_hex().output
+>>> Chepy("A").to_hex().out
 "41"
 ```
 - **out** This is a method that will get the current value from state. Same as `o` and `output`.
 ```python
->>> Chepy("A").to_hex().out()
+>>> Chepy("A").to_hex().out
 "41"
 ```
 - **copy** This method will copy the current value of state into the clipboard. For linux, it will require either `xsel` or `xclip`

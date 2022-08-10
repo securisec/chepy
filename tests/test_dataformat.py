@@ -87,23 +87,23 @@ education: '4 GCSEs
 
 
 def test_base58_decode():
-    assert Chepy("2UDrs31qcWSPi").base58_decode().output.decode() == "some data"
+    assert Chepy("2UDrs31qcWSPi").base58_decode().out.decode() == "some data"
 
 
 def test_base85_encode():
-    assert Chepy("some data").base85_encode().output.decode() == "F)Po,+Cno&@/"
+    assert Chepy("some data").base85_encode().out.decode() == "F)Po,+Cno&@/"
 
 
 def test_base85_decode():
-    assert Chepy("F)Po,+Cno&@/").base85_decode().output.decode() == "some data"
+    assert Chepy("F)Po,+Cno&@/").base85_decode().out.decode() == "some data"
 
 
 def test_base32_encode():
-    assert Chepy("some data").base32_encode().output.decode() == "ONXW2ZJAMRQXIYI="
+    assert Chepy("some data").base32_encode().out.decode() == "ONXW2ZJAMRQXIYI="
 
 
 def test_base64_encode():
-    assert Chepy("some data").base64_encode().output.decode() == "c29tZSBkYXRh"
+    assert Chepy("some data").base64_encode().out.decode() == "c29tZSBkYXRh"
     assert (
         Chepy("some random? data")
         .base64_encode(
@@ -112,7 +112,7 @@ def test_base64_encode():
         .o
         == b"QqxhNG/mMKtYPqoz64FVR42="
     )
-    assert Chepy("test").base64_encode(url_safe=True).o == b"dGVzdA=="
+    assert Chepy("test").base64_encode(url_safe=True).o == b"dGVzdA"
 
 
 def test_base64_decode():
@@ -142,24 +142,24 @@ def test_decode_bytes():
 
 
 def test_base58_encode():
-    assert Chepy("some data").base58_encode().output.decode() == "2UDrs31qcWSPi"
+    assert Chepy("some data").base58_encode().out.decode() == "2UDrs31qcWSPi"
 
 
 def test_to_hex():
-    assert Chepy("AAA").to_hex().out().decode() == "414141"
-    assert Chepy("AAA").to_hex(delimiter=" ").out().decode() == "41 41 41"
+    assert Chepy("AAA").to_hex().out.decode() == "414141"
+    assert Chepy("AAA").to_hex(delimiter=" ").out.decode() == "41 41 41"
 
 
 def test_from_hex():
-    assert Chepy("414141").from_hex().out().decode() == "AAA"
+    assert Chepy("414141").from_hex().out.decode() == "AAA"
     assert (
-        Chepy("41;41;41").from_hex(delimiter=";", join_by="%").out().decode() == "A%A%A"
+        Chepy("41;41;41").from_hex(delimiter=";", join_by="%").out.decode() == "A%A%A"
     )
 
 
 def test_hex_to_int():
-    assert Chepy("0x123").hex_to_int().output == 291
-    assert Chepy("123").hex_to_int().output == 291
+    assert Chepy("0x123").hex_to_int().out == 291
+    assert Chepy("123").hex_to_int().out == 291
 
 
 def test_hex_to_binary():

@@ -12,11 +12,12 @@ class DateTime(ChepyCore):
         super().__init__(*data)
 
     @ChepyDecorators.call_stack
-    def from_unix_timestamp(self, format: str='%c') -> DateTimeT:
+    def from_unix_timestamp(self, format: str = "%c", utc: bool = False) -> DateTimeT:
         """Convert UNIX timestamp to datetime
 
         Args:
             format: Format to use for datetime.strftime()
+            utc: Whether to use UTC or local timezone
 
         Returns:
             Chepy: The Chepy object.
@@ -25,7 +26,11 @@ class DateTime(ChepyCore):
             >>> Chepy("1573426649").from_unix_timestamp()
             "Sun Nov 10 17:57:29 2019"
         """
-        self.state = datetime.fromtimestamp(self._convert_to_int()).strftime(format)
+        data = self._convert_to_int()
+        if utc:
+            self.state = datetime.utcfromtimestamp(data).strftime(format)
+        else:
+            self.state = datetime.fromtimestamp(data).strftime(format)
         return self
 
     @ChepyDecorators.call_stack

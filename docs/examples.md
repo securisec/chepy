@@ -26,6 +26,57 @@ print(c.o)
 StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}
 ```
 
+#### Recipe 3: From charCode
+
+```md
+from chepy import Chepy
+
+c = Chepy(data)
+
+c.substring(r'([0-9]{2,3}(,\s|))+')
+c.from_charcode(delimiter=',', base=10)
+c.substring(r'([0-9]{2,3}(,\s|))+')
+c.from_charcode(delimiter=',', base=10)
+print(c)
+```
+
+#### Recipe 5: Google ei timestamp
+```md
+from chepy import Chepy
+
+data = 'X9guXK1UxvTxBYLJiYAD'
+c = Chepy(data)
+
+c.base64_decode(url_safe=True)
+c.to_hex()
+c.slice(0, 8)
+c.swap_endianness()
+c.int_to_base(16)
+c.from_unix_timestamp()
+
+print(c.o)
+```
+
+# CTF
+
+#### HTB Business 2022 - Perseverence
+```md
+import base64
+from chepy import Chepy
+
+c = (
+    Chepy(data)
+    .base64_decode()
+    .raw_inflate()
+    .decode("utf_16_le")
+    .substring("SFR.+x9")
+    .remove_nonprintable()
+    .base64_decode()
+)
+
+print(c)
+```
+
 #### Cli
 [![asciicast](https://asciinema.org/a/3yBYcxTVp1ZIF3e81Lp9ZBggu.svg)](https://asciinema.org/a/3yBYcxTVp1ZIF3e81Lp9ZBggu)
 

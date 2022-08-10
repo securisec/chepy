@@ -16,6 +16,9 @@ New ideas:
   ☐ @high disable plugins from code
   ☐ homophonic decoder
   ☐ append method for core to add data to the state
+  ☐ qr create 
+  ☐ random from state
+  ☐ subsection. regex select from state and run all subsequent operations on the selected data
 
 Bug:
 

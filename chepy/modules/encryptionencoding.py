@@ -92,7 +92,7 @@ class EncryptionEncoding(ChepyCore):
         Examples:
             In this example, we will rotate by 20
 
-            >>> Chepy("some data").rotate(20).output
+            >>> Chepy("some data").rotate(20).out
             "migy xunu"
         """
         lc = string.ascii_lowercase
@@ -162,7 +162,7 @@ class EncryptionEncoding(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some").rot_47().output
+            >>> Chepy("some").rot_47().out
             "D@>6"
         """
         x = []

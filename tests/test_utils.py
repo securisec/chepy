@@ -2,22 +2,22 @@ from chepy import Chepy
 
 
 def test_reverse():
-    assert Chepy("abcdefg").reverse().output == "gfedcba"
+    assert Chepy("abcdefg").reverse().out == "gfedcba"
 
 
 def test_reverse_1():
-    assert Chepy("abcdefgh").reverse(4).output == "efghabcd"
+    assert Chepy("abcdefgh").reverse(4).out == "efghabcd"
 
 
 def test_count_occurances():
     assert (
-        Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").output
+        Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").out
         == 2
     )
     assert (
         Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja")
         .count_occurances("ja", True)
-        .output
+        .out
         == 1
     )
 

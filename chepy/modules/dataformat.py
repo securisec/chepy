@@ -189,7 +189,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").base58_encode().output.decode()
+            >>> Chepy("some data").base58_encode().out.decode()
             "2UDrs31qcWSPi"
         """
         self.state = base58.b58encode(self._convert_to_bytes())
@@ -208,7 +208,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("2UDrs31qcWSPi").base58_decode().output.decode()
+            >>> Chepy("2UDrs31qcWSPi").base58_decode().out.decode()
             "some data"
         """
         self.state = base58.b58decode(self.state)
@@ -227,7 +227,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").base85_encode().output.decode()
+            >>> Chepy("some data").base85_encode().out.decode()
             "F)Po,+Cno&@/"
         """
         self.state = base64.a85encode(self._convert_to_bytes())
@@ -246,7 +246,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("F)Po,+Cno&@/").base85_decode().output.decode()
+            >>> Chepy("F)Po,+Cno&@/").base85_decode().out.decode()
             "some data"
         """
         self.state = base64.a85decode(self._convert_to_bytes())
@@ -285,7 +285,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").base32_encode().output.decode()
+            >>> Chepy("some data").base32_encode().out.decode()
             "ONXW2ZJAMRQXIYI="
         """
         self.state = base64.b32encode(self._convert_to_bytes())
@@ -438,7 +438,9 @@ class DataFormat(ChepyCore):
             b'IqxhNG/YMLFV'
         """
         if url_safe:
-            self.state = base64.urlsafe_b64encode(self._convert_to_bytes())
+            self.state = base64.urlsafe_b64encode(self._convert_to_bytes()).replace(
+                b"=", b""
+            )
             return self
         if custom is not None:
             x = base64.b64encode(self._convert_to_bytes())
@@ -473,7 +475,7 @@ class DataFormat(ChepyCore):
             Base64 decode using a custom string
             >>> c = Chepy("QqxhNG/mMKtYPqoz64FVR42=")
             >>> c.base64_decode(custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
-            >>> c.out()
+            >>> c.out
             b"some random? data"
         """
         data = self._convert_to_str()
@@ -513,7 +515,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("AAA").to_hex().out().decode()
+            >>> Chepy("AAA").to_hex().out.decode()
             "414141"
         """
         if delimiter == "":
@@ -534,7 +536,7 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("414141").from_hex().out()
+            >>> Chepy("414141").from_hex().out
             b"AAA"
         """
         if delimiter is not None:
@@ -558,12 +560,12 @@ class DataFormat(ChepyCore):
         Examples:
             Chepy works with hex characters that start with a 0x
 
-            >>> Chepy("0x123").hex_to_int().output
+            >>> Chepy("0x123").hex_to_int().out
             291
 
             Without 0x in the hex
 
-            >>> Chepy("123").hex_to_int().output
+            >>> Chepy("123").hex_to_int().out
             291
         """
         if self._convert_to_str().startswith("0x"):
@@ -1304,7 +1306,7 @@ class DataFormat(ChepyCore):
         """
         data = self._convert_to_bytes()
         # check if hex
-        if not re.match(b"^[0-9a-fA-F]+$", data): # pragma: no cover
+        if not re.match(b"^[0-9a-fA-F]+$", data):  # pragma: no cover
             raise ValueError("Data is not hex")
         self.state = hex(struct.unpack("<I", struct.pack(">I", int(data, 16)))[0])[2:]
         return self

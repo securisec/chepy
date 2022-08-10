@@ -126,7 +126,7 @@ class ChepyCore(object):
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
                 "another method, or use one of the output methods "
-                "Example: .o, .output, .state or .out()\n\n"
+                "Example: .o, .out, .state or .out\n\n"
             )
             return ""
 
@@ -549,7 +549,7 @@ class ChepyCore(object):
             return str(self.state)
         elif isinstance(self.state, bytearray):
             return bytearray(self.state).decode()
-        elif isinstance(self.state, float): # pragma: no cover
+        elif isinstance(self.state, float):  # pragma: no cover
             return format(self.state, "f")
         else:  # pragma: no cover
             # todo check more types here
@@ -582,15 +582,6 @@ class ChepyCore(object):
         return self.state
 
     @property
-    def output(self):
-        """Get the final output
-
-        Returns:
-            Any: Final output
-        """
-        return self.state
-
-    @ChepyDecorators.call_stack
     def out(self) -> Any:
         """Get the final output
 
@@ -598,24 +589,6 @@ class ChepyCore(object):
             Any: Final output
         """
         return self.state
-
-    @ChepyDecorators.call_stack
-    def out_as_str(self) -> str:
-        """Get current value as str
-
-        Returns:
-            str: Current value as a string
-        """
-        return self._convert_to_str()
-
-    @ChepyDecorators.call_stack
-    def out_as_bytes(self) -> bytes:
-        """Get current value as bytes
-
-        Returns:
-            bytes: Current value as bytes
-        """
-        return self._convert_to_bytes()
 
     @ChepyDecorators.call_stack
     def get_by_index(self, index: int):
@@ -968,7 +941,7 @@ class ChepyCore(object):
         Examples:
             >>> c = Chepy("some data").to_hex().base64_encode()
             >>> c.save_recipe("/path/to/recipe)
-            >>> c.out()
+            >>> c.out
             NzM2ZjZkNjUyMDY0NjE3NDYx
         """
         with self._abs_path(path) as f:
@@ -986,7 +959,7 @@ class ChepyCore(object):
             Chepy: The Chepy object.
 
         Examples:
-            >>> c = Chepy("some data").load_recipe("/path/to/recipe").out()
+            >>> c = Chepy("some data").load_recipe("/path/to/recipe").out
             NzM2ZjZkNjUyMDY0NjE3NDYx
         """
         with self._abs_path(path) as f:
