@@ -200,6 +200,51 @@ class ChepyCore(object):
         logging.error(red(data))
         return None
 
+    def subsection(
+        self,
+        pattern: Union[str, bytes],
+        methods: List[Tuple[Union[str, object], dict]],
+        group: int = 0,
+    ):
+        """Run specified methods over a subsection of the state. This method will always treat the state 
+        as bytes. 
+
+        Args:
+            pattern (Union[str, bytes]): Regex pattern to match against.
+            methods (List[Tuple[Union[str, object], dict]]): Required. List of tuples. The first value of the 
+                tuple is the method name, the second value is a dictionary of arguments.
+            group (int, optional): Matching group. Defaults to 0.
+
+        Returns:
+            _type_: _description_
+        """
+        if isinstance(pattern, str):
+            pattern = pattern.encode()
+
+        old_state = self._convert_to_bytes()
+        new_state = b""
+        start = 0
+        for matched in re.compile(pattern).finditer(old_state):
+            end, newstart = matched.span()
+            self.state = matched.group(group)
+            new_state += old_state[start:end]
+            for method in methods:
+                if type(method[0]).__name__ == "method":
+                    method_name = method[0].__name__  # type: ignore
+                elif isinstance(method[0], str):
+                    method_name = method[0]
+                if len(method) > 1:
+                    getattr(self, method_name)(**method[1]).o
+                else:
+                    getattr(self, method_name)().o
+            start = newstart
+            new_state += self._convert_to_bytes()
+
+        new_state += old_state[start:]
+
+        self.state = new_state
+        return self
+
     def fork(self, methods: List[Tuple[Union[str, object], dict]]):
         """Run multiple methods on all available states
 
@@ -207,8 +252,7 @@ class ChepyCore(object):
         this should not contain any spaces.
 
         Args:
-            methods (List[Tuple[Union[str, object], dict]]): Required.
-                List of tuples
+            methods (List[Tuple[Union[str, object], dict]]): Required. List of tuples
 
         Returns:
             Chepy: The Chepy object.
@@ -473,14 +517,14 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def substring(self, pattern: Union[str, bytes], group: int = 0):
+    def substring(self, pattern: str, group: int = 0):
         """Choose a substring from current state as string
 
         The preceeding methods will only run on the substring and
         not the original state. Group capture is supported.
 
         Args:
-            pattern (Union[str, bytes]): Pattern to match.
+            pattern (str): Pattern to match.
             group (int, optional): Group to match. Defaults to 0.
 
         Returns:

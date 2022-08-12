@@ -227,3 +227,16 @@ def test_for_each():
         b"41",
         b"42",
     ]
+
+
+def test_subsection():
+    assert (
+        Chepy("he41ll42o").subsection(r"\d{2}", methods=[("from_hex",)]).o == b"heAllBo"
+    )
+    c = Chepy("he41ll42o")
+    assert (
+        c.subsection(
+            b"\d{2}", methods=[(c.from_hex,), (c.hmac_hash, {"key": "secret"})]
+        ).o
+        == b"he955a367a4c01f58118021054729c7fb54b5de94ell9cba467d60276777ce655337e060fa0aebfcc780o"
+    )

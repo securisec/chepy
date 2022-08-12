@@ -18,7 +18,6 @@ New ideas:
   ☐ append method for core to add data to the state
   ☐ qr create 
   ☐ random from state
-  ☐ subsection. regex select from state and run all subsequent operations on the selected data
 
 Bug:
 
@@ -55,6 +54,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ subsection. regex select from state and run all subsequent operations on the selected data @project(New ideas)
   ✔ base 91 @project(Methods)
   ✔ remove unprintable method @project(New ideas)
   ✔ qr plugin with aztec, barcodes, qr etc @project(New ideas)
