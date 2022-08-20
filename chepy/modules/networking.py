@@ -199,3 +199,29 @@ class Networking(ChepyCore):
                         final[key] = cert[key]
                 self.state = final
                 return self
+
+    @ChepyDecorators.call_stack
+    def int_to_ip(self) -> NetworkingT:
+        """Convert an integer to an IP address
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy(3232235777).int_to_ip().o
+        """
+        self.state = str(ipaddress.ip_address(self._convert_to_int()))
+        return self
+
+    @ChepyDecorators.call_stack
+    def ip_to_int(self) -> NetworkingT:
+        """Convert an integer to an IP address
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy(3232235777).int_to_ip().o
+        """
+        self.state = int(ipaddress.ip_address(self._convert_to_str()))
+        return self

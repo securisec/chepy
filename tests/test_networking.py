@@ -49,3 +49,7 @@ def test_parse_ipv6():
 def test_get_cert():
     assert Chepy("google.com").get_ssl_cert().o["subject"]["commonName"] != ""
 
+
+def test_int_to_ip():
+    assert Chepy("2130706433").int_to_ip().o == "127.0.0.1"
+    assert Chepy("127.0.0.1").ip_to_int().o == 2130706433
