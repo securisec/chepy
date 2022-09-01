@@ -70,7 +70,7 @@ print(
 - Extendable via [plugins](https://chepy-plugins.readthedocs.io/en/latest/)
 - Infinitely scalable as it can leverage the full Python library.
 - Chepy can interface with the full Cyberchef web app to a certain degree. It is easy to move from Chepy to Cyberchef if need be. 
-- The Chepy python library is significantly faster than the Cyberchef Node library.
+- The Chepy [python library](https://www.scaler.com/topics/python-libraries/) is significantly faster than the Cyberchef Node library.
 - Works with HTTP/S requests without CORS issues.
 
 #### Disadvantages
