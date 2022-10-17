@@ -38,7 +38,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def encode(self, encoding: str, errors: str='backslashreplace') -> LanguageT:
+    def encode(self, encoding: str, errors: str = "backslashreplace") -> LanguageT:
         """Encode the string using the given encoding.
 
         Args:
@@ -52,7 +52,7 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def decode(self, encoding: str, errors: str='backslashreplace') -> LanguageT:
+    def decode(self, encoding: str, errors: str = "backslashreplace") -> LanguageT:
         """Decode the string using the given encoding.
 
         Args:
@@ -87,4 +87,14 @@ class Language(ChepyCore):
         self.state = self._convert_to_bytes().decode(
             "unicode-escape", errors="backslashreplace"
         )
+        return self
+
+    @ChepyDecorators.call_stack
+    def str_to_unicode(self) -> LanguageT:
+        """Convert unicode to str
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = self._convert_to_str().encode("unicode_escape")
         return self

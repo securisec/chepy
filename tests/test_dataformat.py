@@ -24,6 +24,11 @@ def test_dict_to_json():
     )
 
 
+def test_dict_get_items():
+    o = Chepy({"a": 1, "b": 2}).dict_get_items("a", "b", "c").o
+    assert o[0] == 1 and o[1] == 2 and len(o) == 2
+
+
 def test_json_to_dict():
     assert Chepy('{"some": "data", "a": ["list", 1, true]}').json_to_dict().o == {
         "some": "data",

@@ -179,6 +179,10 @@ def test_decode_cp1258():
     )
 
 
+def test_str_to_unice():
+    assert Chepy("籯").str_to_unicode().o == b"\\u7c6f"
+
+
 def test_encode_iso8859_2():
     assert Chepy("Plzeň").encode("iso8859_2").to_hex().o.decode() == "506c7a65f2"
 

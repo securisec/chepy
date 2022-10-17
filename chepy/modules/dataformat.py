@@ -146,6 +146,26 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def dict_get_items(self, *keys) -> DataFormatT:
+        """Get items from a dict
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> o = Chepy({"a": 1, "b": 2}).dict_get_items("a", "b", "c").o
+            [1, 2]
+        """
+        assert isinstance(self.state, dict), "Not a dict object"
+        assert len(keys) > 0, "No keys provided"
+        o = list()
+        for k in keys:
+            if self.state.get(k):
+                o.append(self.state.get(k))
+        self.state = o
+        return self
+
+    @ChepyDecorators.call_stack
     def yaml_to_json(self) -> DataFormatT:
         """Convert yaml to a json string
 

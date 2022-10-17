@@ -6,3 +6,5 @@ test:
 
 test-all: test
 	pytest -v --disable-pytest-warnings tests_plugins/
+
+# git log --format=%B 4.0.0..5.0.0 | sed '/^\s*$/d' | sort | uniq
