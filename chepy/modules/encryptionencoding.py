@@ -603,7 +603,8 @@ class EncryptionEncoding(ChepyCore):
         key_format: str = "hex",
         iv_format: str = "hex",
     ) -> EncryptionEncodingT:
-        """Encrypt raw state with AES
+        """Encrypt raw state with AES. 
+        CFB mode reflects Cyberchef and not native python behaviour.
 
         Args:
             key (str): Required. The secret key
@@ -621,13 +622,17 @@ class EncryptionEncoding(ChepyCore):
             b"5fb8c186394fc399849b89d3b6605fa3"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
+        assert mode in ["CBC", "CFB", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
         key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
             self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 16))
+            return self
+        elif mode == "CFB":
+            cipher = AES.new(key, mode=AES.MODE_CFB, iv=iv, segment_size=128)
+            self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
@@ -659,7 +664,8 @@ class EncryptionEncoding(ChepyCore):
         key_format: str = "hex",
         iv_format: str = "hex",
     ) -> EncryptionEncodingT:
-        """Decrypt raw state encrypted with DES.
+        """Decrypt raw state encrypted with DES. 
+        CFB mode reflects Cyberchef and not native python behaviour.
 
         Args:
             key (str): Required. The secret key
@@ -680,13 +686,17 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        assert mode in ["CBC", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
+        assert mode in ["CBC", "CFB", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
 
         key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            return self
+        if mode == "CFB":
+            cipher = AES.new(key, mode=AES.MODE_CFB, iv=iv, segment_size=128)
+            self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
