@@ -64,6 +64,11 @@ class DataFormat(ChepyCore):
             "a,b,c"
         """
         assert isinstance(self.state, list), "Data in state not a list"
+        # convert the list of items in state appropiately
+        if isinstance(join_by, str):
+            self.state = [str(x) for x in self.state]
+        elif isinstance(join_by, bytes):
+            self.state = [bytes(x) for x in self.state]
         self.state = join_by.join(self.state)
         return self
 

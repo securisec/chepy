@@ -200,6 +200,8 @@ def test_to_list():
 
 def test_list_to_str():
     assert Chepy(["a", "b", "c"]).list_to_str(",").o == "a,b,c"
+    assert Chepy([1, 2, 3]).list_to_str((".")).o == "1.2.3"
+    assert Chepy([b"a", b"b"]).list_to_str(b".").o == b"a.b"
 
 
 def test_join_list():

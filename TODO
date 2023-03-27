@@ -3,6 +3,7 @@ Fix:
 Code:
   ☐ add more examples in docstrings
   ☐ Luhn validator https://guptaavi352.medium.com/ctflearn-writeups-9f247c2fe94c
+  ☐ 🚀 add crib for xor bruteforce
 
 New ideas:
   ☐ rubber ducky encode/decode
@@ -19,6 +20,9 @@ New ideas:
   ☐ qr create 
   ☐ random from state
   ☐ rot8000
+  ☐ us-ascii 7bit 20127 https://gchq.github.io/CyberChef/#recipe=Encode_text('US-ASCII%20(7-bit)%20(20127)') 걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽
+  ☐ vigenere make aware of all cases/numbers/specials. i.e. npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R} key victory shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}
+  ☐ ascii shift cipher kqfl ? snyjHYK"8fwymdxf~xdm8qq5$ = niteCTF{3arth_says_h3ll0} somewhat
 
 Bug:
 
@@ -55,6 +59,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ for join_by handle int
   ✔ ip from int and vice versa @project(New ideas)
   ✔ subsection. regex select from state and run all subsequent operations on the selected data @project(New ideas)
   ✔ base 91 @project(Methods)
