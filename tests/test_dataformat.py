@@ -355,7 +355,13 @@ def test_from_hexdump():
 
 
 def test_nato_convert():
-    assert Chepy("abc:1").convert_to_nato().o == "Alpha Bravo Charlie : 1"
+    assert Chepy("abc:1").to_nato().o == "Alpha Bravo Charlie : 1"
+    assert (
+        Chepy("Lima Alpha Kilo Echo Mike India Charlie Hotel India Golf Alpha November")
+        .from_nato()
+        .o
+        == "LAKEMICHIGAN"
+    )
 
 
 def test_swap_strings():

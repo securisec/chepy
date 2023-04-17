@@ -1184,7 +1184,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def convert_to_nato(self, join_by: str = " ") -> DataFormatT:
+    def to_nato(self, join_by: str = " ") -> DataFormatT:
         """Convert string to NATO phonetic format.
 
         Example: abc = Alpha Bravo Charlie
@@ -1204,6 +1204,22 @@ class DataFormat(ChepyCore):
             else:
                 hold.append(d)
         self.state = join_by.join(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_nato(self, delimiter: str = " ", join_by: str = "") -> DataFormatT:
+        """Translate NATO phoentic to words
+
+        Args:
+            delimiter (str, optional): Delimiter to split on. Defaults to ' '.
+            join_by (str, optional): Join result by. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        data = self._convert_to_str().split(delimiter)
+        d = {v: k for k, v in Encoding.NATO_CONSTANTS_DICT.items()}
+        self.state = join_by.join([d.get(p, "") for p in data])
         return self
 
     @ChepyDecorators.call_stack
