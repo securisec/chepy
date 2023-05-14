@@ -3,7 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
-from typing import Literal, TypeVar
+from typing import Literal, TypeVar, Dict
 
 import lazy_import
 
@@ -603,7 +603,7 @@ class EncryptionEncoding(ChepyCore):
         key_format: str = "hex",
         iv_format: str = "hex",
     ) -> EncryptionEncodingT:
-        """Encrypt raw state with AES. 
+        """Encrypt raw state with AES.
         CFB mode reflects Cyberchef and not native python behaviour.
 
         Args:
@@ -664,7 +664,7 @@ class EncryptionEncoding(ChepyCore):
         key_format: str = "hex",
         iv_format: str = "hex",
     ) -> EncryptionEncodingT:
-        """Decrypt raw state encrypted with DES. 
+        """Decrypt raw state encrypted with DES.
         CFB mode reflects Cyberchef and not native python behaviour.
 
         Args:
@@ -1052,3 +1052,22 @@ class EncryptionEncoding(ChepyCore):
             h = Hash.SHA256.new(self._convert_to_bytes())
             self.state = PKCS1_15.new(key).verify(h, signature)
             return self
+
+    @ChepyDecorators.call_stack
+    def monoalphabetic_substitution(
+        self, mapping: Dict[str, str] = {}
+    ) -> EncryptionEncodingT:
+        """Monoalphabetic substitution. Re-map characters
+
+        Args:
+            mapping (Dict[str, str], optional): Mapping of characters where key is the character to map and value is the new character to replace with. Defaults to {}.
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        hold = ""
+        cipher = self._convert_to_str()
+        for c in cipher:
+            hold += mapping.get(c.lower(), c)
+        self.state = hold
+        return self

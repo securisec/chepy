@@ -556,3 +556,7 @@ def test_rsa_sign():
         Chepy("lol").rsa_sign("tests/files/private.pem").to_hex().o
         == b"ae12fa91f12af7e1c04e7893ce43fc76195d30203ad0ab88fac3631feb026ee8832d57584a977fe9f70139d8dd7c74b904643ab11493935c642e563752325c1ecde98a29bfaaa714e513d7c3548e9fbea6f2f2705eec3567f4ba868b3ca16f8ede4155e71b854042810bb836dda031c2e540175f4573103c065311d38b7246a6"
     )
+
+
+def test_monoalphabetic_substitution():
+    assert Chepy("lol").monoalphabetic_substitution({"l": "t", "o": "s"}).o == "tst"
