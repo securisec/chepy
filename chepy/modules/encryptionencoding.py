@@ -16,6 +16,7 @@ import json
 AES = lazy_import.lazy_module("Crypto.Cipher.AES")
 ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
 DES = lazy_import.lazy_module("Crypto.Cipher.DES")
+ChaCha20 = lazy_import.lazy_module("Crypto.Cipher.ChaCha20")
 DES3 = lazy_import.lazy_module("Crypto.Cipher.DES3")
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
 Hash = lazy_import.lazy_module("Crypto.Hash")
@@ -496,6 +497,58 @@ class EncryptionEncoding(ChepyCore):
             cipher = DES.new(key, mode=DES.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
+
+    @ChepyDecorators.call_stack
+    def chacha_encrypt(
+        self,
+        key: str,
+        nonce: str = "0000000000000000",
+        key_format: str = "hex",
+        nonce_format: str = "hex",
+    ) -> EncryptionEncodingT:
+        """Encrypt raw state with ChaCha 20 rounds
+
+        Args:
+            key (str): Required. The secret key
+            nonce (str, optional): Nonce. Defaults to '0000000000000000'.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            nonce_format (str, optional): Format of nonce. Defaults to 'hex'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        key, nonce = self._convert_key(key, nonce, key_format, nonce_format)
+
+        cipher = ChaCha20.new(key=key, nonce=nonce)
+        self.state = cipher.encrypt(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def chacha_decrypt(
+        self,
+        key: str,
+        nonce: str = "0000000000000000",
+        key_format: str = "hex",
+        nonce_format: str = "hex",
+    ) -> EncryptionEncodingT:
+        """Decrypt raw state encrypted with ChaCha 20 rounds.
+
+        Args:
+            key (str): Required. The secret key
+            nonce (str, optional): nonce for certain modes only. Defaults to '0000000000000000'.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            nonce_format (str, optional): Format of nonce. Defaults to 'hex'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        key, nonce = self._convert_key(key, nonce, key_format, nonce_format)
+
+        cipher = ChaCha20.new(key=key, nonce=nonce)
+        self.state = cipher.decrypt(self._convert_to_bytes())
+        return self
 
     @ChepyDecorators.call_stack
     def triple_des_encrypt(

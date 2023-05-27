@@ -560,3 +560,29 @@ def test_rsa_sign():
 
 def test_monoalphabetic_substitution():
     assert Chepy("lol").monoalphabetic_substitution({"l": "t", "o": "s"}).o == "tst"
+
+
+def test_chacha_decrypt():
+    assert (
+        Chepy("0d118d5f5807747b085473553146a3c76cf1ef61b976519240")
+        .from_hex()
+        .chacha_decrypt(
+            "4c6561726e696e672069732061206c6966656c6f6e6720656e646561766f722e",
+            "48656c6c6f20776f726c642e",
+        )
+        .o
+        == b"4t_lea5t_1ts_n0t_Electr0n"
+    )
+
+
+def test_chacha_encrypt():
+    assert (
+        Chepy("4t_lea5t_1ts_n0t_Electr0n")
+        .chacha_encrypt(
+            "4c6561726e696e672069732061206c6966656c6f6e6720656e646561766f722e",
+            "48656c6c6f20776f726c642e",
+        )
+        .to_hex()
+        .o
+        == b"0d118d5f5807747b085473553146a3c76cf1ef61b976519240"
+    )
