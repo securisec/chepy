@@ -2,7 +2,10 @@ from chepy import Chepy
 
 
 def test_extract_strings():
-    assert Chepy("tests/files/hello").load_file().extract_strings().o.splitlines()[0] == '__PAGEZERO'
+    assert (
+        Chepy("tests/files/hello").load_file().extract_strings().o.splitlines()[0]
+        == "__PAGEZERO"
+    )
 
 
 def test_extract_hashes():
@@ -214,3 +217,21 @@ def test_extract_b64():
     when an unknown printer took a galley of type c2VjdXJpc2VjLnRlc3QuZGF0YQo= and scrambled it to make a type specimen book. 
     """
     assert Chepy(data).extract_base64().o == "c2VjdXJpc2VjLnRlc3QuZGF0YQo="
+
+
+def test_find_longest_continious_pattern():
+    str1 = "Helhello worldlo World"
+    str2 = "hello world"
+    assert Chepy(str1).find_longest_continious_pattern(str2).o == b"hello world"
+    str1 = b"Helhello worldlo World"
+    str2 = b"hello world"
+    assert Chepy(str1).find_longest_continious_pattern(str2).o == b"hello world"
+
+
+def test_find_continuous_patterns():
+    str1 = "Helhello worldlo World"
+    str2 = "hello world"
+    assert len(Chepy(str1).find_continuous_patterns(str2, 3).o) == 73
+    str1 = b"Helhello worldlo World"
+    str2 = b"hello world"
+    assert len(Chepy(str1).find_continuous_patterns(str2, 3).o) == 73

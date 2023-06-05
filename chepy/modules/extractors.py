@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Union
 from urllib.parse import urlparse as _pyurlparse
 
 import regex as re
@@ -44,7 +44,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_strings(self, length: int = 4, join_by: str='\n') -> ExtractorsT:
+    def extract_strings(self, length: int = 4, join_by: str = "\n") -> ExtractorsT:
         """Extract strings from state
 
         Args:
@@ -70,9 +70,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_ips(
-        self, is_binary: bool = False
-    ) -> ExtractorsT:
+    def extract_ips(self, is_binary: bool = False) -> ExtractorsT:
         """Extract ipv4 and ipv6 addresses
 
         Args:
@@ -116,7 +114,10 @@ class Extractors(ChepyCore):
         pattern = b"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if is_binary:
             matched = list(
-                filter(lambda x: re.search(pattern, x), self.extract_strings().o.encode().splitlines())
+                filter(
+                    lambda x: re.search(pattern, x),
+                    self.extract_strings().o.encode().splitlines(),
+                )
             )
         else:  # pragma: no cover
             matched = list(
@@ -437,4 +438,63 @@ class Extractors(ChepyCore):
             self.state = found
         else:
             self.state = found[0]
+        return self
+
+    @ChepyDecorators.call_stack
+    def find_continuous_patterns(self, str2: Union[str, bytes], min_value: int = 10):
+        """Find continius patterns between the state as a string and the provided str2
+
+        Args:
+            str2 (Union[str, bytes]): String to find matches against
+            min_value (int, optional): Minimum value of continious matches. Defaults to 10.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        str1 = self._convert_to_bytes()
+        if isinstance(str2, str):
+            str2 = str2.encode()
+        combined_data = str1 + str2
+        data_length = len(combined_data)
+        patterns = []
+
+        for length in range(1, data_length + 1):
+            for start in range(data_length - length + 1):
+                pattern = combined_data[start : start + length]
+
+                if pattern in str1 and pattern in str2 and len(pattern) > min_value:
+                    patterns.append(pattern)
+
+        self.state = patterns
+        return self
+
+    @ChepyDecorators.call_stack
+    def find_longest_continious_pattern(self, str2: str):
+        """Find longest continious pattern
+
+        Args:
+            str2 (Union[str, bytes]): String to find match against
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        str1 = self._convert_to_bytes()
+        if isinstance(str2, str):
+            str2 = str2.encode()
+        combined_data = str1 + str2
+        data_length = len(combined_data)
+        matches = []
+
+        for length in range(1, data_length + 1):
+            for start in range(data_length - length + 1):
+                pattern = combined_data[start : start + length]
+
+                if (
+                    pattern in str1
+                    and pattern in str2
+                    and len(pattern) > len(matches[-1:])
+                ):
+                    matches.append(pattern)
+
+        self.state = max(matches, key=len) if matches else ""
         return self
