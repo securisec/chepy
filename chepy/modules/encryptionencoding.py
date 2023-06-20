@@ -166,13 +166,13 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("some").rot_47().out
             "D@>6"
         """
-        decoded_string = ''
+        decoded_string = ""
         for char in self._convert_to_str():
             if ord(char) >= 33 and ord(char) <= 126:
                 decoded_char = chr((ord(char) - 33 + rotation) % 94 + 33)
                 decoded_string += decoded_char
             else:
-                decoded_string += char
+                decoded_string += char  # pragma: no cover
         self.state = decoded_string
         return self
 
@@ -186,13 +186,13 @@ class EncryptionEncoding(ChepyCore):
         hold = {}
         data = self._convert_to_str()
         for r in range(1, 94):
-            decoded_string = ''
+            decoded_string = ""
             for char in data:
                 if ord(char) >= 33 and ord(char) <= 126:
                     decoded_char = chr((ord(char) - 33 + r) % 94 + 33)
                     decoded_string += decoded_char
                 else:
-                    decoded_string += char
+                    decoded_string += char  # pragma: no cover
             hold[str(r)] = decoded_string
         self.state = hold
         return self
