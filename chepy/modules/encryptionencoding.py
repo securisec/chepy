@@ -150,14 +150,14 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_47(self, amount: int = 14) -> EncryptionEncodingT:
+    def rot_47(self, rotation: int = 47) -> EncryptionEncodingT:
         """ROT 47 encoding
 
         A slightly more complex variation of a caesar cipher, which includes
         ASCII characters from 33 '!' to 126 '~'. Default rotation: 47.
 
         Args:
-            amount (int, optional): Amount to rotate by. Defaults to 14.
+            rotation (int, optional): Amount to rotate by. Defaults to 14.
 
         Returns:
             Chepy: The Chepy object.
@@ -166,14 +166,35 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("some").rot_47().out
             "D@>6"
         """
-        x = []
-        for i in range(len(self.state)):
-            j = ord(self.state[i])
-            if j >= 33 and j <= 126:
-                x.append(chr(33 + ((j + amount) % 94)))
-            else:  # pragma: no cover
-                x.append(self.state[i])
-        self.state = "".join(x)
+        decoded_string = ''
+        for char in self._convert_to_str():
+            if ord(char) >= 33 and ord(char) <= 126:
+                decoded_char = chr((ord(char) - 33 + rotation) % 94 + 33)
+                decoded_string += decoded_char
+            else:
+                decoded_string += char
+        self.state = decoded_string
+        return self
+
+    @ChepyDecorators.call_stack
+    def rot_47_bruteforce(self) -> EncryptionEncodingT:
+        """ROT 47 bruteforce
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        hold = {}
+        data = self._convert_to_str()
+        for r in range(1, 94):
+            decoded_string = ''
+            for char in data:
+                if ord(char) >= 33 and ord(char) <= 126:
+                    decoded_char = chr((ord(char) - 33 + r) % 94 + 33)
+                    decoded_string += decoded_char
+                else:
+                    decoded_string += char
+            hold[str(r)] = decoded_string
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack

@@ -7,6 +7,12 @@ def test_rot_47():
     assert Chepy("some").rot_47().out == "D@>6"
 
 
+def test_rot_47_bruteforce():
+    c = Chepy("96==@").rot_47_bruteforce().o
+    assert c["1"] == ":7>>A"
+    assert c["47"] == "hello"
+
+
 def test_rotate():
     assert Chepy("some data").rotate(20).out == "migy xunu"
 
