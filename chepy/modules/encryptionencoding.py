@@ -1048,11 +1048,11 @@ class EncryptionEncoding(ChepyCore):
             if word_delim in chars:
                 chars = re.sub(word_delim, "", chars, re.I)
                 if morse_code_dict.get(chars) is not None:
-                    decode += " " + morse_code_dict.get(chars)
+                    decode += " " + morse_code_dict.get(chars, '')
                 else:  # pragma: no cover
                     decode += " " + chars
             else:
-                decode += morse_code_dict.get(chars)
+                decode += morse_code_dict.get(chars, '')
         self.state = decode
         return self
 

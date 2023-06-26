@@ -137,7 +137,7 @@ def test_run_recipe():
         .run_recipe(
             recipes=[
                 {
-                    "function": "base64_decode",
+                    "function": "from_base64",
                     "args": {"custom": None},
                 },
                 {"function": "swap_case", "args": {}},
@@ -152,7 +152,7 @@ def test_recipe():
     temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
     Chepy(
         "tests/files/encoding"
-    ).load_file().reverse().rot_13().base64_decode().base32_decode().str_from_hexdump().save_recipe(
+    ).load_file().reverse().rot_13().from_base64().from_base32().str_from_hexdump().save_recipe(
         temp
     )
 
@@ -166,7 +166,7 @@ def test_recipe():
 def test_loop():
     assert (
         Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
-        .loop(6, "base64_decode")
+        .loop(6, "from_base64")
         .o
         == b"securisec"
     )

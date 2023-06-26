@@ -6,11 +6,11 @@ def test_eval():
 
 
 def test_base16_encode():
-    assert Chepy("test").base16_encode().o == b"74657374"
+    assert Chepy("test").to_base16().o == b"74657374"
 
 
 def test_base16_decode():
-    assert Chepy("74657374").base16_decode().o == b"test"
+    assert Chepy("74657374").from_base16().o == b"test"
 
 
 def test_bytes_to_ascii():
@@ -27,6 +27,8 @@ def test_dict_to_json():
 def test_dict_get_items():
     o = Chepy({"a": 1, "b": 2}).dict_get_items("a", "b", "c").o
     assert o[0] == 1 and o[1] == 2 and len(o) == 2
+    o = Chepy({"a": 1, "b": 2}).dict_get_items().o
+    assert len(o) == 2
 
 
 def test_json_to_dict():
@@ -91,46 +93,46 @@ education: '4 GCSEs
     )
 
 
-def test_base58_decode():
-    assert Chepy("2UDrs31qcWSPi").base58_decode().out.decode() == "some data"
+def test_from_base58():
+    assert Chepy("2UDrs31qcWSPi").from_base58().out.decode() == "some data"
 
 
-def test_base85_encode():
-    assert Chepy("some data").base85_encode().out.decode() == "F)Po,+Cno&@/"
+def test_to_base85():
+    assert Chepy("some data").to_base85().out.decode() == "F)Po,+Cno&@/"
 
 
-def test_base85_decode():
-    assert Chepy("F)Po,+Cno&@/").base85_decode().out.decode() == "some data"
+def test_from_base85():
+    assert Chepy("F)Po,+Cno&@/").from_base85().out.decode() == "some data"
 
 
-def test_base32_encode():
-    assert Chepy("some data").base32_encode().out.decode() == "ONXW2ZJAMRQXIYI="
+def test_to_base32():
+    assert Chepy("some data").to_base32().out.decode() == "ONXW2ZJAMRQXIYI="
 
 
-def test_base64_encode():
-    assert Chepy("some data").base64_encode().out.decode() == "c29tZSBkYXRh"
+def test_to_base64():
+    assert Chepy("some data").to_base64().out.decode() == "c29tZSBkYXRh"
     assert (
         Chepy("some random? data")
-        .base64_encode(
+        .to_base64(
             custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
         )
         .o
         == b"QqxhNG/mMKtYPqoz64FVR42="
     )
-    assert Chepy("test").base64_encode(url_safe=True).o == b"dGVzdA"
+    assert Chepy("test").to_base64(url_safe=True).o == b"dGVzdA"
 
 
-def test_base64_decode():
-    assert Chepy("c29tZSByYW5kb20/IGRhdGE").base64_decode().o == b"some random? data"
+def test_from_base64():
+    assert Chepy("c29tZSByYW5kb20/IGRhdGE").from_base64().o == b"some random? data"
     assert (
         Chepy("QqxhNG/mMKtYPqoz64FVR42=")
-        .base64_decode(
+        .from_base64(
             custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
         )
         .o
         == b"some random? data"
     )
-    assert Chepy("dGVzdA").base64_decode(url_safe=True).o == b"test"
+    assert Chepy("dGVzdA").from_base64(url_safe=True).o == b"test"
 
 
 def test_decode_bytes():
@@ -140,14 +142,14 @@ def test_decode_bytes():
         )
         .decode_bytes()
         .extract_base64()
-        .base64_decode()
+        .from_base64()
         .o
         == b"247CTF{da80795f8a5cab2e037d7385807b9a91}"
     )
 
 
-def test_base58_encode():
-    assert Chepy("some data").base58_encode().out.decode() == "2UDrs31qcWSPi"
+def test_to_base58():
+    assert Chepy("some data").to_base58().out.decode() == "2UDrs31qcWSPi"
 
 
 def test_to_hex():
@@ -180,16 +182,16 @@ def test_hex_to_str():
     assert Chepy("4100").hex_to_str(ignore=True).o == "A\x00"
 
 
-def test_url_encode():
+def test_to_url_encoding():
     assert (
-        Chepy("https://google.com/?lol=some data&a=1").url_encode(safe="/:").o
+        Chepy("https://google.com/?lol=some data&a=1").to_url_encoding(safe="/:").o
         == "https://google.com/%3Flol%3Dsome+data%26a%3D1"
     )
 
 
-def test_url_decode():
+def test_from_url_encoding():
     assert (
-        Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").url_decode().o
+        Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").from_url_encoding().o
         == "https://google.com/?lol=some data&a=1"
     )
 
@@ -414,9 +416,13 @@ def test_remove_nonprintable():
 def test_base91():
     data = "flag{some_flag}"
     out = "@iH<,{_{W$OsuxXi%]D"
-    assert Chepy(data).base91_encode().o == out
-    assert Chepy(out).base91_decode().o.decode() == data
+    assert Chepy(data).to_base91().o == out
+    assert Chepy(out).from_base91().o.decode() == data
 
 
 def test_swap_endianness():
     assert Chepy("01020304").swap_endianness().o == "4030201"
+
+
+def test_bruteforce_base_xx():
+    assert Chepy("dGVzdA==").bruteforce_from_base_xx().o["base64"] == b"test"

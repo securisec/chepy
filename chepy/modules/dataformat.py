@@ -152,7 +152,7 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def dict_get_items(self, *keys) -> DataFormatT:
-        """Get items from a dict
+        """Get items from a dict. If no keys are specified, it will return all items.
 
         Returns:
             Chepy: The Chepy object.
@@ -162,7 +162,9 @@ class DataFormat(ChepyCore):
             [1, 2]
         """
         assert isinstance(self.state, dict), "Not a dict object"
-        assert len(keys) > 0, "No keys provided"
+        if len(keys) == 0:
+            self.state = list(self.state.values())
+            return self
         o = list()
         for k in keys:
             if self.state.get(k):
@@ -202,7 +204,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base58_encode(self) -> DataFormatT:
+    def to_base58(self) -> DataFormatT:
         """Encode as Base58
 
         Base58 is a notation for encoding arbitrary byte data using a
@@ -214,14 +216,14 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").base58_encode().out.decode()
+            >>> Chepy("some data").to_base58().out.decode()
             "2UDrs31qcWSPi"
         """
         self.state = base58.b58encode(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack
-    def base58_decode(self) -> DataFormatT:
+    def from_base58(self) -> DataFormatT:
         """Decode as Base58
 
         Base58 is a notation for encoding arbitrary byte data using a
@@ -233,14 +235,14 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("2UDrs31qcWSPi").base58_decode().out.decode()
+            >>> Chepy("2UDrs31qcWSPi").from_base58().out.decode()
             "some data"
         """
         self.state = base58.b58decode(self.state)
         return self
 
     @ChepyDecorators.call_stack
-    def base85_encode(self) -> DataFormatT:
+    def to_base85(self) -> DataFormatT:
         """Encode as Base58
 
         Base85 is a notation for encoding arbitrary byte data using a
@@ -252,14 +254,14 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some data").base85_encode().out.decode()
+            >>> Chepy("some data").to_base85().out.decode()
             "F)Po,+Cno&@/"
         """
         self.state = base64.a85encode(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack
-    def base85_decode(self) -> DataFormatT:
+    def from_base85(self) -> DataFormatT:
         """Decode as Base85
 
         Base85 is a notation for encoding arbitrary byte data using a
@@ -271,14 +273,14 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("F)Po,+Cno&@/").base85_decode().out.decode()
+            >>> Chepy("F)Po,+Cno&@/").from_base85().out.decode()
             "some data"
         """
         self.state = base64.a85decode(self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack
-    def base16_encode(self) -> DataFormatT:
+    def to_base16(self) -> DataFormatT:
         """Encode state in base16
 
         Returns:
@@ -288,7 +290,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base16_decode(self) -> DataFormatT:
+    def from_base16(self) -> DataFormatT:
         """Decode state in base16
 
         Returns:
@@ -298,7 +300,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base32_encode(self) -> DataFormatT:
+    def to_base32(self) -> DataFormatT:
         """Encode as Base32
 
         Base32 is a notation for encoding arbitrary byte data using a
@@ -317,7 +319,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base32_decode(self) -> DataFormatT:
+    def from_base32(self) -> DataFormatT:
         """Decode as Base32
 
         Base32 is a notation for encoding arbitrary byte data using a
@@ -332,7 +334,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base91_encode(self) -> DataFormatT:  # pragma: no cover
+    def to_base91(self) -> DataFormatT:  # pragma: no cover
         """Base91 encode
         Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L69
 
@@ -367,7 +369,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base91_decode(self) -> DataFormatT:  # pragma: no cover
+    def from_base91(self) -> DataFormatT:  # pragma: no cover
         """Decode as Base91
         Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L42
 
@@ -441,7 +443,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_encode(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
+    def to_base64(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
         """Encode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -459,7 +461,7 @@ class DataFormat(ChepyCore):
         Examples:
             >>> # To use a custom character set, use:
             >>> custom = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-            >>> Chepy("Some data").base64_encode(custom=custom).o
+            >>> Chepy("Some data").to_base64(custom=custom).o
             b'IqxhNG/YMLFV'
         """
         if url_safe:
@@ -481,7 +483,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def base64_decode(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
+    def from_base64(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -499,7 +501,7 @@ class DataFormat(ChepyCore):
         Examples:
             Base64 decode using a custom string
             >>> c = Chepy("QqxhNG/mMKtYPqoz64FVR42=")
-            >>> c.base64_decode(custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            >>> c.from_base64(custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             >>> c.out
             b"some random? data"
         """
@@ -743,7 +745,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def url_encode(self, safe: str = "") -> DataFormatT:
+    def to_url_encoding(self, safe: str = "") -> DataFormatT:
         """URL encode
 
         Encodes problematic characters into percent-encoding,
@@ -758,21 +760,21 @@ class DataFormat(ChepyCore):
         Examples:
             Url encode while specifying save characters
 
-            >>> Chepy("https://google.com/?lol=some data&a=1").url_encode(safe="/:").o
+            >>> Chepy("https://google.com/?lol=some data&a=1").to_url_encoding(safe="/:").o
             "https://google.com/%3Flol%3Dsome+data%26a%3D1"
         """
         self.state = _urllib_quote_plus(self._convert_to_str(), safe=safe)
         return self
 
     @ChepyDecorators.call_stack
-    def url_decode(self) -> DataFormatT:
+    def from_url_encoding(self) -> DataFormatT:
         """Converts URI/URL percent-encoded characters back to their raw values.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").url_decode().o
+            >>> Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").from_url_encoding().o
             "https://google.com/?lol=some data&a=1"
         """
         self.state = _urllib_unquote_plus(self._convert_to_str())
@@ -1350,4 +1352,29 @@ class DataFormat(ChepyCore):
         if not re.match(b"^[0-9a-fA-F]+$", data):  # pragma: no cover
             raise ValueError("Data is not hex")
         self.state = hex(struct.unpack("<I", struct.pack(">I", int(data, 16)))[0])[2:]
+        return self
+
+    @ChepyDecorators.call_stack
+    def bruteforce_from_base_xx(self):
+        """Bruteforce various base encodings. Current supports base85, base16, base32, base64, base85, base58
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        hold = {}
+        ops = {
+            "base85": base64.a85decode,
+            "base16": base64.b16decode,
+            "base32": base64.b32decode,
+            "base64": base64.b64decode,
+            "base85": base64.b85decode,
+            "base58": base58.b58decode,
+        }
+        data = self._convert_to_bytes()
+        for do in ops.items():
+            try:
+                hold[do[0]] = do[1](data)
+            except:
+                hold[do[0]] = None
+        self.state = hold
         return self

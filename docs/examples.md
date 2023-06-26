@@ -18,8 +18,8 @@ c = (
     .load_file()
     .reverse()
     .rot_13()
-    .base64_decode()
-    .base32_decode()
+    .from_base64()
+    .from_base32()
     .hexdump_to_str()
 )
 print(c.o)
@@ -47,7 +47,7 @@ from chepy import Chepy
 data = 'X9guXK1UxvTxBYLJiYAD'
 c = Chepy(data)
 
-c.base64_decode(url_safe=True)
+c.from_base64(url_safe=True)
 c.to_hex()
 c.slice(0, 8)
 c.swap_endianness()
@@ -66,12 +66,12 @@ from chepy import Chepy
 
 c = (
     Chepy(data)
-    .base64_decode()
+    .from_base64()
     .raw_inflate()
     .decode("utf_16_le")
     .substring("SFR.+x9")
     .remove_nonprintable()
-    .base64_decode()
+    .from_base64()
 )
 
 print(c)
@@ -125,7 +125,7 @@ from chepy.extras.crypto_extras import xor_bruteforce_multi
 import re
 
 chall = "XUBdTFdScw5XCVRGTglJXEpMSFpOQE5AVVxJBRpLT10aYBpIVwlbCVZATl1WTBpaTkBOQFVcSQdH"
-c = Chepy(chall).base64_decode()
+c = Chepy(chall).from_base64()
 for match in xor_bruteforce_multi(c.o, min=2, max=2):
     if re.search('gigem', match['out'], re.I):
         print(match)
@@ -238,7 +238,7 @@ challs = [
 
 c = Chepy(*challs).fork(
     [
-        ("base64_decode",),
+        ("from_base64",),
         (
             "aes_decrypt",
             {"key": "kiwi037900000000", "iv": "itsasecret000000", "hex_iv": False},
@@ -270,7 +270,7 @@ from chepy import Chepy
 
 c = (
     Chepy("eJyzMNdRMDQwBBEWOgqWlkCGIZhnCRU3NdBRMDODyZtD1RiAtZlARAwNzQDKrwzB")
-    .base64_decode()
+    .from_base64()
     .zlib_decompress()
     .split_by(", ")
     .from_decimal()

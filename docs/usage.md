@@ -176,15 +176,15 @@ c = (
     .load_file()
     .reverse()
     .rot_13()
-    .base64_decode()
-    .base32_decode()
+    .from_base64()
+    .from_base32()
     .hexdump_to_str()
     .save_recipe('/tmp/a.recipe')
 )
 ```
 This code will create the follow JSON recipe:
 ```json
-[{"function":"load_file","args":{}},{"function":"reverse","args":{"count":1}},{"function":"rot_13","args":{}},{"function":"base64_decode","args":{"custom":null}},{"function":"base32_decode","args":{}},{"function":"hexdump_to_str","args":{}}]
+[{"function":"load_file","args":{}},{"function":"reverse","args":{"count":1}},{"function":"rot_13","args":{}},{"function":"from_base64","args":{"custom":null}},{"function":"from_base32","args":{}},{"function":"hexdump_to_str","args":{}}]
 ```
 
 #### load_recipe

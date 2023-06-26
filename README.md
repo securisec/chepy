@@ -10,7 +10,6 @@
 [![](https://img.shields.io/pypi/v/chepy.svg?logo=pypi&label=pypi)](https://pypi.python.org/pypi/chepy)
 
 [![](https://codecov.io/gh/securisec/chepy/branch/master/graph/badge.svg?token=q3pRktSVBu)](https://codecov.io/gh/securisec/chepy)
-![](https://img.shields.io/sonar/coverage/securisec_chepy?color=limegreen&logo=sonarcloud&label=SonarCloud&server=https%3A%2F%2Fsonarcloud.io)
 
 [![](https://img.shields.io/badge/code%20style-black-000000.svg?label=Style)](https://github.com/securisec/chepy)
 ![](https://img.shields.io/github/license/securisec/chepy?label=License)
@@ -52,8 +51,8 @@ print(
     .load_file()
     .reverse()
     .rot_13()
-    .base64_decode()
-    .base32_decode()
+    .from_base64()
+    .from_base32()
     .hexdump_to_str()
     .o
 )

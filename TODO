@@ -62,6 +62,8 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ base decode all bases
+  ✔ rename base64 function to from_basexx
   ✔ ✨ cha cha encode, decode
   ✔ ✨ monoalphabetic substitution
   ✔ ✨ from nato

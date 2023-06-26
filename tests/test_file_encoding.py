@@ -22,6 +22,6 @@ def test_reverse():
 def test_flag():
     c = Chepy(path).load_file()
     assert (
-        c.reverse().rot_13().base64_decode().base32_decode().str_from_hexdump().out
+        c.reverse().rot_13().from_base64().from_base32().str_from_hexdump().out
         == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
     )
