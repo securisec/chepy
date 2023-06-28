@@ -426,3 +426,21 @@ def test_swap_endianness():
 
 def test_bruteforce_base_xx():
     assert Chepy("dGVzdA==").bruteforce_from_base_xx().o["base64"] == b"test"
+
+
+def test_long_to_bytes():
+    assert (
+        Chepy(
+            "11515195063862318899931685488813747395775516287289682636499965282714637259206269"
+        )
+        .long_to_bytes()
+        .o
+        == b"crypto{3nc0d1n6_4ll_7h3_w4y_d0wn}"
+    )
+
+
+def test_bytes_to_long():
+    assert (
+        Chepy("crypto{3nc0d1n6_4ll_7h3_w4y_d0wn}").bytes_to_long().o
+        == 11515195063862318899931685488813747395775516287289682636499965282714637259206269
+    )

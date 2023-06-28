@@ -16,6 +16,8 @@ from typing import TypeVar, Union
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
+crypto_number = lazy_import.lazy_module("Crypto.Util.number")
+
 from ..core import ChepyCore, ChepyDecorators
 from chepy.modules.internal.constants import Encoding
 
@@ -1355,7 +1357,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bruteforce_from_base_xx(self):
+    def bruteforce_from_base_xx(self) -> DataFormatT:
         """Bruteforce various base encodings. Current supports base85, base16, base32, base64, base85, base58
 
         Returns:
@@ -1377,4 +1379,26 @@ class DataFormat(ChepyCore):
             except:
                 hold[do[0]] = None
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def long_to_bytes(self) -> DataFormatT:
+        """Long numbers to bytes
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        d = self._convert_to_int()
+        self.state = crypto_number.long_to_bytes(d)
+        return self
+
+    @ChepyDecorators.call_stack
+    def bytes_to_long(self) -> DataFormatT:
+        """Bytes to long
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        d = self._convert_to_bytes()
+        self.state = crypto_number.bytes_to_long(d)
         return self
