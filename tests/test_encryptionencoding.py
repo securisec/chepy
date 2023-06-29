@@ -13,6 +13,10 @@ def test_rot_47_bruteforce():
     assert c["47"] == "hello"
 
 
+def test_rot_8000():
+    assert Chepy("籯籵籪籰粄类簹籽籽簼籷籽簹籽籱簼籬簹类簼粆").rot_8000() == "flag{r0tt3nt0th3c0r3}"
+
+
 def test_rotate():
     assert Chepy("some data").rotate(20).out == "migy xunu"
 
@@ -510,11 +514,19 @@ def test_blowfish_decrypt():
 
 
 def test_vigener_encode():
-    assert Chepy("secret").vigenere_encode("secret").o == "KIEIIM"
+    assert (
+        Chepy("shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}").vigenere_encode("victory").o
+        == "npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}"
+    )
+    assert Chepy("secret").vigenere_encode("secret").o == "kieiim"
 
 
 def test_vigenere_decode():
-    assert Chepy("KIEIIM").vigenere_decode("secret").o == "SECRET"
+    assert (
+        Chepy("npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}").vigenere_decode("victory").o
+        == "shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}"
+    )
+    assert Chepy("kieiim").vigenere_decode("secret").o == "secret"
 
 
 def test_affin_encode():
@@ -591,4 +603,13 @@ def test_chacha_encrypt():
         .to_hex()
         .o
         == b"0d118d5f5807747b085473553146a3c76cf1ef61b976519240"
+    )
+
+
+def test_zero_with_chars():
+    assert (
+        Chepy("this 󠁮󠁩󠁣is 󠁣󠁻󠀰just 󠁲󠁟󠀱a 󠀵󠁟󠀱simple 󠀷󠁽text file")
+        .extract_zero_width_chars()
+        .o
+        == b"nicc{0r_15_17}"
     )

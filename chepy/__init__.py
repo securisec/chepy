@@ -1,3 +1,4 @@
+import pretty_errors
 from docstring_parser import parse as _doc_parse
 
 from .modules.aritmeticlogic import AritmeticLogic

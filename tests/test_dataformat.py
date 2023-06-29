@@ -421,7 +421,7 @@ def test_base91():
 
 
 def test_swap_endianness():
-    assert Chepy("01020304").swap_endianness().o == "4030201"
+    assert Chepy("4142").from_hex().swap_endianness().o == b"\x00\x00\x42A"
 
 
 def test_bruteforce_base_xx():

@@ -1342,18 +1342,27 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def swap_endianness(self) -> DataFormatT:
-        # TODO make this better. this is not inline with cyberchef
-        """Swap endianness of a hex string.
+    def swap_endianness(self, word_length: int = 4) -> DataFormatT:
+        """Swap endianness.
+
+        Args:
+            word_length (int, optional): Word length. Use 8 for big endian. Defaults to 4.
 
         Returns:
             Chepy: The Chepy object.
         """
         data = self._convert_to_bytes()
-        # check if hex
-        if not re.match(b"^[0-9a-fA-F]+$", data):  # pragma: no cover
-            raise ValueError("Data is not hex")
-        self.state = hex(struct.unpack("<I", struct.pack(">I", int(data, 16)))[0])[2:]
+        num_bytes = len(data)
+        padding_length = (word_length - num_bytes) % word_length
+        padded_data = data + b"\x00" * padding_length
+
+        swapped_data = b""
+        for i in range(0, len(padded_data), word_length):
+            word = padded_data[i : i + word_length]
+            swapped_word = struct.unpack("<" + "B" * word_length, word)[::-1]
+            swapped_data += struct.pack("B" * word_length, *swapped_word)
+
+        self.state = swapped_data
         return self
 
     @ChepyDecorators.call_stack

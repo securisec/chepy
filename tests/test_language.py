@@ -321,3 +321,10 @@ def test_decode_iso8859_15():
 
 def test_remove_diacritics():
     assert Chepy("François Chào").remove_diacritics().o.decode() == "Francois Chao"
+
+
+def test_us_ascii_7_bit():
+    assert (
+        Chepy("걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽").encode_us_ascii_7_bit().o
+        == "sun{b4s3_128_15_b1t_r3m4pp1ng}"
+    )

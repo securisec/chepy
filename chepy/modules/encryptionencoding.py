@@ -198,6 +198,76 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def rot_8000(self):
+        """Rot8000
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        valid_code_points = {
+            33: True,
+            127: False,
+            161: True,
+            5760: False,
+            5761: True,
+            8192: False,
+            8203: True,
+            8232: False,
+            8234: True,
+            8239: False,
+            8240: True,
+            8287: False,
+            8288: True,
+            12288: False,
+            12289: True,
+            55296: False,
+            57344: True,
+        }
+
+        BMP_SIZE = 0x10000
+
+        rotlist = {}  # the mapping of char to rotated char
+        hiddenblocks = []
+        startblock = 0
+
+        for key, value in valid_code_points.items():
+            if value:
+                hiddenblocks.append({"start": startblock, "end": key - 1})
+            else:
+                startblock = key
+
+        validintlist = []  # list of all valid chars
+        currvalid = False
+
+        for i in range(BMP_SIZE):
+            if i in valid_code_points:
+                currvalid = valid_code_points[i]
+            if currvalid:
+                validintlist.append(i)
+
+        rotatenum = len(validintlist) // 2
+
+        # go through every valid char and find its match
+        for i in range(len(validintlist)):
+            rotlist[chr(validintlist[i])] = chr(
+                validintlist[(i + rotatenum) % (rotatenum * 2)]
+            )
+
+        outstring = ""
+
+        for char in data:
+            # if it is not in the mappings list, just add it directly (no rotation)
+            if char not in rotlist:
+                outstring += char  # pragma: no cover
+                continue  # pragma: no cover
+
+            # otherwise, rotate it and add it to the string
+            outstring += rotlist[char]
+
+        return outstring
+
+    @ChepyDecorators.call_stack
     def xor(
         self,
         key: str,
@@ -893,36 +963,87 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def vigenere_encode(self, key: str) -> EncryptionEncodingT:
-        """Encode with Vigenere ciper
+        """Vigenere encode
 
         Args:
-            key (str): Required. The secret key
+            key (str): Key
+
+        Raises:
+            ValueError: Key is not alpha
+            ValueError: Key is not provided
 
         Returns:
-            Chepy: The Chepy oject.
-
-        Examples:
-            >>> Chepy("secret").vigenere_encode("secret").o
-            "KIEIIM"
+            Chepy: The Chepy object.
         """
-        self.state = pycipher.Vigenere(key=key).encipher(self._convert_to_str())
+        input_str = self._convert_to_str()
+        alphabet = "abcdefghijklmnopqrstuvwxyz"
+        key = key.lower()
+        output = ""
+        fail = 0
+
+        if not key:
+            raise ValueError("No key entered")  # pragma: no cover
+        if not key.isalpha():
+            raise ValueError("The key must consist only of letters")  # pragma: no cover
+
+        for i in range(len(input_str)):
+            if input_str[i].isalpha():
+                is_upper = input_str[i].isupper()
+                input_char = input_str[i].lower()
+                key_char = key[(i - fail) % len(key)]
+                key_index = alphabet.index(key_char)
+                input_index = alphabet.index(input_char)
+                encoded_index = (key_index + input_index) % 26
+                encoded_char = alphabet[encoded_index]
+                output += encoded_char.upper() if is_upper else encoded_char
+            else:
+                output += input_str[i]
+                fail += 1
+
+        self.state = output
         return self
 
     @ChepyDecorators.call_stack
     def vigenere_decode(self, key: str) -> EncryptionEncodingT:
-        """Decode Vigenere ciper
+        """Vigenere decode
 
         Args:
-            key (str): Required. The secret key
+            key (str): Key
+
+        Raises:
+            ValueError: Key is not alpha
+            ValueError: Key is not provided
 
         Returns:
-            Chepy: The Chepy oject.
-
-        Examples:
-            >>> Chepy("KIEIIM").vigenere_decode("secret").o
-            "SECRET"
+            Chepy: The Chepy object.
         """
-        self.state = pycipher.Vigenere(key=key).decipher(self._convert_to_str())
+        input_str = self._convert_to_str()
+        alphabet = "abcdefghijklmnopqrstuvwxyz"
+        output = ""
+        fail = 0
+
+        if not key:
+            raise ValueError("No key entered")  # pragma: no cover
+        if not key.isalpha():
+            raise ValueError("The key must consist only of letters")  # pragma: no cover
+
+        for i in range(len(input_str)):
+            if input_str[i].isalpha():
+                is_upper = input_str[i].isupper()
+                input_char = input_str[i].lower()
+                key_char = key[(i - fail) % len(key)]
+                key_index = alphabet.index(key_char)
+                input_index = alphabet.index(input_char)
+                encoded_index = (input_index - key_index + len(alphabet)) % len(
+                    alphabet
+                )
+                encoded_char = alphabet[encoded_index]
+                output += encoded_char.upper() if is_upper else encoded_char
+            else:
+                output += input_str[i]
+                fail += 1
+
+        self.state = output
         return self
 
     @ChepyDecorators.call_stack
@@ -1048,11 +1169,11 @@ class EncryptionEncoding(ChepyCore):
             if word_delim in chars:
                 chars = re.sub(word_delim, "", chars, re.I)
                 if morse_code_dict.get(chars) is not None:
-                    decode += " " + morse_code_dict.get(chars, '')
+                    decode += " " + morse_code_dict.get(chars, "")
                 else:  # pragma: no cover
                     decode += " " + chars
             else:
-                decode += morse_code_dict.get(chars, '')
+                decode += morse_code_dict.get(chars, "")
         self.state = decode
         return self
 

@@ -1,3 +1,4 @@
+from binascii import unhexlify
 from typing import TypeVar, Union
 from urllib.parse import urlparse as _pyurlparse
 
@@ -441,7 +442,9 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def find_continuous_patterns(self, str2: Union[str, bytes], min_value: int = 10):
+    def find_continuous_patterns(
+        self, str2: Union[str, bytes], min_value: int = 10
+    ) -> ExtractorsT:
         """Find continius patterns between the state as a string and the provided str2
 
         Args:
@@ -469,7 +472,7 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def find_longest_continious_pattern(self, str2: str):
+    def find_longest_continious_pattern(self, str2: str) -> ExtractorsT:
         """Find longest continious pattern
 
         Args:
@@ -497,4 +500,25 @@ class Extractors(ChepyCore):
                     matches.append(pattern)
 
         self.state = max(matches, key=len) if matches else ""
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_zero_width_chars(self) -> ExtractorsT:
+        """Extract zero width characters between U+E0000 to U+E007F
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        input_string = self._convert_to_str()
+        extracted_characters = []
+
+        for char in input_string:
+            if "\U000e0000" <= char <= "\U000e007f":
+                extracted_characters.append(char)
+
+        self.state = unhexlify(
+            b"".join(
+                [bytes(x.encode("unicode_escape"))[-2:] for x in extracted_characters]
+            )
+        )
         return self

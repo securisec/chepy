@@ -20,3 +20,4 @@ python-editor
 PyYAML
 regex
 typing_extensions
+pretty-errors==1.2.25

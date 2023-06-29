@@ -52,6 +52,17 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def encode_us_ascii_7_bit(self) -> LanguageT:
+        """Encode state using US ascii 7 bit
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        self.state = "".join(chr(ord(c) & 127) for c in data)
+        return self
+
+    @ChepyDecorators.call_stack
     def decode(self, encoding: str, errors: str = "backslashreplace") -> LanguageT:
         """Decode the string using the given encoding.
 
