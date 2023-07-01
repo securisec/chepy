@@ -187,6 +187,7 @@ def test_to_url_encoding():
         Chepy("https://google.com/?lol=some data&a=1").to_url_encoding(safe="/:").o
         == "https://google.com/%3Flol%3Dsome+data%26a%3D1"
     )
+    assert Chepy("a").to_url_encoding(all_chars=True).to_url_encoding().o == "%2561"
 
 
 def test_from_url_encoding():

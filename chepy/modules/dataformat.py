@@ -747,7 +747,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_url_encoding(self, safe: str = "") -> DataFormatT:
+    def to_url_encoding(self, safe: str = "", all_chars: bool = False) -> DataFormatT:
         """URL encode
 
         Encodes problematic characters into percent-encoding,
@@ -755,6 +755,7 @@ class DataFormat(ChepyCore):
 
         Args:
             safe (str, optional): String of characters that will not be encoded, by default ""
+            all_chars (bool, optional): Encode all characters including safe characters
 
         Returns:
             Chepy: The Chepy object.
@@ -765,7 +766,15 @@ class DataFormat(ChepyCore):
             >>> Chepy("https://google.com/?lol=some data&a=1").to_url_encoding(safe="/:").o
             "https://google.com/%3Flol%3Dsome+data%26a%3D1"
         """
-        self.state = _urllib_quote_plus(self._convert_to_str(), safe=safe)
+        data = self._convert_to_str()
+
+        def encode_all(string):
+            return "".join("%{0:0>2x}".format(ord(char)) for char in string)
+
+        if all_chars:
+            self.state = encode_all(data)
+        else:
+            self.state = _urllib_quote_plus(data, safe=safe)
         return self
 
     @ChepyDecorators.call_stack
