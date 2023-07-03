@@ -1261,6 +1261,22 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def stringify(self, compact: bool = True) -> DataFormatT:
+        """Stringify the state. This uses json.dumps unlike to_string
+
+        Args:
+            compact (bool, optional): If the output should be compact. Defaults to True.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        sep = None
+        if compact:
+            sep = (",", ":")
+        self.state = json.dumps(self.state, separators=sep)
+        return self
+
+    @ChepyDecorators.call_stack
     def select(self, start: int, end: int = None) -> DataFormatT:
         """Get an item by specifying an index
 

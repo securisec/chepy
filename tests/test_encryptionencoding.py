@@ -122,6 +122,19 @@ def test_jwt_bruteforce():
     )
 
 
+def test_jwt_non_alg():
+    assert (
+        Chepy(
+            {
+                "sub": "administrator",
+            }
+        )
+        .jwt_token_none_alg()
+        .o
+        == b"eyJhbGciOiAibm9uZSJ9.eyJzdWIiOiAiYWRtaW5pc3RyYXRvciJ9."
+    )
+
+
 def test_rc4_encrypt():
     msg = "some data"
     res = b"9e59bf79a2c0b7d253"

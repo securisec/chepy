@@ -375,6 +375,14 @@ def test_to_string():
     assert Chepy(1).to_string().o == "1"
 
 
+def test_stringify():
+    assert Chepy("aa").stringify().o == '"aa"'
+    assert Chepy(123).stringify().o == "123"
+    # assert Chepy("\xaa").stringify().o == '"\\u00aa"'
+    assert Chepy(True).stringify().o == "true"
+    assert Chepy({"a": 1}).stringify(False).o == '{"a": 1}'
+
+
 def test_select():
     assert Chepy("abcd").select(0, 2).o == "ab"
     assert Chepy("abcd").select(2).o == "cd"

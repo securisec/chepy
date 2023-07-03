@@ -1,3 +1,4 @@
+import string
 from chepy import Chepy
 
 
@@ -49,3 +50,8 @@ def test_lower_case():
 def test_leet_speak():
     assert Chepy("somexValue").to_leetspeak().o == "50m3%V@1u3"
     assert Chepy("somexValue").to_leetspeak(False).o == "50m3xVa1u3"
+
+
+def test_random_case():
+    data = string.ascii_letters * 5
+    assert Chepy(data).random_case().o != data

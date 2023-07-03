@@ -3,7 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
-from typing import Literal, TypeVar, Dict
+from typing import Literal, TypeVar, Dict, Any
 
 import lazy_import
 
@@ -431,6 +431,27 @@ class EncryptionEncoding(ChepyCore):
                     continue
             else:  # pragma: no cover
                 return self
+
+    @ChepyDecorators.call_stack
+    def jwt_token_none_alg(self, headers: Dict[str, Any] = {}) -> EncryptionEncodingT:
+        """Generate a jwt token with none algorithem
+
+        Args:
+            headers (Dict[str, Any], optional): Headers. `alg` key will be overwritten. Defaults to {}.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert isinstance(self.state, dict), "State should be a dictionary"
+        headers["alg"] = "none"
+        encoded_headers = base64.b64encode(json.dumps(headers).encode()).replace(
+            b"=", b""
+        )
+        encoded_payload = base64.b64encode(json.dumps(self.state).encode()).replace(
+            b"=", b""
+        )
+        self.state = encoded_headers + b"." + encoded_payload + b"."
+        return self
 
     @ChepyDecorators.call_stack
     def rc4_encrypt(self, key: str, key_format: str = "hex") -> EncryptionEncodingT:

@@ -24,6 +24,7 @@ New ideas:
   ☐ ✨ zero-width encode/decode
   ☐ ✨ hill cipher encode/decode/brute
   ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
+  ☐ rsa enc/dec with key or from pem directly
 
 Bug:
 
@@ -58,6 +59,8 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ stringify method using json.dumps
+  ✔ jwt none algo
   ✔ ✨ extractor partially done
   ✔ vigenere make aware of all cases/numbers/specials. i.e. npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R} key victory shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}
   ✔ us-ascii 7bit 20127 https://gchq.github.io/CyberChef/#recipe=Encode_text('US-ASCII%20(7-bit)%20(20127)') 걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽

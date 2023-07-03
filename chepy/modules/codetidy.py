@@ -1,6 +1,7 @@
 from typing import TypeVar
 
 import json
+import random
 
 import pydash
 import regex as re
@@ -204,4 +205,29 @@ class CodeTidy(ChepyCore):
             else:
                 hold += char
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def random_case(self) -> CodeTidyT:
+        """Randomly change the case
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        string = self._convert_to_str()
+        string_length = len(string)
+
+        random_indices = random.sample(range(string_length), string_length)
+        random_chars = []
+        for i in random_indices:
+            if random.choice([True, False]):
+                random_chars.append(string[i].upper())
+            else:
+                random_chars.append(string[i].lower())
+
+        string_list = list(string)
+        for index, char in zip(random_indices, random_chars):
+            if 0 <= index < len(string_list):
+                string_list[index] = char
+        self.state = "".join(string_list)
         return self
