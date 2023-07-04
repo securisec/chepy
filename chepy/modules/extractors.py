@@ -1,12 +1,18 @@
+import math
 from binascii import unhexlify
 from typing import TypeVar, Union
 from urllib.parse import urlparse as _pyurlparse
 
 import regex as re
+import re as old_re
 
 from ..core import ChepyCore, ChepyDecorators
 
 ExtractorsT = TypeVar("ExtractorsT", bound="Extractors")
+
+_zw_chars = []
+_zw_codelengthText = 0
+_zw_radix = 0
 
 
 class Extractors(ChepyCore):
@@ -503,8 +509,9 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_zero_width_chars(self) -> ExtractorsT:
-        """Extract zero width characters between U+E0000 to U+E007F
+    def extract_zero_width_chars_tags(self) -> ExtractorsT:
+        """Extract zero width characters between U+E0000 to U+E007F. Implements
+        https://www.irongeek.com/i.php?page=security/unicode-steganography-homoglyph-encoder
 
         Returns:
             Chepy: The Chepy object.
@@ -521,4 +528,54 @@ class Extractors(ChepyCore):
                 [bytes(x.encode("unicode_escape"))[-2:] for x in extracted_characters]
             )
         )
+        return self
+
+    @ChepyDecorators.call_stack
+    def decode_zero_width(
+        self, _zw_chars: str = "\u200c\u200d\u202c\ufeff"
+    ) -> ExtractorsT:
+        """Extract zero with characters. Decode implementation of
+        https://330k.github.io/misc_tools/unicode_steganography.html
+
+        Args:
+            chars (str, optional): Characters for stego. Defaults to '\u200c\u200d\u202c\ufeff'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        
+        def set_use_chars(newchars):
+            global _zw_chars, _zw_radix, _zw_codelengthText
+            if len(newchars) >= 2:
+                _zw_chars = list(newchars)
+                _zw_radix = len(_zw_chars)
+                _zw_codelengthText = math.ceil(math.log(65536) / math.log(_zw_radix))
+            return None
+
+        def split_zerowidth_characters(str1):
+            result = {}
+            result["originalText"] = old_re.sub("[" + "".join(_zw_chars) + "]", "", str1)
+            result["hiddenText"] = old_re.sub("[^" + "".join(_zw_chars) + "]", "", str1)
+            return result
+
+        def decode_from_zero_width_characters_text(str1):
+            r = str1
+            result = []
+            for i in range(_zw_radix):
+                r = r.replace(_zw_chars[i], str(i))
+            for i in range(0, len(r), _zw_codelengthText):
+                result.append(chr(int(r[i : i + _zw_codelengthText], _zw_radix)))
+            return "".join(result)
+
+        def decodeText(text):
+            splitted = split_zerowidth_characters(text)
+            return {
+                # 'originalText': splitted['originalText'],
+                "hidden": decode_from_zero_width_characters_text(
+                    splitted["hiddenText"]
+                )  # , codelengthText)
+            }
+
+        set_use_chars(_zw_chars)
+        self.state = decodeText(self._convert_to_str())
         return self

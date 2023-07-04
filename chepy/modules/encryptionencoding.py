@@ -433,7 +433,9 @@ class EncryptionEncoding(ChepyCore):
                 return self
 
     @ChepyDecorators.call_stack
-    def jwt_token_none_alg(self, headers: Dict[str, Any] = {}) -> EncryptionEncodingT:
+    def jwt_token_generate_none_alg(
+        self, headers: Dict[str, Any] = {}
+    ) -> EncryptionEncodingT:
         """Generate a jwt token with none algorithem
 
         Args:
@@ -451,6 +453,66 @@ class EncryptionEncoding(ChepyCore):
             b"=", b""
         )
         self.state = encoded_headers + b"." + encoded_payload + b"."
+        return self
+
+    @ChepyDecorators.call_stack
+    def jwt_token_generate_embedded_jwk(
+        self,
+        private_key_pem: str,
+        private_key_passphrase: str = None,
+        headers: dict = {},
+        alg: str = "RS256",
+    ) -> EncryptionEncodingT:
+        """Generate a JWT token with an embedded JWK
+
+        Args:
+            private_key_pem (str): Private key to sign token
+            private_key_passphrase (str, optional): Private key passphrase. Defaults to None.
+            headers (dict, optional): Token headers. Defaults to {}.
+            alg (str, optional): Token algorithem. Defaults to "RS256".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        payload = self.state
+        assert isinstance(payload, dict), "State should be a dictionary"
+        private_key = RSA.import_key(private_key_pem, private_key_passphrase)
+
+        n = private_key.n
+        e = private_key.e
+
+        jwk_header = {
+            "kty": "RSA",
+            "e": base64.urlsafe_b64encode(e.to_bytes((e.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("="),
+            "n": base64.urlsafe_b64encode(n.to_bytes((n.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("="),
+        }
+        if headers.get("kid"):
+            jwk_header["kid"] = headers.get("kid")
+        headers["jwk"] = jwk_header
+        headers["alg"] = alg
+
+        encoded_header = (
+            base64.urlsafe_b64encode(bytes(json.dumps(headers), "utf-8"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        encoded_payload = (
+            base64.urlsafe_b64encode(bytes(json.dumps(payload), "utf-8"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+
+        signature_input = f"{encoded_header}.{encoded_payload}".encode("utf-8")
+        hashed_input = Hash.SHA256.new(signature_input)
+        signature = PKCS1_15.new(private_key).sign(hashed_input)
+
+        token = f"{encoded_header}.{encoded_payload}.{base64.urlsafe_b64encode(signature).decode('utf-8').replace('=', '')}"
+
+        self.state = token
         return self
 
     @ChepyDecorators.call_stack
@@ -1268,6 +1330,104 @@ class EncryptionEncoding(ChepyCore):
             h = Hash.SHA256.new(self._convert_to_bytes())
             self.state = PKCS1_15.new(key).verify(h, signature)
             return self
+
+    @ChepyDecorators.call_stack
+    def rsa_private_pem_to_jwk(self) -> EncryptionEncodingT:
+        """Convert RSA PEM private key to jwk format
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        # Load the PEM private key
+        private_key = RSA.import_key(self._convert_to_str())
+
+        n = private_key.n
+        e = private_key.e
+        d = private_key.d
+        p = private_key.p
+        q = private_key.q
+        dp = private_key.d % (p - 1)
+        dq = private_key.d % (q - 1)
+        qi = pow(q, -1, p)
+
+        n_base64url = (
+            base64.urlsafe_b64encode(n.to_bytes((n.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        e_base64url = (
+            base64.urlsafe_b64encode(e.to_bytes((e.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        d_base64url = (
+            base64.urlsafe_b64encode(d.to_bytes((d.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        p_base64url = (
+            base64.urlsafe_b64encode(p.to_bytes((p.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        q_base64url = (
+            base64.urlsafe_b64encode(q.to_bytes((q.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        dp_base64url = (
+            base64.urlsafe_b64encode(dp.to_bytes((dp.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        dq_base64url = (
+            base64.urlsafe_b64encode(dq.to_bytes((dq.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+        qi_base64url = (
+            base64.urlsafe_b64encode(qi.to_bytes((qi.bit_length() + 7) // 8, "big"))
+            .decode("utf-8")
+            .rstrip("=")
+        )
+
+        private = {
+            "p": p_base64url,
+            "kty": "RSA",
+            "q": q_base64url,
+            "d": d_base64url,
+            "e": e_base64url,
+            "qi": qi_base64url,
+            "dp": dp_base64url,
+            "dq": dq_base64url,
+            "n": n_base64url,
+        }
+
+        public = {"kty": "RSA", "e": e_base64url, "n": n_base64url}
+        self.state = {"private": private, "public": public}
+        return self
+
+    @ChepyDecorators.call_stack
+    def rsa_public_key_from_jwk(self) -> EncryptionEncodingT:
+        """Genereate RSA public key in PEM format from JWK
+
+        Raises:
+            AssertionError: If n or e not found
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert isinstance(self.state, dict), "State should be a dict"
+        jwk_key = self.state
+        if not "e" in jwk_key or "n" not in jwk_key:
+            raise AssertionError("e or n not found")  # pragma: no cover
+        e = int.from_bytes(base64.urlsafe_b64decode(jwk_key["e"] + "=="), "big")
+        n = int.from_bytes(base64.urlsafe_b64decode(jwk_key["n"] + "=="), "big")
+
+        public_key = RSA.construct((n, e))
+
+        self.state = public_key.export_key().decode("utf-8")
+        return self
 
     @ChepyDecorators.call_stack
     def monoalphabetic_substitution(

@@ -1,9 +1,10 @@
 import json
+import lazy_import
 from typing import Iterator, Dict, List, Union
 from binascii import hexlify, unhexlify
 from itertools import cycle
 from urllib.request import urlopen
-from Crypto.PublicKey import RSA
+RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
 
 from .combinatons import generate_combo, hex_chars
 from chepy import Chepy
@@ -152,3 +153,28 @@ def one_time_pad_crib(
             )
             hold.append(piece)
     return hold
+
+
+def generate_rsa_keypair(
+    bits: int = 1024, passphrase: str = None
+) -> Dict[str, dict]:  # pragma: no cover
+    """Generates an RSA keypair with the specified number of bits.
+
+    Args:
+      bits: The number of bits for the RSA keypair.
+
+    Returns:
+      A tuple of the RSA public key and RSA private key, both in PEM format.
+    """
+
+    keypair = RSA.generate(bits)
+    return {
+        "pem": {
+            "public": keypair.publickey().exportKey("PEM"),
+            "private": keypair.exportKey("PEM", passphrase=passphrase),
+        },
+        "der": {
+            "public": keypair.publickey().exportKey("DER"),
+            "private": keypair.exportKey("DER", passphrase=passphrase),
+        },
+    }

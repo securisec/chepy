@@ -21,10 +21,11 @@ New ideas:
   ☐ random from state
   ☐ ascii shift cipher kqfl ? snyjHYK"8fwymdxf~xdm8qq5$ = niteCTF{3arth_says_h3ll0} somewhat
   ☐ ✨ affine bruteforce
-  ☐ ✨ zero-width encode/decode
+  ☐ ✨ zero-width encode
   ☐ ✨ hill cipher encode/decode/brute
   ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
   ☐ rsa enc/dec with key or from pem directly
+  ☐ ✨ jwt hmac confusion
 
 Bug:
 

@@ -2,6 +2,35 @@ from chepy import Chepy
 from binascii import hexlify, unhexlify
 from base64 import b64encode
 
+PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAh/1QrTsA41NV3SPvYg087PpcWlG90Lhsm3cD/Nwph6DhDqeZ
+l+ZyWaA8waOutILBRj1i3oJ9vg36JknyZFDYMglYnK47nKyMHBiWmkHA9124IaLw
+b1H1Dh46GslE6/3n1HxldttgDPbkci2zSIi66FqIpJAQEKrAS5wBsELR3VQEgVFm
+symTBsdSAWaGOHFgmebWGjW3BiG0jXPcNa3RQI78DuQEDKEGpifKGAmJKXZoxiwM
+/Gn8GgJB0Vg63R1Bk/mK4XANqWsqQcclhxt3pPy0H7I4jJfNeIvkFO45oSEctI3Y
+bBVtfbLO1/Yb+eofQmyPlRe6yOnocbhJPCdBTwIDAQABAoIBAAbG0E45n6iJtBXX
+icEkm2chw21ldQ82yYQRG7vuNWGYBO8ShLG69EgpbIL9HE0hgO52S6bT8N6CMCIt
+UtdokfAjDW04CiobYnCvUaib4zj7IhxcVB1FWRqxgJVqIeBICv/zN6ktyG0M9phb
+/6Wl2U6P3bmkS4X7xFEK6VNLw80teo1euCARNECallmg43thnlqGazLrKj5N0N+k
+cvy4GezYFNG7UGkSOb35KEvDOhB5kIsBIbkVnt0luFPmGD/M69x32xsyUlCXNPov
+bgAGNr2HTye8kj11IXd84d2WGA0R2sKrQ+Ae8ivk8aCgQ07HB3/Kuc3aXBde6JV8
+4mn5ZU0CgYEAu6hkCKCf3M7u0TCV2c2tgELRIc5Z8zZ2/OR8Y98QCLwJF8XrlgUB
+uLNna/Wyk1goch8/9dtdeOQCzBHmlCS+oKRRd8nxHQKbbnjX5K6AZF9l5q4BF1Pq
+yMEszN25QMnIbeHxjlXPntcgaOcRxce19pdc0iXVKIKpaCfjAhk23RsCgYEAuYPR
+BItwCn/lcNIhBmJyvXWpHskDt3e2LJdROfsoUlOv67G5g0gf2SYJpt7svvGXC5N3
+7blACw+y+AteQHjcznmMiq49ibkMQZ0Vi0dMTSeq15rQf+XiAEqK3lJsbvHtWEFN
+82mgIC+fg2i94T0w1POUCYeMGmOYT8L/DY8aM90CgYAlEcSA98ncgnwmkqRnW/vU
+BF7vgKXAJ5glqLTxvZSbRRm+ungpMGAArl/VsblO5fFHaejmlijGwrPSwA5+YSvO
+6+az9Q5OHr+5eOGc6OOv8DBe+yx4ATm14oMJDRuVMscG/cULyuOyiuh6EHswSJ0n
+Uwsg8BxFXlo8mvR666Qs1QKBgCNEfvj5NSyZ0dmX6PVYw+1mr+cNWeqIFJb3kVaP
+e8Pi6v/IwrbFgGB8zbruiF1oekmWGGeWHym7K0/igWGKWJfcHa7DnylOh5j1rwHS
+ZRwJ3X2tjdOytTtO8IWBb+HLlk5/47zRqMJVq2KFCAwI4P6q68q//Q+LPYp0TJ6c
+ROP1AoGAfU3LGhjeOTdEN2GE8vG+y4r1j1z1h2UZYMe0si9sTf96Xgh+MaXZpj62
+QSlrCXrwKkfREh/JySvSbdZIKEfOqF0kZLTuHIUUjkuIm6Dei8/BA4s6U8F7ot1g
+ueXbG9F+jRfRvGaz8fMuoZAT7F72ptZO3HMzHhZcjrHMau1rfVI=
+-----END RSA PRIVATE KEY-----
+"""
+
 
 def test_rot_47():
     assert Chepy("some").rot_47().out == "D@>6"
@@ -129,7 +158,7 @@ def test_jwt_non_alg():
                 "sub": "administrator",
             }
         )
-        .jwt_token_none_alg()
+        .jwt_token_generate_none_alg()
         .o
         == b"eyJhbGciOiAibm9uZSJ9.eyJzdWIiOiAiYWRtaW5pc3RyYXRvciJ9."
     )
@@ -619,10 +648,45 @@ def test_chacha_encrypt():
     )
 
 
-def test_zero_with_chars():
+def test_rsa_private_pem_to_jwk():
+    c = Chepy(PRIVATE_KEY).rsa_private_pem_to_jwk().o
     assert (
-        Chepy("this 󠁮󠁩󠁣is 󠁣󠁻󠀰just 󠁲󠁟󠀱a 󠀵󠁟󠀱simple 󠀷󠁽text file")
-        .extract_zero_width_chars()
+        c["private"]["p"]
+        == "u6hkCKCf3M7u0TCV2c2tgELRIc5Z8zZ2_OR8Y98QCLwJF8XrlgUBuLNna_Wyk1goch8_9dtdeOQCzBHmlCS-oKRRd8nxHQKbbnjX5K6AZF9l5q4BF1PqyMEszN25QMnIbeHxjlXPntcgaOcRxce19pdc0iXVKIKpaCfjAhk23Rs"
+    )
+    assert c["public"]["e"] == "AQAB"
+
+
+def test_jwt_genereate_embedded_jwk():
+    assert (
+        Chepy({"user": "lol"})
+        .jwt_token_generate_embedded_jwk(PRIVATE_KEY, headers={"kid": "b"})
         .o
-        == b"nicc{0r_15_17}"
+        != ""
+    )
+
+
+def test_rsa_public_key_from_jwk():
+    assert (
+        Chepy(
+            {
+                "kty": "RSA",
+                "e": "AQAB",
+                "use": "sig",
+                "kid": "66447ed3-9521-4029-afa3-fae1cdd8434b",
+                "alg": "RS256",
+                "n": "2bxlRFYk-nczolmssgXIsQo9TTRyLpNKDE0hg4ViZNxOQ63jjCTqSSsmZb_4Pt326n0NzJxEeaJ9I3JwpYFrmjkbB-_mk5CyAEL75cMUDyWO3I9DnYR2tHHI4zhd_VQIaIn48A6AjMFHTiTYxM6B03EWSb7U7FqJmUlxTAjuOkeMSQQrMtD8cptJAKHtiYSRPEfN77q3Hr6zx0pXeQnEG-P_fassID6MeJjMAA9xHc1yG8Oc2hnGSvS9Ao6usIIvuShk7lxHjbPyZ2uuC1eNc7qkGiwq2KTX_Huy4cARHt3g_zdGO9nF-ONaUc7yHgzV6Rwch7li25uc9uYS5rYmOw",
+            }
+        )
+        .rsa_public_key_from_jwk()
+        .o
+        == """-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2bxlRFYk+nczolmssgXI
+sQo9TTRyLpNKDE0hg4ViZNxOQ63jjCTqSSsmZb/4Pt326n0NzJxEeaJ9I3JwpYFr
+mjkbB+/mk5CyAEL75cMUDyWO3I9DnYR2tHHI4zhd/VQIaIn48A6AjMFHTiTYxM6B
+03EWSb7U7FqJmUlxTAjuOkeMSQQrMtD8cptJAKHtiYSRPEfN77q3Hr6zx0pXeQnE
+G+P/fassID6MeJjMAA9xHc1yG8Oc2hnGSvS9Ao6usIIvuShk7lxHjbPyZ2uuC1eN
+c7qkGiwq2KTX/Huy4cARHt3g/zdGO9nF+ONaUc7yHgzV6Rwch7li25uc9uYS5rYm
+OwIDAQAB
+-----END PUBLIC KEY-----"""
     )

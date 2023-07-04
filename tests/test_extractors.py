@@ -235,3 +235,44 @@ def test_find_continuous_patterns():
     str1 = b"Helhello worldlo World"
     str2 = b"hello world"
     assert len(Chepy(str1).find_continuous_patterns(str2, 3).o) == 73
+
+
+def test_zero_with_chars_tags():
+    assert (
+        Chepy("this 󠁮󠁩󠁣is 󠁣󠁻󠀰just 󠁲󠁟󠀱a 󠀵󠁟󠀱simple 󠀷󠁽text file")
+        .extract_zero_width_chars_tags()
+        .o
+        == b"nicc{0r_15_17}"
+    )
+
+
+def test_decode_zero_width():
+    assert (
+        Chepy(
+            "e2808be2808be2808be2808befbbbfe280ace2808b68656c6c6fe2808be2808be2808be2808befbbbfe2808be2808ce2808be2808be2808be2808be280acefbbbfefbbbfe2808be2808be2808be2808befbbbfe2808defbbbfe2808be2808be2808be2808befbbbfe2808be2808ce2808be2808be2808be2808befbbbfe280ace2808c"
+        )
+        .from_hex()
+        .decode_zero_width("\u200B\u200c\u200d\u202c\ufeff")
+        .o["hidden"]
+        == "secret"
+    )
+    assert (
+        Chepy(
+            "e2808ce2808ce2808ce2808ce2808defbbbfe2808cefbbbfe2808ce2808ce2808ce2808ce2808de280ace2808de2808de2808ce2808ce2808ce2808ce2808de280ace2808cefbbbfe2808ce2808ce2808ce2808ce2808defbbbfe2808ce280ac68656c6c6fe2808ce2808ce2808ce2808ce2808de280ace2808de2808de2808ce2808ce2808ce2808ce2808defbbbfe2808de2808c"
+        )
+        .from_hex()
+        .decode_zero_width("\u200c\u200d\u202c\ufeff")
+        .o["hidden"]
+        == "secret"
+    )
+    assert (
+        Chepy(
+            "e2808be2808be2808ce2808ce280ace2808be2808be2808ce2808be2808ce2808be2808be2808befbbbfefbbbf68656c6c6fe2808be2808be2808ce2808ce280aae2808be2808be2808ce2808be2808ce2808be2808be2808ce2808ce280ad"
+        )
+        .from_hex()
+        .decode_zero_width(
+            "\u200B\u200C\u200D\u200E\u202A\u202C\u202D\u2062\u2063\ufeff"
+        )
+        .o["hidden"]
+        == "secret"
+    )
