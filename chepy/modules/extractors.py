@@ -51,7 +51,9 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def extract_strings(self, length: int = 4, join_by: str = "\n") -> ExtractorsT:
+    def extract_strings(
+        self, length: int = 4, join_by: Union[str, bytes] = "\n"
+    ) -> ExtractorsT:
         """Extract strings from state
 
         Args:
@@ -73,7 +75,7 @@ class Extractors(ChepyCore):
         """
         pattern = b"[^\x00-\x1F\x7F-\xFF]{" + str(length).encode() + b",}"
         matches = re.findall(pattern, self._convert_to_bytes())
-        self.state = join_by.join([m.decode() for m in matches])
+        self.state = self._str_to_bytes(join_by).join([m for m in matches])
         return self
 
     @ChepyDecorators.call_stack
@@ -123,7 +125,7 @@ class Extractors(ChepyCore):
             matched = list(
                 filter(
                     lambda x: re.search(pattern, x),
-                    self.extract_strings().o.encode().splitlines(),
+                    self.extract_strings().o.splitlines(),
                 )
             )
         else:  # pragma: no cover
@@ -543,7 +545,7 @@ class Extractors(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        
+
         def set_use_chars(newchars):
             global _zw_chars, _zw_radix, _zw_codelengthText
             if len(newchars) >= 2:
@@ -554,7 +556,9 @@ class Extractors(ChepyCore):
 
         def split_zerowidth_characters(str1):
             result = {}
-            result["originalText"] = old_re.sub("[" + "".join(_zw_chars) + "]", "", str1)
+            result["originalText"] = old_re.sub(
+                "[" + "".join(_zw_chars) + "]", "", str1
+            )
             result["hiddenText"] = old_re.sub("[^" + "".join(_zw_chars) + "]", "", str1)
             return result
 

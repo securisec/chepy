@@ -53,8 +53,7 @@ class EncryptionEncoding(ChepyCore):
     def _convert_key(
         self, key, iv, key_format: str, iv_format: str
     ) -> EncryptionEncodingT:  # pragma: no cover
-        if isinstance(key, str):
-            key = key.encode()
+        key = self._str_to_bytes(key)
         # modify key according to mode
         if key_format == "hex":
             key = binascii.unhexlify(key)
@@ -66,8 +65,7 @@ class EncryptionEncoding(ChepyCore):
             key = key.decode().encode("latin-1")
 
         # modify iv according to mode
-        if isinstance(iv, str):
-            iv = iv.encode()
+        iv = self._str_to_bytes(iv)
         if iv_format == "hex":
             iv = binascii.unhexlify(iv)
         if iv_format == "base64" or iv_format == "b64":
@@ -101,7 +99,7 @@ class EncryptionEncoding(ChepyCore):
         lookup = str.maketrans(
             lc + uc, lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by]
         )
-        self.state = self.state.translate(lookup)
+        self.state = self.state.translate(lookup).encode()
         return self
 
     @ChepyDecorators.call_stack
@@ -132,7 +130,7 @@ class EncryptionEncoding(ChepyCore):
                 lc + uc,
                 lc[rotate_by:] + lc[:rotate_by] + uc[rotate_by:] + uc[:rotate_by],
             )
-            hold[str(rotate_by)] = self.state.translate(lookup)
+            hold[str(rotate_by)] = self.state.translate(lookup).encode()
         self.state = hold
         return self
 
@@ -164,7 +162,7 @@ class EncryptionEncoding(ChepyCore):
 
         Examples:
             >>> Chepy("some").rot_47().out
-            "D@>6"
+            b"D@>6"
         """
         decoded_string = ""
         for char in self._convert_to_str():
@@ -173,7 +171,7 @@ class EncryptionEncoding(ChepyCore):
                 decoded_string += decoded_char
             else:
                 decoded_string += char  # pragma: no cover
-        self.state = decoded_string
+        self.state = decoded_string.encode()
         return self
 
     @ChepyDecorators.call_stack
@@ -193,7 +191,7 @@ class EncryptionEncoding(ChepyCore):
                     decoded_string += decoded_char
                 else:
                     decoded_string += char  # pragma: no cover
-            hold[str(r)] = decoded_string
+            hold[str(r)] = decoded_string.encode()
         self.state = hold
         return self
 
@@ -265,7 +263,8 @@ class EncryptionEncoding(ChepyCore):
             # otherwise, rotate it and add it to the string
             outstring += rotlist[char]
 
-        return outstring
+        self.state = outstring.encode()
+        return self
 
     @ChepyDecorators.call_stack
     def xor(
@@ -300,12 +299,8 @@ class EncryptionEncoding(ChepyCore):
             key = binascii.hexlify(base64.b64decode(key.encode()))
         key = binascii.unhexlify(key)
         x = bytearray(b"")
-        try:
-            for char, key_val in zip(self._convert_to_str(), itertools.cycle(key)):
-                x.append(ord(char) ^ key_val)
-        except:
-            for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
-                x.append(char ^ key_val)
+        for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
+            x.append(char ^ key_val)
 
         self.state = x
         return self
@@ -396,41 +391,6 @@ class EncryptionEncoding(ChepyCore):
             data = json.loads(self.state)
         self.state = jwt.encode(data, key=secret, algorithm=algorithms)
         return self
-
-    @ChepyDecorators.call_stack
-    def jwt_bruteforce(
-        self, wordlist: str, b64_encode: bool = False, algorithm: list = ["HS256"]
-    ) -> EncryptionEncodingT:
-        """Brute force JWT token secret
-
-        This method will use the provided wordlist to try and bruteforce the
-        verification.
-
-        Args:
-            wordlist (str): Required. Path to a wordlist
-            b64_encode (bool, optional): Encoded the words in base64. Defaults to False.
-            algorithm (list, optional): Array of valid algorithms. Defaults to ["HS256"].
-
-        Returns:
-            Chepy: The Chepy object.
-        """
-        with open(pathlib.Path(wordlist).expanduser().absolute()) as words:
-            for word in words:
-                try:
-                    word = word.strip()
-                    if b64_encode:  # pragma: no cover
-                        word = base64.b64encode(word)
-                    j = jwt.decode(self._convert_to_str(), word, algorithms=algorithm)
-                    self.state = {
-                        "paylod": j,
-                        "header": jwt.get_unverified_header(self._convert_to_str()),
-                        "secret": word,
-                    }
-                    return self
-                except jwt.InvalidSignatureError:
-                    continue
-            else:  # pragma: no cover
-                return self
 
     @ChepyDecorators.call_stack
     def jwt_token_generate_none_alg(

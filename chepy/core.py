@@ -599,6 +599,19 @@ class ChepyCore(object):
             # todo check more types here
             raise NotImplementedError
 
+    def _str_to_bytes(self, s: str) -> bytes: # pragma: no cover
+        """Converts a str to bytes
+
+        Args:
+            s (str): String
+
+        Returns:
+            bytes: Bytes
+        """
+        if isinstance(s, bytes):
+            return s
+        return s.encode()
+
     def _convert_to_int(self) -> int:
         """This method is used to coerce the curret object in
         the state variable into an int. The method should be
@@ -1061,6 +1074,9 @@ class ChepyCore(object):
             >>> c.loop(iterations=6, callback='hmac_hash', args={'key': 'secret'})
             securisec
         """
+        if type(callback).__name__ == 'method':
+            # this allows for both method and string passing
+            callback = callback.__name__
         assert isinstance(callback, str), "Callback must be a string"
         assert isinstance(iterations, int), "Iterations must be an intiger"
         assert isinstance(args, dict), "Args must be a dick"
@@ -1097,6 +1113,10 @@ class ChepyCore(object):
             >>> c.loop_list('to_hex').loop_list('hmac_hash', {'key': 'secret'})
             ['5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e', '30d75bf34740e8781cd4ec7b122e3efd8448e270']
         """
+        if type(callback).__name__ == 'method':
+            # this allows for both method and string passing
+            callback = callback.__name__
+
         assert isinstance(self.state, list), "State is not a list"
         assert isinstance(callback, str), "Callback must be a string"
         hold = []
@@ -1154,7 +1174,11 @@ class ChepyCore(object):
                 {"another": "aaaa"},
             ]
         """
+        if type(callback).__name__ == 'method':
+            # this allows for both method and string passing
+            callback = callback.__name__
         assert isinstance(callback, str), "Callback must be a string"
+        
         hold = {}
         current_state = self.state
         # find the last index that this method was run

@@ -33,37 +33,37 @@ ueXbG9F+jRfRvGaz8fMuoZAT7F72ptZO3HMzHhZcjrHMau1rfVI=
 
 
 def test_rot_47():
-    assert Chepy("some").rot_47().out == "D@>6"
+    assert Chepy("some").rot_47().out == b"D@>6"
 
 
 def test_rot_47_bruteforce():
     c = Chepy("96==@").rot_47_bruteforce().o
-    assert c["1"] == ":7>>A"
-    assert c["47"] == "hello"
+    assert c["1"] == b":7>>A"
+    assert c["47"] == b"hello"
 
 
 def test_rot_8000():
-    assert Chepy("籯籵籪籰粄类簹籽籽簼籷籽簹籽籱簼籬簹类簼粆").rot_8000() == "flag{r0tt3nt0th3c0r3}"
+    assert Chepy("籯籵籪籰粄类簹籽籽簼籷籽簹籽籱簼籬簹类簼粆").rot_8000().o == b"flag{r0tt3nt0th3c0r3}"
 
 
 def test_rotate():
-    assert Chepy("some data").rotate(20).out == "migy xunu"
+    assert Chepy("some data").rotate(20).out == b"migy xunu"
 
 
 def test_rotate_bruteforce():
-    assert Chepy("uryyb").rotate_bruteforce().o["13"] == "hello"
+    assert Chepy("uryyb").rotate_bruteforce().o["13"] == b"hello"
 
 
 def test_xor_utf():
-    assert Chepy("some data").xor("UD", "utf").out.decode() == "&+8!u 404"
+    assert Chepy("some data").xor("UD", "utf").o == b"&+8!u 404"
 
 
 def test_xor_base64():
-    assert Chepy("&+8!u 404").xor("VUQ=", "base64").out.decode() == "some data"
+    assert Chepy("&+8!u 404").xor("VUQ=", "base64").o == b"some data"
 
 
 def test_xor_hex():
-    assert Chepy("some data").xor("5544", "hex").out.decode() == "&+8!u 404"
+    assert Chepy("some data").xor("5544", "hex").o == b"&+8!u 404"
 
 
 def test_xor_binary():
@@ -77,15 +77,15 @@ def test_xor_binary():
         == "222727"
     )
     assert (
-        Chepy("./tests/files/hello").load_file().xor(41, "utf").to_hex().o.decode()[0:6]
-        == "fbcbd9"
+        Chepy("./tests/files/hello").load_file().xor(41, "utf").to_hex().o[0:6]
+        == b"fbcbd9"
     )
     assert (
         Chepy("./tests/files/hello")
         .xor(key=41, key_type="utf")
         .to_hex()
-        .o.decode()[0:6]
-        == "1a1e40"
+        .o[0:6]
+        == b"1a1e40"
     )
 
 
@@ -118,12 +118,12 @@ def test_jwt_decode():
 
 def test_jwt_sign():
     assert (
-        Chepy({"some": "payload"}).jwt_sign("secret", "HS512").o.decode()
-        == "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
+        Chepy({"some": "payload"}).jwt_sign("secret", "HS512").o
+        == b"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
     )
     assert (
-        Chepy('{"some": "payload"}').jwt_sign("secret", "HS512").o.decode()
-        == "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
+        Chepy('{"some": "payload"}').jwt_sign("secret", "HS512").o
+        == b"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzb21lIjoicGF5bG9hZCJ9.EgMnzcJYrElON09Bw_OwaqR_Z7Cq30n7cgTZGJqtK1YHfG1cGnGJoJGwOLj6AWg9taOyJN3Dnqd9NXeTCjTCwA"
     )
 
 
@@ -136,18 +136,6 @@ def test_jwt_verify():
         .jwt_verify("secret")
         .o
         == {"some": "payload"}
-    )
-
-
-def test_jwt_bruteforce():
-    assert (
-        Chepy(
-            b"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.bqxXg9VwcbXKoiWtp-osd0WKPX307RjcN7EuXbdq-CE"
-        )
-        .jwt_bruteforce("tests/files/wordlist.txt")
-        .get_by_key("secret")
-        .o
-        == "secret"
     )
 
 

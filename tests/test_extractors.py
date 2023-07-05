@@ -4,7 +4,7 @@ from chepy import Chepy
 def test_extract_strings():
     assert (
         Chepy("tests/files/hello").load_file().extract_strings().o.splitlines()[0]
-        == "__PAGEZERO"
+        == b"__PAGEZERO"
     )
 
 

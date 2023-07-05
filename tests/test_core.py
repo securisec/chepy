@@ -170,6 +170,12 @@ def test_loop():
         .o
         == b"securisec"
     )
+    c = Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
+    assert (
+        c.loop(6, c.from_base64)
+        .o
+        == b"securisec"
+    )
 
 
 def test_loop_list():
@@ -180,7 +186,7 @@ def test_loop_list():
         "30d75bf34740e8781cd4ec7b122e3efd8448e270",
     ]
     c1 = Chepy(["an", "array"])
-    c1.loop_list("to_hex").loop_list("hmac_hash", {"key": "secret"})
+    c1.loop_list("to_hex").loop_list(c.hmac_hash, {"key": "secret"})
     assert c1.o == [
         "5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
         "30d75bf34740e8781cd4ec7b122e3efd8448e270",
@@ -199,7 +205,7 @@ def test_loop_dict():
     ]
 
     d = Chepy({"some": "hahahaha", "lol": "aahahah"})
-    d.loop_dict(["some"], "to_upper_case")
+    d.loop_dict(["some"], d.to_upper_case)
     assert d.o == {"some": "HAHAHAHA", "lol": "aahahah"}
 
     e = Chepy({"some": "hahahaha", "lol": "aahahah"})
