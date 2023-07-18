@@ -81,7 +81,7 @@ def test_zlib_compress():
 def test_zlib_decompress():
     assert (
         Chepy("789c0580a10d000008c35ee1b9ca05c104e737b761ca5711e8039a")
-        .hex_to_binary()
+        .hex_to_bytes()
         .zlib_decompress()
         .o
         == b"some text"

@@ -26,7 +26,15 @@ New ideas:
   ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
   ☐ rsa enc/dec with key or from pem directly
   ☐ ✨ jwt hmac confusion
-  ☐ 🚀 improve tar compression mode type
+  ☐ ✨ amf encode/decode
+  ☐ ✨ rabbit encryption
+  ☐ ✨ lz4 compression/decompression
+  ☐ ✨ aes cmac
+  ☐ ✨ shuffle
+  ☐ ✨ cetacean encode/decode
+  ☐ ✨ ls47 enc/dec
+  ☐ ✨ lm hash
+  ☐ ✨ nt hash
 
 Bug:
 

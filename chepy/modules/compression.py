@@ -316,7 +316,7 @@ class Compression(ChepyCore):
 
         Examples:
             >>> c = Chepy("789c0580a10d000008c35ee1b9ca05c104e737b761ca5711e8039a")
-            >>> c.hex_to_binary()
+            >>> c.hex_to_bytes()
             >>> c.zlib_decompress()
             >>> c.out
             b"some text"

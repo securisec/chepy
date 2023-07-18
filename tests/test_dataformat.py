@@ -169,8 +169,8 @@ def test_hex_to_int():
     assert Chepy("123").hex_to_int().out == 291
 
 
-def test_hex_to_binary():
-    assert Chepy("ab00").hex_to_binary().o == b"\xab\x00"
+def test_hex_to_bytes():
+    assert Chepy("ab00").hex_to_bytes().o == b"\xab\x00"
 
 
 def test_int_to_hex():
@@ -279,11 +279,33 @@ def test_from_decimal():
 
 
 def test_to_binary():
-    assert Chepy("abc").to_binary().o == "01100001 01100010 01100011"
+    assert Chepy("abc").to_binary().o == b"01100001 01100010 01100011"
+    assert Chepy("8081").from_hex().to_binary().o == b"10000000 10000001"
 
 
 def test_from_binary():
     assert Chepy("011001000110 000101110100 0110000 1").from_binary().o == b"data"
+    assert Chepy("01100100 01100001 01110100 01100001").from_binary().o == b"data"
+    assert (
+        Chepy("0001100100 0001100001 0001110100 0001100001")
+        .from_binary(byte_length=10)
+        .o
+        == b"data"
+    )
+    assert (
+        Chepy("000001100100 000001100001 000001110100 000001100001")
+        .from_binary(byte_length=12)
+        .o
+        == b"data"
+    )
+    assert (
+        Chepy(
+            "00000000000001110011 00000000000001101111 00000000000001101101 00000000000001100101 00000000000000100000 00000000000001100100 00000000000001100001 00000000000001110100 00000000000001100001"
+        )
+        .from_binary(byte_length=20)
+        .o
+        == b"some data"
+    )
 
 
 def test_to_octal():

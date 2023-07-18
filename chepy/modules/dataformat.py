@@ -12,7 +12,7 @@ yaml = lazy_import.lazy_module("yaml")
 import regex as re
 import hexdump
 from ast import literal_eval
-from typing import TypeVar, Union
+from typing import TypeVar, Union, List
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
@@ -604,17 +604,17 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def hex_to_binary(self) -> DataFormatT:
-        """Hex to binary hex
+    def hex_to_bytes(self) -> DataFormatT:
+        """Hex to bytes hex
 
-        Converts a hex string to its binary form. Example:
+        Converts a hex string to its bytes form. Example:
         41 becomes \\x41
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("ab00").hex_to_binary().o
+            >>> Chepy("ab00").hex_to_bytes().o
             b"\\xab\\x00"
         """
         self.state = binascii.unhexlify(self._convert_to_bytes())
@@ -931,39 +931,51 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_binary(self, join_by: str = " ") -> DataFormatT:
+    def to_binary(
+        self, join_by: Union[str, bytes] = " ", byte_length: int = 8
+    ) -> DataFormatT:
         """Convert string characters to binary
 
         Args:
             join_by (str, optional): join_by. Defaults to " ".
+            byte_length (int, optional): Byte length. Defaults to 8.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("abc").to_binary().o
-            "01100001 01100010 01100011"
+            b"01100001 01100010 01100011"
         """
-        self.state = join_by.join(
-            list(format(ord(s), "08b") for s in list(self._convert_to_str()))
-        )
+        hold = []
+        join_by = self._str_to_bytes(join_by)
+        out = list(format(s, "08b").encode() for s in list(self._convert_to_bytes()))
+        for s in list(self._convert_to_bytes()):
+            hold.append(str(bin(s)[2:].zfill(byte_length)).encode())
+        self.state = join_by.join(hold)
         return self
 
     @ChepyDecorators.call_stack
-    def from_binary(self, delimiter: str = " ") -> DataFormatT:
+    def from_binary(self, delimiter: str = " ", byte_length: int = 8) -> DataFormatT:
         """Convert a list of binary numbers to string
 
         Args:
             delimiter (str, optional): Delimiter. Defaults to " ".
+            byte_length (int, optional): Byte length. Defaults to 8.
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy(["01100001", "01100010", "01100011"]).from_binary().o
+            >>> Chepy("01100001 01100010 01100011").from_binary().o
             "abc"
         """
-        n = int("".join(self._convert_to_str().split(delimiter)), 2)
+        n = int(
+            "".join(
+                [x[byte_length - 8 :] for x in self._convert_to_str().split(delimiter)]
+            ),
+            2,
+        )
         self.state = n.to_bytes((n.bit_length() + 7) // 8, "big")
         return self
 
