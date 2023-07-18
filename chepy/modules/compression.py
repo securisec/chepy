@@ -7,6 +7,9 @@ import tarfile
 import zipfile
 import zlib
 from typing import TypeVar
+import lazy_import
+
+LZ4 = lazy_import.lazy_module("lz4.frame")
 
 from ..core import ChepyCore, ChepyDecorators
 
@@ -362,4 +365,24 @@ class Compression(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = zlib.compress(self._convert_to_bytes())[2:-4]
+        return self
+
+    @ChepyDecorators.call_stack
+    def lz4_compress(self) -> CompressionT:
+        """LZ4 compress
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = LZ4.compress(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def lz4_decompress(self) -> CompressionT:
+        """LZ4 decompress
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = LZ4.decompress(self._convert_to_bytes())
         return self

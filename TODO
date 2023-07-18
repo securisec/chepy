@@ -28,7 +28,6 @@ New ideas:
   ☐ ✨ jwt hmac confusion
   ☐ ✨ amf encode/decode
   ☐ ✨ rabbit encryption
-  ☐ ✨ lz4 compression/decompression
   ☐ ✨ aes cmac
   ☐ ✨ shuffle
   ☐ ✨ cetacean encode/decode
@@ -69,6 +68,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ lz4 compression/decompression
   ✔ 🚀 improve aes ctr enc/dec to handle iv
   ✔ stringify method using json.dumps
   ✔ jwt none algo

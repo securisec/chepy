@@ -21,3 +21,4 @@ PyYAML
 regex
 typing_extensions
 pretty-errors==1.2.25
+lz4==4.3.2

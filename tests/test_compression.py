@@ -151,3 +151,20 @@ def test_tar_compress():
 
 def test_raw_deflate_inflate():
     assert Chepy("securisec").raw_deflate().raw_inflate().o == b"securisec"
+
+
+def test_lz4_compress():
+    assert (
+        Chepy("data").lz4_compress().to_hex().o
+        == b"04224d1868400400000000000000cd040000806461746100000000"
+    )
+
+
+def test_lz4_decompress():
+    assert (
+        Chepy("04224d1868400400000000000000cd040000806461746100000000")
+        .from_hex()
+        .lz4_decompress()
+        .o
+        == b"data"
+    )
