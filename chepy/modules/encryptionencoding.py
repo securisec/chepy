@@ -20,6 +20,7 @@ ChaCha20 = lazy_import.lazy_module("Crypto.Cipher.ChaCha20")
 DES3 = lazy_import.lazy_module("Crypto.Cipher.DES3")
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
 Hash = lazy_import.lazy_module("Crypto.Hash")
+Counter = lazy_import.lazy_module("Crypto.Util.Counter")
 PKCS1_15 = lazy_import.lazy_module("Crypto.Signature.pkcs1_15")
 PKCS1_OAEP = lazy_import.lazy_module("Crypto.Cipher.PKCS1_OAEP")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
@@ -270,13 +271,13 @@ class EncryptionEncoding(ChepyCore):
     def xor(
         self,
         key: str,
-        key_type: Literal["hex", "utf", "base64"] = "hex",
+        key_type: Literal["hex", "utf", "base64", "decimal"] = "hex",
     ) -> EncryptionEncodingT:
         """XOR state with a key
 
         Args:
             key (str): Required. The key to xor by
-            key_type (str, optional): The key type. Valid values are hex, utf and base64. Defaults to "hex".
+            key_type (str, optional): The key type. Valid values are hex, utf, decimal and base64. Defaults to "hex".
 
         Returns:
             Chepy: The Chepy object.
@@ -285,24 +286,30 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("secret").xor(key="secret", key_type="utf").to_hex()
             000000000000
         """
-        assert key_type in [
-            "utf",
-            "hex",
-            "base64",
-        ], "Valid key types are hex, utf and base64"
 
-        if isinstance(key, int):
-            key = str(key)
-        if key_type == "utf":
-            key = binascii.hexlify(key.encode())
-        elif key_type == "base64":
-            key = binascii.hexlify(base64.b64decode(key.encode()))
-        key = binascii.unhexlify(key)
         x = bytearray(b"")
-        for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
-            x.append(char ^ key_val)
+        # check if state is a list and keys are list
+        if isinstance(self.state, bytearray) and isinstance(key, bytearray):
+            for char, key_val in zip(self.state, itertools.cycle(key)):
+                x.append(char ^ key_val)
 
-        self.state = x
+        else:
+
+            if key_type == "utf":
+                key = str(key)
+                key = binascii.hexlify(key.encode())
+            elif key_type == "base64":
+                key = binascii.hexlify(base64.b64decode(key.encode()))
+            elif key_type == "decimal":
+                key = binascii.hexlify(
+                    int(key).to_bytes(len(str(key)), byteorder="big")
+                )
+
+            key = binascii.unhexlify(key)
+            for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
+                x.append(char ^ key_val)
+
+        self.state = bytes(x)
         return self
 
     @ChepyDecorators.call_stack
@@ -826,7 +833,8 @@ class EncryptionEncoding(ChepyCore):
             self.state = cipher.encrypt(Padding.pad(self._convert_to_bytes(), 16))
             return self
         elif mode == "CTR":
-            cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
+            counter = Counter.new(128, initial_value=int.from_bytes(iv, "big"))
+            cipher = AES.new(key, mode=AES.MODE_CTR, counter=counter)
             self.state = cipher.encrypt(self._convert_to_bytes())
             return self
         elif mode == "GCM":
@@ -890,7 +898,8 @@ class EncryptionEncoding(ChepyCore):
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
             return self
         elif mode == "CTR":
-            cipher = AES.new(key, mode=AES.MODE_CTR, nonce=b"")
+            counter = Counter.new(128, initial_value=int.from_bytes(iv, "big"))
+            cipher = AES.new(key, mode=AES.MODE_CTR, counter=counter)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "GCM":

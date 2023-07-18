@@ -81,12 +81,63 @@ def test_xor_binary():
         == b"fbcbd9"
     )
     assert (
-        Chepy("./tests/files/hello")
-        .xor(key=41, key_type="utf")
-        .to_hex()
-        .o[0:6]
+        Chepy("./tests/files/hello").xor(key=41, key_type="utf").to_hex().o[0:6]
         == b"1a1e40"
     )
+
+
+def test_xor_decimal():
+    assert Chepy("kfool").xor(3, "decimal").o == b"hello"
+
+
+def test_xor_bytearray():
+    flag = bytearray(
+        [
+            212,
+            240,
+            205,
+            31,
+            239,
+            85,
+            80,
+            104,
+            31,
+            167,  #
+            180,
+            136,
+            232,
+            240,
+            216,
+            11,
+            195,
+            144,
+            227,
+            19,  #
+            239,
+            115,
+            81,
+            3,
+            6,
+            166,
+            183,
+            209,
+            244,
+            241,  #
+            245,
+            80,
+            168,
+            210,
+            191,
+            7,
+            166,
+        ]
+    )  #
+
+    key = bytearray(
+        [156, 164, 143, 100, 219, 10, 34, 92, 113, 212, 132, 229, 159, 196, 170, 56]
+    )
+
+    assert Chepy(flag).xor(key).o == b"HTB{4_r4ns0mw4r3_4lw4ys_wr34k5_h4v0c}"
 
 
 def test_xor_bruteforce():

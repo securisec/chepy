@@ -26,6 +26,7 @@ New ideas:
   ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
   ☐ rsa enc/dec with key or from pem directly
   ☐ ✨ jwt hmac confusion
+  ☐ 🚀 improve tar compression mode type
 
 Bug:
 
@@ -60,6 +61,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ 🚀 improve aes ctr enc/dec to handle iv
   ✔ stringify method using json.dumps
   ✔ jwt none algo
   ✔ ✨ extractor partially done

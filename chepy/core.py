@@ -206,12 +206,12 @@ class ChepyCore(object):
         methods: List[Tuple[Union[str, object], dict]],
         group: int = 0,
     ):
-        """Run specified methods over a subsection of the state. This method will always treat the state 
-        as bytes. 
+        """Run specified methods over a subsection of the state. This method will always treat the state
+        as bytes.
 
         Args:
             pattern (Union[str, bytes]): Regex pattern to match against.
-            methods (List[Tuple[Union[str, object], dict]]): Required. List of tuples. The first value of the 
+            methods (List[Tuple[Union[str, object], dict]]): Required. List of tuples. The first value of the
                 tuple is the method name, the second value is a dictionary of arguments.
             group (int, optional): Matching group. Defaults to 0.
 
@@ -599,7 +599,7 @@ class ChepyCore(object):
             # todo check more types here
             raise NotImplementedError
 
-    def _str_to_bytes(self, s: str) -> bytes: # pragma: no cover
+    def _str_to_bytes(self, s: str) -> bytes:  # pragma: no cover
         """Converts a str to bytes
 
         Args:
@@ -608,6 +608,8 @@ class ChepyCore(object):
         Returns:
             bytes: Bytes
         """
+        if s is None:
+            return s
         if isinstance(s, bytes):
             return s
         return s.encode()
@@ -1074,7 +1076,7 @@ class ChepyCore(object):
             >>> c.loop(iterations=6, callback='hmac_hash', args={'key': 'secret'})
             securisec
         """
-        if type(callback).__name__ == 'method':
+        if type(callback).__name__ == "method":
             # this allows for both method and string passing
             callback = callback.__name__
         assert isinstance(callback, str), "Callback must be a string"
@@ -1113,7 +1115,7 @@ class ChepyCore(object):
             >>> c.loop_list('to_hex').loop_list('hmac_hash', {'key': 'secret'})
             ['5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e', '30d75bf34740e8781cd4ec7b122e3efd8448e270']
         """
-        if type(callback).__name__ == 'method':
+        if type(callback).__name__ == "method":
             # this allows for both method and string passing
             callback = callback.__name__
 
@@ -1174,11 +1176,11 @@ class ChepyCore(object):
                 {"another": "aaaa"},
             ]
         """
-        if type(callback).__name__ == 'method':
+        if type(callback).__name__ == "method":
             # this allows for both method and string passing
             callback = callback.__name__
         assert isinstance(callback, str), "Callback must be a string"
-        
+
         hold = {}
         current_state = self.state
         # find the last index that this method was run
