@@ -4,24 +4,26 @@ from chepy import Chepy
 def test_defang_url():
     assert (
         Chepy("https://app.google.com/?lol=some data&a=1").defang_url().o
-        == "hxxps://app[.]google[.]com/?lol=some data&a=1"
+        == b"hxxps://app[.]google[.]com/?lol=some data&a=1"
     )
 
 
 def test_refang_url():
     assert (
         Chepy("hxxps://app[.]google[.]com/?lol=some data&a=1").refang_url().o
-        == "https://app.google.com/?lol=some data&a=1"
+        == b"https://app.google.com/?lol=some data&a=1"
     )
 
 
 def test_defang_ip():
-    assert Chepy("2001:4860:4860::8844").defang_ip().o == "2001[:]4860[:]4860[:][:]8844"
-    assert Chepy("127.0.0.1").defang_ip().o == "127[.]0[.]0[.]1"
+    assert (
+        Chepy("2001:4860:4860::8844").defang_ip().o == b"2001[:]4860[:]4860[:][:]8844"
+    )
+    assert Chepy("127.0.0.1").defang_ip().o == b"127[.]0[.]0[.]1"
 
 
 def test_refang_ip():
-    assert Chepy("127[.]0[.]0[.]1").refang_ip().o == "127.0.0.1"
+    assert Chepy("127[.]0[.]0[.]1").refang_ip().o == b"127.0.0.1"
 
 
 def test_parse_uri():
@@ -51,5 +53,5 @@ def test_get_cert():
 
 
 def test_int_to_ip():
-    assert Chepy("2130706433").int_to_ip().o == "127.0.0.1"
+    assert Chepy("2130706433").int_to_ip().o == b"127.0.0.1"
     assert Chepy("127.0.0.1").ip_to_int().o == 2130706433

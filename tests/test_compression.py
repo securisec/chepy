@@ -1,5 +1,6 @@
 from chepy import Chepy
 
+
 def test_fix_zip_header():
     assert (
         Chepy(
@@ -10,8 +11,9 @@ def test_fix_zip_header():
         .unzip_one("flag.txt")
         .trim()
         .o
-        == "LLS{tragic_number_more_like_magic_number}"
+        == b"LLS{tragic_number_more_like_magic_number}"
     )
+
 
 def test_zip_info():
     assert (

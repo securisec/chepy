@@ -14,13 +14,13 @@ def test_base16_decode():
 
 
 def test_bytes_to_ascii():
-    assert Chepy([116, 101, 115, 116]).bytes_to_ascii().o == "test"
+    assert Chepy([116, 101, 115, 116]).bytes_to_ascii().o == b"test"
 
 
 def test_dict_to_json():
     assert (
         Chepy({"some": "data", "a": ["list", 1, True]}).dict_to_json().o
-        == '{"some": "data", "a": ["list", 1, true]}'
+        == b'{"some": "data", "a": ["list", 1, true]}'
     )
 
 
@@ -68,7 +68,7 @@ education: |
 def test_json_to_yaml():
     data = '{"name": "Martin D\'vloper", "job": "Developer", "skill": "Elite", "employed": true, "foods": ["Apple", "Orange", "Strawberry", "Mango"], "languages": {"perl": "Elite", "python": "Elite", "pascal": "Lame"}, "education": "4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
     assert (
-        Chepy(data).json_to_yaml().o
+        Chepy(data).json_to_yaml().o.decode()
         == """name: Martin D'vloper
 job: Developer
 skill: Elite
@@ -174,26 +174,26 @@ def test_hex_to_bytes():
 
 
 def test_int_to_hex():
-    assert Chepy(101).int_to_hex().o == "65"
+    assert Chepy(101).int_to_hex().o == b"65"
 
 
 def test_hex_to_str():
     assert Chepy("4100").hex_to_str().o == b"A\x00"
-    assert Chepy("4100").hex_to_str(ignore=True).o == "A\x00"
+    assert Chepy("4100").hex_to_str(ignore=True).o == b"A\x00"
 
 
 def test_to_url_encoding():
     assert (
         Chepy("https://google.com/?lol=some data&a=1").to_url_encoding(safe="/:").o
-        == "https://google.com/%3Flol%3Dsome+data%26a%3D1"
+        == b"https://google.com/%3Flol%3Dsome+data%26a%3D1"
     )
-    assert Chepy("a").to_url_encoding(all_chars=True).to_url_encoding().o == "%2561"
+    assert Chepy("a").to_url_encoding(all_chars=True).to_url_encoding().o == b"%2561"
 
 
 def test_from_url_encoding():
     assert (
         Chepy("https://google.com/%3Flol%3Dsome+data%26a%3D1").from_url_encoding().o
-        == "https://google.com/?lol=some data&a=1"
+        == b"https://google.com/?lol=some data&a=1"
     )
 
 
@@ -202,17 +202,17 @@ def test_to_list():
 
 
 def test_list_to_str():
-    assert Chepy(["a", "b", "c"]).list_to_str(",").o == "a,b,c"
-    assert Chepy([1, 2, 3]).list_to_str((".")).o == "1.2.3"
+    assert Chepy(["a", "b", "c"]).list_to_str(",").o == b"a,b,c"
+    assert Chepy([1, 2, 3]).list_to_str((".")).o == b"1.2.3"
     assert Chepy([b"a", b"b"]).list_to_str(b".").o == b"a.b"
 
 
 def test_join_list():
-    assert Chepy(["a", "b", "c"]).join_list(":").o == "a:b:c"
+    assert Chepy(["a", "b", "c"]).join_list(":").o == b"a:b:c"
 
 
 def test_join():
-    assert Chepy(["a", "b", "c"]).join(":").o == "a:b:c"
+    assert Chepy(["a", "b", "c"]).join(":").o == b"a:b:c"
 
 
 def test_to_int():
@@ -220,16 +220,15 @@ def test_to_int():
 
 
 def test_normalize_hex():
-    assert Chepy("41:42:CE").normalize_hex().o == "4142CE"
-    assert Chepy("0x410x420xce").normalize_hex().o == "4142ce"
+    assert Chepy("41:42:CE").normalize_hex().o == b"4142CE"
+    assert Chepy("0x410x420xce").normalize_hex().o == b"4142ce"
     assert (
-        Chepy("tests/files/hello").load_file().normalize_hex(True).o[0:6].decode()
-        == "cffaed"
+        Chepy("tests/files/hello").load_file().normalize_hex(True).o[0:6] == b"cffaed"
     )
 
 
 def test_bytearray_to_str():
-    assert Chepy(bytearray("lolol", "utf")).bytearray_to_str().o == "lolol"
+    assert Chepy(bytearray("lolol", "utf")).bytearray_to_str().o == b"lolol"
 
 
 def test_get_by_index():
@@ -237,7 +236,7 @@ def test_get_by_index():
 
 
 def test_get_by_key():
-    assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == "data"
+    assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == b"data"
 
 
 def test_to_bytes():
@@ -246,7 +245,7 @@ def test_to_bytes():
 
 def test_from_bytes():
     assert (
-        Chepy(b'{"some": "val", "kl": 1}').from_bytes().o == '{"some": "val", "kl": 1}'
+        Chepy(b'{"some": "val", "kl": 1}').from_bytes().o == b'{"some": "val", "kl": 1}'
     )
 
 
@@ -259,23 +258,23 @@ def test_str_to_dict():
 
 
 def test_int_to_str():
-    assert Chepy(41).int_to_str().o == "41"
+    assert Chepy(41).int_to_str().o == b"41"
 
 
 def test_to_charcode():
-    assert Chepy("aㅎ").to_charcode().o == "97 12622"
+    assert Chepy("aㅎ").to_charcode().o == b"97 12622"
 
 
 def test_from_charcode():
-    assert Chepy("314e 61 20 41").from_charcode().o == "ㅎa A"
+    assert Chepy("314e 61 20 41").from_charcode().o == b"\xe3\x85\x8ea A"
 
 
 def test_to_decimal():
-    assert Chepy("aㅎ").to_decimal().o == "97 12622"
+    assert Chepy("aㅎ").to_decimal().o == b"97 12622"
 
 
 def test_from_decimal():
-    assert Chepy(12622).from_decimal().o == "ㅎ"
+    assert Chepy(12622).from_decimal().o == b"\xe3\x85\x8e"
 
 
 def test_to_binary():
@@ -309,29 +308,29 @@ def test_from_binary():
 
 
 def test_to_octal():
-    assert Chepy("abㅎ").to_octal().o == "141 142 30516"
+    assert Chepy("abㅎ").to_octal().o == b"141 142 30516"
 
 
 def test_from_octral():
-    assert Chepy("141 142 30516").from_octal().o == "abㅎ"
+    assert Chepy("141 142 30516").from_octal().o == b"ab\xe3\x85\x8e"
 
 
 def test_html_encode():
     assert (
         Chepy('https://google.com&a="lol"').to_html_entity().o
-        == "https://google.com&amp;a=&quot;lol&quot;"
+        == b"https://google.com&amp;a=&quot;lol&quot;"
     )
 
 
 def test_html_decode():
     assert (
         Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
-        == 'https://google.com&a="lol"'
+        == b'https://google.com&a="lol"'
     )
 
 
 def test_from_punycode():
-    assert Chepy(b"mnchen-3ya").from_punycode().o == "münchen"
+    assert Chepy(b"mnchen-3ya").from_punycode().o == b"m\xc3\xbcnchen"
 
 
 def test_to_punycode():
@@ -348,30 +347,30 @@ def test_encode_bruteforce():
 def test_decode_bruteforce():
     assert (
         Chepy("m\xfcnchen\ud55c").decode_bruteforce().get_by_key("utf_8").o
-        == "münchen한"
+        == b"m\xc3\xbcnchen\xed\x95\x9c"
     )
 
 
 def test_to_braille():
-    assert Chepy("secret message").to_braille().o == "⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑"
+    assert Chepy("secret message").to_braille().o.decode() == "⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑"
 
 
 def test_from_braille():
-    assert Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o == "secret message"
+    assert Chepy("⠎⠑⠉⠗⠑⠞⠀⠍⠑⠎⠎⠁⠛⠑").from_braille().o == b"secret message"
 
 
 def test_trim():
-    assert Chepy("\nlol ").trim().o == "lol"
+    assert Chepy("\nlol ").trim().o == b"lol"
 
 
 def test_to_hexdump():
     assert Chepy("some").to_hexdump().o.split() == [
-        "00000000:",
-        "73",
-        "6F",
-        "6D",
-        "65",
-        "some",
+        b"00000000:",
+        b"73",
+        b"6F",
+        b"6D",
+        b"65",
+        b"some",
     ]
 
 
@@ -380,34 +379,34 @@ def test_from_hexdump():
 
 
 def test_nato_convert():
-    assert Chepy("abc:1").to_nato().o == "Alpha Bravo Charlie : 1"
+    assert Chepy("abc:1").to_nato().o == b"Alpha Bravo Charlie : 1"
     assert (
         Chepy("Lima Alpha Kilo Echo Mike India Charlie Hotel India Golf Alpha November")
         .from_nato()
         .o
-        == "LAKEMICHIGAN"
+        == b"LAKEMICHIGAN"
     )
 
 
 def test_swap_strings():
-    assert Chepy("oY u").swap_strings(2).o == "You "
+    assert Chepy("oY u").swap_strings(2).o == b"You "
 
 
 def test_to_string():
-    assert Chepy(1).to_string().o == "1"
+    assert Chepy(1).to_string().o == b"1"
 
 
 def test_stringify():
-    assert Chepy("aa").stringify().o == '"aa"'
-    assert Chepy(123).stringify().o == "123"
+    assert Chepy("aa").stringify().o == b'"aa"'
+    assert Chepy(123).stringify().o == b"123"
     # assert Chepy("\xaa").stringify().o == '"\\u00aa"'
-    assert Chepy(True).stringify().o == "true"
-    assert Chepy({"a": 1}).stringify(False).o == '{"a": 1}'
+    assert Chepy(True).stringify().o == b"true"
+    assert Chepy({"a": 1}).stringify(False).o == b'{"a": 1}'
 
 
 def test_select():
-    assert Chepy("abcd").select(0, 2).o == "ab"
-    assert Chepy("abcd").select(2).o == "cd"
+    assert Chepy("abcd").select(0, 2).o == b"ab"
+    assert Chepy("abcd").select(2).o == b"cd"
 
 
 def test_length():
@@ -426,7 +425,7 @@ def test_substitute():
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
         )
         .o
-        == "flag{d41d8cd98f00b204e9800998ecf8427e}"
+        == b"flag{d41d8cd98f00b204e9800998ecf8427e}"
     )
 
 
@@ -445,10 +444,10 @@ def test_remove_nonprintable():
 
 
 def test_base91():
-    data = "flag{some_flag}"
-    out = "@iH<,{_{W$OsuxXi%]D"
+    data = b"flag{some_flag}"
+    out = b"@iH<,{_{W$OsuxXi%]D"
     assert Chepy(data).to_base91().o == out
-    assert Chepy(out).from_base91().o.decode() == data
+    assert Chepy(out).from_base91().o == data
 
 
 def test_swap_endianness():

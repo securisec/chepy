@@ -55,11 +55,10 @@ def test_fire1():
 def test_fire2():
     assert (
         fire.Fire(Chepy, command=["abc", "-", "hmac_hash", "--digest", "md5"]).o
-        == "dd2701993d29fdd0b032c233cec63403"
+        == b"dd2701993d29fdd0b032c233cec63403"
     )
 
 
 def test_fire3():
     fire_obj = fire.Fire(Chepy, command=["abc", "-", "hmac_hash", "--digest", "md5"])
     assert type(fire_obj) == Chepy
-

@@ -2,17 +2,16 @@ from chepy import Chepy
 
 
 def test_reverse():
-    assert Chepy("abcdefg").reverse().out == "gfedcba"
+    assert Chepy("abcdefg").reverse().out == b"gfedcba"
 
 
 def test_reverse_1():
-    assert Chepy("abcdefgh").reverse(4).out == "efghabcd"
+    assert Chepy("abcdefgh").reverse(4).out == b"efghabcd"
 
 
 def test_count_occurances():
     assert (
-        Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").out
-        == 2
+        Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja").count_occurances("ja").out == 2
     )
     assert (
         Chepy("AABCDADJAKDJHKSDAJSDdaskjdhaskdjhasdkja")
@@ -57,8 +56,7 @@ def test_remove_nullbytes():
         .remove_nullbytes()
         .binary_to_hex()
         .o[0:4]
-        .decode()
-        == "cffa"
+        == b"cffa"
     )
 
 
@@ -160,27 +158,27 @@ def test_filter_dict_value():
 
 
 def test_slice():
-    assert Chepy("some data").slice(3, 6).o == "e d"
+    assert Chepy("some data").slice(3, 6).o == b"e d"
 
 
 def test_strip_ansi():
-    assert Chepy("[38;2;92;207;230m;-- main:[0m").strip_ansi().o == ";-- main:"
+    assert Chepy("[38;2;92;207;230m;-- main:[0m").strip_ansi().o == b";-- main:"
 
 
 def test_strip():
-    assert Chepy("some some data").strip(r"some\s").o == "data"
+    assert Chepy("some some data").strip(r"some\s").o == b"data"
 
 
 def test_find_replace():
-    assert Chepy("some some data").find_replace(r"some\s", "data").o == "datadatadata"
+    assert Chepy("some some data").find_replace(r"some\s", "data").o == b"datadatadata"
 
 
 def test_escape_string():
-    assert Chepy("$ome' d@ta").escape_string().o == "\\$ome'\\ d@ta"
+    assert Chepy("$ome' d@ta").escape_string().o == b"\\$ome'\\ d@ta"
 
 
 def test_unescape_string():
-    assert Chepy("\\$ome' d@ta").unescape_string().o == "$ome' d@ta"
+    assert Chepy("\\$ome' d@ta").unescape_string().o == b"$ome' d@ta"
 
 
 def test_color_hex_to_rgb():
@@ -191,7 +189,7 @@ def test_diff():
     c = Chepy("a long sentence haha").save_buffer().to_upper_case(by="word")
     c.state += " hehe"
     c.find_replace("lo", "").diff(buffer=0)
-    assert c.o == "{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
+    assert c.o == b"{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
     d = (
         Chepy("a long sentence haha", "a long sentence haha")
         .save_buffer()
@@ -199,12 +197,12 @@ def test_diff():
     )
     d.state += " hehe"
     d.find_replace("lo", "").diff(state=1)
-    assert d.o == "{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
+    assert d.o == b"{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
 
 
 def test_pad():
-    assert Chepy("lol").pad(7, char="a").o == "lola"
-    assert Chepy("lol").pad(7, direction="right", char="a").o == "alol"
+    assert Chepy("lol").pad(7, char="a").o == b"lola"
+    assert Chepy("lol").pad(7, direction="right", char="a").o == b"alol"
 
 
 def test_count():

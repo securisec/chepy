@@ -216,7 +216,7 @@ def test_extract_b64():
     data = """
     when an unknown printer took a galley of type c2VjdXJpc2VjLnRlc3QuZGF0YQo= and scrambled it to make a type specimen book. 
     """
-    assert Chepy(data).extract_base64().o == "c2VjdXJpc2VjLnRlc3QuZGF0YQo="
+    assert Chepy(data).extract_base64().o == b"c2VjdXJpc2VjLnRlc3QuZGF0YQo="
 
 
 def test_find_longest_continious_pattern():

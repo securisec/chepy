@@ -638,6 +638,8 @@ class ChepyCore(object):
         Returns:
             Any: Final output
         """
+        if isinstance(self.state, str):
+            return self.state.encode()
         return self.state
 
     @property
@@ -647,6 +649,8 @@ class ChepyCore(object):
         Returns:
             Any: Final output
         """
+        if isinstance(self.state, str):
+            return self.state.encode()
         return self.state
 
     @ChepyDecorators.call_stack

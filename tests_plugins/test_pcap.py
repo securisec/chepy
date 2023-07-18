@@ -55,7 +55,7 @@ def test_pcap_convo():
 
 def test_usb_keyboard():
     c = Chepy("tests/files/keyboard.pcap").read_pcap().pcap_usb_keyboard()
-    assert "KAIZEN" in c.o
+    assert b"KAIZEN" in c.o
 
 
 def test_raw_payload_offset():

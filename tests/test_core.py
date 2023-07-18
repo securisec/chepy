@@ -14,8 +14,8 @@ def test_states():
 
 
 def test_substring():
-    assert Chepy("some data").debug(True).substring("s(ome)", 1).o == "ome"
-    assert Chepy("some data").substring("s(ome)").o == "some"
+    assert Chepy("some data").debug(True).substring("s(ome)", 1).o == b"ome"
+    assert Chepy("some data").substring("s(ome)").o == b"some"
 
 
 def test_get_state():
@@ -35,7 +35,7 @@ def test_copy_state():
 
 
 def test_set_state():
-    assert Chepy("some data").set_state("new data").o == "new data"
+    assert Chepy("some data").set_state("new data").o == b"new data"
 
 
 def test_run_script():
@@ -48,8 +48,8 @@ def test_fork():
     assert Chepy("A", "B").fork(
         [("to_hex",), ("hmac_hash", {"key": "secret", "digest": "md5"})]
     ).states == {
-        0: "3e90033ea5422dafd81470dde4ffb37b",
-        1: "c474a4a957fe2018e2bffef53887ae22",
+        0: b"3e90033ea5422dafd81470dde4ffb37b",
+        1: b"c474a4a957fe2018e2bffef53887ae22",
     }
     assert c.fork([(c.to_hex,)]).states == {0: b"41", 1: b"42"}
 
@@ -144,7 +144,7 @@ def test_run_recipe():
             ]
         )
         .o
-        == "LOL\n"
+        == b"LOL\n"
     )
 
 
@@ -158,7 +158,7 @@ def test_recipe():
 
     assert (
         Chepy("tests/files/encoding").load_recipe(temp).o
-        == "StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
+        == b"StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}"
     )
     Path(temp).unlink()
 
@@ -171,25 +171,21 @@ def test_loop():
         == b"securisec"
     )
     c = Chepy("VmpGb2QxTXhXWGxTYmxKV1lrZDRWVmx0ZEV0alZsSllaVWRHYWxWVU1Eaz0=")
-    assert (
-        c.loop(6, c.from_base64)
-        .o
-        == b"securisec"
-    )
+    assert c.loop(6, c.from_base64).o == b"securisec"
 
 
 def test_loop_list():
     c = Chepy(["an", "array"])
     c.loop_list("to_hex").loop_list("hmac_hash", {"key": "secret"})
     assert c.o == [
-        "5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
-        "30d75bf34740e8781cd4ec7b122e3efd8448e270",
+        b"5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
+        b"30d75bf34740e8781cd4ec7b122e3efd8448e270",
     ]
     c1 = Chepy(["an", "array"])
     c1.loop_list("to_hex").loop_list(c.hmac_hash, {"key": "secret"})
     assert c1.o == [
-        "5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
-        "30d75bf34740e8781cd4ec7b122e3efd8448e270",
+        b"5cbe6ca2a66b380aec1449d4ebb0d40ac5e1b92e",
+        b"30d75bf34740e8781cd4ec7b122e3efd8448e270",
     ]
 
 
@@ -198,19 +194,22 @@ def test_loop_dict():
     c = Chepy(data)
     c.loop_list("loop_dict", {"keys": ["some", "lol"], "callback": "to_upper_case"})
     assert c.o == [
-        {"some": "VAL"},
-        {"some": "ANOTHER"},
-        {"lol": "LOL"},
+        {"some": b"VAL"},
+        {"some": b"ANOTHER"},
+        {"lol": b"LOL"},
         {"another": "aaaa"},
     ]
 
-    d = Chepy({"some": "hahahaha", "lol": "aahahah"})
+    d = Chepy({"some": "hahahaha", "lol": b"aahahah"})
     d.loop_dict(["some"], d.to_upper_case)
-    assert d.o == {"some": "HAHAHAHA", "lol": "aahahah"}
+    assert d.o == {"some": b"HAHAHAHA", "lol": b"aahahah"}
 
     e = Chepy({"some": "hahahaha", "lol": "aahahah"})
     e.loop_dict(["some"], "hmac_hash", {"key": "secret"})
-    assert e.o == {"some": "99f77ec06a3c69a4a95371a7888245ba57f47f55", "lol": "aahahah"}
+    assert e.o == {
+        "some": b"99f77ec06a3c69a4a95371a7888245ba57f47f55",
+        "lol": "aahahah",
+    }
 
 
 def test_reset():

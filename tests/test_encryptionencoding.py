@@ -597,46 +597,46 @@ def test_blowfish_decrypt():
 def test_vigener_encode():
     assert (
         Chepy("shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}").vigenere_encode("victory").o
-        == "npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}"
+        == b"npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}"
     )
-    assert Chepy("secret").vigenere_encode("secret").o == "kieiim"
+    assert Chepy("secret").vigenere_encode("secret").o == b"kieiim"
 
 
 def test_vigenere_decode():
     assert (
         Chepy("npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}").vigenere_decode("victory").o
-        == "shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}"
+        == b"shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}"
     )
-    assert Chepy("kieiim").vigenere_decode("secret").o == "secret"
+    assert Chepy("kieiim").vigenere_decode("secret").o == b"secret"
 
 
 def test_affin_encode():
-    assert Chepy("secret").affine_encode().o == "TFDSFU"
+    assert Chepy("secret").affine_encode().o == b"TFDSFU"
 
 
 def test_affine_decode():
-    assert Chepy("TFDSFU").affine_decode().o == "SECRET"
+    assert Chepy("TFDSFU").affine_decode().o == b"SECRET"
 
 
 def test_atbash_encode():
-    assert Chepy("secret").atbash_encode().o == "hvxivg".upper()
+    assert Chepy("secret").atbash_encode().o == b"hvxivg".upper()
 
 
 def test_atbash_decode():
-    assert Chepy("hvxivg").atbash_decode().o == "secret".upper()
+    assert Chepy("hvxivg").atbash_decode().o == b"secret".upper()
 
 
 def test_to_morse_code():
     assert (
         Chepy("hello world").to_morse_code(word_delim="/").o
-        == ".... . .-.. .-.. --- /.-- --- .-. .-.. -.. /"
+        == b".... . .-.. .-.. --- /.-- --- .-. .-.. -.. /"
     )
 
 
 def test_from_morse_code():
     assert (
         Chepy(".... . .-.. .-.. --- \n.-- --- .-. .-.. -..").from_morse_code().o
-        == "HELLO WORLD"
+        == b"HELLO WORLD"
     )
 
 
@@ -658,7 +658,7 @@ def test_rsa_sign():
 
 
 def test_monoalphabetic_substitution():
-    assert Chepy("lol").monoalphabetic_substitution({"l": "t", "o": "s"}).o == "tst"
+    assert Chepy("lol").monoalphabetic_substitution({"l": "t", "o": "s"}).o == b"tst"
 
 
 def test_chacha_decrypt():
@@ -719,13 +719,5 @@ def test_rsa_public_key_from_jwk():
         )
         .rsa_public_key_from_jwk()
         .o
-        == """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2bxlRFYk+nczolmssgXI
-sQo9TTRyLpNKDE0hg4ViZNxOQ63jjCTqSSsmZb/4Pt326n0NzJxEeaJ9I3JwpYFr
-mjkbB+/mk5CyAEL75cMUDyWO3I9DnYR2tHHI4zhd/VQIaIn48A6AjMFHTiTYxM6B
-03EWSb7U7FqJmUlxTAjuOkeMSQQrMtD8cptJAKHtiYSRPEfN77q3Hr6zx0pXeQnE
-G+P/fassID6MeJjMAA9xHc1yG8Oc2hnGSvS9Ao6usIIvuShk7lxHjbPyZ2uuC1eN
-c7qkGiwq2KTX/Huy4cARHt3g/zdGO9nF+ONaUc7yHgzV6Rwch7li25uc9uYS5rYm
-OwIDAQAB
------END PUBLIC KEY-----"""
+        == b"""-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2bxlRFYk+nczolmssgXI\nsQo9TTRyLpNKDE0hg4ViZNxOQ63jjCTqSSsmZb/4Pt326n0NzJxEeaJ9I3JwpYFr\nmjkbB+/mk5CyAEL75cMUDyWO3I9DnYR2tHHI4zhd/VQIaIn48A6AjMFHTiTYxM6B\n03EWSb7U7FqJmUlxTAjuOkeMSQQrMtD8cptJAKHtiYSRPEfN77q3Hr6zx0pXeQnE\nG+P/fassID6MeJjMAA9xHc1yG8Oc2hnGSvS9Ao6usIIvuShk7lxHjbPyZ2uuC1eN\nc7qkGiwq2KTX/Huy4cARHt3g/zdGO9nF+ONaUc7yHgzV6Rwch7li25uc9uYS5rYm\nOwIDAQAB\n-----END PUBLIC KEY-----"""
     )

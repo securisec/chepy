@@ -8,7 +8,7 @@ def test_jpath():
         .jpath_selector("[*].name.first")
         .get_by_index(2)
         .o
-        == "Long"
+        == b"Long"
     )
 
 
@@ -19,7 +19,7 @@ def test_xpath():
         .xpath_selector("//title/text()")
         .get_by_index(0)
         .o
-        == "Example Domain"
+        == b"Example Domain"
     )
 
 
@@ -30,7 +30,7 @@ def test_css():
         .css_selector("title")
         .get_by_index(0)
         .o
-        == "<title>Example Domain</title>"
+        == b"<title>Example Domain</title>"
     )
 
 
