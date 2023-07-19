@@ -3,7 +3,7 @@ import hashlib
 
 import lazy_import
 
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Any
 
 from crccheck.crc import Crc8, Crc32, CrcArc
 from typing_extensions import Literal
@@ -23,6 +23,7 @@ SHAKE256 = lazy_import.lazy_module("Crypto.Hash.SHAKE256")
 RIPEMD = lazy_import.lazy_module("Crypto.Hash.RIPEMD")
 BLAKE2s = lazy_import.lazy_module("Crypto.Hash.BLAKE2s")
 BLAKE2b = lazy_import.lazy_module("Crypto.Hash.BLAKE2b")
+import passlib.hash
 
 # from Crypto.Protocol.KDF import PBKDF2
 KDF = lazy_import.lazy_module("Crypto.Protocol.KDF")
@@ -556,4 +557,17 @@ class Hashing(ChepyCore):
         self.state = KDF.scrypt(
             self._convert_to_bytes(), salt=salt, key_len=key_length, N=2**N, r=r, p=p
         ).hex()
+        return self
+
+    @ChepyDecorators.call_stack
+    def password_hashing(self, format: str, **kwargs: Any) -> HashingT:
+        """Hash the state with various password hashing algorithems
+
+        Args:
+            format (str): Hash state with password algorithems
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        self.state = getattr(passlib.hash, format).hash(self._convert_to_bytes(), **kwargs)
         return self

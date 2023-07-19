@@ -22,3 +22,4 @@ regex
 typing_extensions
 pretty-errors==1.2.25
 lz4==4.3.2
+passlib==1.7.4

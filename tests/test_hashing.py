@@ -220,3 +220,15 @@ def test_derive_pbkdf2_key():
         .o[:10]
         == b"6d2a9c4b24"
     )
+
+
+def test_password_hashing():
+    password = "lol"
+    assert (
+        Chepy(password).password_hashing("lmhash").o
+        == b"7d0fbaebf878e771aad3b435b51404ee"
+    )
+    assert (
+        Chepy(password).password_hashing("msdcc", user="lol").o
+        == b"5a487b0cda9a56e7e25464d81da162a2"
+    )

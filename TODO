@@ -32,8 +32,6 @@ New ideas:
   ☐ ✨ shuffle
   ☐ ✨ cetacean encode/decode
   ☐ ✨ ls47 enc/dec
-  ☐ ✨ lm hash
-  ☐ ✨ nt hash
 
 Bug:
 
@@ -68,6 +66,8 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ nt hash
+  ✔ ✨ lm hash
   ✔ ✨ lz4 compression/decompression
   ✔ 🚀 improve aes ctr enc/dec to handle iv
   ✔ stringify method using json.dumps

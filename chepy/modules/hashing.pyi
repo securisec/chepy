@@ -2,6 +2,61 @@ from ..core import ChepyCore
 from typing import Any, TypeVar, Union
 from typing_extensions import Literal as Literal
 
+type_password_hashes = Literal[
+    "apr_md5_crypt",
+    "argon2",
+    "atlassian_pbkdf2_sha1",
+    "bcrypt",
+    "bcrypt_sha256",
+    "bigcrypt",
+    "bsd_nthash",
+    "bsdi_crypt",
+    "cisco_asa",
+    "cisco_pix",
+    "cisco_type7",
+    "crypt16",
+    "cta_pbkdf2_sha1",
+    "des_crypt",
+    "django_digest",
+    "dlitz_pbkdf2_sha1",
+    "fshp",
+    "grub_pbkdf2_sha512",
+    "hex_digest",
+    "ldap_crypt",
+    "ldap_hex_md5",
+    "ldap_hex_sha1",
+    "ldap_md5",
+    "ldap_pbkdf2_digest",
+    "ldap_plaintext",
+    "ldap_salted_md5",
+    "ldap_salted_sha1",
+    "ldap_salted_sha256",
+    "ldap_salted_sha512",
+    "ldap_sha1",
+    "lmhash",
+    "md5_crypt",
+    "msdcc",
+    "msdcc2",
+    "mssql2000",
+    "mssql2005",
+    "mysql323",
+    "mysql41",
+    "nthash",
+    "oracle10",
+    "oracle11",
+    "pbkdf2_digest",
+    "phpass",
+    "postgres_md5",
+    "roundup_plaintext",
+    "scram",
+    "scrypt",
+    "sha1_crypt",
+    "sha256_crypt",
+    "sha512_crypt",
+    "sun_md5_crypt",
+    "unix_disabled",
+]
+
 HashingT = TypeVar('HashingT', bound='Hashing')
 hmac: Any
 MD2: Any
@@ -50,4 +105,5 @@ class Hashing(ChepyCore):
     def derive_pbkdf2_key(self: HashingT, password: Union[str, bytes], salt: Union[str, bytes], key_size: int=..., iterations: int=..., hash_type: Literal['md5', 'sha1', 'sha256', 'sha512']=..., hex_salt: bool=..., show_full_key: bool=...) -> Any: ...
     def bcrypt_hash(self: HashingT, rounds: int=...) -> HashingT: ...
     def bcrypt_compare(self: HashingT, hash: str) -> HashingT: ...
-    def scrypt_hash(self: HashingT, salt: str=..., key_length: int=..., N: int=..., r: int=..., p: int=...) -> Any: ...
+    def scrypt_hash(self: HashingT, salt: str=..., key_length: int=..., N: int=..., r: int=..., p: int=...) -> HashingT: ...
+    def password_hashing(self: HashingT, format: type_password_hashes, **kwargs) -> HashingT: ...
