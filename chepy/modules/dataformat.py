@@ -1448,3 +1448,44 @@ class DataFormat(ChepyCore):
         d = self._convert_to_bytes()
         self.state = crypto_number.bytes_to_long(d)
         return self
+
+    @ChepyDecorators.call_stack
+    def concat(self, data: Union[str, bytes]) -> DataFormatT:
+        """Concat bytes to the current state
+
+        Args:
+            data (Union[str, bytes]): Data to add
+
+        Returns:
+            Chepy: The Chepy object. s
+        """
+        data = self._str_to_bytes(data)
+        self.state = self._convert_to_bytes() + data
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_wingdings(self) -> DataFormatT:
+        """Encode to windings
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        hold = ""
+        for c in list(self._convert_to_str()):
+            hold += chr(Encoding.wingdings.get(c, ord(c)))
+        self.state = hold.encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_wingdings(self) -> DataFormatT:
+        """Decode from windings
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        conv = {v: k for k, v in Encoding.wingdings.items()}
+        hold = ""
+        for i in list(self._convert_to_str()):
+            hold += conv.get(ord(i), i)
+        self.state = hold.encode()
+        return self

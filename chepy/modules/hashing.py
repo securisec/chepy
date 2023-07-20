@@ -560,6 +560,7 @@ class Hashing(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    @ChepyDecorators.is_stdout
     def password_hashing(self, format: str, **kwargs: Any) -> HashingT:
         """Hash the state with various password hashing algorithems
 
@@ -567,7 +568,9 @@ class Hashing(ChepyCore):
             format (str): Hash state with password algorithems
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
-        self.state = getattr(passlib.hash, format).hash(self._convert_to_bytes(), **kwargs)
+        self.state = getattr(passlib.hash, format).hash(
+            self._convert_to_bytes(), **kwargs
+        )
         return self

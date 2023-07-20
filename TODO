@@ -32,6 +32,7 @@ New ideas:
   ☐ ✨ shuffle
   ☐ ✨ cetacean encode/decode
   ☐ ✨ ls47 enc/dec
+  ☐ ✨ decorator that will show warning message if unexpected results in stdout
 
 Bug:
 
@@ -66,6 +67,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ concat method
   ✔ ✨ nt hash
   ✔ ✨ lm hash
   ✔ ✨ lz4 compression/decompression

@@ -50,6 +50,14 @@ class ChepyDecorators(object):
 
         return func(*args, **kwargs)  # lgtm [py/call-to-non-callable]
 
+    @staticmethod
+    @decorator
+    def is_stdout(func, *args, **kwargs):  # pragma: no cover
+        """Detect if method is being called from the cli"""
+        if sys.stdout.isatty():
+            logging.warning(f"{func.__name__} may not work as expected on the cli")
+        return func(*args, **kwargs)
+
 
 class ChepyCore(object):
     """The ChepyCore class for Chepy is primarily used as an interface
