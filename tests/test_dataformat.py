@@ -501,3 +501,44 @@ def test_from_windings():
         .o.decode()
         == "f︎l︎a︎g︎{︎e︎0︎7︎9︎1︎c︎e︎6︎8︎f︎7︎1︎8︎1︎8︎8︎c︎0︎3︎7︎8︎b︎1︎c︎0︎a︎3︎b︎d︎c︎9︎e︎}︎"
     )
+
+
+def test_to_base36():
+    assert (
+        Chepy("BDSEC{_tW1n_H3X_c1Ph3r_}").to_base36().o
+        == b"19119108 1394555 22173 728462295"
+    )
+    assert (
+        Chepy("BDSEC{_tW1n_H3X_c1Ph3r_}").to_base36(":").o
+        == b"19119108:1394555:22173:728462295"
+    )
+
+
+def test_from_base36():
+    assert (
+        Chepy(b"19119108 1394555 22173 728462295").from_base36().o
+        == b"BDSEC tW1n H3X c1Ph3r".lower()
+    )
+    assert (
+        Chepy(b"19119108:1394555:22173:728462295")
+        .from_base36(delimiter=":", join_by=" ")
+        .o
+        == b"BDSEC tW1n H3X c1Ph3r".lower()
+    )
+
+
+def test_to_twin_hex():
+    assert (
+        Chepy("BDSEC{_tW1n_H3X_c1Ph3r_}").to_twin_hex().to_twin_hex().o
+        == b"1e25v768h1e66dw61v1hv1kl6aa1ei1pw1pv1ju1kj5ps1bb6lw624"
+    )
+
+
+def test_from_twin_hex():
+    assert (
+        Chepy("1e25v768h1e66dw61v1hv1kl6aa1ei1pw1pv1ju1kj5ps1bb6lw624")
+        .from_twin_hex()
+        .from_twin_hex()
+        .o
+        == b"BDSEC{_tW1n_H3X_c1Ph3r_}"
+    )

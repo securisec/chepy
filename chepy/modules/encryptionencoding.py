@@ -3,7 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
-from typing import Literal, TypeVar, Dict, Any
+from typing import Literal, TypeVar, Dict, Any, Union
 
 import lazy_import
 
@@ -313,7 +313,9 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def xor_bruteforce(self, length: int = 100) -> EncryptionEncodingT:
+    def xor_bruteforce(
+        self, length: int = 100, crib: Union[bytes, str, None] = None
+    ) -> EncryptionEncodingT:
         """Brute force single byte xor
 
         For multibyte xor bruteforce, use chepy.extras.crypto_extras.xor_bruteforce_multi
@@ -321,6 +323,7 @@ class EncryptionEncoding(ChepyCore):
 
         Args:
             length (int, optional): How to bytes to bruteforce. Defaults to 100.
+            crib (Union[bytes, str, None], optional): Check for crib in xored value. Defaults to None.
 
         Returns:
             Chepy: The Chepy object.
@@ -339,13 +342,18 @@ class EncryptionEncoding(ChepyCore):
             >>> c.xor("03").bytearray_to_str()
             pf`qfw
         """
+        crib = self._str_to_bytes(crib)
         original = self.state
         found = {}
         keys = hex_chars()
         self.state = original[:length]
         for key in keys:
             self.xor(key)
-            found[key] = self.state
+            if crib is not None:
+                if crib in self.state:
+                    found[key] = self.state
+            else:
+                found[key] = self.state
             self.state = original[:length]
         self.state = found
         return self

@@ -1489,3 +1489,150 @@ class DataFormat(ChepyCore):
             hold += conv.get(ord(i), i)
         self.state = hold.encode()
         return self
+
+    @ChepyDecorators.call_stack
+    def from_twin_hex(self) -> DataFormatT:
+        """Decode twin hex
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        spaceChar = " "
+        cypherBase = []
+        for x in range(32, 128):
+            for y in range(32, 128):
+                thisPair = chr(x) + chr(y)
+                cypherBase.append(thisPair)
+
+        def tripleSplit(strInput):
+            outArray = []
+            thisTriple = ""
+            i = 0
+            while i < len(strInput):
+                thisTriple = strInput[i]
+                i += 1
+                if i < len(strInput):
+                    thisTriple += strInput[i]
+                else:  # pragma: no cover
+                    thisTriple += spaceChar
+                i += 1
+                if i < len(strInput):
+                    thisTriple += strInput[i]
+                else:  # pragma: no cover
+                    thisTriple += spaceChar
+                outArray.append(thisTriple)
+                i += 1
+            return outArray
+
+        def base36_encode(string):
+            return int(string, 36)
+
+        inputArray = tripleSplit(self._convert_to_str())
+        strOutput = ""
+        thisPair = ""
+        for code in inputArray:
+            if code and len(code):
+                thisCode = base36_encode(code)
+                thisPair = cypherBase[thisCode]
+                strOutput += thisPair
+        self.state = strOutput.encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_twin_hex(self) -> DataFormatT:
+        """Encode to twin hex encoding
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        def base36_decode(number):
+            alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
+            if number == 0:  # pragma: no cover
+                return "0"
+            base36 = ""
+            while number != 0:
+                number, i = divmod(number, 36)
+                base36 = alphabet[i] + base36
+            return base36
+
+        def dHex(thisPair):
+            intCode = cypherBase.index(thisPair)
+            strOutput = base36_decode(intCode)
+            if len(strOutput) == 2:  # pragma: no cover
+                return strOutput + spaceChar
+            else:
+                return strOutput
+
+        spaceChar = " "
+        cypherBase = []
+        for x in range(32, 128):
+            for y in range(32, 128):
+                thisPair = chr(x) + chr(y)
+                cypherBase.append(thisPair)
+
+        strInput = self._convert_to_str()
+        strOutput = ""
+        thisPair = ""
+        i = 0
+        while i < len(strInput):
+            thisPair = strInput[i]
+            i += 1
+            if i < len(strInput):
+                thisPair += strInput[i]
+            else:  # pragma: no cover
+                thisPair += spaceChar
+            strOutput += dHex(thisPair)
+            i += 1
+        self.state = strOutput.encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base36(
+        self, delimiter: Union[str, bytes] = " ", join_by: Union[str, bytes] = " "
+    ) -> DataFormatT:
+        """Decode Base36 data
+
+        Args:
+            delimiter (Union[str, bytes], optional): Delimiter to split groups of ints by. Defaults to ' '.
+            join_by (Union[str, bytes], optional): Join final output by. Defaults to ' '.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        delimiter = self._bytes_to_str(delimiter)
+        join_by = self._bytes_to_str(join_by)
+        data = self._convert_to_str().split(delimiter)
+        hold = []
+
+        alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
+        for number in data:
+            number = int(number)
+            if number == 0:
+                return "0"  # pragma: no cover
+            base36 = ""
+            while number != 0:
+                number, i = divmod(number, 36)
+                base36 = alphabet[i] + base36
+            hold.append(base36)
+        self.state = join_by.join(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_base36(self, join_by: Union[str, bytes] = b" ") -> DataFormatT:
+        """Encode to Base 36
+
+        Args:
+            join_by (Union[str, bytes], optional): Join final output by. Defaults to b' '.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        join_by = self._str_to_bytes(join_by)
+        data = self._convert_to_str()
+        data = re.compile(r"[^a-zA-Z0-9]").sub(" ", data).split()
+        hold = []
+        for d in data:
+            hold.append(str(int(d.strip(), 36)).encode())
+        self.state = join_by.join(hold)
+        return self

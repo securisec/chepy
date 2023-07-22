@@ -622,6 +622,21 @@ class ChepyCore(object):
             return s
         return s.encode()
 
+    def _bytes_to_str(self, s: bytes) -> str:  # pragma: no cover
+        """Converts a bytes to str
+
+        Args:
+            s (str): String
+
+        Returns:
+            str: String
+        """
+        if s is None:
+            return s
+        if isinstance(s, bytes):
+            return s.decode()
+        return s
+
     def _convert_to_int(self) -> int:
         """This method is used to coerce the curret object in
         the state variable into an int. The method should be

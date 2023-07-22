@@ -144,6 +144,14 @@ def test_xor_bruteforce():
     assert Chepy(
         b"\x85\x88\x81\x81\x82\xcd\x9a\x82\x9f\x81\x89"
     ).xor_bruteforce().get_by_key("ed").o == bytearray(b"hello world")
+    assert (
+        len(
+            Chepy(b"\x85\x88\x81\x81\x82\xcd\x9a\x82\x9f\x81\x89")
+            .xor_bruteforce(crib="hell")
+            .o.keys()
+        )
+        == 1
+    )
 
 
 def test_jwt_decode():
