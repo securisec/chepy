@@ -3,6 +3,7 @@ import binascii
 import codecs
 import itertools
 import string
+import random
 from typing import Literal, TypeVar, Dict, Any, Union
 
 import lazy_import
@@ -1423,4 +1424,48 @@ class EncryptionEncoding(ChepyCore):
         for c in cipher:
             hold += mapping.get(c.lower(), c)
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_letter_number_code(
+        self, join_by: Union[str, bytes] = b" "
+    ) -> EncryptionEncodingT:
+        """Encode to A1Z26
+
+        Args:
+            join_by (Union[str, bytes], optional): join output by. Defaults to b' '.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        join_by = self._str_to_bytes(join_by)
+        data = list(self._convert_to_str())
+        hold = []
+        for i, d in enumerate(data):
+            hold.append(f"{d}{i}".encode())
+        random.shuffle(hold)
+        self.state = join_by.join(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_letter_number_code(
+        self, delimiter: Union[str, bytes] = " ", join_by: Union[str, bytes] = ""
+    ) -> EncryptionEncodingT:
+        """Decode A1Z26
+
+        Args:
+            delimiter (Union[str, bytes], optional): Split on. Defaults to ' '.
+            join_by (Union[str, bytes], optional): Join output by. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str().split(delimiter)
+        hold = ["§" for _ in range(len(data))]
+        for d in data:
+            try:
+                hold[int(d[1:])] = d[0]
+            except:  # pragma: no cover
+                continue
+        self.state = join_by.join(hold).encode()
         return self

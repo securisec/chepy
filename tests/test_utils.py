@@ -162,7 +162,7 @@ def test_slice():
 
 
 def test_strip_ansi():
-    assert Chepy("[38;2;92;207;230m;-- main:[0m").strip_ansi().o == b";-- main:"
+    assert Chepy("\x1b[38;2;92;207;230m;-- main:\x1b[0m").strip_ansi().o == b";-- main:"
 
 
 def test_strip():
@@ -221,3 +221,10 @@ def test_filter_list_by_length():
 def test_regex_to_str():
     assert len(Chepy("lol([a-c])").regex_to_str().o) == 4
     assert len(Chepy("lol([a-c])").regex_to_str(all_combo=True).o) == 3
+
+
+def test_shuffle():
+    assert Chepy({"a": 1}).shuffle().o == {"a": 1}
+    assert len(Chepy([1, 2, 3]).shuffle().o) == 3
+    assert len(Chepy("abc").shuffle().o) == 3
+    assert len(Chepy(b"abdc").shuffle().o) != 3

@@ -1225,7 +1225,7 @@ class DataFormat(ChepyCore):
         data: str = self._convert_to_str()
         for d in data:
             if d.isalpha():
-                hold.append(nato_chars[d.upper()])
+                hold.append(nato_chars.get(d.upper(), d.upper()))
             else:
                 hold.append(d)
         self.state = join_by.join(hold)
@@ -1244,7 +1244,7 @@ class DataFormat(ChepyCore):
         """
         data = self._convert_to_str().split(delimiter)
         d = {v: k for k, v in Encoding.NATO_CONSTANTS_DICT.items()}
-        self.state = join_by.join([d.get(p, "") for p in data])
+        self.state = join_by.join([d.get(p, p) for p in data])
         return self
 
     @ChepyDecorators.call_stack

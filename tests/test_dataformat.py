@@ -386,6 +386,12 @@ def test_nato_convert():
         .o
         == b"LAKEMICHIGAN"
     )
+    assert (
+        Chepy(
+            "Whiskey Hotel Four Tango Dash Alpha Romeo Three Dash Yankee Oscar Uniform Dash Sierra One November Kilo India November Golf Dash Four Bravo Zero Uniform Seven"
+        ).from_nato().o
+        == b"WH4T-AR3-YOU-S1NKING-4B0U7"
+    )
 
 
 def test_swap_strings():

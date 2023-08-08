@@ -1,4 +1,5 @@
 import lazy_import
+import random
 import difflib
 from collections import OrderedDict
 from typing import TypeVar, Union
@@ -662,4 +663,34 @@ class Utils(ChepyCore):
             self.state = list(exrex.generate(self._convert_to_str()))
         else:
             self.state = exrex.getone(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def shuffle(self) -> UtilsT:
+        """Shuffle the state if it is a list, string or bytes. The state is
+        unchanged if any other types.
+
+        Returns:
+            Chepy: _description_
+        """
+        data = self.state
+        if not isinstance(
+            data,
+            (
+                bytes,
+                str,
+                list,
+            ),
+        ):
+            return self
+        if isinstance(
+            data,
+            (
+                bytes,
+                str,
+            ),
+        ):
+            data = list(data)
+        random.shuffle(data)
+        self.state = data
         return self
