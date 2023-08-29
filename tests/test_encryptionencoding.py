@@ -657,6 +657,37 @@ def test_rsa_encrypt_decrypt():
         == b"lol"
     )
 
+    private = """-----BEGIN RSA PRIVATE KEY-----
+MIICWwIBAAKBgQDDhjb/e1alLSQk+2UmXjuYmJ1CuYHRWkfmKdf5MhNell2PhrTM
+tT4ljNb7PTi+n8WcwihAxHVNfKvgSQt6q/yuVPj5t51159XJHov+ySANFsTUxsUw
+YzHUJ5yeeHbbcWgNwehHMPGSdDuZ/XnXH3VIk50FIRNjzrrMpHuQso58ewIDAQAB
+AoGAczd000n//efC49QMf/aJkdtk2Dvuhsp3kebYcO0UQunCimArzHGFBKWgzX3/
+IT2POlejVr8uDJJJyinhDNGqXJw9ZEs33f89B7JBGjViS83d9qWypHOg2/OfAt6S
+LNICmpPSmKSSJtenFx7XjV0LdG/+b8rENpNy+8TafThnYekCQQDv8oRfMnur8lLq
+oG2Fg8RJvq6OA8UOcE4Duo0uPba0uec48kfhBvLsCVhW/vDBDU14o5nUoFKn1sBa
+7jU7Mb0fAkEA0JrhtcBNgUd93tp0jSC6T/qNUOVcJjFZWjamB/X4fPesiNw/azV5
+OaGpn9wp7swX56DCcLdIR57T9oRw5DX5JQJAWH4Oh7VsmuuR3Ooxui3wdGoYolON
+l1efzgw9CTLFcT2mov/ntnwDlz2TEPKRBAHN8pITp7FBCplO87oqc5xSbQJAfpT9
+UaSXY1NWddxpzRmG9PE8v1HuUN6xMaTnqvz/BBXmhEXh1dRk8yu+GlsmttjxyIQs
+eOk+2vbt+DD1sAVwYQJAF3kq/lbmROIyAOekpXYFCIWU11mHfxSVuxmYjUYLVRGZ
+bmwesS2DFBX5scKK27uMng7nBB9QukZ5kitK4cKelA==
+-----END RSA PRIVATE KEY-----
+    """
+    public = """-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDhjb/e1alLSQk+2UmXjuYmJ1C
+uYHRWkfmKdf5MhNell2PhrTMtT4ljNb7PTi+n8WcwihAxHVNfKvgSQt6q/yuVPj5
+t51159XJHov+ySANFsTUxsUwYzHUJ5yeeHbbcWgNwehHMPGSdDuZ/XnXH3VIk50F
+IRNjzrrMpHuQso58ewIDAQAB
+-----END PUBLIC KEY-----
+    """
+    assert (
+        Chepy("hello")
+        .rsa_encrypt(public_key=public, is_file=False, cipher="PKCS")
+        .rsa_decrypt(private, False, cipher="PKCS")
+        .o
+        == b"hello"
+    )
+
 
 def test_rsa_sign():
     assert (
@@ -744,3 +775,10 @@ def test_from_letter_number_code():
 
 def test_to_letter_number_code():
     assert len(Chepy("test").to_letter_number_code().o.split()) == 4
+
+
+def test_ls47_enc_dec():
+    assert (
+        Chepy("hello").ls47_encrypt("password").ls47_decrypt("password").o
+        == b"hello---"
+    )

@@ -5,6 +5,11 @@ import itertools
 import string
 import random
 from typing import Literal, TypeVar, Dict, Any, Union
+from .internal.ls47 import (
+    encrypt_pad as _ls47_enc,
+    decrypt_pad as _ls47_dec,
+    derive_key as _derive_key,
+)
 
 import lazy_import
 
@@ -24,6 +29,7 @@ Hash = lazy_import.lazy_module("Crypto.Hash")
 Counter = lazy_import.lazy_module("Crypto.Util.Counter")
 PKCS1_15 = lazy_import.lazy_module("Crypto.Signature.pkcs1_15")
 PKCS1_OAEP = lazy_import.lazy_module("Crypto.Cipher.PKCS1_OAEP")
+PKCS1_v1_5 = lazy_import.lazy_module("Crypto.Cipher.PKCS1_v1_5")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
 Padding = lazy_import.lazy_module("Crypto.Util.Padding")
 pycipher = lazy_import.lazy_module("pycipher")
@@ -79,6 +85,19 @@ class EncryptionEncoding(ChepyCore):
         else:
             iv = binascii.unhexlify(binascii.hexlify(iv))
         return key, iv
+
+    def _rsa_process_key(self, key: str, is_file: bool, passphrase=None):
+        """Returns an RSA instance for either keyfile or string key"""
+        if is_file:
+            with open(str(self._abs_path(key)), "r") as f:
+                return RSA.import_key(f.read(), passphrase)
+        return RSA.import_key(key, passphrase)
+
+    def _rsa_cipher(self, c_format: str, rsa):
+        """Returns an RSA Cipher instnace based for cipher type"""
+        if c_format == "PKCS":
+            return PKCS1_v1_5.new(rsa)
+        return PKCS1_OAEP.new(rsa)
 
     @ChepyDecorators.call_stack
     def rotate(self, rotate_by: int) -> EncryptionEncodingT:
@@ -1239,75 +1258,105 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rsa_encrypt(self, pub_key_path: str) -> EncryptionEncodingT:
+    def rsa_encrypt(
+        self,
+        public_key: str,
+        is_file: bool = True,
+        passphrase: str = None,
+        cipher: Literal["OAEP", "PKCS"] = "OAEP",
+    ) -> EncryptionEncodingT:
         """Encrypt data with RSA Public key in PEM format
 
         Args:
-            pub_key_path (str): Path to Public key
+            public_key (str): Path to Public key
+            is_file (bool): If supplied argument is a PEM file path. Defaults to false
+            passphrase (str): passphrase. Defaults to None
+            cipher (str): Cipher type. Defaults to OAEP
 
         Returns:
             Chepy: The Chepy object
         """
-        with open(str(self._abs_path(pub_key_path)), "r") as f:
-            pub_key = f.read()
-            key = RSA.importKey(pub_key)
-            cipher = PKCS1_OAEP.new(key)
-            self.state = cipher.encrypt(self._convert_to_bytes())
-            return self
+        rsa = self._rsa_process_key(public_key, is_file, passphrase)
+        c = self._rsa_cipher(cipher, rsa)
+        self.state = c.encrypt(self._convert_to_bytes())
+        return self
 
     @ChepyDecorators.call_stack
-    def rsa_decrypt(self, priv_key_path: str) -> EncryptionEncodingT:
+    def rsa_decrypt(
+        self,
+        private_key: str,
+        is_file: bool = True,
+        passphrase: str = None,
+        cipher: Literal["OAEP", "PKCS"] = "OAEP",
+    ) -> EncryptionEncodingT:
         """Decrypt data with RSA Private key in PEM format
 
         Args:
-            priv_key_path (str): Path to Private key
+            private_key (str): Path to Private key
+            is_file (bool): If supplied argument is a PEM file path. Defaults to false
+            passphrase (str): passphrase. Defaults to None
+            cipher (str): Cipher type. Defaults to OAEP
 
         Returns:
             Chepy: The Chepy object
         """
-        with open(str(self._abs_path(priv_key_path)), "r") as f:
-            priv_key = f.read()
-            key = RSA.importKey(priv_key)
-            cipher = PKCS1_OAEP.new(key)
-            self.state = cipher.decrypt(self._convert_to_bytes())
-            return self
+        rsa = self._rsa_process_key(private_key, is_file, passphrase)
+        c = self._rsa_cipher(cipher, rsa)
+        if cipher == "PKCS":
+            self.state = c.decrypt(self._convert_to_bytes(), None)
+        else:
+            self.state = c.decrypt(self._convert_to_bytes())
+        return self
 
     @ChepyDecorators.call_stack
-    def rsa_sign(self, priv_key_path: str) -> EncryptionEncodingT:
+    def rsa_sign(
+        self,
+        private_key: str,
+        is_file: bool = True,
+        passphrase: str = None,
+        hash_format: Literal["SHA256", "SHA512", "SHA1", "MD5", "SHA384"] = "SHA256",
+    ) -> EncryptionEncodingT:
         """Sign data in state with RSA Private key in PEM format
 
         Args:
-            priv_key_path (str): Path to Private key
+            private_key (str): Private key
+            is_file (bool): If supplied argument is a PEM file path. Defaults to false
+            passphrase (str): passphrase. Defaults to None
+            hash_format (str): hash type. Defaults to SHA256
 
         Returns:
             Chepy: The Chepy object
         """
-        with open(str(self._abs_path(priv_key_path)), "r") as f:
-            priv_key = f.read()
-            key = RSA.importKey(priv_key)
-            h = Hash.SHA256.new(self._convert_to_bytes())
-            self.state = PKCS1_15.new(key).sign(h)
-            return self
+        rsa = self._rsa_process_key(private_key, is_file, passphrase)
+        h = getattr(Hash, hash_format).new(self._convert_to_bytes())
+        self.state = PKCS1_15.new(rsa).sign(h)
+        return self
 
     @ChepyDecorators.call_stack
     def rsa_verify(
-        self, signature: bytes, public_key_path: str
+        self,
+        signature: bytes,
+        public_key: str,
+        is_file: bool = True,
+        passphrase: str = None,
+        hash_format: Literal["SHA256", "SHA512", "SHA1", "MD5", "SHA384"] = "SHA256",
     ) -> EncryptionEncodingT:  # pragma: no cover
         """Verify data in state with RSA Public key in PEM format
 
         Args:
             signature (bytes): The signature as bytes
-            public_key_path (str): Path to Private key
+            public_key (str): Path to Private key
+            is_file (bool): If supplied argument is a PEM file path. Defaults to false
+            passphrase (str): passphrase. Defaults to None
+            hash_format (str): Cipher type. Defaults to SHA256
 
         Returns:
             Chepy: The Chepy object
         """
-        with open(str(self._abs_path(public_key_path)), "r") as f:
-            pub_key = f.read()
-            key = RSA.importKey(pub_key)
-            h = Hash.SHA256.new(self._convert_to_bytes())
-            self.state = PKCS1_15.new(key).verify(h, signature)
-            return self
+        rsa = self._rsa_process_key(public_key, is_file, passphrase)
+        h = getattr(Hash, hash_format).new(self._convert_to_bytes())
+        self.state = PKCS1_15.new(rsa).verify(h, signature)
+        return self
 
     @ChepyDecorators.call_stack
     def rsa_private_pem_to_jwk(self) -> EncryptionEncodingT:
@@ -1468,4 +1517,39 @@ class EncryptionEncoding(ChepyCore):
             except:  # pragma: no cover
                 continue
         self.state = join_by.join(hold).encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def ls47_encrypt(
+        self, password: str, padding: int = 10, signature: str = ""
+    ) -> EncryptionEncodingT:
+        """LS47 encrypt
+
+        Args:
+            password (str): password
+            padding (int, optional): Padding. Defaults to 10.
+            signature (str, optional): Signature to prepend. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = _derive_key(password)
+        self.state = _ls47_enc(
+            key, self._convert_to_str(), padding_size=padding, signature=signature
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def ls47_decrypt(self, password: str, padding: int = 10) -> EncryptionEncodingT:
+        """LS47 decrypt
+
+        Args:
+            password (str): password
+            padding (int, optional): Padding. Defaults to 10.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = _derive_key(password)
+        self.state = _ls47_dec(key, padding, self._convert_to_str())
         return self
