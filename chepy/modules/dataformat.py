@@ -6,13 +6,15 @@ import html
 import base58
 import json
 import struct
+import pickle
+import string
 from random import randint
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
 import hexdump
 from ast import literal_eval
-from typing import TypeVar, Union, List
+from typing import TypeVar, Union, List, Literal
 from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
@@ -1635,4 +1637,106 @@ class DataFormat(ChepyCore):
         for d in data:
             hold.append(str(int(d.strip(), 36)).encode())
         self.state = join_by.join(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_pickle(self) -> DataFormatT:
+        """Pickle serialize state
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = pickle.dumps(self.state)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_pickle(self, trust: bool = False) -> DataFormatT:
+        """Deserialize pickle data
+
+        Args:
+            trust (bool, optional): As this can lead to code execution, this is a safety net and needs to be set to True. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if not trust:
+            return self
+        self.state = pickle.loads(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_bacon(
+        self,
+        A: Literal["A", "0"] = "A",
+        B: Literal["B", "1"] = "B",
+        complete: bool = True,
+        join_by: Union[str, bytes] = b" ",
+        invert: bool = False,
+    ) -> DataFormatT:
+        """Bacon encode
+
+        Args:
+            A (Literal['A', '0'], optional): The A character. Defaults to 'A'.
+            B (Literal['B', '1'], optional): The B character. Defaults to 'B'.
+            complete (bool, optional): Use unique mapping for all characters. Defaults to True.
+            join_by (Union[str,bytes], optional): Join output by. Defaults to b' '.
+            invert (bool, optional): Invert encoding. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        join_by = self._str_to_bytes(join_by)
+        hold = []
+        for s in self._convert_to_str():
+            if s in string.ascii_letters:
+                if complete:
+                    hold.append(Encoding.BACON_26.get(s.upper()))
+                else:  # pragma: no cover
+                    hold.append(Encoding.BACON_24.get(s.upper()))
+        updated = []
+        for h in hold:
+            if invert:  # pragma: no cover
+                updated.append(h.replace("a", B).replace("b", A).encode())
+            else:
+                updated.append(h.replace("a", A).replace("b", B).encode())
+        self.state = join_by.join(updated)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_bacon(
+        self,
+        A: Literal["A", "0"] = "A",
+        B: Literal["B", "1"] = "B",
+        complete: bool = True,
+        split_by: Union[str, bytes] = b" ",
+        invert: bool = False,
+    ) -> DataFormatT:
+        """From Bacon
+
+        Args:
+            A (Literal['A','0'], optional): A character. Defaults to 'A'.
+            B (str, optional): B character. Defaults to 'B'.
+            complete (bool, optional): Use unique mapping for all characters. Defaults to True.
+            split_by (Union[str,bytes], optional): Split by. Defaults to b' '.
+            invert (bool, optional): Invert decoding. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        split_by = self._bytes_to_str(split_by)
+        if complete:
+            mapping = {v: k for k, v in Encoding.BACON_26.items()}
+        else:
+            mapping = {v: k for k, v in Encoding.BACON_26.items()}  # pragma: no cover
+        data = self.state
+        if not isinstance(self.state, list):  # pragma: no cover
+            data = self._convert_to_str().split(split_by)
+        out = ""
+        for d in data:
+            if invert:  # pragma: no cover
+                d = d.replace(A, "b").replace(B, "a")
+            else:
+                d = d.replace(A, "a").replace(B, "b")
+            out += mapping.get(d, "")
+        self.state = out.encode()
         return self

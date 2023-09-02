@@ -389,7 +389,9 @@ def test_nato_convert():
     assert (
         Chepy(
             "Whiskey Hotel Four Tango Dash Alpha Romeo Three Dash Yankee Oscar Uniform Dash Sierra One November Kilo India November Golf Dash Four Bravo Zero Uniform Seven"
-        ).from_nato().o
+        )
+        .from_nato()
+        .o
         == b"WH4T-AR3-YOU-S1NKING-4B0U7"
     )
 
@@ -548,3 +550,17 @@ def test_from_twin_hex():
         .o
         == b"BDSEC{_tW1n_H3X_c1Ph3r_}"
     )
+
+
+def test_pickle():
+    out = Chepy("hello").to_pickle().o
+    assert out == b"\x80\x04\x95\t\x00\x00\x00\x00\x00\x00\x00\x8c\x05hello\x94."
+    assert Chepy(out).from_pickle(True).o == b"hello"
+    assert Chepy(out).from_pickle().o == out
+
+
+def test_bacon():
+    out = Chepy("hello").to_bacon().o
+    assert out == b"AABBB AABAA ABABB ABABB ABBBA"
+    assert Chepy(out).from_bacon().o == b"HELLO"
+    assert Chepy("hello").to_bacon(A="0", B="1").from_bacon(A="0", B="1").o == b"HELLO"

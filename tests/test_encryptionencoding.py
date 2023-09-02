@@ -618,7 +618,7 @@ def test_vigenere_decode():
     assert Chepy("kieiim").vigenere_decode("secret").o == b"secret"
 
 
-def test_affin_encode():
+def test_affine_encode():
     assert Chepy("secret").affine_encode().o == b"TFDSFU"
 
 

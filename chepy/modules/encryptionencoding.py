@@ -1215,7 +1215,7 @@ class EncryptionEncoding(ChepyCore):
             morse_code_dict[k] = v.replace(".", dot).replace("-", dash)
         for word in self._convert_to_str().split():
             for w in word:
-                encode += morse_code_dict.get(w.upper()) + letter_delim
+                encode += morse_code_dict.get(w.upper(), '') + letter_delim
             encode += word_delim
         self.state = encode
         return self
