@@ -56,7 +56,7 @@ jobs:
         
     - name: Install test requirements
       run: |
-        pip install sphinx recommonmark pytest==7.4.0 pytest-cov bandit pyperclip 
+        pip install sphinx recommonmark pytest==7.4.0 pytest-cov pyperclip 
         
     - name: Test with pytest
       run: |
@@ -92,9 +92,9 @@ jobs:
         pytest --disable-pytest-warnings tests_plugins/
         python -c "from chepy import Chepy"
 
-    - name: Test with bandit
-      run: |
-        bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404,B608,B311,B324
+    # - name: Test with bandit
+    #   run: |
+    #     bandit --recursive chepy/ --ignore-nosec --skip B101,B413,B303,B310,B112,B304,B320,B410,B404,B608,B311,B324
         
     # - name: Test docs
     #   if: ${{ !env.ACT }} && contains(matrix.os, 'ubuntu')

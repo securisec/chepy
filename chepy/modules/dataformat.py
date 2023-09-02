@@ -9,6 +9,7 @@ import struct
 import pickle
 import string
 from random import randint
+from .internal.constants import Encoding
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -1739,4 +1740,43 @@ class DataFormat(ChepyCore):
                 d = d.replace(A, "a").replace(B, "b")
             out += mapping.get(d, "")
         self.state = out.encode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_upside_down(self, reverse: bool = False):
+        """To upside down
+
+        Args:
+            reverse (bool, optional): Reverse order. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        hold = ""
+        for s in self._convert_to_str():
+            hold += Encoding.UPSIDE_DOWN.get(s, s)
+        if reverse:
+            self.state = hold[::-1]
+        else:
+            self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_upside_down(self, reverse: bool = False):
+        """From upside down
+
+        Args:
+            reverse (bool, optional): Reverse order. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        encoding = {v: k for k, v in Encoding.UPSIDE_DOWN.items()}
+        hold = ""
+        for s in self._convert_to_str():
+            hold += encoding.get(s, s)
+        if reverse:
+            self.state = hold[::-1]
+        else:
+            self.state = hold
         return self

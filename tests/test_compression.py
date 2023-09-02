@@ -56,6 +56,18 @@ def test_create_zip():
     )
 
 
+def test_zip_compress():
+    c = Chepy("some data").zip_compress("file").o
+    assert c[:2] == b"PK"
+    assert b"some data" in c
+
+
+def test_zip_compress_symlink():
+    c = Chepy("some data").zip_compress_symlink("file", "target").o
+    assert c[:2] == b"PK"
+    assert b"target" in c
+
+
 def test_gzip_compress():
     assert Chepy("A").to_hex().gzip_compress().to_hex().slice(0, 6).o == b"1f8b08"
 

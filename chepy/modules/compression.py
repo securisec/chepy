@@ -6,6 +6,7 @@ import lzma
 import tarfile
 import zipfile
 import zlib
+import stat
 from typing import TypeVar
 import lazy_import
 
@@ -145,6 +146,62 @@ class Compression(ChepyCore):
         z.writestr(file_name, self.state)
         z.close()
         self.state = mf.getvalue()
+        return self
+
+    @ChepyDecorators.call_stack
+    def zip_compress(self, file_name: str) -> CompressionT:
+        """Compress the state as a zipfile
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        out = io.BytesIO()
+        zipInfo = zipfile.ZipInfo(file_name)
+        with zipfile.ZipFile(out, mode="w") as z:
+            z.writestr(zipInfo, self._convert_to_bytes())
+        self.state = out.getvalue()
+        return self
+
+    @ChepyDecorators.call_stack
+    def zip_compress_symlink(
+        self: CompressionT, file_name: str, target_file: str
+    ) -> CompressionT:
+        """Create a zipfile with a symlink pointer. For unix
+
+        Args:
+            filename (str): File name
+            target_file (str): Target system file
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        out = io.BytesIO()
+        zipInfo = zipfile.ZipInfo(file_name)
+        zipInfo.create_system = (
+            3  # System which created ZIP archive, 3 = Unix; 0 = Windows
+        )
+        unix_st_mode = (
+            stat.S_IFLNK
+            | stat.S_IRUSR
+            | stat.S_IWUSR
+            | stat.S_IXUSR
+            | stat.S_IRGRP
+            | stat.S_IWGRP
+            | stat.S_IXGRP
+            | stat.S_IROTH
+            | stat.S_IWOTH
+            | stat.S_IXOTH
+        )
+        zipInfo.external_attr = (
+            unix_st_mode << 16
+        )  # The Python zipfile module accepts the 16-bit "Mode" field (that stores st_mode field from struct stat, containing user/group/other permissions, setuid/setgid and symlink info, etc) of the ASi extra block for Unix as bits 16-31 of the external_attr
+        zipOut = zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED)
+        zipOut.writestr(zipInfo, target_file)
+        zipOut.close()
+        self.state = out.getvalue()
         return self
 
     @ChepyDecorators.call_stack
