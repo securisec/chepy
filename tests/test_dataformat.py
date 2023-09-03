@@ -566,5 +566,5 @@ def test_bacon():
     assert Chepy("hello").to_bacon(A="0", B="1").from_bacon(A="0", B="1").o == b"HELLO"
 
 def test_upside_down():
-    assert Chepy('hello').to_upside_down().from_upside_down().o == b'heLLo'
-    assert Chepy('hello').to_upside_down(True).from_upside_down(True).o == b'heLLo'
+    assert Chepy('hello').to_upside_down().from_upside_down().o == b'hello'
+    assert Chepy('hello').to_upside_down(True).from_upside_down(True).o == b'hello'
