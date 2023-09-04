@@ -29,8 +29,6 @@ New ideas:
   ☐ ✨ aes cmac
   ☐ ✨ cetacean encode/decode
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
-  ☐ ✨ huffman encode/decode
-  ☐ ✨ new plugin that can help detect encoding type trained on random data
 
 Bug:
 
@@ -62,28 +60,6 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ huffman encode/decode
+  ✔ ✨ new plugin that can help detect encoding type trained on random data
   ✔ ✨ bifd
-  ✔ ✨ to/from messagepack
-  ✔ ✨ upside down writing
-  ✔ ✨ bacon encode/decode
-  ✔ rsa enc/dec with key or from pem directly
-  ✔ ✨ to/from pickle
-  ✔ ✨ ls47 enc/dec
-  ✔ ✨ shuffle
-  ✔ 🚀 add crib for xor bruteforce
-  ✔ ✨ twin hex encoder/decoder
-  ✔ ✨ base36 encoder decoder
-  ✔ ✨ decorator that will show warning message if unexpected results in stdout
-  ✔ ✨ concat method
-  ✔ ✨ nt hash
-  ✔ ✨ lm hash
-  ✔ ✨ lz4 compression/decompression
-  ✔ 🚀 improve aes ctr enc/dec to handle iv
-  ✔ stringify method using json.dumps
-  ✔ jwt none algo
-  ✔ ✨ extractor partially done
-  ✔ vigenere make aware of all cases/numbers/specials. i.e. npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R} key victory shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}
-  ✔ us-ascii 7bit 20127 https://gchq.github.io/CyberChef/#recipe=Encode_text('US-ASCII%20(7-bit)%20(20127)') 걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽
-  ✔ rot8000
-  ✔ base decode all bases
-  ✔ rename base64 function to from_basexx

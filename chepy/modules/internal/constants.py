@@ -1,15 +1,57 @@
+from collections import Counter
+
+
+class HuffmanNode:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+
+
 class Ciphers:
     @staticmethod
     def gen_polybius_square(keyword):
         alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
         pol_array = list(keyword.upper() + alpha)
-        pol_array = sorted(list(set(pol_array)), key=lambda x: (pol_array.index(x) // 5, pol_array.index(x) % 5))
+        pol_array = sorted(
+            list(set(pol_array)),
+            key=lambda x: (pol_array.index(x) // 5, pol_array.index(x) % 5),
+        )
         polybius = []
 
         for i in range(5):
-            polybius.append(pol_array[i * 5:i * 5 + 5])
+            polybius.append(pol_array[i * 5 : i * 5 + 5])
 
         return polybius
+
+    @staticmethod
+    def build_huffman_tree(data):
+        char_freq = dict(Counter(data))
+        nodes = [HuffmanNode(char, freq) for char, freq in char_freq.items()]
+
+        while len(nodes) > 1:
+            nodes = sorted(nodes, key=lambda x: x.freq)
+            left = nodes.pop(0)
+            right = nodes.pop(0)
+            parent = HuffmanNode(None, left.freq + right.freq)
+            parent.left = left
+            parent.right = right
+            nodes.append(parent)
+
+        return nodes[0]
+
+    @staticmethod
+    def build_huffman_codes(root, current_code, huffman_codes):
+        if root is None:  # pragma: no cover
+            return
+
+        if root.char is not None:
+            huffman_codes[root.char] = current_code
+            return
+
+        Ciphers.build_huffman_codes(root.left, current_code + "0", huffman_codes)
+        Ciphers.build_huffman_codes(root.right, current_code + "1", huffman_codes)
 
 
 class Encoding(object):

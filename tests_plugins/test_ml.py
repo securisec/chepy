@@ -2,19 +2,19 @@ from chepy import Chepy
 
 
 def test_ml_detect():
-    data = "04224d184070df280000806147567362473867643239796247516761534268625342684948526c633351675a47463059513d3d00000000"
     assert (
         Chepy("https%3A%2F%2Fwww.pennington.com%2Fcategories%2Fwp-content")
         .ml_detect()
         .o.get("to_url_encode")
         != None
     )
-    assert Chepy(data).ml_detect().o.get("to_hex") != None
-    assert Chepy(data).from_hex().ml_detect().o.get("lz4_compress") != None
+    data = "5ZXN4aSn4N2ZVzGA6Q7NbqCRJa2XBt2CEKAvgDUoQj8x9vBJqcrk5fBKZh5XqdAoKnyXMeNmE21QQAqZcKZPamT8he6s8nYRU1unmSb2eAmnnBv8NWSs9f6BgsJ3DGPpdbPm8b9kDSMDTLfZ1"
+    assert Chepy(data).ml_detect().o.get("to_base58") != None
+    assert Chepy(data).from_base58().ml_detect().o.get("to_hex") != None
     assert (
-        Chepy(data).from_hex().lz4_decompress().ml_detect().o.get("to_base64") != None
+        Chepy(data).from_base58().from_hex().ml_detect().o.get("lzma_compress") != None
     )
     assert (
-        Chepy(data).from_hex().lz4_decompress().from_base64().o
-        == b"hello world i am a test data"
+        Chepy(data).from_base58().from_hex().lzma_decompress().o
+        == b"some data with an encoded flag"
     )

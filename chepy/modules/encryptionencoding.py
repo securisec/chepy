@@ -1672,3 +1672,43 @@ class EncryptionEncoding(ChepyCore):
 
         self.state = output
         return self
+
+    @ChepyDecorators.call_stack
+    def huffman_encode(self) -> EncryptionEncodingT:
+        """Huffman encode
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        root = Ciphers.build_huffman_tree(data)
+        huffman_codes = {}
+        Ciphers.build_huffman_codes(root, "", huffman_codes)
+        encoded_data = "".join(huffman_codes[char] for char in data)
+        self.state = {"encoded": encoded_data, "codes": huffman_codes}
+        return self
+
+    @ChepyDecorators.call_stack
+    def huffman_decode(self, huffman_codes: Dict[str, str]) -> EncryptionEncodingT:
+        """Huffman decode
+
+        Args:
+            huffman_codes (Dict[str, str]): Huffman codes as a dict
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        decoded_data = ""
+        current_code = ""
+
+        encoded_data = self._convert_to_str()
+        for bit in encoded_data:
+            current_code += bit
+            for char, code in huffman_codes.items():
+                if code == current_code:
+                    decoded_data += char
+                    current_code = ""
+                    break
+
+        self.state = decoded_data
+        return self

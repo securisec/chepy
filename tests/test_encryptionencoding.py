@@ -786,3 +786,26 @@ def test_ls47_enc_dec():
 
 def test_bifid():
     assert Chepy("hello").bifid_encode("!H").bifid_decode("!H").o == b"hello"
+
+
+def test_huffman():
+    assert Chepy("hello world").huffman_encode().get_by_key("encoded").o != b""
+    assert (
+        Chepy("hello world")
+        .huffman_encode()
+        .get_by_key("encoded")
+        .huffman_decode(
+            {
+                " ": "000",
+                "w": "001",
+                "r": "010",
+                "d": "011",
+                "l": "10",
+                "o": "110",
+                "h": "1110",
+                "e": "1111",
+            }
+        )
+        .o
+        == b"hello world"
+    )
