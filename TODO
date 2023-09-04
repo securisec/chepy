@@ -27,7 +27,6 @@ New ideas:
   ☐ ✨ amf encode/decode
   ☐ ✨ rabbit encryption
   ☐ ✨ aes cmac
-  ☐ ✨ cetacean encode/decode
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
 
 Bug:
@@ -60,6 +59,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ cetacean encode/decode
   ✔ ✨ huffman encode/decode
   ✔ ✨ new plugin that can help detect encoding type trained on random data
   ✔ ✨ bifd

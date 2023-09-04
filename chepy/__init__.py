@@ -1,5 +1,6 @@
 import pretty_errors
 from docstring_parser import parse as _doc_parse
+from types import FunctionType
 
 from .modules.aritmeticlogic import AritmeticLogic
 from .modules.codetidy import CodeTidy
@@ -42,12 +43,24 @@ class Chepy(
     *_plugins
 ):
     """Chepy class that exposes all functionality of Chepy and its plugins."""
+
     pass
+
+
+def show_plugins():  # pragma: no cover
+    hold = {}
+    for p in _plugins:
+        hold[p.__name__] = [
+            name
+            for name, attr in vars(p).items()
+            if isinstance(attr, FunctionType) and not name.startswith("_")
+        ]
+    return hold
 
 
 def search_chepy_methods(search: str) -> None:  # pragma: no cover
     """Search for Chepy methods
-    
+
     Args:
         search (str): String to search for
     """

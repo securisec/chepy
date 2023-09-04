@@ -809,3 +809,18 @@ def test_huffman():
         .o
         == b"hello world"
     )
+
+
+def test_cetacean():
+    assert (
+        Chepy("hello {}").cetacean_encode().o
+        == b"EEEEEEEEEeeEeEEEEEEEEEEEEeeEEeEeEEEEEEEEEeeEeeEEEEEEEEEEEeeEeeEEEEEEEEEEEeeEeeee EEEEEEEEEeeeeEeeEEEEEEEEEeeeeeEe"
+    )
+    assert (
+        Chepy(
+            "EEEEEEEEEeeEeEEEEEEEEEEEEeeEEeEeEEEEEEEEEeeEeeEEEEEEEEEEEeeEeeEEEEEEEEEEEeeEeeee EEEEEEEEEeeeeEeeEEEEEEEEEeeeeeEe"
+        )
+        .cetacean_decode()
+        .o
+        == b"hello {}"
+    )

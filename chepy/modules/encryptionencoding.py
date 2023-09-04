@@ -1712,3 +1712,48 @@ class EncryptionEncoding(ChepyCore):
 
         self.state = decoded_data
         return self
+
+    @ChepyDecorators.call_stack
+    def cetacean_encode(self) -> EncryptionEncodingT:
+        """Cetacean encode
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        result = []
+        charArray = list(self._convert_to_str())
+
+        for character in charArray:
+            if character == " ":
+                result.append(character)
+            else:
+                binaryArray = format(ord(character), "016b")
+                result.append(
+                    "".join(["e" if bit == "1" else "E" for bit in binaryArray])
+                )
+
+        self.state = "".join(result)
+        return self
+
+    @ChepyDecorators.call_stack
+    def cetacean_decode(self) -> EncryptionEncodingT:
+        """Cetacean decode
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        binaryArray = []
+
+        for char in self._convert_to_str():
+            if char == " ":
+                binaryArray.extend([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0])
+            else:
+                binaryArray.append(1 if char == "e" else 0)
+
+        byteArray = []
+
+        for i in range(0, len(binaryArray), 16):
+            byteArray.append("".join(map(str, binaryArray[i : i + 16])))
+
+        self.state = "".join([chr(int(byte, 2)) for byte in byteArray])
+        return self
