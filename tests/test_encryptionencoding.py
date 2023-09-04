@@ -782,3 +782,7 @@ def test_ls47_enc_dec():
         Chepy("hello").ls47_encrypt("password").ls47_decrypt("password").o
         == b"hello---"
     )
+
+
+def test_bifid():
+    assert Chepy("hello").bifid_encode("!H").bifid_decode("!H").o == b"hello"

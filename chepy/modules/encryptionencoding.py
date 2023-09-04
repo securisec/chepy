@@ -10,6 +10,7 @@ from .internal.ls47 import (
     decrypt_pad as _ls47_dec,
     derive_key as _derive_key,
 )
+from .internal.constants import Ciphers
 
 import lazy_import
 
@@ -1215,7 +1216,7 @@ class EncryptionEncoding(ChepyCore):
             morse_code_dict[k] = v.replace(".", dot).replace("-", dash)
         for word in self._convert_to_str().split():
             for w in word:
-                encode += morse_code_dict.get(w.upper(), '') + letter_delim
+                encode += morse_code_dict.get(w.upper(), "") + letter_delim
             encode += word_delim
         self.state = encode
         return self
@@ -1552,4 +1553,122 @@ class EncryptionEncoding(ChepyCore):
         """
         key = _derive_key(password)
         self.state = _ls47_dec(key, padding, self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def bifid_encode(self, key: Union[bytes, str] = "") -> EncryptionEncodingT:
+        """Bifid / polybius decode
+
+        Args:
+            key (Union[str, bytes], optional): Key. Defaults to "".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = self._bytes_to_str(key)
+        key = "".join(re.findall(r"[A-Z]+", key))
+        keyword_str = key.upper().replace("J", "I")
+        keyword_set = set(keyword_str)
+        keyword_list = []
+        alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+        x_co = []
+        y_co = []
+        structure = []
+
+        output = ""
+        count = 0
+
+        polybius = Ciphers.gen_polybius_square(keyword_str)
+
+        for letter in self._convert_to_str().replace("J", "I"):
+            alp_ind = letter.upper() in alpha
+            pol_ind = -1
+
+            if alp_ind:
+                for i in range(5):
+                    if letter.upper() in polybius[i]:
+                        pol_ind = polybius[i].index(letter.upper())
+                        x_co.append(pol_ind)
+                        y_co.append(i)
+
+                if letter in alpha:
+                    structure.append(True)  # pragma: no cover
+                elif alp_ind:
+                    structure.append(False)
+            else:
+                structure.append(letter)  # pragma: no cover
+
+        trans = "".join(map(str, y_co)) + "".join(map(str, x_co))
+
+        for pos in structure:
+            if isinstance(pos, bool):
+                coords = trans[2 * count : 2 * count + 2]
+                coords = list(map(int, coords))
+
+                output += (
+                    polybius[coords[0]][coords[1]]
+                    if pos
+                    else polybius[coords[0]][coords[1]].lower()
+                )
+                count += 1
+            else:
+                output += pos  # pragma: no cover
+
+        self.state = output
+        return self
+
+    @ChepyDecorators.call_stack
+    def bifid_decode(self, key: Union[str, bytes] = ""):
+        """Bifid / polybius decode
+
+        Args:
+            key (Union[str, bytes], optional): Key. Defaults to "".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = self._bytes_to_str(key)
+        key = "".join(re.findall(r"[A-Z]+", key))
+        keyword_str = key.upper().replace("J", "I")
+        keyword_set = set(keyword_str)
+        alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+        structure = []
+
+        output = ""
+        count = 0
+        trans = ""
+
+        polybius = Ciphers.gen_polybius_square(keyword_str)
+
+        for letter in self._convert_to_str().replace("J", "I"):
+            alp_ind = letter.upper() in alpha
+            pol_ind = -1
+
+            if alp_ind:
+                for i in range(5):
+                    if letter.upper() in polybius[i]:
+                        pol_ind = polybius[i].index(letter.upper())
+                        trans += f"{i}{pol_ind}"
+
+                if letter in alpha:
+                    structure.append(True)  # pragma: no cover
+                elif alp_ind:
+                    structure.append(False)
+            else:
+                structure.append(letter)  # pragma: no cover
+
+        for pos in structure:
+            if isinstance(pos, bool):
+                coords = [int(trans[count]), int(trans[count + len(trans) // 2])]
+
+                output += (
+                    polybius[coords[0]][coords[1]]
+                    if pos
+                    else polybius[coords[0]][coords[1]].lower()
+                )
+                count += 1
+            else:
+                output += pos  # pragma: no cover
+
+        self.state = output
         return self

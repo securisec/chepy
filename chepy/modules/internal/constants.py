@@ -1,3 +1,17 @@
+class Ciphers:
+    @staticmethod
+    def gen_polybius_square(keyword):
+        alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+        pol_array = list(keyword.upper() + alpha)
+        pol_array = sorted(list(set(pol_array)), key=lambda x: (pol_array.index(x) // 5, pol_array.index(x) % 5))
+        polybius = []
+
+        for i in range(5):
+            polybius.append(pol_array[i * 5:i * 5 + 5])
+
+        return polybius
+
+
 class Encoding(object):
     UPSIDE_DOWN = {
         "!": "¡",

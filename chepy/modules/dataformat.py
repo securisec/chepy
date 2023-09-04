@@ -20,6 +20,7 @@ from urllib.parse import quote_plus as _urllib_quote_plus
 from urllib.parse import unquote_plus as _urllib_unquote_plus
 
 crypto_number = lazy_import.lazy_module("Crypto.Util.number")
+msgpack = lazy_import.lazy_module("msgpack")
 
 from ..core import ChepyCore, ChepyDecorators
 from chepy.modules.internal.constants import Encoding
@@ -1779,4 +1780,24 @@ class DataFormat(ChepyCore):
             self.state = hold[::-1]
         else:
             self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_messagepack(self) -> DataFormatT:
+        """To MessagePack
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = msgpack.packb(self.state)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_messagepack(self) -> DataFormatT:
+        """From MessagePack
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = msgpack.unpackb(self.state, raw=False)
         return self

@@ -31,7 +31,6 @@ New ideas:
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
   ☐ ✨ huffman encode/decode
   ☐ ✨ new plugin that can help detect encoding type trained on random data
-  ☐ ✨ upside down writing
 
 Bug:
 
@@ -63,6 +62,9 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ bifd
+  ✔ ✨ to/from messagepack
+  ✔ ✨ upside down writing
   ✔ ✨ bacon encode/decode
   ✔ rsa enc/dec with key or from pem directly
   ✔ ✨ to/from pickle
