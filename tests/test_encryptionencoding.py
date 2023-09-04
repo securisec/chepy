@@ -824,3 +824,7 @@ def test_cetacean():
         .o
         == b"hello {}"
     )
+
+
+def test_rabbit():
+    assert Chepy("hello").rabbit("pass", "iv").rabbit("pass", "iv").o == b"hello"

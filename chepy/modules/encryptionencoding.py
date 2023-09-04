@@ -10,7 +10,7 @@ from .internal.ls47 import (
     decrypt_pad as _ls47_dec,
     derive_key as _derive_key,
 )
-from .internal.constants import Ciphers
+from .internal.constants import Ciphers, Rabbit
 
 import lazy_import
 
@@ -1756,4 +1756,18 @@ class EncryptionEncoding(ChepyCore):
             byteArray.append("".join(map(str, binaryArray[i : i + 16])))
 
         self.state = "".join([chr(int(byte, 2)) for byte in byteArray])
+        return self
+
+    @ChepyDecorators.call_stack
+    def rabbit(self, key: str, iv: Union[None, str] = None) -> EncryptionEncodingT:
+        """Rabbit encryption/decryption
+
+        Args:
+            key (str): Key
+            iv (Union[None,str], optional): IV. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = Rabbit(key, iv).encrypt(self._convert_to_str())
         return self

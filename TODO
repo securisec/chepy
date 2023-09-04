@@ -23,9 +23,7 @@ New ideas:
   ☐ ✨ zero-width encode
   ☐ ✨ hill cipher encode/decode/brute
   ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
-  ☐ ✨ jwt hmac confusion
   ☐ ✨ amf encode/decode
-  ☐ ✨ rabbit encryption
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
 
@@ -59,6 +57,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ rabbit encryption
   ✔ ✨ cetacean encode/decode
   ✔ ✨ huffman encode/decode
   ✔ ✨ new plugin that can help detect encoding type trained on random data
