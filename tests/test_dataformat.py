@@ -266,7 +266,9 @@ def test_to_charcode():
 
 
 def test_from_charcode():
-    assert Chepy("314e 61 20 41").from_charcode().o == b"\xe3\x85\x8ea A"
+    assert Chepy("314e-61-20-41").from_charcode(base=16).o == b"\xe3\x85\x8ea A"
+    assert Chepy("314e 61 20 41").from_charcode(base=16).o == b"\xe3\x85\x8ea A"
+    assert Chepy("97 98 99").from_charcode().o == b"abc"
 
 
 def test_to_decimal():
@@ -275,6 +277,7 @@ def test_to_decimal():
 
 def test_from_decimal():
     assert Chepy(12622).from_decimal().o == b"\xe3\x85\x8e"
+    assert Chepy('97-98-99').from_decimal().o == b"abc"
 
 
 def test_to_binary():
@@ -382,6 +385,12 @@ def test_nato_convert():
     assert Chepy("abc:1").to_nato().o == b"Alpha Bravo Charlie : 1"
     assert (
         Chepy("Lima Alpha Kilo Echo Mike India Charlie Hotel India Golf Alpha November")
+        .from_nato()
+        .o
+        == b"LAKEMICHIGAN"
+    )
+    assert (
+        Chepy("Lima-Alpha-Kilo-Echo-Mike-India-Charlie-Hotel-India-Golf-Alpha-November")
         .from_nato()
         .o
         == b"LAKEMICHIGAN"

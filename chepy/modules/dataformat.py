@@ -10,6 +10,7 @@ import pickle
 import string
 from random import randint
 from .internal.constants import Encoding
+from .internal.helpers import detect_delimiter
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -572,15 +573,14 @@ class DataFormat(ChepyCore):
             >>> Chepy("414141").from_hex().out
             b"AAA"
         """
+        data = self._convert_to_bytes()
+        delimiter = detect_delimiter(data, default_delimiter=None)
         if delimiter is not None:
             self.state = join_by.encode().join(
-                list(
-                    binascii.unhexlify(x)
-                    for x in self._convert_to_str().split(delimiter)
-                )
+                list(binascii.unhexlify(x) for x in data.split(delimiter))
             )
         else:
-            self.state = binascii.unhexlify(self._convert_to_str())
+            self.state = binascii.unhexlify(data)
         return self
 
     @ChepyDecorators.call_stack
@@ -873,14 +873,14 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def from_charcode(
-        self, delimiter: str = " ", join_by: str = "", base: int = 16
+        self, delimiter: str = None, join_by: str = "", base: int = 10
     ) -> DataFormatT:
         """Convert array of unicode chars to string
 
         Args:
             delimiter (str, optional): Delimiter. Defaults to " ".
             join_by (str, optional): Join by. Defaults to "".
-            base (int, optional): Base. Defaults to 16.
+            base (int, optional): Base. Defaults to 10.
 
         Returns:
             Chepy: The Chepy object.
@@ -889,8 +889,10 @@ class DataFormat(ChepyCore):
             >>> Chepy("314e 61 20 41"]).from_charcode().o
             "ㅎa A"
         """
+        data = self._convert_to_str()
         out = []
-        for c in self._convert_to_str().split(delimiter):
+        delimiter = detect_delimiter(data)
+        for c in data.split(delimiter):
             out.append(chr(int(c, base)))
         self.state = join_by.join(out)
         return self
@@ -915,7 +917,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_decimal(self, delimiter: str = " ", join_by: str = "") -> DataFormatT:
+    def from_decimal(self, delimiter: str = None, join_by: str = "") -> DataFormatT:
         """Convert a list of decimal numbers to string
 
         Args:
@@ -929,8 +931,10 @@ class DataFormat(ChepyCore):
             >>> Chepy(12622).from_decimal().o
             "ㅎ"
         """
+        data = self._convert_to_str()
+        delimiter = detect_delimiter(data)
         self.state = join_by.join(
-            list(chr(int(s)) for s in self._convert_to_str().strip().split(delimiter))
+            list(chr(int(s)) for s in data.strip().split(delimiter))
         )
         return self
 
@@ -960,7 +964,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_binary(self, delimiter: str = " ", byte_length: int = 8) -> DataFormatT:
+    def from_binary(self, delimiter: str = None, byte_length: int = 8) -> DataFormatT:
         """Convert a list of binary numbers to string
 
         Args:
@@ -974,10 +978,10 @@ class DataFormat(ChepyCore):
             >>> Chepy("01100001 01100010 01100011").from_binary().o
             "abc"
         """
+        data = self._convert_to_str()
+        delimiter = detect_delimiter(data)
         n = int(
-            "".join(
-                [x[byte_length - 8 :] for x in self._convert_to_str().split(delimiter)]
-            ),
+            "".join([x[byte_length - 8 :] for x in data.split(delimiter)]),
             2,
         )
         self.state = n.to_bytes((n.bit_length() + 7) // 8, "big")
@@ -1017,8 +1021,10 @@ class DataFormat(ChepyCore):
             >>> Chepy("141 142").from_octal().o
             "ab"
         """
+        data = self._convert_to_str()
+        delimiter = detect_delimiter(data, default_delimiter=delimiter)
         self.state = join_by.join(
-            list(chr(int(str(x), 8)) for x in self._convert_to_str().split(delimiter))
+            list(chr(int(str(x), 8)) for x in data.split(delimiter))
         )
         return self
 
@@ -1236,7 +1242,9 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_nato(self, delimiter: str = " ", join_by: str = "") -> DataFormatT:
+    def from_nato(
+        self, delimiter: Union[str, None] = None, join_by: str = ""
+    ) -> DataFormatT:
         """Translate NATO phoentic to words
 
         Args:
@@ -1246,7 +1254,10 @@ class DataFormat(ChepyCore):
         Returns:
             Chepy: The Chepy object
         """
-        data = self._convert_to_str().split(delimiter)
+        data = self._convert_to_str()
+        if delimiter is None:
+            delimiter = detect_delimiter(data)
+        data = data.split(delimiter)
         d = {v: k for k, v in Encoding.NATO_CONSTANTS_DICT.items()}
         self.state = join_by.join([d.get(p, p) for p in data])
         return self

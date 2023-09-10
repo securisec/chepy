@@ -26,6 +26,8 @@ New ideas:
   ☐ ✨ amf encode/decode
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
+  ☐ 🐙 diff show results only
+  ☐ ✨ brainfuck encoder/decoder
 
 Bug:
 
@@ -57,6 +59,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ automatic delimiter detect
   ✔ ✨ rabbit encryption
   ✔ ✨ cetacean encode/decode
   ✔ ✨ huffman encode/decode

@@ -11,6 +11,7 @@ from .internal.ls47 import (
     derive_key as _derive_key,
 )
 from .internal.constants import Ciphers, Rabbit
+from .internal.helpers import detect_delimiter
 
 import lazy_import
 
@@ -34,6 +35,7 @@ PKCS1_v1_5 = lazy_import.lazy_module("Crypto.Cipher.PKCS1_v1_5")
 Blowfish = lazy_import.lazy_module("Crypto.Cipher.Blowfish")
 Padding = lazy_import.lazy_module("Crypto.Util.Padding")
 pycipher = lazy_import.lazy_module("pycipher")
+Fernet = lazy_import.lazy_callable("cryptography.fernet.Fernet")
 
 from ..core import ChepyCore, ChepyDecorators
 from ..extras.combinatons import hex_chars
@@ -1499,7 +1501,7 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def from_letter_number_code(
-        self, delimiter: Union[str, bytes] = " ", join_by: Union[str, bytes] = ""
+        self, delimiter: Union[str, bytes] = None, join_by: Union[str, bytes] = ""
     ) -> EncryptionEncodingT:
         """Decode A1Z26
 
@@ -1510,7 +1512,9 @@ class EncryptionEncoding(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        data = self._convert_to_str().split(delimiter)
+        data = self._convert_to_str()
+        delimiter = detect_delimiter(data)
+        data = data.split(delimiter)
         hold = ["§" for _ in range(len(data))]
         for d in data:
             try:
@@ -1770,4 +1774,44 @@ class EncryptionEncoding(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = Rabbit(key, iv).encrypt(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def fernet_encrypt(
+        self, key: Union[bytes, str], encode_key: bool = False
+    ) -> EncryptionEncodingT:
+        """Fernet encrypt
+
+        Args:
+            key (Union[bytes, str]): Key to encrypt with. This should be 32 bytes long
+            encode_key (bool, optional): If key should be base64 encoded. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = self._str_to_bytes(key)
+        if encode_key:
+            key = base64.b64encode(key)
+        out = Fernet(key).encrypt(self._convert_to_bytes())
+        self.state = out
+        return self
+
+    @ChepyDecorators.call_stack
+    def fernet_decrypt(
+        self, key: Union[bytes, str], encode_key: bool = False
+    ) -> EncryptionEncodingT:
+        """Fernet decrypt
+
+        Args:
+            key (Union[bytes, str]): Key to encrypt with. This should be 32 bytes long
+            encode_key (bool, optional): If key should be base64 encoded. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key = self._str_to_bytes(key)
+        if encode_key:
+            key = base64.b64encode(key)
+        out = Fernet(key).decrypt(self._convert_to_bytes())
+        self.state = out
         return self

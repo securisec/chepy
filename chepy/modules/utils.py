@@ -165,7 +165,8 @@ class Utils(ChepyCore):
         Returns:
             UtilsT: The Chepy object.
         """
-        self.state = self._convert_to_str().split(delimiter)
+        delimiter = self._str_to_bytes(delimiter)
+        self.state = self._convert_to_bytes().split(delimiter)
         return self
 
     @ChepyDecorators.call_stack
