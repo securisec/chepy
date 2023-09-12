@@ -198,6 +198,7 @@ def test_diff():
     d.state += " hehe"
     d.find_replace("lo", "").diff(state=1)
     assert d.o == b"{a->A} {-lo}ng {s->S}entence {h->H}aha{+ hehe}"
+    assert Chepy("he", "she").diff(1, only_changes=True).o == b"{-s}"
 
 
 def test_pad():

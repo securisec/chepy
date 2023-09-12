@@ -28,6 +28,7 @@ New ideas:
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
   ☐ 🐙 diff show results only
   ☐ ✨ brainfuck encoder/decoder
+  ☐ ✨ spoon encoder/decoder
 
 Bug:
 
@@ -59,6 +60,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ ✨ callback function that can take a python function and run it over state. handle recipes for this
   ✔ ✨ automatic delimiter detect
   ✔ ✨ rabbit encryption
   ✔ ✨ cetacean encode/decode

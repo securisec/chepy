@@ -12,7 +12,7 @@ import webbrowser
 from configparser import ConfigParser
 from importlib.machinery import SourceFileLoader
 from pprint import pformat
-from typing import Any, Dict, List, Mapping, Tuple, Union
+from typing import Any, Dict, List, Mapping, Tuple, Union, Callable
 from urllib.parse import urljoin
 
 import lazy_import
@@ -1367,3 +1367,29 @@ class ChepyCore(object):
             return None
         else:
             raise AttributeError("The path does not exist")
+
+    def callback(self, callback_function: Callable[[Any], Any]):
+        """Run any user defined python function against the state.
+        This method is not recorded in the recipes
+
+        Args:
+            callback_function (Callable[[Any], Any]): The function to run. The function should take one argument (the state is passed to it). It can return Any
+
+        Examples:
+            from chepy import Chepy
+
+            def cb(data):
+                return data * 2
+
+            c = Chepy('abc').callback(cb)
+            # state is now abcabc
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        # dont run if from cli
+        if sys.stdout.isatty():  # pragma: no cover
+            logging.warning("callback cannot be used via the cli")
+            return self
+        self.state = callback_function(self.state)
+        return self

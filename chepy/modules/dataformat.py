@@ -1812,3 +1812,30 @@ class DataFormat(ChepyCore):
         """
         self.state = msgpack.unpackb(self.state, raw=False)
         return self
+
+    @ChepyDecorators.call_stack
+    def unicode_escape(
+        self, padding: int = 0, uppercase_hex: bool = False
+    ) -> DataFormatT:
+        """Unicode escape
+
+        Args:
+            padding (int, optional): Optional padding. Defaults to 0.
+            uppercase_hex (bool, optional): Uppercase hex chars. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        def unicode_replacer(match):
+            code_point = ord(match.group(0))
+            padding_format = "{:04x}".format(code_point)
+            if uppercase_hex:
+                padding_format = padding_format.upper()
+            return r"\u" + "0" * padding + padding_format
+
+        escaped_string = re.sub(
+            r"[^\x00-\x7F]", unicode_replacer, self._convert_to_str()
+        )
+        self.state = escaped_string
+        return self

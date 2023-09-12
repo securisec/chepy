@@ -277,7 +277,7 @@ def test_to_decimal():
 
 def test_from_decimal():
     assert Chepy(12622).from_decimal().o == b"\xe3\x85\x8e"
-    assert Chepy('97-98-99').from_decimal().o == b"abc"
+    assert Chepy("97-98-99").from_decimal().o == b"abc"
 
 
 def test_to_binary():
@@ -585,3 +585,15 @@ def test_messagepack():
     assert Chepy("hello").to_messagepack().from_messagepack().o == b"hello"
     assert Chepy(["hello"]).to_messagepack().from_messagepack().o == ["hello"]
     assert Chepy({"a": "hello"}).to_messagepack().from_messagepack().o == {"a": "hello"}
+
+
+def test_unicode_escape():
+    data = "MMMMM‌‍aaaaaaa‌‍ssss‌‌oooooonnnnnCCC‌‌CCCC"
+    assert (
+        Chepy(data).unicode_escape(padding=4, uppercase_hex=True).o
+        == b"MMMMM\u0000200C\u0000200Daaaaaaa\u0000200C\u0000200Dssss\u0000200C\u0000200CoooooonnnnnCCC\u0000200C\u0000200CCCCC"
+    )
+    assert (
+        Chepy(data).unicode_escape().o
+        == b"MMMMM\u200c\u200daaaaaaa\u200c\u200dssss\u200c\u200coooooonnnnnCCC\u200c\u200cCCCC"
+    )

@@ -245,3 +245,10 @@ def test_subsection():
         ).o
         == b"he955a367a4c01f58118021054729c7fb54b5de94ell9cba467d60276777ce655337e060fa0aebfcc780o"
     )
+
+
+def test_callback():
+    def cb(data):
+        return data * 2
+
+    assert Chepy("abc").callback(cb).o == b"abcabc"

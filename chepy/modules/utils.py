@@ -533,14 +533,16 @@ class Utils(ChepyCore):
         buffer: int = None,
         colors: bool = False,
         swap: bool = False,
+        only_changes: bool = False
     ):
         """Diff state with another state or buffer
 
         Args:
             state (int, optional): Index of state to compare against. Defaults to None.
             buffer (int, optional): Index of buffer to compare against. Defaults to None.
-            colors (int, optional): Show colored diff. Defaults to False.
-            swap (int, optional): Swap the diff order. Defaults to False.
+            colors (bool, optional): Show colored diff. Defaults to False.
+            swap (bool, optional): Swap the diff order. Defaults to False.
+            only_changes (bool, optional): Return only changes. Defaults to False.
 
         Raises:
             TypeError: If both state and buffer is set to True.
@@ -583,6 +585,8 @@ class Utils(ChepyCore):
                 else:
                     return "{-" + matcher.a[i1:i2] + "}"
             if tag == "equal":
+                if only_changes:
+                    return ''
                 return matcher.a[i1:i2]
             if tag == "insert":
                 if colors:
