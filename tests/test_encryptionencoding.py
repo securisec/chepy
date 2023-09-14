@@ -834,5 +834,5 @@ def test_fernet():
     flag = "ucf{urum_noql}"
     key = "\x41" * 32
     c = Chepy(flag).fernet_encrypt(key, True)
-    assert c.o.startswith(b"gAAAAABk")
+    assert c.o.startswith(b"gAAA")
     assert c.fernet_decrypt(key, True).o == flag.encode()
