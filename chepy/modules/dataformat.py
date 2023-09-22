@@ -10,7 +10,7 @@ import pickle
 import string
 from random import randint
 from .internal.constants import Encoding
-from .internal.helpers import detect_delimiter
+from .internal.helpers import detect_delimiter, Rotate
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -1838,4 +1838,86 @@ class DataFormat(ChepyCore):
             r"[^\x00-\x7F]", unicode_replacer, self._convert_to_str()
         )
         self.state = escaped_string
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_base(self, radix: int = 36) -> DataFormatT:
+        """Convert int to base
+
+        Args:
+            radix (int, optional): Radix. Defaults to 36.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        num = self._convert_to_int()
+        if num == 0:
+            self.state = "0"
+            return self
+
+        chars = string.digits + string.ascii_lowercase
+        result = ""
+
+        while num > 0:
+            remainder = num % radix
+            result = chars[remainder] + result
+            num //= radix
+
+        self.state = result
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base(self, radix: int = 36) -> DataFormatT:
+        """Convert string to int base
+
+        Args:
+            radix (int, optional): Radix. Defaults to 36.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        chars = string.digits + string.ascii_lowercase
+        result = 0
+
+        string_num = self._convert_to_str()
+        for char in string_num:
+            result = result * radix + chars.index(char)
+
+        self.state = result
+        return self
+
+    @ChepyDecorators.call_stack
+    def rotate_right(self, radix: int = 1, carry: bool = False) -> DataFormatT:
+        """Rotate right
+
+        Args:
+            radix (int, optional): Radix. Defaults to 1.
+            carry (bool, optional): Carry. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        r = Rotate(self._convert_to_bytes(), radix)
+        if carry:
+            self.state = r.rot_right_carry()
+        else:
+            self.state = r.rot(Rotate.rotate_right)
+        return self
+
+    @ChepyDecorators.call_stack
+    def rotate_left(self, radix: int = 1, carry: bool = False) -> DataFormatT:
+        """Rotate left
+
+        Args:
+            radix (int, optional): Radix. Defaults to 1.
+            carry (bool, optional): Carry. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        r = Rotate(self._convert_to_bytes(), radix)
+        if carry:
+            self.state = r.rotate_left_carry()
+        else:
+            self.state = r.rot(Rotate.rotate_left)
         return self

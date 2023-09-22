@@ -597,3 +597,28 @@ def test_unicode_escape():
         Chepy(data).unicode_escape().o
         == b"MMMMM\u200c\u200daaaaaaa\u200c\u200dssss\u200c\u200coooooonnnnnCCC\u200c\u200cCCCC"
     )
+
+
+def test_to_base():
+    assert Chepy(0).to_base().o == b"0"
+    assert Chepy(15295865526991442899).to_base(16).o == b"d445d4a7e477d3d3"
+
+
+def test_from_base():
+    assert Chepy("d445d4a7e477d3d3").from_base(16).o == 15295865526991442899
+
+
+def test_rotate_right():
+    assert Chepy("d445d4a7e477d3d3").from_hex().rotate_right(radix=4).o == b"MTMzNw=="
+    assert (
+        Chepy("d445d4a7e477d3d3").from_hex().rotate_right(radix=4, carry=True).o
+        == b"=D]J~G}="
+    )
+
+
+def test_rotate_left():
+    assert Chepy("d445d4a7e477d3d3").from_hex().rotate_left(radix=4).o == b"MTMzNw=="
+    assert (
+        Chepy("d445d4a7e477d3d3").from_hex().rotate_left(radix=4, carry=True).o
+        == b"D]J~G}=="
+    )
