@@ -1921,3 +1921,48 @@ class DataFormat(ChepyCore):
         else:
             self.state = r.rot(Rotate.rotate_left)
         return self
+
+    @ChepyDecorators.call_stack
+    def to_base62(
+        self,
+        alphabet: str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+    ) -> DataFormatT:
+        """Encode to base62
+
+        Args:
+            alphabet (str, optional): Alphabet. Defaults to "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        base62 = []
+        num = int.from_bytes(self._convert_to_bytes(), byteorder="big")
+
+        while num > 0:
+            num, remainder = divmod(num, 62)
+            base62.insert(0, alphabet[remainder])
+
+        self.state = "".join(base62)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base62(
+        self,
+        alphabet: str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+    ) -> DataFormatT:
+        """Decode from base62
+
+        Args:
+            alphabet (str, optional): Alphabet. Defaults to "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        base62_dict = {char: index for index, char in enumerate(alphabet)}
+        num = 0
+        for char in self._convert_to_str():
+            num = num * 62 + base62_dict[char]
+        decoded_data = num.to_bytes((num.bit_length() + 7) // 8, byteorder="big")
+
+        self.state = decoded_data
+        return self

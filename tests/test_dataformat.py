@@ -622,3 +622,11 @@ def test_rotate_left():
         Chepy("d445d4a7e477d3d3").from_hex().rotate_left(radix=4, carry=True).o
         == b"D]J~G}=="
     )
+
+
+def test_base62():
+    assert (
+        Chepy(b"hello !!123!! world\xcc").to_base62().o
+        == b"EtWxGEdLPmwchEzFHWNyyyI3p1w"
+    )
+    assert Chepy("3bfP0XZgTym6SsUKeZS5Z6qoKa").from_base62().o == b"hello !!123!! world"

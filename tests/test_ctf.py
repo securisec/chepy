@@ -41,3 +41,16 @@ def test_springforward_23_hours_behind():
     c = Chepy("vqkk{0vtg_b1um_e1tt_b3tt}")
     c.rotate_bruteforce().dict_get_items().filter_list("nicc")
     assert c.o == b"nicc{0nly_t1me_w1ll_t3ll}"
+
+
+def test_bsides_c5():
+    c = (
+        Chepy(
+            "BtC8EzBDHPOhKvzY6zyWRuy4lFMQNxDk9zLIG93n50uD83gxB9vg5jq7ZQJ50xpHMrUCwk4dRwtA0yGRSIDTFZ"
+        )
+        .from_base62()
+        .reverse()
+        .from_octal()
+        .o
+        == b"th3_cak3_is_a_li3"
+    )
