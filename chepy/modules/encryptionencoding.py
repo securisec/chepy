@@ -898,8 +898,8 @@ class EncryptionEncoding(ChepyCore):
             iv (str, optional): IV for certain modes only.
                 Defaults to '00000000000000000000000000000000'.
             mode (str, optional): Encryption mode. Defaults to 'CBC'.
-            hex_key (bool, optional): If the secret key is a hex string. Defaults to False.
-            hex_iv (bool, optional): If the IV is a hex string. Defaults to True.
+            key_format (str, optional): Format of key. Defaults to 'hex'.
+            iv_format (str, optional): Format of IV. Defaults to 'hex'.
 
         Returns:
             Chepy: The Chepy object.
