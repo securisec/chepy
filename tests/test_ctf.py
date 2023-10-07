@@ -54,3 +54,35 @@ def test_bsides_c5():
         .o
         == b"th3_cak3_is_a_li3"
     )
+
+    c = (
+        Chepy("MjBfcDAweF9ycm1hdV9ta3ozdmsza2ZqM19tcHlpX3B5aTN2")
+        .from_base64()
+        .vigenere_decode("key")
+        .o
+        == b"20_f00t_thick_imp3rm3abl3_clay_lay3r"
+    )
+
+    c = (
+        Chepy(
+            "ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnpkV0lpT2lJeE1qTTBOVFkzT0Rrd0lpd2libUZ0WlNJNklscHFSbnBoUmpsNllVZEdkMDB5VW1aWk0wcG9XVEp6ZW1OcVZTSXNJbWxoZENJNk1UVXhOakl6T1RBeU1uMC5QUkFfMlVfUHVZWEZHb1BWdGxEc2JnaHhvWDA1czNnTGVoVFJEdC1VeUgw"
+        )
+        .from_base64()
+        .jwt_decode()
+        .get_by_key("payload")
+        .get_by_key("name")
+        .from_base64()
+        .o
+        == b"f1sh_shap3d_crack3r5"
+    )
+
+    assert (
+        Chepy(
+            "e6 96 37 33 27 f5 27 33 47 37 56 97 c6 f6 07 f5 46 33 47 16 27 57 47 16 37 e6 57"
+        )
+        .reverse()
+        .remove_whitespace()
+        .from_hex()
+        .o
+        == b"unsaturat3d_polyest3r_r3sin"
+    )

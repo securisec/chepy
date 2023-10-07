@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Union
 
 import regex as re
 
@@ -17,7 +17,7 @@ class Search(ChepyCore):
     """
 
     @ChepyDecorators.call_stack
-    def search(self, pattern: str) -> SearchT:
+    def search(self, pattern: Union[str, bytes]) -> SearchT:
         """Search. Group matches are returned as tuples.
 
         Args:
@@ -30,7 +30,8 @@ class Search(ChepyCore):
             >>> Chepy("abcdefg123 and again abcdefg123").search("abc(de)fg(12)(3)").o
             [('abcdefg123', 'de', '12', '3'), ('abcdefg123', 'de', '12', '3')]
         """
-        self.state = re.findall("({})".format(pattern), self._convert_to_str())
+        pattern = self._str_to_bytes(pattern)
+        self.state = re.findall(pattern, self._convert_to_bytes())
         return self
 
     @ChepyDecorators.call_stack

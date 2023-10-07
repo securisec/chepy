@@ -630,3 +630,10 @@ def test_base62():
         == b"EtWxGEdLPmwchEzFHWNyyyI3p1w"
     )
     assert Chepy("3bfP0XZgTym6SsUKeZS5Z6qoKa").from_base62().o == b"hello !!123!! world"
+
+
+def test_cut():
+    assert Chepy("abcd").cut(1, 2).o == b"b"
+    assert Chepy("abcd").cut(1, 3).o == b"bc"
+    assert Chepy({"a": 1}).cut(1, 3).o == b"'a"
+    assert Chepy({"a": None}).cut(6, 9).o == b"Non"

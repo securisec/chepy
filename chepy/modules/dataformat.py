@@ -1966,3 +1966,18 @@ class DataFormat(ChepyCore):
 
         self.state = decoded_data
         return self
+
+    @ChepyDecorators.call_stack
+    def cut(self, start: int, end: int) -> DataFormatT:
+        """Convert the state to bytes and cut x:y data from it
+
+        Args:
+            start (int): Starting position
+            end (int): End position
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        self.state = data[start:end]
+        return self

@@ -3,8 +3,8 @@ from chepy import Chepy
 
 def test_search():
     assert Chepy("abcdefg123 and again abcdefg123").search(r"abc(de)fg(12)(3)").o == [
-        ("abcdefg123", "de", "12", "3"),
-        ("abcdefg123", "de", "12", "3"),
+        (b"de", b"12", b"3"),
+        (b"de", b"12", b"3"),
     ]
 
 
