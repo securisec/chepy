@@ -22,7 +22,7 @@ New ideas:
   ☐ ✨ affine bruteforce
   ☐ ✨ zero-width encode
   ☐ ✨ hill cipher encode/decode/brute
-  ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistant bytes approach to all functions
+  ☐ 💡 maybe a decorator function to convert all inputs into bytes when possible? this will allow for a consistent bytes approach to all functions
   ☐ ✨ amf encode/decode
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language

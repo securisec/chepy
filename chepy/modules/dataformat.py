@@ -71,7 +71,7 @@ class DataFormat(ChepyCore):
             "a,b,c"
         """
         assert isinstance(self.state, list), "Data in state not a list"
-        # convert the list of items in state appropiately
+        # convert the list of items in state appropriately
         if isinstance(join_by, str):
             self.state = [str(x) for x in self.state]
         elif isinstance(join_by, bytes):
@@ -585,7 +585,7 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def hex_to_int(self) -> DataFormatT:
-        """Converts hex into its intiger represantation
+        """Converts hex into its integer representation
 
         Returns:
             Chepy: The Chepy object.
@@ -899,7 +899,7 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def to_decimal(self, join_by: str = " ") -> DataFormatT:
-        """Convert charactes to decimal
+        """Convert characters to decimal
 
         Args:
             join_by (str, optional): Join the decimal values by this. Defaults to ' '.
@@ -1180,7 +1180,7 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def to_braille(self) -> DataFormatT:
-        """Convery text to six-dot braille symbols
+        """Convert text to six-dot braille symbols
 
         Returns:
             Chepy: The Chepy object.
@@ -1195,7 +1195,7 @@ class DataFormat(ChepyCore):
 
     @ChepyDecorators.call_stack
     def from_braille(self) -> DataFormatT:
-        """Convery text to six-dot braille symbols
+        """Convert text to six-dot braille symbols
 
         Returns:
             Chepy: The Chepy object.

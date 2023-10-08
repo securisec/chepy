@@ -97,7 +97,7 @@ class EncryptionEncoding(ChepyCore):
         return RSA.import_key(key, passphrase)
 
     def _rsa_cipher(self, c_format: str, rsa):
-        """Returns an RSA Cipher instnace based for cipher type"""
+        """Returns an RSA Cipher instance based for cipher type"""
         if c_format == "PKCS":
             return PKCS1_v1_5.new(rsa)
         return PKCS1_OAEP.new(rsa)
@@ -434,7 +434,7 @@ class EncryptionEncoding(ChepyCore):
     def jwt_token_generate_none_alg(
         self, headers: Dict[str, Any] = {}
     ) -> EncryptionEncodingT:
-        """Generate a jwt token with none algorithem
+        """Generate a jwt token with none algorithm
 
         Args:
             headers (Dict[str, Any], optional): Headers. `alg` key will be overwritten. Defaults to {}.
@@ -467,7 +467,7 @@ class EncryptionEncoding(ChepyCore):
             private_key_pem (str): Private key to sign token
             private_key_passphrase (str, optional): Private key passphrase. Defaults to None.
             headers (dict, optional): Token headers. Defaults to {}.
-            alg (str, optional): Token algorithem. Defaults to "RS256".
+            alg (str, optional): Token algorithm. Defaults to "RS256".
 
         Returns:
             Chepy: The Chepy object.
@@ -596,7 +596,7 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("some data").des_encrypt("70617373776f7264").o
             b"1ee5cb52954b211d1acd6e79c598baac"
 
-            To encrypt using a differnt mode
+            To encrypt using a different mode
 
             >>> Chepy("some data").des_encrypt("password", mode="CTR").o
             b"0b7399049b0267d93d"
@@ -1131,14 +1131,14 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def affine_encode(self, a: int = 1, b: int = 1) -> EncryptionEncodingT:
-        """Encode with Affine ciper
+        """Encode with Affine cipher
 
         Args:
             a (int, optional): Multiplier value. Defaults to 1
             b (int, optional): Additive value. Defaults to 1
 
         Returns:
-            Chepy: The Chepy oject.
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("secret").affine_encode().o
@@ -1149,14 +1149,14 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def affine_decode(self, a: int = 1, b: int = 1) -> EncryptionEncodingT:
-        """Decode Affine ciper
+        """Decode Affine cipher
 
         Args:
             a (int, optional): Multiplier value. Defaults to 1
             b (int, optional): Additive value. Defaults to 1
 
         Returns:
-            Chepy: The Chepy oject.
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("TFDSFU").affine_decode().o
@@ -1167,10 +1167,10 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def atbash_encode(self) -> EncryptionEncodingT:
-        """Encode with Atbash ciper
+        """Encode with Atbash cipher
 
         Returns:
-            Chepy: The Chepy oject.
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("secret").atbash_encode().o
@@ -1181,10 +1181,10 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def atbash_decode(self) -> EncryptionEncodingT:
-        """Decode Atbash ciper
+        """Decode Atbash cipher
 
         Returns:
-            Chepy: The Chepy oject.
+            Chepy: The Chepy object.
 
         Examples:
             >>> Chepy("hvxivg").atbash_decode().o
@@ -1439,7 +1439,7 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def rsa_public_key_from_jwk(self) -> EncryptionEncodingT:
-        """Genereate RSA public key in PEM format from JWK
+        """Generate RSA public key in PEM format from JWK
 
         Raises:
             AssertionError: If n or e not found

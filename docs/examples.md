@@ -59,7 +59,7 @@ print(c.o)
 
 # CTF
 
-#### HTB Business 2022 - Perseverence
+#### HTB Business 2022 - Perseverance
 ```md
 import base64
 from chepy import Chepy

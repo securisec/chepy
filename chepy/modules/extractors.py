@@ -32,7 +32,7 @@ class Extractors(ChepyCore):
             >>> ).extract_hashes()
             {'md5': [b'60b725f10c9c85c70d97880dfe8191b3'], 'sha1': [b'3f786850e387550fdab836ed7e6dc881de23001b'], 'sha256': [], 'sha512': []}
         """
-        # TODO make this more effecient. because at the moment, we are compiling and running this 4 separate times.
+        # TODO make this more efficient. because at the moment, we are compiling and running this 4 separate times.
         data = self._convert_to_bytes()
         found = {}
         found["md5"] = re.findall(
@@ -437,7 +437,7 @@ class Extractors(ChepyCore):
         """Extract base64 encoded strings
 
         Args:
-            min (int, optional): Minium length to match. Defaults to 20.
+            min (int, optional): Minimum length to match. Defaults to 20.
 
         Returns:
             Chepy: The Chepy object.
@@ -457,7 +457,7 @@ class Extractors(ChepyCore):
 
         Args:
             str2 (Union[str, bytes]): String to find matches against
-            min_value (int, optional): Minimum value of continious matches. Defaults to 10.
+            min_value (int, optional): Minimum value of continuous matches. Defaults to 10.
 
         Returns:
             Chepy: The Chepy object.
@@ -481,7 +481,7 @@ class Extractors(ChepyCore):
 
     @ChepyDecorators.call_stack
     def find_longest_continious_pattern(self, str2: str) -> ExtractorsT:
-        """Find longest continious pattern
+        """Find longest continuous pattern
 
         Args:
             str2 (Union[str, bytes]): String to find match against
@@ -572,11 +572,11 @@ class Extractors(ChepyCore):
             return "".join(result)
 
         def decodeText(text):
-            splitted = split_zerowidth_characters(text)
+            split = split_zerowidth_characters(text)
             return {
-                # 'originalText': splitted['originalText'],
+                # 'originalText': split['originalText'],
                 "hidden": decode_from_zero_width_characters_text(
-                    splitted["hiddenText"]
+                    split["hiddenText"]
                 )  # , codelengthText)
             }
 

@@ -11,6 +11,6 @@ var es6function = (vars) => {
 }
 
 /**
- * another multline
+ * another multiline
  * comment
  */

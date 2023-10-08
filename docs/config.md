@@ -13,7 +13,7 @@ This path controls where chepy will look for plugins and extensions. For more in
 ### Cli.history_path
 Path where the chepy cli history is stored. Defaults to *USERHOME/.chepy/chepy_history*
 ### Cli.prompt_colors
-Controls the colors of **>>>** in chepy prompt. Should be space seperated 3 hex color codes. Defaults to *#00ffff #ff0000 #ffd700*
+Controls the colors of **>>>** in chepy prompt. Should be space separated 3 hex color codes. Defaults to *#00ffff #ff0000 #ffd700*
 ### Cli.show_rprompt
 Controls visibility of the right prompt. Value should be *true* or *false*. Defaults to *false*.
 ### Cli.prompt_rprompt

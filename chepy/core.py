@@ -94,7 +94,7 @@ class ChepyCore(object):
         self.cyberchef = self.web
         #: Alias for `load_file`
         self.read_file = self.load_file
-        #: Holds all the methods that are called/chanined and their args
+        #: Holds all the methods that are called/chained and their args
         self._stack = list()
 
         #: Log level
@@ -528,7 +528,7 @@ class ChepyCore(object):
     def substring(self, pattern: str, group: int = 0):
         """Choose a substring from current state as string
 
-        The preceeding methods will only run on the substring and
+        The preceding methods will only run on the substring and
         not the original state. Group capture is supported.
 
         Args:
@@ -548,7 +548,7 @@ class ChepyCore(object):
         instead of calling `self.state` directly to avoid errors.
 
         Raises:
-            NotImplementedError: If type coercian isnt available
+            NotImplementedError: If type coercian isn't available
                 for the current state type.
         """
         if isinstance(self.state, bytes):
@@ -584,7 +584,7 @@ class ChepyCore(object):
         instead of calling `self.state` directly to avoid errors.
 
         Raises:
-            NotImplementedError: If type coercian isnt available
+            NotImplementedError: If type coercian isn't available
                 for the current state type.
         """
         if isinstance(self.state, bytes):
@@ -644,7 +644,7 @@ class ChepyCore(object):
         instead of calling `self.state` directly to avoid errors.
 
         Raises:
-            NotImplementedError: If type coercian isnt available
+            NotImplementedError: If type coercian isn't available
                 for the current state type.
         """
         if isinstance(self.state, int):
@@ -1015,7 +1015,7 @@ class ChepyCore(object):
     def save_recipe(self, path: str):
         """Save the current recipe
 
-        A recipe will be all the previous methdos called on the
+        A recipe will be all the previous methods called on the
         chepy instance along with their args
 
         Args:
@@ -1107,7 +1107,7 @@ class ChepyCore(object):
             # this allows for both method and string passing
             callback = callback.__name__
         assert isinstance(callback, str), "Callback must be a string"
-        assert isinstance(iterations, int), "Iterations must be an intiger"
+        assert isinstance(iterations, int), "Iterations must be an integer"
         assert isinstance(args, dict), "Args must be a dick"
 
         stack_loop_index = next(
@@ -1287,7 +1287,7 @@ class ChepyCore(object):
             Chepy: The Chepy object.
 
         Examples:
-            This method can be used to interace with the shell and Chepy
+            This method can be used to interface with the shell and Chepy
             directly by ingesting a commands output in Chepy.
 
             >>> c = Chepy("ls -l").shell_output().o
