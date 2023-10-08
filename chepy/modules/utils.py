@@ -47,7 +47,7 @@ class Utils(ChepyCore):
 
     @ChepyDecorators.call_stack
     def count_occurances(self, regex: str, case_sensitive: bool = False) -> UtilsT:
-        """Counts occurances of the regex.
+        """Counts occurrences of the regex.
 
         Counts the number of times the provided string occurs.
 
@@ -128,7 +128,7 @@ class Utils(ChepyCore):
 
         Args:
             pattern (str): Required. The regex pattern to search by
-            ignore_case (bool, optional): Set case insentive flag. Defaults to False.
+            ignore_case (bool, optional): Set case insensitive flag. Defaults to False.
             multiline (bool, optional): ^/$ match start/end. Defaults to False.
             dotall (bool, optional): `.` matches newline. Defaults to False.
             unicode (bool, optional): Match unicode characters. Defaults to False.

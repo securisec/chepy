@@ -562,10 +562,10 @@ class Hashing(ChepyCore):
     @ChepyDecorators.call_stack
     @ChepyDecorators.is_stdout
     def password_hashing(self, format: str, **kwargs: Any) -> HashingT:
-        """Hash the state with various password hashing algorithems
+        """Hash the state with various password hashing algorithms
 
         Args:
-            format (str): Hash state with password algorithems
+            format (str): Hash state with password algorithms
 
         Returns:
             Chepy: The Chepy object.

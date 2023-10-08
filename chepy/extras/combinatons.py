@@ -10,7 +10,7 @@ def generate_combo(
     
     Args:
         words (List[Any]): List of strings.
-        min_length (int, optional): Mininum length of permutations. By default, 0 which 
+        min_length (int, optional): Minimum length of permutations. By default, 0 which 
             will generate all
         max_length (int, optional): Maximum length of permutations. 
             By default, it is the length of the `words` list

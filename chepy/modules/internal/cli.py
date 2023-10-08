@@ -243,7 +243,7 @@ def cli_get_attr(fire: object, attr: str):
     if fire is not None and not isinstance(fire, Chepy):
         print_in_colors(getattr(fire, attr)())
     else:
-        print(red("Nope. That didnt work.."))
+        print(red("Nope. That didn't work.."))
 
 
 def cli_pretty_print(fire: object):
@@ -255,7 +255,7 @@ def cli_pretty_print(fire: object):
     if fire is not None and isinstance(fire, Chepy):
         print_in_colors(pprint.pformat(fire.state))
     else:
-        print(red("Nope. That didnt work.."))
+        print(red("Nope. That didn't work.."))
 
 
 def cli_plugin_path(config):
