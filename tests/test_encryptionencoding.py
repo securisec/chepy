@@ -402,6 +402,16 @@ def test_aes_encrypt():
         .o
         == b"4ab2b4f72e9d92960b"
     )
+    raw_key = (
+        raw_iv
+    ) = b'\xe1p\x07\x01R\xee\xde)\xa0gx\xb6\xc2\xcb\x18\x9e\x80\xe5\x9eu\xf2"0PVvE\xdb\x08\x93\xa0\x93'
+    assert (
+        Chepy("hello")
+        .aes_encrypt(key=raw_key, iv=raw_iv[:16], key_format="raw", iv_format="raw")
+        .aes_decrypt(key=raw_key, iv=raw_iv[:16], key_format="raw", iv_format="raw")
+        .o
+        == b"hello"
+    )
 
 
 def test_aes_decrypt():

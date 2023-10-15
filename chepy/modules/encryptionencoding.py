@@ -74,6 +74,8 @@ class EncryptionEncoding(ChepyCore):
             key = key.decode().encode("utf-8")
         if key_format == "latin-1":
             key = key.decode().encode("latin-1")
+        if key_format == "raw":
+            key = key
 
         # modify iv according to mode
         iv = self._str_to_bytes(iv)
@@ -82,9 +84,11 @@ class EncryptionEncoding(ChepyCore):
         if iv_format == "base64" or iv_format == "b64":
             iv = base64.b64decode(iv)
         if iv_format == "utf-8" or iv_format == "utf8":
-            key = key.decode().encode("utf-8")
+            iv = key.decode().encode("utf-8")
         if iv_format == "latin-1":
-            key = key.decode().encode("latin-1")
+            iv = key.decode().encode("latin-1")
+        if iv_format == "raw":
+            iv = iv
         else:
             iv = binascii.unhexlify(binascii.hexlify(iv))
         return key, iv
