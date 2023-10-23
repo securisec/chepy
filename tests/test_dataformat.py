@@ -637,3 +637,8 @@ def test_cut():
     assert Chepy("abcd").cut(1, 3).o == b"bc"
     assert Chepy({"a": 1}).cut(1, 3).o == b"'a"
     assert Chepy({"a": None}).cut(6, 9).o == b"Non"
+
+
+def test_flatten():
+    assert Chepy(["a", 1, True]).flatten().o == ["a", 1, True]
+    assert Chepy([["a"], [1], [True]]).flatten().o == ["a", 1, True]

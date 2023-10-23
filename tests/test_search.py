@@ -2,10 +2,16 @@ from chepy import Chepy
 
 
 def test_search():
-    assert Chepy("abcdefg123 and again abcdefg123").search(r"abc(de)fg(12)(3)").o == [
+    assert Chepy("abcdefg123 and again abcdefg124").search(r"abc(de)fg(12)(\d)").o == [
         (b"de", b"12", b"3"),
-        (b"de", b"12", b"3"),
+        (b"de", b"12", b"4"),
     ]
+
+
+def test_search_list():
+    assert Chepy(
+        ["InfoSeCon2023{1af5856c70878f8566085bc13849ef4d}", True, 123, ["a", "b"]]
+    ).search_list("Info.+").o == [[b"InfoSeCon2023{1af5856c70878f8566085bc13849ef4d}"]]
 
 
 def test_ctf_flags():

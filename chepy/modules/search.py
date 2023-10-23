@@ -21,7 +21,7 @@ class Search(ChepyCore):
         """Search. Group matches are returned as tuples.
 
         Args:
-            pattern (str): String pattern to search
+            pattern (Union[str, bytes]): Bytes pattern to search
 
         Returns:
             Chepy: The Chepy object.
@@ -32,6 +32,32 @@ class Search(ChepyCore):
         """
         pattern = self._str_to_bytes(pattern)
         self.state = re.findall(pattern, self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def search_list(self, pattern: Union[str, bytes]) -> SearchT:
+        """Search all items in a list. List items are coerced into bytes first.
+        Group matches are returned as tuples.
+
+        Args:
+            pattern (Union[str, bytes]): Bytes pattern to search
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert isinstance(self.state, list), "State is not a list"
+
+        converted = [self._to_bytes(s) for s in self.state]
+        pattern = self._str_to_bytes(pattern)
+        pc = re.compile(pattern)
+
+        hold = []
+        for search in converted:
+            matches = pc.findall(search)
+            if len(matches) > 0:
+                hold.append(matches)
+
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack

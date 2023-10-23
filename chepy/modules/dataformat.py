@@ -8,6 +8,7 @@ import json
 import struct
 import pickle
 import string
+import itertools
 from random import randint
 from .internal.constants import Encoding
 from .internal.helpers import detect_delimiter, Rotate
@@ -1981,3 +1982,16 @@ class DataFormat(ChepyCore):
         data = self._convert_to_bytes()
         self.state = data[start:end]
         return self
+
+    @ChepyDecorators.call_stack
+    def flatten(self) -> DataFormatT:
+        """Flatten a list of lists into a single list
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        try:
+            self.state = list(itertools.chain(*self.state))
+            return self
+        except:
+            return self

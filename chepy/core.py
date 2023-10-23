@@ -543,7 +543,7 @@ class ChepyCore(object):
 
     def _convert_to_bytes(self) -> bytes:
         """This method is used to coerce the current object in
-        the state variable into a string. The method should be
+        the state variable into a bytes. The method should be
         called inside any method that operates on a string object
         instead of calling `self.state` directly to avoid errors.
 
@@ -567,6 +567,35 @@ class ChepyCore(object):
             return bytes(self.state)
         elif isinstance(self.state, float):
             return bytearray(struct.pack("f", self.state))
+        else:  # pragma: no cover
+            # todo check more types here
+            raise NotImplementedError
+
+    def _to_bytes(self, data: Any) -> bytes:  # pragma: no cover
+        """This method is used to coerce data to bytes. The method should be
+        called inside any method that operates on a string object
+        instead of calling `self.state` directly to avoid errors.
+
+        Raises:
+            NotImplementedError: If type coercian isn't available
+                for the current state type.
+        """
+        if isinstance(data, bytes):
+            return data
+        elif isinstance(data, str):
+            return data.encode()
+        elif isinstance(data, int):
+            return str(data).encode()
+        elif isinstance(data, dict):
+            return str(data).encode()
+        elif isinstance(data, list):
+            return str(data).encode()
+        elif isinstance(data, bool):
+            return str(data).encode()
+        elif isinstance(data, bytearray):
+            return bytes(data)
+        elif isinstance(data, float):
+            return bytearray(struct.pack("f", data))
         else:  # pragma: no cover
             # todo check more types here
             raise NotImplementedError
