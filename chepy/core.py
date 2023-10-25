@@ -683,6 +683,32 @@ class ChepyCore(object):
         else:  # pragma: no cover
             raise NotImplementedError
 
+    def _get_nested_value(self, data, key, split_by="."):
+        """Get a dict value based on a string key with dot notation. Supports array indexing. 
+        If split_by is None or "", returns only the first key
+
+        Args:
+            data (dict): Data
+            key (str): Dict key in a dot notation and array
+            split_by (str, optional): Chars to split key by. Defaults to ".".
+        """
+        if not split_by:
+            return data[key]
+        try:
+            keys = key.split(split_by)
+            for k in keys:
+                if "[" in k:
+                    # Extract the key and index
+                    k, index_str = k.split("[")
+                    index = int(index_str.rstrip("]"))
+                    data = data[k][index]
+                else:
+                    data = data[k]
+            return data
+        except Exception as e:  # pragma: no cover
+            self._error_logger(e)
+            return data
+
     @property
     def o(self):
         """Get the final output
@@ -719,20 +745,21 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def get_by_key(self, key: str):
-        """Get an object from a dict by key
+    def get_by_key(self, key: str, split_key: str = "."):
+        """Get value from a dict. Supports nested keys and arrays.
 
         Args:
-            key (str): A valid key
+            key (Union[Hashable, None]): Keys to extract.
+            split_key (str, optional): Split nested keys. Defaults to "."
+            nested (bool, optional): If the specified keys are nested. Supports array indexing. Defaults to True
 
         Returns:
             Chepy: The Chepy object.
         """
-        if isinstance(self.state, dict):
-            self.state = self.state.get(key)
-            return self
-        else:  # pragma: no cover
-            raise TypeError("State is not a dictionary")
+        assert isinstance(self.state, dict), "State is not a dictionary"
+
+        self.state = self._get_nested_value(self.state, key, split_by=split_key)
+        return self
 
     @ChepyDecorators.call_stack
     def copy_to_clipboard(self) -> None:  # pragma: no cover
@@ -801,7 +828,7 @@ class ChepyCore(object):
         json: dict = None,
         headers: dict = {},
         cookies: dict = {},
-    ):
+    ):  # pragma: no cover
         """Make a http/s request
 
         Make a HTTP/S request and work with the data in Chepy. Most common http

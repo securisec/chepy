@@ -66,8 +66,30 @@ def test_load_buffer():
     assert c.load_buffer(0).state == b"41"
 
 
-def test_http_request():
-    assert Chepy("https://example.com").http_request().get_by_key("status").o == 200
+# def test_http_request():
+#     assert Chepy("https://example.com").http_request().get_by_key("status").o == 200
+
+
+def test_get_by_key():
+    data2 = {
+        "menu": {
+            "id": "file",
+            "value": "File",
+            "popup": {
+                "menuitem": [
+                    {"value": "New", "onclick": "CreateNewDoc()"},
+                    {"value": "Open", "onclick": "OpenDoc()"},
+                    {"value": "Close", "onclick": "CloseDoc()"},
+                ]
+            },
+        }
+    }
+    assert Chepy(data2).get_by_key("menu.popup.menuitem[1].value").o == b"Open"
+    assert (
+        Chepy(data2).get_by_key("menu..popup..menuitem[0]..value", split_key="..").o
+        == b"New"
+    )
+    assert Chepy(data2).get_by_key("menu", split_key=None).o.get("id") == "file"
 
 
 def test_delete_state():

@@ -207,12 +207,8 @@ def test_list_to_str():
     assert Chepy([b"a", b"b"]).list_to_str(b".").o == b"a.b"
 
 
-def test_join_list():
-    assert Chepy(["a", "b", "c"]).join_list(":").o == b"a:b:c"
-
-
 def test_join():
-    assert Chepy(["a", "b", "c"]).join(":").o == b"a:b:c"
+    assert Chepy(["a", "b", "c", True]).join(":").o == b"a:b:c:True"
 
 
 def test_to_int():

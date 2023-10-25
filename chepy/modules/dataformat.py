@@ -95,11 +95,11 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def join(self, by: Union[str, bytes] = "") -> DataFormatT:
+    def join(self, join_by: Union[str, bytes] = "") -> DataFormatT:
         """Join a list with specified character
 
         Args:
-            by (Union[str, bytes], optional): What to join with. Defaults to ""
+            join_by (Union[str, bytes], optional): What to join with. Defaults to ""
 
         Returns:
             Chepy: The Chepy object.
@@ -107,23 +107,10 @@ class DataFormat(ChepyCore):
             >>> Chepy(["a", "b", "c"]).join_list(":").o
             "a:b:c"
         """
-        self.state = by.join(self.state)
-        return self
-
-    @ChepyDecorators.call_stack
-    def join_list(self, by: Union[str, bytes] = "") -> DataFormatT:
-        """Join a list with specified character
-
-        Args:
-            by (Union[str, bytes], optional): What to join with. Defaults to ""
-
-        Returns:
-            Chepy: The Chepy object.
-        Examples:
-            >>> Chepy(["a", "b", "c"]).join_list(":").o
-            "a:b:c"
-        """
-        self.state = by.join(self.state)
+        assert isinstance(self.state, list), "State is not a list"
+        data = [self._to_bytes(x) for x in self.state]
+        join_by = self._str_to_bytes(join_by)
+        self.state = join_by.join(data)
         return self
 
     @ChepyDecorators.call_stack

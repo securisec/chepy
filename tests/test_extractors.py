@@ -276,3 +276,23 @@ def test_decode_zero_width():
         .o["hidden"]
         == "secret"
     )
+
+
+def test_xpath_selector():
+    c = Chepy("tests/files/test.html").load_file().xpath_selector("//p/text()")
+    assert "This domain" in c.o[0]
+
+
+def test_css_selector():
+    c = Chepy("tests/files/test.html").load_file().css_selector("title")
+    assert "Example Domain" in c.o[0]
+
+
+def test_html_tags():
+    c = Chepy("tests/files/test.html").load_file().extract_html_tags(["title", "p"])
+    assert len(c.o) == 3
+
+
+def test_html_comments():
+    c = Chepy("tests/files/test.html").load_file().extract_html_comments()
+    assert len(c.o) == 3

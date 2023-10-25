@@ -19,7 +19,7 @@ def test_pe_imports():
             Chepy("tests/files/ff.exe")
             .read_file()
             .pe_imports()
-            .get_by_key(b"api-ms-win-crt-filesystem-l1-1-0.dll")
+            .get_by_key(b"api-ms-win-crt-filesystem-l1-1-0.dll", split_key=None)
             .o
         )
         == 2
@@ -33,7 +33,7 @@ def test_pe_exports():
 def test_elf_imports():
     assert (
         len(
-            Chepy("tests/files/elf").load_file().elf_imports().get_by_key(".rela.dyn").o
+            Chepy("tests/files/elf").load_file().elf_imports().get_by_key(".rela.dyn",split_key=None).o
         )
         == 9
     )

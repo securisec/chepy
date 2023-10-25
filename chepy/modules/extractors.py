@@ -1,10 +1,13 @@
 import math
 from binascii import unhexlify
-from typing import TypeVar, Union
+from typing import TypeVar, Union, List
 from urllib.parse import urlparse as _pyurlparse
+import lazy_import
 
 import regex as re
 import re as old_re
+
+parsel = lazy_import.lazy_module("parsel")
 
 from ..core import ChepyCore, ChepyDecorators
 
@@ -18,6 +21,10 @@ _zw_radix = 0
 class Extractors(ChepyCore):
     def __init__(self, *data):
         super().__init__(*data)
+
+    def _parsel_obj(self):
+        """Returns a parsel.Selector object"""
+        return parsel.Selector(self._convert_to_str())
 
     @ChepyDecorators.call_stack
     def extract_hashes(self) -> ExtractorsT:
@@ -582,4 +589,96 @@ class Extractors(ChepyCore):
 
         set_use_chars(_zw_chars)
         self.state = decodeText(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def xpath_selector(self, query: str, namespaces: str = None):
+        """Extract data using valid xpath selectors
+
+        Args:
+            query (str): Required. Xpath query
+            namespaces (str, optional): Namespace. Applies for XML data. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy("http://example.com")
+            >>> c.http_request()
+            >>> c.xpath_selector("//title/text()")
+            >>> c.get_by_index(0)
+            >>> c.o
+            "Example Domain"
+        """
+        self.state = (
+            parsel.Selector(self._convert_to_str(), namespaces=namespaces)
+            .xpath(query)
+            .getall()
+        )
+        return self
+
+    @ChepyDecorators.call_stack
+    def css_selector(self, query: str):
+        """Extract data using valid CSS selectors
+
+        Args:
+            query (str): Required. CSS query
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy("http://example.com")
+            >>> c.http_request()
+            >>> c.css_selector("title")
+            >>> c.get_by_index(0)
+            >>> c.o
+            "<title>Example Domain</title>"
+        """
+        self.state = self._parsel_obj().css(query).getall()
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_html_tags(self, tags: List[str]):
+        """Extract tags from html along with their attributes
+
+        Args:
+            tag (str): A HTML tag
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("http://example.com").http_request().html_tags(['p']).o
+            [
+                {'tag': 'p', 'attributes': {}},
+                {'tag': 'p', 'attributes': {}},
+                {'tag': 'p', 'attributes': {}}
+            ]
+        """
+        hold = []
+
+        for tag in tags:
+            for element in self._parsel_obj().xpath("//{}".format(tag)):
+                attributes = []
+                for index, attribute in enumerate(element.xpath("@*"), start=1):
+                    attribute_name = element.xpath(
+                        "name(@*[%d])" % index
+                    ).extract_first()
+                    attributes.append((attribute_name, attribute.extract()))
+                hold.append({"tag": tag, "attributes": dict(attributes)})
+
+        self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def extract_html_comments(self):
+        """Extract html comments
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = list(
+            filter(lambda x: x != "", self._parsel_obj().xpath("//comment()").getall())
+        )
         return self
