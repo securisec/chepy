@@ -14,7 +14,7 @@ pycipher
 pycryptodome
 pydash
 pyjwt==1.7.1
-pyOpenSSL
+pyOpenSSL==23.2.0
 pyperclip
 python-editor
 PyYAML
