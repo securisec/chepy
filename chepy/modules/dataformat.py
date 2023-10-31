@@ -11,7 +11,7 @@ import string
 import itertools
 from random import randint
 from .internal.constants import Encoding
-from .internal.helpers import detect_delimiter, Rotate
+from .internal.helpers import detect_delimiter, Rotate, Uint1Array
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -1982,3 +1982,47 @@ class DataFormat(ChepyCore):
             return self
         except:
             return self
+
+    @ChepyDecorators.call_stack
+    def to_utf21(self) -> DataFormatT:
+        """Convert to UTF-21
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        bits = Uint1Array(len(data) * 21)
+
+        bit_index = 0
+        for codepoint in data:
+            for i in range(20, -1, -1):
+                bits.set(bit_index, (codepoint & (1 << i)) >> i)
+                bit_index += 1
+
+        self.state = bytes(bits.buffer)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_utf21(self) -> DataFormatT:
+        """Convert from UTF-21
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        buffer = self._convert_to_bytes()
+        bits = Uint1Array(buffer)
+        codepoint_length = (len(buffer) * 8) // 21
+        codepoints = []
+
+        for codepoint_index in range(codepoint_length):
+            start_bit_index = codepoint_index * 21
+            codepoint = 0
+
+            for i in range(21):
+                bit = bits.get(start_bit_index + i)
+                codepoint += bit << (20 - i)
+
+            codepoints.append(codepoint)
+
+        self.state = bytes(codepoints)
+        return self

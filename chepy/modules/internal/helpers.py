@@ -1,6 +1,36 @@
 from typing import List, Union
 
 
+class Uint1Array:
+    # reference https://git.sr.ht/~evanhahn/UTF-21.js
+    def __init__(self, bit_length_or_buffer):
+        if isinstance(bit_length_or_buffer, int):
+            bit_length = bit_length_or_buffer
+            self.bit_length = bit_length
+            self.bytes = bytearray((bit_length + 7) // 8)
+        else:
+            buffer = bit_length_or_buffer
+            self.bit_length = len(buffer) * 8
+            self.bytes = bytearray(buffer)
+
+    @property
+    def buffer(self):
+        return bytes(self.bytes)
+
+    def get(self, index):
+        byte_index = index // 8
+        bit_index = index % 8
+        byte = self.bytes[byte_index]
+        return (byte >> (7 - bit_index)) & 1
+
+    def set(self, index, value):
+        byte_index = index // 8
+        bit_index = index % 8
+        old_byte = self.bytes[byte_index]
+        new_byte = old_byte | (value << (7 - bit_index))
+        self.bytes[byte_index] = new_byte
+
+
 def detect_delimiter(
     data: Union[str, bytes],
     delimiters: List[Union[str, bytes]] = [
