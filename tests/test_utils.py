@@ -89,6 +89,13 @@ def test_split_lines():
     )
 
 
+def test_split_chunks():
+    data = "hello world"
+    c1 = Chepy(data).split_chunks(2)
+    assert len(c1.o) == 6
+    assert c1.o == [b"he", b"ll", b"o ", b"wo", b"rl", b"d"]
+
+
 def test_select_n():
     assert Chepy(["a", 1, "lol", "", True]).select_every_n(3).o == ["a", ""]
 

@@ -236,6 +236,23 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def split_chunks(self, chunk_size) -> UtilsT:
+        """Split data in chunks
+
+        Args:
+            chunk_size (int): Chunk size
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        data_chunks = []
+        for i in range(0, len(data), chunk_size):
+            data_chunks.append(data[i : i + chunk_size])
+        self.state = data_chunks
+        return self
+
+    @ChepyDecorators.call_stack
     def unique(self) -> UtilsT:
         """Get an array of unique list items
 
@@ -533,7 +550,7 @@ class Utils(ChepyCore):
         buffer: int = None,
         colors: bool = False,
         swap: bool = False,
-        only_changes: bool = False
+        only_changes: bool = False,
     ):
         """Diff state with another state or buffer
 
@@ -586,7 +603,7 @@ class Utils(ChepyCore):
                     return "{-" + matcher.a[i1:i2] + "}"
             if tag == "equal":
                 if only_changes:
-                    return ''
+                    return ""
                 return matcher.a[i1:i2]
             if tag == "insert":
                 if colors:

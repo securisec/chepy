@@ -11,7 +11,7 @@ import string
 import itertools
 from random import randint
 from .internal.constants import Encoding
-from .internal.helpers import detect_delimiter, Rotate, Uint1Array
+from .internal.helpers import detect_delimiter, Rotate, Uint1Array, UUEncoderDecoder
 
 yaml = lazy_import.lazy_module("yaml")
 import regex as re
@@ -2025,4 +2025,30 @@ class DataFormat(ChepyCore):
             codepoints.append(codepoint)
 
         self.state = bytes(codepoints)
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_uuencode(self, header: str = "-") -> DataFormatT:
+        """To UUEncode
+
+        Args:
+            header (str): header
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = UUEncoderDecoder(self._convert_to_bytes(), header).uuencode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_uuencode(self, header: str = "-") -> DataFormatT:
+        """From UUEncode
+
+        Args:
+            header (str): header
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = UUEncoderDecoder(self._convert_to_bytes(), header).uudecode()
         return self

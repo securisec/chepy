@@ -724,3 +724,13 @@ def test_utf21():
     ]
     assert Chepy(bytes(flag)).from_utf21().o == b"UDCTF{7w3nty_0n3?_Y0u_57up1d!}"
     assert Chepy("UDCTF{7w3nty_0n3?_Y0u_57up1d!}").to_utf21().o == bytes(flag)
+
+
+def test_uuencode():
+    data = """HI ZERO IM TRYING A NEW ENCRYPTION
+
+EKO{UUENC0DED_ENCRYPTED?}"""
+    assert (
+        b"EKO{UUENC0DED_ENCRYPTED?}"
+        in Chepy(data).to_uuencode().from_uuencode().remove_nullbytes().o
+    )

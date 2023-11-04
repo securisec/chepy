@@ -1,4 +1,41 @@
 from typing import List, Union
+import binascii
+
+
+class UUEncoderDecoder:
+    def __init__(self, data: bytes, header: str = "-"):
+        self.data = data
+        self.header = header
+
+    def split_data(self, data, chunk_size=45):
+        for i in range(0, len(data), chunk_size):
+            yield self.data[i : i + chunk_size]
+
+    def uuencode(self):
+        encoded_chunks = []
+        for chunk in self.split_data(self.data):
+            encoded_data = binascii.b2a_uu(chunk)
+            encoded_chunks.append(encoded_data.decode("utf-8"))
+
+        # UUencode header and footer
+        header = f"begin 644 {self.header}\n"
+        footer = " \nend\n"
+
+        return header + "\n".join(encoded_chunks) + footer
+
+    def uudecode(self):
+        lines = self.data.strip().split(b"\n")
+        if len(lines) < 3 or b"begin 644" not in lines[0].lower():  # pragma: no cover
+            raise ValueError("Invalid UUencode format. Missing header")
+
+        data_lines = lines[1:-1]  # Remove header and footer
+
+        decoded_data = []
+        for line in data_lines:
+            decoded_chunk = binascii.a2b_uu(line)
+            decoded_data.append(decoded_chunk)
+
+        return b"".join(decoded_data)
 
 
 class Uint1Array:
