@@ -26,9 +26,6 @@ New ideas:
   ☐ ✨ amf encode/decode
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
-  ☐ 🐙 diff show results only
-  ☐ ✨ brainfuck encoder/decoder
-  ☐ ✨ spoon encoder/decoder
 
 Bug:
 
@@ -59,6 +56,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ 🐙 diff show results only
   ✔ 🐙 update ascii in xor function to documentation
   ✔ 🐛 search with bytes is erroring
   ✔ ✨ base62
