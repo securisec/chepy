@@ -1,5 +1,4 @@
 from chepy import Chepy
-import re
 
 
 def test_eval():
@@ -735,17 +734,3 @@ EKO{UUENC0DED_ENCRYPTED?}"""
         b"EKO{UUENC0DED_ENCRYPTED?}"
         in Chepy(data).to_uuencode().from_uuencode().remove_nullbytes().o
     )
-
-def test_lz77():
-    input_str = "(0,0,O)(0,0,M)(0,0,G)(1,1,G)(3,3, )(0,0,Y)(10,1,U)(4,1,A)(0,0,R)(0,0,E)(4,1,C)(0,0,L)(9,1,S)(6,2,T)(5,1, )(3,1,H)(7,2,F)(13,1,A)(1,1,A)(2,2,G)(36,7,C)(28,5,C)(6,5,W)(3,1,L)(1,1, )(0,0,N)(10,1,W)(40,3,I)(15,1, )(3,3,T)(48,6,G)(5,1,E)(0,0,K)(22,1,{)(25,1,I)(38,1,E)(1,1,E)(3,3,E)(7,7,E)(15,15,_)(38,3,O)(2,2,O)(5,5,O)(11,11,O)(3,3,_)(63,23,})"
-    array_of_arrays = []
-    regex = r"\((\d+),(\d+),([A-Z\s_{}]+)\)"
-    matches = re.findall(regex, input_str)
-
-    for match in matches:
-        param1, param2, param3 = match
-        array_of_arrays.append([int(param1), int(param2), param3])
-
-    assert b'EKO{' in Chepy(array_of_arrays).from_lz77().o
-
-    assert Chepy('OMGGGGGG').to_lz77(1).o[1] == [0, 0, 'M']

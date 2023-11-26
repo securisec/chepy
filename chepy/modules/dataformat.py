@@ -2047,7 +2047,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_uuencode(self, header: str = "-") -> DataFormatT:
+    def from_uuencode(self: DataFormatT, header: str = "-") -> DataFormatT:
         """From UUEncode
 
         Args:
@@ -2057,40 +2057,4 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = UUEncoderDecoder(self._convert_to_bytes(), header).uudecode()
-        return self
-
-    @ChepyDecorators.call_stack
-    def to_lz77(
-        self, window_size: int = 13, lookahead_buffer_size: int = 6
-    ) -> DataFormatT:
-        """To LZ77 compression
-
-        Args:
-            window_size (int, optional): Window size. Defaults to 13.
-            lookahead_buffer_size (int, optional): Lookahead. Defaults to 6.
-
-        Returns:
-            Chepy: The Chepy object.
-        """
-        self.state = LZ77Compressor(window_size, lookahead_buffer_size).compress(
-            self._convert_to_str()
-        )
-        return self
-
-    def from_lz77(
-        self, window_size: int = 13, lookahead_buffer_size: int = 6
-    ) -> DataFormatT:
-        """From LZ77 compression
-
-        Args:
-            window_size (int, optional): Window size. Defaults to 13.
-            lookahead_buffer_size (int, optional): Lookahead. Defaults to 6.
-
-        Returns:
-            Chepy: The Chepy object.
-        """
-        assert isinstance(self.state, list), "State is not a list"
-        self.state = LZ77Compressor(window_size, lookahead_buffer_size).decompress(
-            self.state
-        )
         return self

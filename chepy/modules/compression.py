@@ -9,6 +9,7 @@ import zlib
 import stat
 from typing import TypeVar
 import lazy_import
+from .internal.helpers import LZ77Compressor
 
 LZ4 = lazy_import.lazy_module("lz4.frame")
 
@@ -25,7 +26,7 @@ class Compression(ChepyCore):
         assert mode in ["gz", "bz2", "xz", ""], "Valid modes are gz, bz2, xz"
 
     @ChepyDecorators.call_stack
-    def fix_zip_header(self) -> CompressionT:
+    def fix_zip_header(self: CompressionT) -> CompressionT:
         """Fix the first 4 bytes of a zip file
 
         Returns:
@@ -442,4 +443,36 @@ class Compression(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = LZ4.decompress(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def lz77_compress(self, window_size: int = 13, lookahead_buffer_size: int = 6):
+        """To LZ77 compression
+
+        Args:
+            window_size (int, optional): Window size. Defaults to 13.
+            lookahead_buffer_size (int, optional): Lookahead. Defaults to 6.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = LZ77Compressor(window_size, lookahead_buffer_size).compress(
+            self._convert_to_str()
+        )
+        return self
+
+    def lz77_decompress(self, window_size: int = 13, lookahead_buffer_size: int = 6):
+        """From LZ77 compression
+
+        Args:
+            window_size (int, optional): Window size. Defaults to 13.
+            lookahead_buffer_size (int, optional): Lookahead. Defaults to 6.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        assert isinstance(self.state, list), "State is not a list"
+        self.state = LZ77Compressor(window_size, lookahead_buffer_size).decompress(
+            self.state
+        )
         return self
