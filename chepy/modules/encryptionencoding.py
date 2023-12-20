@@ -1505,7 +1505,7 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def from_letter_number_code(
-        self, delimiter: Union[str, bytes] = None, join_by: Union[str, bytes] = ""
+        self, delimiter: Union[str, bytes] = ' ', join_by: Union[str, bytes] = ""
     ) -> EncryptionEncodingT:
         """Decode A1Z26
 
@@ -1517,7 +1517,7 @@ class EncryptionEncoding(ChepyCore):
             Chepy: The Chepy object.
         """
         data = self._convert_to_str()
-        delimiter = detect_delimiter(data)
+        delimiter = detect_delimiter(data, default_delimiter=delimiter)
         data = data.split(delimiter)
         hold = ["§" for _ in range(len(data))]
         for d in data:

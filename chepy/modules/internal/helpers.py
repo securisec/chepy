@@ -137,19 +137,24 @@ class Uint1Array:
 def detect_delimiter(
     data: Union[str, bytes],
     delimiters: List[Union[str, bytes]] = [
-        " ",
+        "; ",
         ";",
+        ". ",
         ".",
+        "- ",
         "-",
         "\\",
+        ": ",
         ":",
         "/",
+        ", ",
         ",",
+        " ",
         "\n",
         "\\x",
         "\\0x",
     ],
-    default_delimiter: str = " ",
+    default_delimiter: str = "",
 ) -> Union[str, bytes, None]:
     """Detect delimiter
 
@@ -161,6 +166,9 @@ def detect_delimiter(
     Returns:
         Union[str, bytes, None]: Delimiter or None if one is not found
     """
+    if default_delimiter:
+        return default_delimiter
+        
     is_bytes = False
     if isinstance(data, bytes):  # pragma: no cover
         delimiters = [d.encode() for d in delimiters]

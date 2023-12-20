@@ -568,10 +568,14 @@ class DataFormat(ChepyCore):
             b"AAA"
         """
         data = self._convert_to_bytes()
-        delimiter = detect_delimiter(data, default_delimiter=None)
+        if delimiter is None:
+            delimiter = detect_delimiter(data, default_delimiter=None)
         if delimiter is not None:
             self.state = join_by.encode().join(
-                list(binascii.unhexlify(x) for x in data.split(delimiter))
+                list(
+                    binascii.unhexlify(x)
+                    for x in data.split(self._str_to_bytes(delimiter))
+                )
             )
         else:
             self.state = binascii.unhexlify(data)
@@ -885,7 +889,9 @@ class DataFormat(ChepyCore):
         """
         data = self._convert_to_str()
         out = []
-        delimiter = detect_delimiter(data)
+        if not delimiter:
+            delimiter = detect_delimiter(data)
+        print("🟢 ", delimiter)
         for c in data.split(delimiter):
             out.append(chr(int(c, base)))
         self.state = join_by.join(out)
@@ -926,7 +932,8 @@ class DataFormat(ChepyCore):
             "ㅎ"
         """
         data = self._convert_to_str()
-        delimiter = detect_delimiter(data)
+        if not delimiter:
+            delimiter = detect_delimiter(data)
         self.state = join_by.join(
             list(chr(int(s)) for s in data.strip().split(delimiter))
         )
@@ -973,7 +980,8 @@ class DataFormat(ChepyCore):
             "abc"
         """
         data = self._convert_to_str()
-        delimiter = detect_delimiter(data)
+        if not delimiter:
+            delimiter = detect_delimiter(data)
         n = int(
             "".join([x[byte_length - 8 :] for x in data.split(delimiter)]),
             2,
@@ -1016,7 +1024,8 @@ class DataFormat(ChepyCore):
             "ab"
         """
         data = self._convert_to_str()
-        delimiter = detect_delimiter(data, default_delimiter=delimiter)
+        if not delimiter:
+            delimiter = detect_delimiter(data, default_delimiter=delimiter)
         self.state = join_by.join(
             list(chr(int(str(x), 8)) for x in data.split(delimiter))
         )
@@ -1372,7 +1381,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def remove_nonprintable(self, replace_with: bytes = b"") -> DataFormatT:
+    def remove_nonprintable(self, replace_with: Union[str, bytes] = b"") -> DataFormatT:
         """Remove non-printable characters from string.
 
         Args:
@@ -1381,8 +1390,7 @@ class DataFormat(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        if isinstance(replace_with, str):
-            replace_with = replace_with.encode()
+        replace_with = self._str_to_bytes(replace_with)
         data = self._convert_to_bytes()
         self.state = re.sub(b"[^[:print:]]", replace_with, data)
         return self
