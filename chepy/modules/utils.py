@@ -693,7 +693,7 @@ class Utils(ChepyCore):
         unchanged if any other types.
 
         Returns:
-            Chepy: _description_
+            Chepy: The Chepy object
         """
         data = self.state
         if not isinstance(
@@ -715,4 +715,28 @@ class Utils(ChepyCore):
             data = list(data)
         random.shuffle(data)
         self.state = data
+        return self
+
+    @ChepyDecorators.call_stack
+    def drop_bytes(self, start: int, length: int) -> UtilsT:
+        """Drop bytes from starting index up to length
+
+        Args:
+            start (int): Starting index
+            length (int): Number of bytes to drop
+
+        Raises:
+            ValueError: If start or length < -1
+
+        Returns:
+            Chepy: The Chepy object
+        """
+        if start < 0 or length < 0:
+            raise ValueError(
+                "Start and length must be non-negative integers."
+            )  # pragma: no cover
+
+        end = start + length
+        data = self._convert_to_bytes()
+        self.state = data[:start] + data[end:]
         return self

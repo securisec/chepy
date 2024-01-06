@@ -236,3 +236,7 @@ def test_shuffle():
     assert len(Chepy([1, 2, 3]).shuffle().o) == 3
     assert len(Chepy("abc").shuffle().o) == 3
     assert len(Chepy(b"abdc").shuffle().o) != 3
+
+
+def test_drop_bytes():
+    assert Chepy("hello").drop_bytes(2, 2).o == b"heo"

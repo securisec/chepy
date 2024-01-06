@@ -1,3 +1,9 @@
+bin/
+pyvenv.cfg
+.envrc
+hexfile.bin
+share/
+
 .bandit.json
 .scannerwork
 .DS_Store
