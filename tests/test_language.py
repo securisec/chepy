@@ -63,7 +63,8 @@ def test_encode_cp932():
 
 def test_decode_cp932():
     assert (
-        Chepy("82b182f182c982bf82cd").hex_to_str().decode("cp932").o.decode() == "こんにちは"
+        Chepy("82b182f182c982bf82cd").hex_to_str().decode("cp932").o.decode()
+        == "こんにちは"
     )
 
 
@@ -177,14 +178,21 @@ def test_decode_cp1258():
         Chepy("745c75316561316d2062695c753165633774")
         .hex_to_str()
         .decode("cp1258")
-        .unicode_to_str()
+        .unicode_to_str(True)
         .o.decode()
         == "tạm biệt"
     )
 
 
-def test_str_to_unice():
+def test_unicode_to_str():
+    assert Chepy("U+0073U+0061U+006d").unicode_to_str().o == b"sam"
+
+
+def test_str_to_unicode():
     assert Chepy("籯").str_to_unicode().o == b"\\u7c6f"
+    assert (
+        Chepy(b"sam").str_to_unicode(all_chars=True).o.decode() == r"\u0073\u0061\u006d"
+    )
 
 
 def test_encode_iso8859_2():
@@ -333,6 +341,8 @@ def test_remove_diacritics():
 
 def test_us_ascii_7_bit():
     assert (
-        Chepy("걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽").encode_us_ascii_7_bit().o
+        Chepy("걳걵걮걻걢갴걳갳걟갱갲갸걟갱갵걟걢갱건걟걲갳걭갴거거갱걮걧걽")
+        .encode_us_ascii_7_bit()
+        .o
         == b"sun{b4s3_128_15_b1t_r3m4pp1ng}"
     )

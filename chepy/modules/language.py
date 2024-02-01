@@ -89,23 +89,44 @@ class Language(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def unicode_to_str(self) -> LanguageT:
+    def unicode_to_str(self, as_bytes=False) -> LanguageT:
         """Escape any \\u characters to its proper unicode representation
+
+        Args:
+            as_bytes (bool): Treat state as bytes. This does not handle %u or U+ encodings
 
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self._convert_to_bytes().decode(
-            "unicode-escape", errors="backslashreplace"
-        )
+        if as_bytes:
+            self.state = self._convert_to_bytes().decode(
+                "unicode-escape", errors="backslashreplace"
+            )
+        else:
+            data = self._convert_to_str()
+            cleaned_string = re.sub(r"(\\u|%u|U\+)", r"\\u", data)
+            self.state = bytes(cleaned_string, "utf-8").decode(
+                "unicode-escape", errors="backslashreplace"
+            )
         return self
 
     @ChepyDecorators.call_stack
-    def str_to_unicode(self) -> LanguageT:
+    def str_to_unicode(self, prefix: str = "\\u", all_chars: bool = False) -> LanguageT:
         """Convert unicode to str
+
+        Args:
+            prefix (str): Prefix character.
+            all_chars (bool): Force convert all chars to unicode.
 
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self._convert_to_str().encode("unicode_escape")
+        data = self._convert_to_str()
+        if all_chars:
+            hold = []
+            for d in data:
+                hold.append("{}{:04x}".format(prefix, ord(d)))
+            self.state = "".join(hold)
+            return self
+        self.state = data.encode("unicode_escape")
         return self

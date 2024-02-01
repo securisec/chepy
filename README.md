@@ -96,10 +96,10 @@ pip3 install -e .
 # I use -e here so that if I update later with git pull, I dont have it install it again (unless dependencies have changed)
 ```
 
-#### [Docker](https://hub.docker.com/r/securisec/chepy)
+<!-- #### [Docker](https://hub.docker.com/r/securisec/chepy)
 ```bash
 docker run --rm -ti -v $PWD:/data securisec/chepy "some string" [somefile, "another string"]
-```
+``` -->
 
 #### Standalone binary
 One can build Chepy to be a standalone binary also. This includes packaging all the dependencies together.
