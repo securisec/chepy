@@ -39,14 +39,34 @@ class AritmeticLogic(ChepyCore):
         """Add a number to the state
 
         Args:
-            n (int): Number to add with
+            n (int): Number to add with. Can be decimal or hex string without 0x
 
         Returns:
             Chepy: The Chepy object.
         """
-        if not isinstance(self.state, int):
-            self.state = self.__hex_to_int(self.state)
-        self.state = self.state + n
+        # Determine the base of the key (hexadecimal or decimal)
+        if isinstance(n, int):
+            # Try converting to decimal
+            key_int = n
+        else:
+            try:
+                # Try converting to hexadecimal
+                key_int = int(n, 16)
+            except ValueError:  # pragma: no cover
+                self._log.error(
+                    "Invalid key format. Must be a decimal or hexadecimal string."
+                )
+                return self
+
+        hold = b""
+        for char_code in self._convert_to_bytes():
+            # Add the key to the integer and take the result modulo 255
+            result_code = (char_code + key_int) % 256
+
+            # Convert the result back to a byte
+            hold += result_code.to_bytes(1, byteorder="big")
+
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack
@@ -59,9 +79,29 @@ class AritmeticLogic(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        if not isinstance(self.state, int):
-            self.state = self.__hex_to_int(self.state)
-        self.state = self.state - n
+        # Determine the base of the key (hexadecimal or decimal)
+        if isinstance(n, int):
+            # Try converting to decimal
+            key_int = n
+        else:
+            try:
+                # Try converting to hexadecimal
+                key_int = int(n, 16)
+            except ValueError:  # pragma: no cover
+                self._log.error(
+                    "Invalid key format. Must be a decimal or hexadecimal string."
+                )
+                return self
+
+        hold = b""
+        for char_code in self._convert_to_bytes():
+            # Add the key to the integer and take the result modulo 255
+            result_code = (char_code - key_int) % 256
+
+            # Convert the result back to a byte
+            hold += result_code.to_bytes(1, byteorder="big")
+
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack
@@ -81,8 +121,8 @@ class AritmeticLogic(ChepyCore):
 
     @ChepyDecorators.call_stack
     def divide(self, n: int) -> AritmeticLogicT:
-        """Divide a number to the state. Chepy is not optimized for float math. 
-        Subsequent methods may fail. 
+        """Divide a number to the state. Chepy is not optimized for float math.
+        Subsequent methods may fail.
 
         Args:
             n (int): Number to divide with
@@ -107,7 +147,7 @@ class AritmeticLogic(ChepyCore):
         """
         if not isinstance(self.state, int):
             self.state = self.__hex_to_int(self.state)
-        self.state = self.state ** n
+        self.state = self.state**n
         return self
 
     @ChepyDecorators.call_stack
@@ -149,7 +189,7 @@ class AritmeticLogic(ChepyCore):
     @ChepyDecorators.call_stack
     def int_to_base(self, base: Union[int, str]) -> AritmeticLogicT:
         """Convert the state to a different base
-        
+
         Args:
             base (int): Base to convert to
 

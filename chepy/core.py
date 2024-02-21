@@ -103,6 +103,8 @@ class ChepyCore(object):
         self.log_format = "%(levelname)-2s - %(message)s"
         logging.getLogger().setLevel(self.log_level)
         logging.basicConfig(format=self.log_format)
+        # logger
+        self._log = logging
 
     @property
     def recipe(self) -> List[Dict[str, Union[str, Dict[str, Any]]]]:

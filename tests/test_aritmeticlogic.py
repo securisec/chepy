@@ -6,7 +6,9 @@ def test_bit_shift_right():
 
 
 def test_add():
-    assert Chepy("0x40").add(1).o == 65
+    assert Chepy("40").add(1).to_int().o == 51
+    assert Chepy("hello").add('ff').o == b'gdkkn'
+    assert Chepy(9).add('01').o == b':'
 
 
 def test_multiply():
@@ -37,7 +39,10 @@ def test_median():
 
 
 def test_subtract():
-    assert Chepy(["0x02", "0x04"]).loop_list("subtract", {"n": 1}).o == [1, 3]
+    assert Chepy("40").subtract(1).o == b'3/'
+    assert Chepy("hello").subtract('10').o == b'XU\\\\_'
+    assert Chepy("hello").subtract(10).o == b'^[bbe'
+    # assert Chepy(9).add('01').o == b':'
 
 
 def test_int_to_base():
