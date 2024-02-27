@@ -59,8 +59,7 @@ education: |
     BSc in the Internet of Things
 """
     assert (
-        Chepy(data).yaml_to_json().o
-        != ""
+        Chepy(data).yaml_to_json().o != ""
         # == '{"name":"Martin D\'vloper","job":"Developer","skill":"Elite","employed":true,"foods":["Apple","Orange","Strawberry","Mango"],"languages":{"perl":"Elite","python":"Elite","pascal":"Lame"},"education":"4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
     )
 
@@ -496,20 +495,14 @@ def test_concat():
 
 def test_to_wingdings():
     assert (
-        Chepy(
-            "f︎l︎a︎g︎{︎e︎0︎7︎9︎1︎c︎e︎6︎8︎f︎7︎1︎8︎1︎8︎8︎c︎0︎3︎7︎8︎b︎1︎c︎0︎a︎3︎b︎d︎c︎9︎e︎}︎"
-        )
-        .to_wingdings()
-        .o.decode()
+        Chepy("f︎l︎a︎g︎{︎e︎0︎7︎9︎1︎c︎e︎6︎8︎f︎7︎1︎8︎1︎8︎8︎c︎0︎3︎7︎8︎b︎1︎c︎0︎a︎3︎b︎d︎c︎9︎e︎}︎").to_wingdings().o.decode()
         == "♐︎●︎♋︎♑︎❀︎♏︎📁︎🖮︎🖲︎📂︎♍︎♏︎⌛︎🖰︎♐︎🖮︎📂︎🖰︎📂︎🖰︎🖰︎♍︎📁︎🗏︎🖮︎🖰︎♌︎📂︎♍︎📁︎♋︎🗏︎♌︎♎︎♍︎🖲︎♏︎❝︎"
     )
 
 
 def test_from_windings():
     assert (
-        Chepy(
-            "♐︎●︎♋︎♑︎❀︎♏︎📁︎🖮︎🖲︎📂︎♍︎♏︎⌛︎🖰︎♐︎🖮︎📂︎🖰︎📂︎🖰︎🖰︎♍︎📁︎🗏︎🖮︎🖰︎♌︎📂︎♍︎📁︎♋︎🗏︎♌︎♎︎♍︎🖲︎♏︎❝︎"
-        )
+        Chepy("♐︎●︎♋︎♑︎❀︎♏︎📁︎🖮︎🖲︎📂︎♍︎♏︎⌛︎🖰︎♐︎🖮︎📂︎🖰︎📂︎🖰︎🖰︎♍︎📁︎🗏︎🖮︎🖰︎♌︎📂︎♍︎📁︎♋︎🗏︎♌︎♎︎♍︎🖲︎♏︎❝︎")
         .from_wingdings()
         .o.decode()
         == "f︎l︎a︎g︎{︎e︎0︎7︎9︎1︎c︎e︎6︎8︎f︎7︎1︎8︎1︎8︎8︎c︎0︎3︎7︎8︎b︎1︎c︎0︎a︎3︎b︎d︎c︎9︎e︎}︎"
@@ -734,3 +727,14 @@ EKO{UUENC0DED_ENCRYPTED?}"""
         b"EKO{UUENC0DED_ENCRYPTED?}"
         in Chepy(data).to_uuencode().from_uuencode().remove_nullbytes().o
     )
+
+
+def test_quoted_printable():
+    assert Chepy("Exupéry").to_quoted_printable().o == b"Exup=C3=A9ry"
+    assert Chepy("Exup=C3=A9ry").from_quoted_printable().o == "Exupéry".encode()
+
+
+def test_rison():
+    data = {"b": True, "c": {"d": [1, 2]}}
+    assert Chepy(data).to_rison().o == b"(b:!t,c:(d:!(1,2)))"
+    assert Chepy("(b:!t,c:(d:!(1,2)))").from_rison().o == data

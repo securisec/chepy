@@ -9,6 +9,7 @@ import struct
 import pickle
 import string
 import itertools
+import quopri
 from random import randint
 from .internal.constants import Encoding
 from .internal.helpers import (
@@ -32,6 +33,7 @@ msgpack = lazy_import.lazy_module("msgpack")
 
 from ..core import ChepyCore, ChepyDecorators
 from chepy.modules.internal.constants import Encoding
+import chepy.modules.internal.rison as rison
 
 DataFormatT = TypeVar("DataFormatT", bound="DataFormat")
 
@@ -2065,4 +2067,53 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = UUEncoderDecoder(self._convert_to_bytes(), header).uudecode()
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_quoted_printable(self) -> DataFormatT:
+        """From quoted printable
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = quopri.decodestring(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_quoted_printable(self) -> DataFormatT:
+        """To quoted printable
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = quopri.encodestring(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_rison(self):
+        """Encode to RISON
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = rison.loads(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_rison(self):
+        """Decode from RISON
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = rison.dumps(self.state)
+        # if option is None:
+        # elif option == 'array':
+        #     self.state = rison.encode_array(self.state)
+        # elif option == 'object':
+        #     self.state = rison.encode_object(self.state)
+        # elif option == 'uri':
+        #     self.state = rison.encode_uri(self.state)
+        # else:
+        #     self._log.error('Invalid data type')
         return self
