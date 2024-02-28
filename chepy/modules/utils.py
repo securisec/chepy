@@ -118,6 +118,7 @@ class Utils(ChepyCore):
     def regex_search(
         self,
         pattern: str,
+        is_bytes: bool = False,
         ignore_case: bool = False,
         multiline: bool = False,
         dotall: bool = False,
@@ -128,6 +129,7 @@ class Utils(ChepyCore):
 
         Args:
             pattern (str): Required. The regex pattern to search by
+            is_bytes (bool, optional): Treat the pattern and state as bytes. Defaults to False.
             ignore_case (bool, optional): Set case insensitive flag. Defaults to False.
             multiline (bool, optional): ^/$ match start/end. Defaults to False.
             dotall (bool, optional): `.` matches newline. Defaults to False.
@@ -152,7 +154,10 @@ class Utils(ChepyCore):
             flags += re.UNICODE
         if extended:
             flags += re.X
-        self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
+        if is_bytes:
+            self.state = re.findall(self._to_bytes(pattern), self._convert_to_bytes(), flags=flags)
+        else:
+            self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
 
     @ChepyDecorators.call_stack

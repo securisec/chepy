@@ -1,9 +1,11 @@
 import binascii
 import statistics
 from typing import TypeVar, Union
+from functools import reduce as functools_reduce
 
 from ..core import ChepyCore, ChepyDecorators
 from .exceptions import StateNotList
+from .internal.helpers import detect_delimiter
 
 
 AritmeticLogicT = TypeVar("AritmeticLogicT", bound="AritmeticLogic")
@@ -70,8 +72,33 @@ class AritmeticLogic(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def subtract(self, n: int) -> AritmeticLogicT:
-        """Subtract a number to the state
+    def addition(self, delimiter=None) -> AritmeticLogicT:
+        """Adds a list of numbers. If an item in the string is not a number it is excluded from the list.
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        print('🟢 ', data)
+        if not delimiter:
+            delimiter = detect_delimiter(data)
+        # only work on numbers
+        nums = []
+        for n in data.split(delimiter):
+            try:
+                nums.append(int(n))
+            except:  # noqa: E722
+                continue
+
+        self.state = functools_reduce(lambda x, y: x + y, nums)
+        return self
+
+    @ChepyDecorators.call_stack
+    def sub(self, n: int) -> AritmeticLogicT:
+        """SUB the input with the given key
 
         Args:
             n (int): Number to subtract with
@@ -102,6 +129,30 @@ class AritmeticLogic(ChepyCore):
             hold += result_code.to_bytes(1, byteorder="big")
 
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def subtract(self, delimiter=None) -> AritmeticLogicT:
+        """Subtracts a list of numbers. If an item in the string is not a number it is excluded from the list.
+
+        Args:
+            delimiter (str, optional): Delimiter. Defaults to None.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        if not delimiter:
+            delimiter = detect_delimiter(data)
+        # only work on numbers
+        nums = []
+        for n in data.split(delimiter):
+            try:
+                nums.append(int(n))
+            except:  # noqa: E722
+                continue
+
+        self.state = functools_reduce(lambda x, y: x - y, nums)
         return self
 
     @ChepyDecorators.call_stack

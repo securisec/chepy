@@ -96,6 +96,8 @@ class ChepyCore(object):
         self.read_file = self.load_file
         #: Holds all the methods that are called/chained and their args
         self._stack = list()
+        #: Holds register values
+        self._registers = dict()
 
         #: Log level
         self.log_level = logging.INFO
@@ -296,7 +298,11 @@ class ChepyCore(object):
                     self.states[i] = getattr(self, method_name)().o
         return self
 
-    def for_each(self, methods: List[Tuple[Union[str, object], dict]]):
+    def for_each(
+        self,
+        methods: List[Tuple[Union[str, object], dict]],
+        merge: Union[str, bytes, None] = None,
+    ):
         """Run multiple methods on current state if it is a list
 
         Method names in a list of tuples. If using in the cli,
@@ -305,6 +311,7 @@ class ChepyCore(object):
         Args:
             methods (List[Tuple[Union[str, object], dict]]): Required.
                 List of tuples
+            merge (Union[str, bytes, None]): Merge data with. Defaults to None
 
         Returns:
             Chepy: The Chepy object.
@@ -340,7 +347,17 @@ class ChepyCore(object):
                     ).o  # pragma: no cover
                 else:
                     hold[i] = getattr(self, method_name)().o
-        self.state = hold
+        if merge is not None:
+            if len(hold) > 0:
+                merge = self._to_bytes(merge)
+                if isinstance(hold[0], str):  # pragma: no cover
+                    self.state = merge.decode().join(hold)
+                elif isinstance(hold[0], bytes):
+                    self.state = merge.join(hold)
+                else:  # pragma: no cover
+                    self.state = hold
+        else:
+            self.state = hold
         return self
 
     @ChepyDecorators.call_stack
@@ -686,7 +703,7 @@ class ChepyCore(object):
             raise NotImplementedError
 
     def _get_nested_value(self, data, key, split_by="."):
-        """Get a dict value based on a string key with dot notation. Supports array indexing. 
+        """Get a dict value based on a string key with dot notation. Supports array indexing.
         If split_by is None or "", returns only the first key
 
         Args:
@@ -1450,4 +1467,96 @@ class ChepyCore(object):
             logging.warning("callback cannot be used via the cli")
             return self
         self.state = callback_function(self.state)
+        return self
+
+    def register(
+        self,
+        pattern: Union[str, bytes],
+        ignore_case: bool = False,
+        multiline: bool = False,
+        dotall: bool = False,
+        unicode: bool = False,
+        extended: bool = False,
+    ):
+        """Extract data from the input and store it in registers. Regular expression capture groups are used to select the data to extract.
+
+        Args:
+            pattern (Union[str, bytes]): Required. The regex pattern to search by
+            ignore_case (bool, optional): Set case insensitive flag. Defaults to False.
+            multiline (bool, optional): ^/$ match start/end. Defaults to False.
+            dotall (bool, optional): `.` matches newline. Defaults to False.
+            unicode (bool, optional): Match unicode characters. Defaults to False.
+            extended (bool, optional): Ignore whitespace. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> c = Chepy("hello world")
+            >>> c.register("(hello)\s(world)")
+            >>> c._registers
+            {'$R0': 'hello', '$R1': 'world'}
+        """
+        # regex flags
+        flags = 0
+        if ignore_case:
+            flags += re.IGNORECASE
+        if multiline:
+            flags += re.MULTILINE
+        if dotall:
+            flags += re.DOTALL
+        if unicode:
+            flags += re.UNICODE
+        if extended:  # pragma: no cover
+            flags += re.X
+
+        r = re.compile(pattern, flags=flags)
+        old_state = self.state
+
+        if isinstance(pattern, bytes):
+            matches = r.findall(self._convert_to_bytes())
+        else:
+            matches = r.findall(self._convert_to_str())
+
+        # there are matches which is a list of tuples
+        if len(matches) > 0:
+            # if there is only one match, it will be a list. else, it is a list with a tuple
+            if isinstance(matches[0], tuple):  # pragma: no cover
+                matches = matches[0]
+            for i in range(len(matches)):
+                # only add non empty
+                if matches[i]:
+                    self._registers[f"$R{i}"] = matches[i]
+
+        self.state = old_state
+        return self
+
+    def get_register(self, key: str) -> Union[str, bytes]:
+        """Get a value from registers by key
+
+        Args:
+            key (str): Key
+
+        Raises:
+            ValueError: If key does not exist
+
+        Returns:
+            Union[str, bytes]: Value of register
+        """
+        v = self._registers.get(key)
+        if v is None:  # pragma: no cover
+            raise ValueError("Key not found in registers")
+        return v
+
+    def set_register(self, key: str, val: Union[str, bytes]):
+        """Set the value of a register
+
+        Args:
+            key (str): Key
+            val (Union[str, bytes]): Value
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self._registers[key] = val
         return self

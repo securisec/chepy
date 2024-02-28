@@ -386,7 +386,7 @@ class DataFormat(ChepyCore):
         n = 0
         out = bytearray()
         for strletter in encoded_str:
-            if not strletter in decode_table:
+            if strletter not in decode_table:
                 continue
             c = decode_table[strletter]
             if v < 0:
@@ -960,7 +960,7 @@ class DataFormat(ChepyCore):
         """
         hold = []
         join_by = self._str_to_bytes(join_by)
-        out = list(format(s, "08b").encode() for s in list(self._convert_to_bytes()))
+        # out = list(format(s, "08b").encode() for s in list(self._convert_to_bytes()))
         for s in list(self._convert_to_bytes()):
             hold.append(str(bin(s)[2:].zfill(byte_length)).encode())
         self.state = join_by.join(hold)
@@ -1434,7 +1434,6 @@ class DataFormat(ChepyCore):
             "base16": base64.b16decode,
             "base32": base64.b32decode,
             "base64": base64.b64decode,
-            "base85": base64.b85decode,
             "base58": base58.b58decode,
         }
         data = self._convert_to_bytes()

@@ -34,6 +34,14 @@ def test_search():
     assert (
         len(
             Chepy("loLolololoL")
+            .regex_search("ol", ignore_case=True, is_bytes=True)
+            .o
+        )
+        == 5
+    )
+    assert (
+        len(
+            Chepy("loLolololoL")
             .regex_search(
                 "ol",
                 ignore_case=True,

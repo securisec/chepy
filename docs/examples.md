@@ -8,7 +8,7 @@ We are given a file called encoding which contains the following string.
 =0GDAqREMS0EEWHGOEHJWWRAZqGDHAyHDSxDWyHImRHEEcIGOAyZMqHDPyHFScIDUSyDASREMS0EYS0AWEyJMyRARyHDQWGGUSxJAqREEy1EIWHFOAIDXqHHP1HDRyIDUSyHQySFPImEGW0AOAHHWqHIPy0GHcIDSAyJAS0DEEmEGWHGOEHJOqHHP1HIOMwDVIREFySFESHEMcIGOAxZMqHDP5HFRSIDSIyHASREMS0EEWHGOExEEOSJn5HGSMwDSSxJBqREEEmEHWHFAExZOIHDX1HERyIDUSyDASREMyxD0DxJUE0DFOIDPyHFRAGDSEyJAS0DlR1EOWHFYIIJOqHHP1HDRyIDUgHD3ZSEP50E0DHFOASAAqHDF1HFRSIGUEyDWS0DPM0EEWHGOEHJOqHHFAHJLAyDVIyD3R0DEI1EKWHFEEyJOIHIn1HDQSIDVWyDASREMS0EEWHGISxAnyxHP9HJVSIDSqyDBS0HM10EOW0GUEHHOIxIX1HDRyIDUSyDASRETSSHFWyGUIxAPIHDX10ERSIJUEyDWqRElRHEOWIGQEHJOqHHP1HDRyIFPEQGFq0EQWSHOWHFYExZOIRIF5HDQWGHUSxDW1HEMS0EEWHGOEHJOq0FOqGIHcIHCEQEWS0HO50EOcIGUEHHEqRJPyHDGWxDUSyDASREMS0EEW1DMuSJP9RIQqGDQSIJWqyDWSRImRHEHcxGOAHHSuHHP1HDRyIDUSyDAIID24RHUAxIMuHHOI0Dl4HDQAGHUSxDBgREESHEKWHGOEHJOqHHP1HDRMHHDE0FmHRF2VHEOcIGWEHHEy0IPyHEHAGDSSxJASREMS0EEWHGOEHJWWRAmZGFLcxHDSxDW1HEmRHEIcyGOAyJIqHDPyHDRyIDUSyDASREMS0E
 ```
 
-#### Script
+# Script
 We can script the solution using the following python script:
 ```python
 from chepy import Chepy
@@ -28,7 +28,7 @@ StormCTF{Spot3:DcEC6181F48e3B9D3dF77Dd827BF34e0}
 
 #### Recipe 3: From charCode
 
-```md
+```py
 from chepy import Chepy
 
 c = Chepy(data)
@@ -41,7 +41,7 @@ print(c)
 ```
 
 #### Recipe 5: Google ei timestamp
-```md
+```py
 from chepy import Chepy
 
 data = 'X9guXK1UxvTxBYLJiYAD'
@@ -57,10 +57,29 @@ c.from_unix_timestamp()
 print(c.o)
 ```
 
+## Advanced usage 1
+Partial Chepy implementation of the following advanced usage documented at https://embee-research.ghost.io/advanced-cyberchef-operations-netsupport/
+
+```py
+from chepy import Chepy
+
+c = Chepy('/tmp/malware/netsupport_loader.vbs.txt').load_file()
+
+c.register('\w+ = (\d+)')
+
+c.search('\(([\d,]{1000,})\)')
+c.get_by_index(0)
+c.find_replace('\d{3}', '\g<0> '+c.get_register('$R0'))
+c.split_by_char(',')
+c.for_each([(c.subtract,), (c.from_decimal,)], '')
+
+print(c)
+```
+
 # CTF
 
 #### HTB Business 2022 - Perseverence
-```md
+```py
 import base64
 from chepy import Chepy
 

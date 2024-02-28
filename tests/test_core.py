@@ -239,13 +239,11 @@ def test_reset():
 
 
 def test_load_from_url():
-    assert (
-        type(
-            Chepy("https://s2.googleusercontent.com/s2/favicons?domain=apple.com")
-            .load_from_url()
-            .o
-        )
-        == bytes
+    assert isinstance(
+        Chepy("https://s2.googleusercontent.com/s2/favicons?domain=apple.com")
+        .load_from_url()
+        .o,
+        bytes,
     )
 
 
@@ -254,6 +252,7 @@ def test_for_each():
         b"41",
         b"42",
     ]
+    assert Chepy(["41", "42"]).for_each([("from_hex",), ("to_hex",)], "").o == b"4142"
 
 
 def test_subsection():
@@ -274,3 +273,37 @@ def test_callback():
         return data * 2
 
     assert Chepy("abc").callback(cb).o == b"abcabc"
+
+
+def test_register():
+    # test set register
+    c1 = Chepy("hello")
+    assert c1._registers == {}
+    c1.set_register("a", "test")
+    assert c1._registers == {"a": "test"}
+    # test register
+    # test get_register
+
+    data = """key = 'cGFzc3dvcmRwYXNzd29yZA=='
+
+out = c52f0da8f2217771f4f4cd06e2f014f9
+"""
+
+    c = Chepy(data)
+    c.register("key = '(.+)'", unicode=True)
+    c.regex_search("out = (.+)").get_by_index(0).from_hex()
+    c.aes_decrypt(c.get_register("$R0"), key_format="base64", mode="ECB")
+    assert c.o == b"hello"
+    # test get_register
+    assert c.get_register("$R0") == "cGFzc3dvcmRwYXNzd29yZA=="
+
+    data = """key = 'cGFzc3dvcmRwYXNzd29yZA=='
+
+out = c52f0da8f2217771f4f4cd06e2f014f9
+"""
+
+    c = Chepy(data)
+    c.register(b"key = '(.+)'", ignore_case=True, multiline=True, dotall=True)
+    c.regex_search("out = (.+)").get_by_index(0).from_hex()
+    c.aes_decrypt(c.get_register("$R0"), key_format="base64", mode="ECB")
+    assert c.o == b"hello"
