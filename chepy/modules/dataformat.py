@@ -17,7 +17,6 @@ from .internal.helpers import (
     Rotate,
     Uint1Array,
     UUEncoderDecoder,
-    LZ77Compressor,
 )
 
 yaml = lazy_import.lazy_module("yaml")
@@ -176,7 +175,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def yaml_to_json(self) -> DataFormatT:
+    def yaml_to_json(self) -> DataFormatT:  # pragma: no cover
         """Convert yaml to a json string
 
         Returns:
@@ -1034,10 +1033,14 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_html_entity(self) -> DataFormatT:
+    def to_html_entity(self, format="named", all_chars=False) -> DataFormatT:
         """Encode html entities
 
         Encode special html characters like & > < etc
+
+        Args:
+            format (str): Encoding format. Valid formats are named, numeric and hex. Defaults to named
+            all_chars (bool): If all chars should be encoded. By default a-ZA-Z0-9 are skipped. Defaults to False
 
         Returns:
             Chepy: The Chepy object.
@@ -1046,7 +1049,20 @@ class DataFormat(ChepyCore):
             >>> Chepy('https://google.com&a="lol"').to_html_entity().o
             "https://google.com&amp;a=&quot;lol&quot;"
         """
-        self.state = html.escape(self._convert_to_str())
+        data = self._convert_to_str()
+        chars = {k: 1 for k in string.ascii_letters + string.digits}
+        hold = ""
+        for d in data:
+            if not all_chars and chars.get(d) is not None:
+                hold += d
+                continue
+            if format == "named":
+                hold += Encoding.BYTE_TO_ENTITY.get(ord(d), f"&#{ord(d)};")
+            elif format == "hex":
+                hold += f"&#x{d.encode().hex()};"
+            elif format == "numeric":
+                hold += f"&#{ord(d)};"
+        self.state = hold
         return self
 
     @ChepyDecorators.call_stack

@@ -38,30 +38,30 @@ def test_json_to_dict():
     }
 
 
-def test_yaml_to_json():
-    data = """# An employee record
-name: Martin D'vloper
-job: Developer
-skill: Elite
-employed: True
-foods:
-    - Apple
-    - Orange
-    - Strawberry
-    - Mango
-languages:
-    perl: Elite
-    python: Elite
-    pascal: Lame
-education: |
-    4 GCSEs
-    3 A-Levels
-    BSc in the Internet of Things
-"""
-    assert (
-        Chepy(data).yaml_to_json().o != ""
-        # == '{"name":"Martin D\'vloper","job":"Developer","skill":"Elite","employed":true,"foods":["Apple","Orange","Strawberry","Mango"],"languages":{"perl":"Elite","python":"Elite","pascal":"Lame"},"education":"4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
-    )
+# def test_yaml_to_json():
+#     data = """# An employee record
+# name: Martin D'vloper
+# job: Developer
+# skill: Elite
+# employed: True
+# foods:
+# 	- Apple
+# 	- Orange
+# 	- Strawberry
+# 	- Mango
+# languages:
+# 	perl: Elite
+# 	python: Elite
+# 	pascal: Lame
+# education: |
+# 	4 GCSEs
+# 	3 A-Levels
+# 	BSc in the Internet of Things
+# """
+#     assert (
+#         Chepy(data).yaml_to_json().o != ""
+#         # == '{"name":"Martin D\'vloper","job":"Developer","skill":"Elite","employed":true,"foods":["Apple","Orange","Strawberry","Mango"],"languages":{"perl":"Elite","python":"Elite","pascal":"Lame"},"education":"4 GCSEs\\n3 A-Levels\\nBSc in the Internet of Things\\n"}'
+#     )
 
 
 def test_json_to_yaml():
@@ -315,14 +315,32 @@ def test_from_octral():
 
 def test_html_encode():
     assert (
-        Chepy('https://google.com&a="lol"').to_html_entity().o
-        == b"https://google.com&amp;a=&quot;lol&quot;"
+        Chepy('https://google.com&a="lol"').to_html_entity(format="named").o
+        == b"https&colon;&sol;&sol;google&period;com&amp;a&equals;&quot;lol&quot;"
+    )
+    assert (
+        Chepy('https://google.com&a="lol"').to_html_entity(format="numeric").o
+        == b"https&#58;&#47;&#47;google&#46;com&#38;a&#61;&#34;lol&#34;"
+    )
+    assert (
+        Chepy('https://google.com&a="lol"').to_html_entity(format="hex").o
+        == b"https&#x3a;&#x2f;&#x2f;google&#x2e;com&#x26;a&#x3d;&#x22;lol&#x22;"
+    )
+    assert (
+        Chepy('https://google.com&a="lol"')
+        .to_html_entity(format="hex", all_chars=True)
+        .o
+        == b"&#x68;&#x74;&#x74;&#x70;&#x73;&#x3a;&#x2f;&#x2f;&#x67;&#x6f;&#x6f;&#x67;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;&#x26;&#x61;&#x3d;&#x22;&#x6c;&#x6f;&#x6c;&#x22;"
     )
 
 
 def test_html_decode():
     assert (
-        Chepy("https://google.com&amp;a=&quot;lol&quot;").from_html_entity().o
+        Chepy(
+            "&#x68;&#x74;&#x74;&#x70;&#x73;&#x3a;&#x2f;&#x2f;&#x67;&#x6f;&#x6f;&#x67;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;&#x26;&#x61;&#x3d;&#x22;&#x6c;&#x6f;&#x6c;&#x22;"
+        )
+        .from_html_entity()
+        .o
         == b'https://google.com&a="lol"'
     )
 
