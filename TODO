@@ -28,8 +28,6 @@ New ideas:
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
   beaufort
   ☐ register support in callstack
-  ☐ extract phone numbers. r'^(?:\+\d{1,3}|0\d{1,3}|00\d{1,2})?(?:\s?\(\d+\))?(?:[-\/\s.]|\d)+(x\d+)?$'
-  ☐ load csv data
   ☐ 🔥 update python_requires in setup.py on python version change
 
 Bug:
