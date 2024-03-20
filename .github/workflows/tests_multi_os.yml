@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         python-version: 
-          - "3.10"
+          - "3.12"
 
     steps:
     - uses: actions/checkout@v3
@@ -56,7 +56,7 @@ jobs:
         
     - name: Install test requirements
       run: |
-        pip install sphinx recommonmark pytest==7.4.0 pytest-cov pyperclip 
+        pip install sphinx recommonmark pytest==8.1.1 pytest-cov pyperclip 
         
     - name: Test with pytest
       run: |

@@ -927,7 +927,7 @@ class ChepyCore(object):
         json: dict = None,
         headers: dict = {},
         cookies: dict = {},
-    ):
+    ):  # pragma: no cover
         """Load binary content from a url
 
         Most common http methods are supported; but some methods may not provide a response body.

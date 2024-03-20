@@ -3,7 +3,6 @@ import inspect
 import regex as re
 import pprint
 
-import editor
 from docstring_parser import parse as _parse_doc
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import print_formatted_text
@@ -80,15 +79,15 @@ def get_doc(method: str):
         print(red(pprint.pformat("Could not find docs...")))
 
 
-def cli_edit_state(fire: object, args: list):
-    """Edit the current state
+# def cli_edit_state(fire: object, args: list):
+#     """Edit the current state
 
-    Args:
-        args (object): Cli args
-    """
-    current_index = fire._current_index
-    hold = editor.edit(contents=str(fire.states[current_index])).decode()
-    args[current_index] = hold
+#     Args:
+#         args (object): Cli args
+#     """
+#     current_index = fire._current_index
+#     hold = editor.edit(contents=str(fire.states[current_index])).decode()
+#     args[current_index] = hold
 
 
 def cli_highlight(fire: object, highlight: str):
