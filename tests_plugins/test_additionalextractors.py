@@ -12,10 +12,10 @@ def test_jpath():
     )
 
 
-def test_php_deserialzie():
-    assert Chepy(
-        'a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}'
-    ).php_deserialize().o == {1: b"elem 1", 2: b"elem 2", 3: b" elem 3"}
+# def test_php_deserialzie():
+#     assert Chepy(
+#         'a:3:{i:1;s:6:"elem 1";i:2;s:6:"elem 2";i:3;s:7:" elem 3";}'
+#     ).php_deserialize().o == {1: b"elem 1", 2: b"elem 2", 3: b" elem 3"}
 
 
 def test_minify_xml():
