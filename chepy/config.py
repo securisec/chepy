@@ -135,5 +135,5 @@ class ChepyConfig(object):
                     loaded = getattr(plugin, klass)
                     plugins.append(loaded)
                 except:
-                    logging.warning("Error loading {}".format(plugin.__name__))
+                    logging.warning(f"Error loading {plugin.__name__}")
         return plugins

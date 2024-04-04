@@ -802,17 +802,23 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        self.__check_mode(mode)
-
         key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
             return self
+        elif mode == "CBC/NoPadding":
+            cipher = DES3.new(key, mode=DES3.MODE_CBC, iv=iv)
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
         elif mode == "ECB":
             cipher = DES3.new(key, mode=DES3.MODE_ECB)
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 8)
+            return self
+        elif mode == "ECB/NoPadding":
+            cipher = DES3.new(key, mode=DES3.MODE_ECB)
+            self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "CTR":
             cipher = DES3.new(key, mode=DES3.MODE_CTR, nonce=b"")
@@ -822,6 +828,8 @@ class EncryptionEncoding(ChepyCore):
             cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
+        else: # pragma: no cover
+            raise ValueError('Invalid mode')
 
     @ChepyDecorators.call_stack
     def aes_encrypt(
@@ -894,7 +902,7 @@ class EncryptionEncoding(ChepyCore):
         key_format: str = "hex",
         iv_format: str = "hex",
     ) -> EncryptionEncodingT:
-        """Decrypt raw state encrypted with DES.
+        """Decrypt raw state encrypted with AES.
         CFB mode reflects Cyberchef and not native python behaviour.
 
         Args:
@@ -916,21 +924,27 @@ class EncryptionEncoding(ChepyCore):
             b"some data"
         """
 
-        assert mode in ["CBC", "CFB", "OFB", "CTR", "ECB", "GCM"], "Not a valid mode."
-
         key, iv = self._convert_key(key, iv, key_format, iv_format)
 
         if mode == "CBC":
             cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
             return self
-        if mode == "CFB":
+        elif mode == "CBC/NoPadding":
+            cipher = AES.new(key, mode=AES.MODE_CBC, iv=iv)
+            self.state = cipher.decrypt(self._convert_to_bytes())
+            return self
+        elif mode == "CFB":
             cipher = AES.new(key, mode=AES.MODE_CFB, iv=iv, segment_size=128)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "ECB":
             cipher = AES.new(key, mode=AES.MODE_ECB)
             self.state = Padding.unpad(cipher.decrypt(self._convert_to_bytes()), 16)
+            return self
+        elif mode == "ECB/NoPadding":
+            cipher = AES.new(key, mode=AES.MODE_ECB)
+            self.state = cipher.decrypt(self._convert_to_bytes())
             return self
         elif mode == "CTR":
             counter = Counter.new(128, initial_value=int.from_bytes(iv, "big"))
@@ -949,6 +963,8 @@ class EncryptionEncoding(ChepyCore):
             cipher = AES.new(key, mode=AES.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
+        else: # pragma: no cover
+            raise ValueError('Invalid AES mode')
 
     @ChepyDecorators.call_stack
     def blowfish_encrypt(
@@ -1108,6 +1124,7 @@ class EncryptionEncoding(ChepyCore):
         alphabet = "abcdefghijklmnopqrstuvwxyz"
         output = ""
         fail = 0
+        key = key.lower()
 
         if not key:
             raise ValueError("No key entered")  # pragma: no cover

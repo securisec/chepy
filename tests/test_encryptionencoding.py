@@ -464,6 +464,22 @@ def test_aes_decrypt():
         .o
         == b"some data"
     )
+    assert (
+        Chepy("6bcd22d5c24a59a818f39ba64b7f2d21")
+        .from_hex()
+        .aes_decrypt("b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b", iv='404cce974703e46da08c3fb65c469109', mode='ECB/NoPadding')
+        .to_hex()
+        .o
+        == b"68656c6c6f0b0b0b0b0b0b0b0b0b0b0b"
+    )
+    assert (
+        Chepy("dda597db9a1b3627f64fb3397502c6f4")
+        .from_hex()
+        .aes_decrypt("b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b", iv='404cce974703e46da08c3fb65c469109', mode='CBC/NoPadding')
+        .to_hex()
+        .o
+        == b"68656c6c6f0b0b0b0b0b0b0b0b0b0b0b"
+    )
 
 
 def test_des_decrypt():
@@ -540,6 +556,8 @@ def test_triple_des_decrypt():
         .o
         == b"some data"
     )
+    assert Chepy('23bba626dce4683a').from_hex().triple_des_decrypt('df5770dec9f7d1843d72f195656b374c894b435da94a830d', '8219e29f40416b93', mode='ECB/NoPadding').to_hex().o == b'68656c6c6f030303'
+    assert Chepy('804b7fd84fa2d823').from_hex().triple_des_decrypt('df5770dec9f7d1843d72f195656b374c894b435da94a830d', '8219e29f40416b93', mode='CBC/NoPadding').to_hex().o == b'68656c6c6f030303'
 
 
 def test_blowfish_encrypt():
@@ -622,7 +640,7 @@ def test_vigener_encode():
 
 def test_vigenere_decode():
     assert (
-        Chepy("npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}").vigenere_decode("victory").o
+        Chepy("npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}").vigenere_decode("vicTOry").o
         == b"shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}"
     )
     assert Chepy("kieiim").vigenere_decode("secret").o == b"secret"

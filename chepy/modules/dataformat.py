@@ -554,7 +554,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_hex(self, delimiter: str = None, join_by: str = " ") -> DataFormatT:
+    def from_hex(self, delimiter: str = None, join_by: str = "") -> DataFormatT:
         """Convert a non delimited hex string to string
 
         Args:

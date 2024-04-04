@@ -26,9 +26,10 @@ New ideas:
   ☐ ✨ amf encode/decode
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
-  beaufort
+  ☐ beaufort
   ☐ register support in callstack
   ☐ 🔥 update python_requires in setup.py on python version change
+  ☐ 🐙 update config to use envars also
 
 Bug:
 
@@ -59,14 +60,5 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
-  ✔ 🐙 diff show results only
-  ✔ 🐙 update ascii in xor function to documentation
-  ✔ 🐛 search with bytes is erroring
-  ✔ ✨ base62
-  ✔ ✨ callback function that can take a python function and run it over state. handle recipes for this
-  ✔ ✨ automatic delimiter detect
-  ✔ ✨ rabbit encryption
-  ✔ ✨ cetacean encode/decode
-  ✔ ✨ huffman encode/decode
-  ✔ ✨ new plugin that can help detect encoding type trained on random data
-  ✔ ✨ bifd
+  ✔ ecb no padding in aes/des
+  ✔ update ml model with different spacing for hex, binary etc
