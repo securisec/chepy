@@ -412,6 +412,10 @@ def test_aes_encrypt():
         .o
         == b"hello"
     )
+    assert (
+        Chepy('hello')
+        .aes_encrypt(key='supersecret!!!!!', key_format='utf8', iv='abcdefghijklmnop', iv_format='utf-8')
+        .to_hex().o == b'd18c2cba21d2eef40c9ed4771a9b320e')
 
 
 def test_aes_decrypt():

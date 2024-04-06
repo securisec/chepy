@@ -84,9 +84,9 @@ class EncryptionEncoding(ChepyCore):
         if iv_format == "base64" or iv_format == "b64":
             iv = base64.b64decode(iv)
         if iv_format == "utf-8" or iv_format == "utf8":
-            iv = key.decode().encode("utf-8")
+            iv = iv.decode().encode("utf-8")
         if iv_format == "latin-1":
-            iv = key.decode().encode("latin-1")
+            iv = iv.decode().encode("latin-1")
         if iv_format == "raw":
             iv = iv
         else:
