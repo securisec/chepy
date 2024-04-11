@@ -321,7 +321,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_base32(self) -> DataFormatT:
+    def from_base32(self, remove_whitespace: bool = True) -> DataFormatT:
         """Decode as Base32
 
         Base32 is a notation for encoding arbitrary byte data using a
@@ -329,9 +329,14 @@ class DataFormat(ChepyCore):
         and processed by computers. It uses a smaller set of characters than
         Base64, usually the uppercase alphabet and the numbers 2 to 7.
 
+        Args:
+            remove_whitespace(bool, optional): If true, all whitespaces are removed
+
         Returns:
             Chepy: The Chepy object.
         """
+        if remove_whitespace:
+            self.state = self.remove_whitespace().o
         self.state = base64.b32decode(self.state)
         return self
 
@@ -485,7 +490,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_base64(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
+    def from_base64(self, custom: str = None, url_safe: bool = False, remove_whitespace: bool = True) -> DataFormatT:
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -496,6 +501,7 @@ class DataFormat(ChepyCore):
         Args:
             custom (str, optional): Provide a custom charset to base64 with
             url_safe (bool, optional): If true, decode url safe. Defaults to False
+            remove_whitespace(bool, optional): If true, all whitespaces are removed
 
         Returns:
             Chepy: The Chepy object.
@@ -507,6 +513,8 @@ class DataFormat(ChepyCore):
             >>> c.out
             b"some random? data"
         """
+        if remove_whitespace:
+            data = self.remove_whitespace().o
         data = self._convert_to_str()
         if custom is not None:
             std_base64chars = (

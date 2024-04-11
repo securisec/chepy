@@ -27,7 +27,6 @@ New ideas:
   ☐ ✨ aes cmac
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
   ☐ beaufort
-  ☐ register support in callstack
   ☐ 🔥 update python_requires in setup.py on python version change
   ☐ 🐙 update config to use envars also
 
@@ -46,19 +45,10 @@ Enhance:
 
 Plugins:
 
-Methods:
-  ☐ magic method from cyberchef
-  ☐ base 92
-
-Github Actions:
-
-Distribution:
-  ☐ request to add to kali
-  ☐ request to add to brew
-
 Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ register support in callstack
   ✔ ecb no padding in aes/des
   ✔ update ml model with different spacing for hex, binary etc

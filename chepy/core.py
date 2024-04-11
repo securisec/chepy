@@ -66,7 +66,7 @@ class ChepyCore(object):
     **buffers**, etc and is required to use and extend Chepy.
 
     Args:
-        \*data (tuple): The core class takes arbitrary number of arguments as \*args.
+        *data (tuple): The core class takes arbitrary number of arguments as *args.
 
     Attributes:
         states (dict): Contains all the current states. Each arg passed to
@@ -1469,6 +1469,7 @@ class ChepyCore(object):
         self.state = callback_function(self.state)
         return self
 
+    @ChepyDecorators.call_stack
     def register(
         self,
         pattern: Union[str, bytes],

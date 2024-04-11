@@ -104,8 +104,15 @@ def test_from_base85():
     assert Chepy("F)Po,+Cno&@/").from_base85().out.decode() == "some data"
 
 
-def test_to_base32():
+def test_base32():
     assert Chepy("some data").to_base32().out.decode() == "ONXW2ZJAMRQXIYI="
+    assert (
+        Chepy("""MFWWC5DFOVZHGQ2UIZ5XA2LDGBPXONBVNY3V6ZZQGBSF63RQOVTWQXZVGBPWSXZXGAYGWX3TN5WT
+GX3DOIZTI5BROYZV63BRMIZXE5BRGM2V6YLEMU4DQMRQMV6Q====""")
+        .from_base32()
+        .o
+        == b"amateursCTF{pic0_w45n7_g00d_n0ugh_50_i_700k_som3_cr34t1v3_l1b3rt135_ade8820e}"
+    )
 
 
 def test_to_base64():
@@ -132,6 +139,13 @@ def test_from_base64():
         == b"some random? data"
     )
     assert Chepy("dGVzdA").from_base64(url_safe=True).o == b"test"
+    assert (
+        Chepy("""YW1hdGV1cnNDVEZ7cGljMF93NDVuN19nMDBkX24wdWdoXzUwX2lfNzAwa19zb20zX2NyMzR0MXYz
+X2wxYjNydDEzNV9hZGU4ODIwZX0=""")
+        .from_base64()
+        .o
+        == b"amateursCTF{pic0_w45n7_g00d_n0ugh_50_i_700k_som3_cr34t1v3_l1b3rt135_ade8820e}"
+    )
 
 
 def test_decode_bytes():
@@ -227,7 +241,7 @@ def test_bytearray_to_str():
 
 
 def test_get_by_index():
-    assert Chepy([1, "a", True]).get_by_index(2).state == True
+    assert Chepy([1, "a", True]).get_by_index(2).state
 
 
 def test_get_by_key():

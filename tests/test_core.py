@@ -172,11 +172,9 @@ def test_run_recipe():
 
 def test_recipe():
     temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
-    Chepy(
-        "tests/files/encoding"
-    ).load_file().reverse().rot_13().from_base64().from_base32().str_from_hexdump().save_recipe(
-        temp
-    )
+    Chepy("tests/files/encoding").load_file().reverse().rot_13().from_base64(
+        remove_whitespace=False
+    ).from_base32(remove_whitespace=False).str_from_hexdump().save_recipe(temp)
 
     assert (
         Chepy("tests/files/encoding").load_recipe(temp).o
