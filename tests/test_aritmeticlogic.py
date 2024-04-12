@@ -1,10 +1,6 @@
 from chepy import Chepy
 
 
-def test_bit_shift_right():
-    assert Chepy("hello").str_bit_shift_right(2).to_hex().o == b"1a191b1b1b"
-
-
 def test_add():
     assert Chepy("40").add(1).to_int().o == 51
     assert Chepy("hello").add("ff").o == b"gdkkn"
@@ -56,3 +52,10 @@ def test_addition():
 
 def test_int_to_base():
     assert Chepy("067165").int_to_base(8).o == 28277
+
+
+def test_bitwise_operations():
+    assert Chepy("A").bit_shift_right(3).o == b"\x08"
+    assert Chepy(b"414243").bit_shift_right().o == b"\x1a\x18\x1a\x19\x1a\x19"
+    assert Chepy("A").bit_shift_left().o == b"\x82"
+    assert Chepy("414243").from_hex().bit_shift_left(7).o == b"\x80\x00\x80"

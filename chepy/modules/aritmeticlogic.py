@@ -1,6 +1,6 @@
 import binascii
 import statistics
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Literal
 from functools import reduce as functools_reduce
 
 from ..core import ChepyCore, ChepyDecorators
@@ -20,21 +20,6 @@ class AritmeticLogic(ChepyCore):
             return int(n, 0)
         if isinstance(n, int):
             return n
-
-    @ChepyDecorators.call_stack
-    def str_bit_shift_right(self, amount: int) -> AritmeticLogicT:
-        """Bit shift string right
-
-        Args:
-            amount (int): Amount to shift
-
-        Returns:
-            Chepy: The Chepy object
-        """
-        self.state = binascii.unhexlify(
-            "".join(list(format(ord(x) >> int(amount), "02x") for x in list("hello")))
-        )
-        return self
 
     @ChepyDecorators.call_stack
     def add(self, n: int) -> AritmeticLogicT:
@@ -82,7 +67,7 @@ class AritmeticLogic(ChepyCore):
             Chepy: The Chepy object.
         """
         data = self._convert_to_str()
-        print('🟢 ', data)
+        print("🟢 ", data)
         if not delimiter:
             delimiter = detect_delimiter(data)
         # only work on numbers
@@ -248,4 +233,40 @@ class AritmeticLogic(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = int(self.state, base)
+        return self
+
+    @ChepyDecorators.call_stack
+    def bit_shift_right(
+        self,
+        amount: int = 1,
+        operation_type: Literal["logical", "arithmetic"] = "logical",
+    ) -> AritmeticLogicT:
+        """Shifts the bits in each byte towards the right by the specified amount.
+
+        Args:
+            amount (int, optional): Amount. Defaults to 1
+            operation_type (Literal['logical', 'arithmetic'], optional): Operation type. Defaults to 'logical'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        mask = 0x80 if operation_type.lower() != "logical" else 0
+        output_bytes = [
+            (byte >> int(amount)) ^ (byte & mask) for byte in self._convert_to_bytes()
+        ]
+        self.state = bytearray(output_bytes)
+        return self
+
+    @ChepyDecorators.call_stack
+    def bit_shift_left(self, amount: int = 1):
+        """Shifts each byte in the input byte array to the left by a specified amount.
+
+        Args:
+            amount (int, optional): Amount. Defaults to 1.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        output_bytes = [(byte << amount) & 0xFF for byte in self._convert_to_bytes()]
+        self.state = bytearray(output_bytes)
         return self
