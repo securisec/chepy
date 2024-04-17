@@ -17,6 +17,8 @@ from .internal.helpers import (
     Rotate,
     Uint1Array,
     UUEncoderDecoder,
+    Base92,
+    Base45,
 )
 
 yaml = lazy_import.lazy_module("yaml")
@@ -341,6 +343,46 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def to_base92(self) -> DataFormatT:
+        """Encode to Base92
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = Base92.b92encode(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base92(self) -> DataFormatT:
+        """Decode from Base92
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = Base92.b92decode(self._convert_to_str())
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_base45(self) -> DataFormatT:
+        """Encode to Base45
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = Base45().b45encode(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base45(self) -> DataFormatT:
+        """Decode from Base45
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.state = Base45().b45decode(self._convert_to_bytes())
+        return self
+
+    @ChepyDecorators.call_stack
     def to_base91(self) -> DataFormatT:  # pragma: no cover
         """Base91 encode
         Reference: https://github.com/aberaud/base91-python/blob/master/base91.py#L69
@@ -490,7 +532,9 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_base64(self, custom: str = None, url_safe: bool = False, remove_whitespace: bool = True) -> DataFormatT:
+    def from_base64(
+        self, custom: str = None, url_safe: bool = False, remove_whitespace: bool = True
+    ) -> DataFormatT:
         """Decode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a

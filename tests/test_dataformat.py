@@ -770,3 +770,16 @@ def test_rison():
     data = {"b": True, "c": {"d": [1, 2]}}
     assert Chepy(data).to_rison().o == b"(b:!t,c:(d:!(1,2)))"
     assert Chepy("(b:!t,c:(d:!(1,2)))").from_rison().o == data
+
+
+def test_base92():
+    data = "hello"
+    assert Chepy(data).to_base92().o == b"Fc_$aOB"
+    assert Chepy("").to_base92().o == b"~"
+    assert Chepy(b"Fc_$aOB").from_base92().o == b"hello"
+    assert Chepy("~").from_base92().o == b""
+
+
+def test_base45():
+    assert Chepy("+8D VDL2").from_base45().o == b"hello"
+    assert Chepy("hello").to_base45().o == b"+8D VDL2"

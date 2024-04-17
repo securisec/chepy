@@ -2,6 +2,146 @@ from typing import List, Union
 import binascii
 
 
+class Base45:
+    # reference: https://github.com/kirei/python-base45/blob/main/base45/__init__.py
+    def __init__(self) -> None:
+        self.BASE45_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+        self.BASE45_DICT = {v: i for i, v in enumerate(self.BASE45_CHARSET)}
+
+    def b45encode(self, buf: bytes) -> bytes:
+        """Convert bytes to base45-encoded string"""
+        res = ""
+        buflen = len(buf)
+        for i in range(0, buflen & ~1, 2):
+            x = (buf[i] << 8) + buf[i + 1]
+            e, x = divmod(x, 45 * 45)
+            d, c = divmod(x, 45)
+            res += (
+                self.BASE45_CHARSET[c] + self.BASE45_CHARSET[d] + self.BASE45_CHARSET[e]
+            )
+        if buflen & 1:
+            d, c = divmod(buf[-1], 45)
+            res += self.BASE45_CHARSET[c] + self.BASE45_CHARSET[d]
+        return res.encode()
+
+    def b45decode(self, s: Union[bytes, str]) -> bytes:
+        """Decode base45-encoded string to bytes"""
+        try:
+            if isinstance(s, str):  # pragma: no cover
+                buf = [self.BASE45_DICT[c] for c in s.rstrip("\n")]
+            elif isinstance(s, bytes):
+                buf = [self.BASE45_DICT[c] for c in s.decode()]
+            else:  # pragma: no cover
+                raise TypeError("Type must be 'str' or 'bytes'")
+
+            buflen = len(buf)
+            if buflen % 3 == 1:  # pragma: no cover
+                raise ValueError("Invalid base45 string")
+
+            res = []
+            for i in range(0, buflen, 3):
+                if buflen - i >= 3:
+                    x = buf[i] + buf[i + 1] * 45 + buf[i + 2] * 45 * 45
+                    if x > 0xFFFF:  # pragma: no cover
+                        raise ValueError
+                    res.extend(divmod(x, 256))
+                else:
+                    x = buf[i] + buf[i + 1] * 45
+                    if x > 0xFF:  # pragma: no cover
+                        raise ValueError
+                    res.append(x)
+            return bytes(res)
+        except (ValueError, KeyError, AttributeError):  # pragma: no cover
+            raise ValueError("Invalid base45 string")
+
+
+class Base92(object):
+    """
+    Reference: https://github.com/Gu-f/py3base92/tree/master
+    """
+
+    CHARACTER_SET = r"!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_abcdefghijklmnopqrstuvwxyz{|}"
+
+    @classmethod
+    def base92_chr(cls, val):
+        if val < 0 or val >= 91:  # pragma: no cover
+            raise ValueError("val must be in [0, 91)")
+        if val == 0:
+            return "!"  # pragma: no cover
+        elif val <= 61:
+            return chr(ord("#") + val - 1)
+        else:
+            return chr(ord("a") + val - 62)
+
+    @classmethod
+    def base92_ord(cls, val):
+        num = ord(val)
+        if val == "!":
+            return 0  # pragma: no cover
+        elif ord("#") <= num and num <= ord("_"):
+            return num - ord("#") + 1
+        elif ord("a") <= num and num <= ord("}"):
+            return num - ord("a") + 62
+        else:  # pragma: no cover
+            raise ValueError("val is not a base92 character")
+
+    @classmethod
+    def b92encode(cls, byt: bytes) -> str:
+        if not isinstance(byt, bytes):  # pragma: no cover
+            raise TypeError(f"a bytes-like object is required, not '{type(byt)}'")
+        if not byt:
+            return "~"
+        if not isinstance(byt, str):
+            byt = "".join([chr(b) for b in byt])
+        bitstr = ""
+        while len(bitstr) < 13 and byt:
+            bitstr += "{:08b}".format(ord(byt[0]))
+            byt = byt[1:]
+        resstr = ""
+        while len(bitstr) > 13 or byt:
+            i = int(bitstr[:13], 2)
+            resstr += cls.base92_chr(i // 91)
+            resstr += cls.base92_chr(i % 91)
+            bitstr = bitstr[13:]
+            while len(bitstr) < 13 and byt:
+                bitstr += "{:08b}".format(ord(byt[0]))
+                byt = byt[1:]
+
+        if bitstr:
+            if len(bitstr) < 7:
+                bitstr += "0" * (6 - len(bitstr))
+                resstr += cls.base92_chr(int(bitstr, 2))
+            else:  # pragma: no cover
+                bitstr += "0" * (13 - len(bitstr))
+                i = int(bitstr, 2)
+                resstr += cls.base92_chr(i // 91)
+                resstr += cls.base92_chr(i % 91)
+        return resstr
+
+    @classmethod
+    def b92decode(cls, bstr: str) -> bytes:
+        if not isinstance(bstr, str):  # pragma: no cover
+            raise TypeError(f"a str object is required, not '{type(bstr)}'")
+        bitstr = ""
+        resstr = ""
+        if bstr == "~":
+            return "".encode(encoding="latin-1")
+
+        for i in range(len(bstr) // 2):
+            x = cls.base92_ord(bstr[2 * i]) * 91 + cls.base92_ord(bstr[2 * i + 1])
+            bitstr += "{:013b}".format(x)
+            while 8 <= len(bitstr):
+                resstr += chr(int(bitstr[0:8], 2))
+                bitstr = bitstr[8:]
+        if len(bstr) % 2 == 1:
+            x = cls.base92_ord(bstr[-1])
+            bitstr += "{:06b}".format(x)
+            while 8 <= len(bitstr):
+                resstr += chr(int(bitstr[0:8], 2))
+                bitstr = bitstr[8:]
+        return resstr.encode(encoding="latin-1")
+
+
 class LZ77Compressor:
     """
     Class containing compress and decompress methods using LZ77 compression algorithm.
@@ -168,7 +308,7 @@ def detect_delimiter(
     """
     if default_delimiter:
         return default_delimiter
-        
+
     is_bytes = False
     if isinstance(data, bytes):  # pragma: no cover
         delimiters = [d.encode() for d in delimiters]
