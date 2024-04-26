@@ -43,7 +43,10 @@ def test_rot_47_bruteforce():
 
 
 def test_rot_8000():
-    assert Chepy("籯籵籪籰粄类簹籽籽簼籷籽簹籽籱簼籬簹类簼粆").rot_8000().o == b"flag{r0tt3nt0th3c0r3}"
+    assert (
+        Chepy("籯籵籪籰粄类簹籽籽簼籷籽簹籽籱簼籬簹类簼粆").rot_8000().o
+        == b"flag{r0tt3nt0th3c0r3}"
+    )
 
 
 def test_rotate():
@@ -155,24 +158,19 @@ def test_xor_bruteforce():
 
 
 def test_jwt_decode():
-    assert (
-        Chepy(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmF\
+    assert Chepy(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmF\
             tZSI6IkFtYXppbmcgSGF4eDByIiwiZXhwIjoiMTQ2NjI3MDcyMiIsImFkbWluIjp0\
                 cnVlfQ.UL9Pz5HbaMdZCV9cS9OcpccjrlkcmLovL2A2aiKiAOY"
-        )
-        .jwt_decode()
-        .o
-        == {
-            "payload": {
-                "sub": "1234567890",
-                "name": "Amazing Haxx0r",
-                "exp": "1466270722",
-                "admin": True,
-            },
-            "header": {"alg": "HS256", "typ": "JWT"},
-        }
-    )
+    ).jwt_decode().o == {
+        "payload": {
+            "sub": "1234567890",
+            "name": "Amazing Haxx0r",
+            "exp": "1466270722",
+            "admin": True,
+        },
+        "header": {"alg": "HS256", "typ": "JWT"},
+    }
 
 
 def test_jwt_sign():
@@ -187,15 +185,10 @@ def test_jwt_sign():
 
 
 def test_jwt_verify():
-    assert (
-        Chepy(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb21lIjoicGF5bG9hZCJ9.4twFt5N\
+    assert Chepy(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb21lIjoicGF5bG9hZCJ9.4twFt5N\
             iznN84AWoo1d7KO1T_yoc0Z6XOpOVswacPZg"
-        )
-        .jwt_verify("secret")
-        .o
-        == {"some": "payload"}
-    )
+    ).jwt_verify("secret").o == {"some": "payload"}
 
 
 def test_jwt_non_alg():
@@ -402,9 +395,9 @@ def test_aes_encrypt():
         .o
         == b"4ab2b4f72e9d92960b"
     )
-    raw_key = (
-        raw_iv
-    ) = b'\xe1p\x07\x01R\xee\xde)\xa0gx\xb6\xc2\xcb\x18\x9e\x80\xe5\x9eu\xf2"0PVvE\xdb\x08\x93\xa0\x93'
+    raw_key = raw_iv = (
+        b'\xe1p\x07\x01R\xee\xde)\xa0gx\xb6\xc2\xcb\x18\x9e\x80\xe5\x9eu\xf2"0PVvE\xdb\x08\x93\xa0\x93'
+    )
     assert (
         Chepy("hello")
         .aes_encrypt(key=raw_key, iv=raw_iv[:16], key_format="raw", iv_format="raw")
@@ -413,9 +406,17 @@ def test_aes_encrypt():
         == b"hello"
     )
     assert (
-        Chepy('hello')
-        .aes_encrypt(key='supersecret!!!!!', key_format='utf8', iv='abcdefghijklmnop', iv_format='utf-8')
-        .to_hex().o == b'd18c2cba21d2eef40c9ed4771a9b320e')
+        Chepy("hello")
+        .aes_encrypt(
+            key="supersecret!!!!!",
+            key_format="utf8",
+            iv="abcdefghijklmnop",
+            iv_format="utf-8",
+        )
+        .to_hex()
+        .o
+        == b"d18c2cba21d2eef40c9ed4771a9b320e"
+    )
 
 
 def test_aes_decrypt():
@@ -471,7 +472,11 @@ def test_aes_decrypt():
     assert (
         Chepy("6bcd22d5c24a59a818f39ba64b7f2d21")
         .from_hex()
-        .aes_decrypt("b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b", iv='404cce974703e46da08c3fb65c469109', mode='ECB/NoPadding')
+        .aes_decrypt(
+            "b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b",
+            iv="404cce974703e46da08c3fb65c469109",
+            mode="ECB/NoPadding",
+        )
         .to_hex()
         .o
         == b"68656c6c6f0b0b0b0b0b0b0b0b0b0b0b"
@@ -479,7 +484,11 @@ def test_aes_decrypt():
     assert (
         Chepy("dda597db9a1b3627f64fb3397502c6f4")
         .from_hex()
-        .aes_decrypt("b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b", iv='404cce974703e46da08c3fb65c469109', mode='CBC/NoPadding')
+        .aes_decrypt(
+            "b88e5c5597eb6e5e9d1ce47ab2eb57d0fcbd44a3c3a648116cbf6b09073f836b",
+            iv="404cce974703e46da08c3fb65c469109",
+            mode="CBC/NoPadding",
+        )
         .to_hex()
         .o
         == b"68656c6c6f0b0b0b0b0b0b0b0b0b0b0b"
@@ -560,8 +569,30 @@ def test_triple_des_decrypt():
         .o
         == b"some data"
     )
-    assert Chepy('23bba626dce4683a').from_hex().triple_des_decrypt('df5770dec9f7d1843d72f195656b374c894b435da94a830d', '8219e29f40416b93', mode='ECB/NoPadding').to_hex().o == b'68656c6c6f030303'
-    assert Chepy('804b7fd84fa2d823').from_hex().triple_des_decrypt('df5770dec9f7d1843d72f195656b374c894b435da94a830d', '8219e29f40416b93', mode='CBC/NoPadding').to_hex().o == b'68656c6c6f030303'
+    assert (
+        Chepy("23bba626dce4683a")
+        .from_hex()
+        .triple_des_decrypt(
+            "df5770dec9f7d1843d72f195656b374c894b435da94a830d",
+            "8219e29f40416b93",
+            mode="ECB/NoPadding",
+        )
+        .to_hex()
+        .o
+        == b"68656c6c6f030303"
+    )
+    assert (
+        Chepy("804b7fd84fa2d823")
+        .from_hex()
+        .triple_des_decrypt(
+            "df5770dec9f7d1843d72f195656b374c894b435da94a830d",
+            "8219e29f40416b93",
+            mode="CBC/NoPadding",
+        )
+        .to_hex()
+        .o
+        == b"68656c6c6f030303"
+    )
 
 
 def test_blowfish_encrypt():
@@ -868,3 +899,10 @@ def test_fernet():
     c = Chepy(flag).fernet_encrypt(key, True)
     assert c.o.startswith(b"gAAA")
     assert c.fernet_decrypt(key, True).o == flag.encode()
+
+
+def test_railfence():
+    assert Chepy("hello").railfence_encode().o == b"hloel"
+    assert Chepy("hello world").railfence_encode(key=4, offset=4).o == b"lrelolhowd"
+    assert Chepy("hloel").railfence_decode().o == b"hello"
+    assert Chepy(b"lelho").railfence_decode(key=4, offset="4").o == b"hello"

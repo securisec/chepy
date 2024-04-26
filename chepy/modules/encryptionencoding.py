@@ -321,7 +321,6 @@ class EncryptionEncoding(ChepyCore):
                 x.append(char ^ key_val)
 
         else:
-
             if key_type == "utf":
                 key = str(key)
                 key = binascii.hexlify(key.encode())
@@ -828,8 +827,8 @@ class EncryptionEncoding(ChepyCore):
             cipher = DES3.new(key, mode=DES3.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
-        else: # pragma: no cover
-            raise ValueError('Invalid mode')
+        else:  # pragma: no cover
+            raise ValueError("Invalid mode")
 
     @ChepyDecorators.call_stack
     def aes_encrypt(
@@ -963,8 +962,8 @@ class EncryptionEncoding(ChepyCore):
             cipher = AES.new(key, mode=AES.MODE_OFB, iv=iv)
             self.state = cipher.decrypt(self._convert_to_bytes())
             return self
-        else: # pragma: no cover
-            raise ValueError('Invalid AES mode')
+        else:  # pragma: no cover
+            raise ValueError("Invalid AES mode")
 
     @ChepyDecorators.call_stack
     def blowfish_encrypt(
@@ -1522,7 +1521,7 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def from_letter_number_code(
-        self, delimiter: Union[str, bytes] = ' ', join_by: Union[str, bytes] = ""
+        self, delimiter: Union[str, bytes] = " ", join_by: Union[str, bytes] = ""
     ) -> EncryptionEncodingT:
         """Decode A1Z26
 
@@ -1593,8 +1592,8 @@ class EncryptionEncoding(ChepyCore):
         key = self._bytes_to_str(key)
         key = "".join(re.findall(r"[A-Z]+", key))
         keyword_str = key.upper().replace("J", "I")
-        keyword_set = set(keyword_str)
-        keyword_list = []
+        # keyword_set = set(keyword_str)
+        # keyword_list = []
         alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
         x_co = []
         y_co = []
@@ -1655,7 +1654,7 @@ class EncryptionEncoding(ChepyCore):
         key = self._bytes_to_str(key)
         key = "".join(re.findall(r"[A-Z]+", key))
         keyword_str = key.upper().replace("J", "I")
-        keyword_set = set(keyword_str)
+        # keyword_set = set(keyword_str)
         alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
         structure = []
 
@@ -1835,4 +1834,74 @@ class EncryptionEncoding(ChepyCore):
             key = base64.b64encode(key)
         out = Fernet(key).decrypt(self._convert_to_bytes())
         self.state = out
+        return self
+
+    @ChepyDecorators.call_stack
+    def railfence_encode(self, key=2, offset=0) -> EncryptionEncodingT:
+        """Encode to railfence
+
+        Args:
+            key (int, optional): Key. Should be equal or larger than data. Defaults to 2.
+            offset (int, optional): Offset. Defaults to 0.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key, offset = int(key), int(offset)
+        data = self._convert_to_str()
+        if key < 2:
+            raise ValueError("Key has to be bigger than 2")  # pragma: no cover
+        elif key > len(data):
+            raise ValueError(
+                "Key should be smaller than the plain text's length"
+            )  # pragma: no cover
+
+        if offset < 0:
+            raise ValueError("Offset has to be a positive integer")  # pragma: no cover
+
+        cycle = (key - 1) * 2
+        rows = [""] * key
+
+        for pos in range(len(data)):
+            row_idx = key - 1 - abs(cycle // 2 - (pos + offset) % cycle)
+            rows[row_idx] += data[pos]
+
+        self.state = "".join(rows).strip()
+        return self
+
+    @ChepyDecorators.call_stack
+    def railfence_decode(self, key=2, offset=0) -> EncryptionEncodingT:
+        """Decode railfence
+
+        Args:
+            key (int, optional): Key. Should be equal or larger than data. Defaults to 2.
+            offset (int, optional): Offset. Defaults to 0.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        key, offset = int(key), int(offset)
+        cipher = self._convert_to_str()
+
+        if key < 2:
+            raise ValueError("Key has to be bigger than 2")  # pragma: no cover
+        elif key > len(cipher):
+            raise ValueError(
+                "Key should be smaller than the cipher's length"
+            )  # pragma: no cover
+
+        if offset < 0:
+            raise ValueError("Offset has to be a positive integer")  # pragma: no cover
+
+        cycle = (key - 1) * 2
+        plaintext = [""] * len(cipher)
+
+        j = 0
+        for y in range(key):
+            for x in range(len(cipher)):
+                if (y + x + offset) % cycle == 0 or (y - x - offset) % cycle == 0:
+                    plaintext[x] = cipher[j]
+                    j += 1
+
+        self.state = "".join(plaintext).strip()
         return self
