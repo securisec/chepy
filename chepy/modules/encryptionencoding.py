@@ -16,7 +16,6 @@ from .internal.helpers import detect_delimiter
 import lazy_import
 
 jwt = lazy_import.lazy_module("jwt")
-import pathlib
 
 import regex as re
 import json

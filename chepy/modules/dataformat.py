@@ -2157,7 +2157,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_rison(self):
+    def from_rison(self) -> DataFormatT:
         """Encode to RISON
 
         Returns:
@@ -2167,7 +2167,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_rison(self):
+    def to_rison(self) -> DataFormatT:
         """Decode from RISON
 
         Returns:
@@ -2183,4 +2183,40 @@ class DataFormat(ChepyCore):
         #     self.state = rison.encode_uri(self.state)
         # else:
         #     self._log.error('Invalid data type')
+        return self
+
+    @ChepyDecorators.call_stack
+    def increment_bytes(self, n: int) -> DataFormatT:
+        """Loop through each byte and increment
+
+        Args:
+            n (int): increment by.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        count = int(n)
+        hold = bytearray()
+        data = self._convert_to_bytes()
+        for d in data:
+            hold.append(d + count)
+        self.state = bytes(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def decrement_bytes(self, n: int) -> DataFormatT:
+        """Loop through each byte and decrement
+
+        Args:
+            n (int): decrement by.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        count = int(n)
+        hold = bytearray()
+        data = self._convert_to_bytes()
+        for d in data:
+            hold.append(d - count)
+        self.state = bytes(hold)
         return self

@@ -783,3 +783,14 @@ def test_base92():
 def test_base45():
     assert Chepy("+8D VDL2").from_base45().o == b"hello"
     assert Chepy("hello").to_base45().o == b"+8D VDL2"
+
+
+def test_inc_dec_bytes():
+    assert (
+        Chepy("gmbh|cc265ceg113b731ec768c9eg95b98175~").decrement_bytes(1).o
+        == b"flag{bb154bdf002a620db657b8df84a87064}"
+    )
+    assert (
+        Chepy("flag{bb154bdf002a620db657b8df84a87064}").increment_bytes(1).o
+        == b"gmbh|cc265ceg113b731ec768c9eg95b98175~"
+    )

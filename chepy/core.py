@@ -1345,6 +1345,16 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
+    def print(self, *args):  # pragma: no cover
+        """Print the state
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        print(*args, self.state)
+        return self
+
+    @ChepyDecorators.call_stack
     def reset(self):
         """Reset states back to their initial values
 
@@ -1494,7 +1504,7 @@ class ChepyCore(object):
 
         Examples:
             >>> c = Chepy("hello world")
-            >>> c.register("(hello)\s(world)")
+            >>> c.register(r"(hello)\s(world)")
             >>> c._registers
             {'$R0': 'hello', '$R1': 'world'}
         """
