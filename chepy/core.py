@@ -997,11 +997,12 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def load_file(self, binary_mode: bool = False):
+    def load_file(self, binary_mode: bool = False, encoding: Union[str, None]=None):
         """If a path is provided, load the file
 
         Args:
             binary_mode (bool, optional): Force load in binary mode.
+            encoding (Union[str, None], optional): Encoding for string.
 
         Returns:
             Chepy: The Chepy object.
@@ -1017,7 +1018,7 @@ class ChepyCore(object):
                 self.states[self._current_index] = bytearray(f.read())
         else:
             try:
-                with open(path, "r") as f:  # type: ignore
+                with open(path, "r", encoding=encoding) as f:  # type: ignore
                     self.states[self._current_index] = f.read()
             except UnicodeDecodeError:
                 with open(path, "rb") as f:

@@ -10,6 +10,10 @@ import pickle
 import string
 import itertools
 import quopri
+import io
+import csv
+import sqlite3
+import collections
 from random import randint
 from .internal.constants import Encoding
 from .internal.helpers import (
@@ -155,7 +159,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def dict_get_items(self, *keys) -> DataFormatT:
+    def dict_get_items(self, *keys: str) -> DataFormatT:
         """Get items from a dict. If no keys are specified, it will return all items.
 
         Returns:
@@ -2219,4 +2223,44 @@ class DataFormat(ChepyCore):
         for d in data:
             hold.append(d - count)
         self.state = bytes(hold)
+        return self
+
+    @ChepyDecorators.call_stack
+    def parse_csv(self) -> DataFormatT:
+        """Parse a csv file. Returns a list of dict objects.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = io.StringIO(self._convert_to_str())
+        rows = csv.DictReader(data)
+        self.state = [x for x in rows]
+        return self
+
+    @ChepyDecorators.call_stack
+    def parse_sqlite(self, query: str) -> DataFormatT:
+        """Parse sqlite db and run queries against it. Returns an array of dict objects with column as key and value
+
+        Args:
+            query (str): SQL Query
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        query = self._bytes_to_str(query)
+        conn = sqlite3.connect(":memory:")
+        conn.deserialize(data)
+        cursor = conn.cursor()
+
+        cursor.execute(query)
+
+        rows = cursor.fetchall()
+        hold = []
+        columns = [col[0] for col in cursor.description]
+
+        for r in rows:
+            hold.append(dict(collections.OrderedDict(zip(columns, r))))
+
+        self.state = hold
         return self
