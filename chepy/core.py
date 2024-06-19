@@ -751,24 +751,28 @@ class ChepyCore(object):
         return self.state
 
     @ChepyDecorators.call_stack
-    def get_by_index(self, index: int):
-        """Get an item by specifying an index
+    def get_by_index(self, *indexes: int):
+        """Get an item by specifying an index. If only one index is specified, the obj is return else a new list is returned
 
         Args:
-            index (int): Index number to get
+            *indexes (int): Index numbers to get.
 
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self.state[index]
+        if len(indexes) == 1:
+            self.state = self.state[int(indexes[0])]
+        else:
+            self.state = [self.state[int(index)] for index in indexes]
         return self
 
     @ChepyDecorators.call_stack
-    def get_by_key(self, key: str, split_key: str = "."):
+    def get_by_key(self, *keys: str, split_key: str = "."):
         """Get value from a dict. Supports nested keys and arrays.
+        If only one key is specified, the obj is return else a new list is returned
 
         Args:
-            key (Union[Hashable, None]): Keys to extract.
+            keys (Tuple[Union[Hashable, None]]): Keys to extract.
             split_key (str, optional): Split nested keys. Defaults to "."
             nested (bool, optional): If the specified keys are nested. Supports array indexing. Defaults to True
 
@@ -777,7 +781,13 @@ class ChepyCore(object):
         """
         assert isinstance(self.state, dict), "State is not a dictionary"
 
-        self.state = self._get_nested_value(self.state, key, split_by=split_key)
+        if len(keys) == 1:
+            self.state = self._get_nested_value(self.state, keys[0], split_by=split_key)
+        else:
+            self.state = [
+                self._get_nested_value(self.state, key, split_by=split_key)
+                for key in keys
+            ]
         return self
 
     @ChepyDecorators.call_stack
@@ -997,7 +1007,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def load_file(self, binary_mode: bool = False, encoding: Union[str, None]=None):
+    def load_file(self, binary_mode: bool = False, encoding: Union[str, None] = None):
         """If a path is provided, load the file
 
         Args:

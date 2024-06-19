@@ -906,3 +906,7 @@ def test_railfence():
     assert Chepy("hello world").railfence_encode(key=4, offset=4).o == b"lrelolhowd"
     assert Chepy("hloel").railfence_decode().o == b"hello"
     assert Chepy(b"lelho").railfence_decode(key=4, offset="4").o == b"hello"
+
+
+def test_rot13():
+    assert Chepy("Abc1").rot_13(rotate_numbers=True).o == b"Nop4"

@@ -85,6 +85,9 @@ def test_get_by_key():
         }
     }
     assert Chepy(data2).get_by_key("menu.popup.menuitem[1].value").o == b"Open"
+    assert Chepy(data2).get_by_key(
+        "menu.popup.menuitem[1].value", "menu.popup.menuitem[2].value"
+    ).o == ["Open", "Close"]
     assert (
         Chepy(data2).get_by_key("menu..popup..menuitem[0]..value", split_key="..").o
         == b"New"
@@ -271,6 +274,11 @@ def test_callback():
         return data * 2
 
     assert Chepy("abc").callback(cb).o == b"abcabc"
+
+
+def test_get_by_index():
+    assert Chepy("abc").get_by_index(0).o == b"a"
+    assert Chepy("abc").get_by_index(0, 2).o == ["a", "c"]
 
 
 def test_register():

@@ -162,16 +162,30 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_13(self) -> EncryptionEncodingT:
-        """ROT-13 encoding
+    def rot_13(self, amount=13, rotate_lower=True, rotate_upper=True, rotate_numbers=False) -> EncryptionEncodingT:
+        """Rot 13
 
-        A simple caesar substitution cipher which rotates alphabet
-        characters by the specified amount (default 13).
+        Args:
+            amount (int, optional): Rotate amount. Defaults to 13.
+            rotate_lower (bool, optional): Rotate lowercase. Defaults to True.
+            rotate_upper (bool, optional): Rotate uppercase. Defaults to True.
+            rotate_numbers (bool, optional): Rotate numbers. Defaults to False.
 
         Returns:
-            Chepy: The Chepy object.
+            Chepy: The Chepy object. 
         """
-        self.state = codecs.encode(self._convert_to_str(), "rot_13")
+        text = self._convert_to_str()
+        result = []
+        for char in text:
+            if rotate_lower and 'a' <= char <= 'z':  # Lowercase letters
+                result.append(chr((ord(char) - ord('a') + amount) % 26 + ord('a')))
+            elif rotate_upper and 'A' <= char <= 'Z':  # Uppercase letters
+                result.append(chr((ord(char) - ord('A') + amount) % 26 + ord('A')))
+            elif rotate_numbers and '0' <= char <= '9':  # Numbers
+                result.append(chr((ord(char) - ord('0') + amount) % 10 + ord('0')))
+            else:
+                result.append(char)  # Non-alphabetical characters remain unchanged
+        self.state = ''.join(result)
         return self
 
     @ChepyDecorators.call_stack
