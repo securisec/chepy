@@ -61,7 +61,7 @@ class Search(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def search_ctf_flags(self, prefix: str, postfix: str = ".+?\{*\}") -> SearchT:
+    def search_ctf_flags(self, prefix: str, postfix: str = ".+?\\{*\\}") -> SearchT:
         """Search CTF style flags.
 
         This by default assumes that the flag format is similar
@@ -70,7 +70,7 @@ class Search(ChepyCore):
         Args:
             prefix (str): Prefix of the flag. Like `picoCTF`
             postfix (str, optional): Regex for the remainder of the flag.
-                Defaults to '.+\{.+}'.
+                Defaults to '.+\\{.+\\}'.
 
         Returns:
             Chepy: The Chepy object.
@@ -107,7 +107,7 @@ class Search(ChepyCore):
             Chepy: The Chepy object.
         """
         self.state = re.findall(
-            "https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
+            r"https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}",
             self._convert_to_str(),
         )
         return self

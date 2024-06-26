@@ -179,7 +179,7 @@ class Networking(ChepyCore):
                 'crlDistributionPoints': ('http://crl.pki.goog/GTS1O1.crl',)
             }
         """
-        domain = re.sub("^\w+://", "", self._convert_to_str())
+        domain = re.sub(r"^\w+://", "", self._convert_to_str())
         with socket.create_connection((domain, port)) as sock:
             context = ssl.create_default_context()
             context.check_hostname = False

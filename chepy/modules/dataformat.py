@@ -159,28 +159,6 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def dict_get_items(self, *keys: str) -> DataFormatT:
-        """Get items from a dict. If no keys are specified, it will return all items.
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> o = Chepy({"a": 1, "b": 2}).dict_get_items("a", "b", "c").o
-            [1, 2]
-        """
-        assert isinstance(self.state, dict), "Not a dict object"
-        if len(keys) == 0:
-            self.state = list(self.state.values())
-            return self
-        o = list()
-        for k in keys:
-            if self.state.get(k):
-                o.append(self.state.get(k))
-        self.state = o
-        return self
-
-    @ChepyDecorators.call_stack
     def yaml_to_json(self) -> DataFormatT:  # pragma: no cover
         """Convert yaml to a json string
 
@@ -610,12 +588,18 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def from_hex(self, delimiter: str = None, join_by: str = "") -> DataFormatT:
+    def from_hex(
+        self,
+        delimiter: str = None,
+        join_by: str = "",
+        replace: Union[bytes, None] = b"%|0x",
+    ) -> DataFormatT:
         """Convert a non delimited hex string to string
 
         Args:
             delimiter (str, optional): Delimiter. Defaults to None.
             join_by (str, optional): Join by. Defaults to ' '.
+            replace (Union[bytes, None], optional): Regex pattern to replace hex string prefixes. Defaults to b'%x|0x'.
 
         Returns:
             Chepy: The Chepy object.
@@ -625,6 +609,9 @@ class DataFormat(ChepyCore):
             b"AAA"
         """
         data = self._convert_to_bytes()
+        if replace is not None:
+            replace = self._str_to_bytes(replace)
+            data = re.sub(replace, b"", data)
         if delimiter is None:
             delimiter = detect_delimiter(data, default_delimiter=None)
         if delimiter is not None:

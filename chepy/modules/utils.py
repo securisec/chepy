@@ -155,7 +155,9 @@ class Utils(ChepyCore):
         if extended:
             flags += re.X
         if is_bytes:
-            self.state = re.findall(self._to_bytes(pattern), self._convert_to_bytes(), flags=flags)
+            self.state = re.findall(
+                self._to_bytes(pattern), self._convert_to_bytes(), flags=flags
+            )
         else:
             self.state = re.findall(pattern, self._convert_to_str(), flags=flags)
         return self
@@ -463,7 +465,7 @@ class Utils(ChepyCore):
             "This is a string"
         """
         self.state = re.sub(
-            "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))",
+            "[\u001b\u009b][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))",
             "",
             self._convert_to_str(),
         )
@@ -481,7 +483,7 @@ class Utils(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some some data").strip(r"some\s").o
+            >>> Chepy("some some data").strip("some\\s").o
             "data"
         """
         flags = 0
@@ -503,7 +505,7 @@ class Utils(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("some some data").find_replace(r"some\s", "data").o
+            >>> Chepy("some some data").find_replace("some\\s", "data").o
             "datadatadata"
         """
         flags = 0

@@ -93,6 +93,11 @@ def test_get_by_key():
         == b"New"
     )
     assert Chepy(data2).get_by_key("menu", split_key=None).o.get("id") == "file"
+    assert Chepy(data2).get_by_key("menu.popup.menuitem[*].value").o == [
+        "New",
+        "Open",
+        "Close",
+    ]
 
 
 def test_delete_state():
@@ -152,7 +157,10 @@ def test_load_file_binary():
 
 def test_show_recipe():
     assert Chepy("4142").from_hex().recipe == [
-        {"function": "from_hex", "args": {"delimiter": None, "join_by": ""}}
+        {
+            "function": "from_hex",
+            "args": {"delimiter": None, "join_by": "", "replace": b"%|0x"},
+        }
     ]
 
 

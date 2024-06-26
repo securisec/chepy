@@ -715,14 +715,23 @@ class ChepyCore(object):
             return data[key]
         try:
             keys = key.split(split_by)
-            for k in keys:
-                if "[" in k:
+            for key in keys:
+                if "[" in key:
                     # Extract the key and index
-                    k, index_str = k.split("[")
-                    index = int(index_str.rstrip("]"))
-                    data = data[k][index]
+                    key, index_str = key.split("[")
+                    index_str = index_str.rstrip("]").strip()
+                    if index_str == "*":
+                        data = [data[key][i] for i in range(len(data[key]))]
+                    else:
+                        index = int(index_str)
+                        data = data[key][index]
                 else:
-                    data = data[k]
+                    if isinstance(data, list):
+                        data = [
+                            data[i][key] for i in range(len(data)) if key in data[i]
+                        ]
+                    else:
+                        data = data[key] if key in data else data
             return data
         except Exception as e:  # pragma: no cover
             self._error_logger(e)
@@ -1515,7 +1524,7 @@ class ChepyCore(object):
 
         Examples:
             >>> c = Chepy("hello world")
-            >>> c.register(r"(hello)\s(world)")
+            >>> c.register("(hello)\\s(world)")
             >>> c._registers
             {'$R0': 'hello', '$R1': 'world'}
         """

@@ -41,7 +41,7 @@ class Links(ChepyCore):
             "/blob",
             "",
             re.sub(
-                "(github\.com)(/)",
+                r"(github\.com)(/)",
                 r"raw.githubusercontent.com\2",
                 self._convert_to_str(),
             ),
@@ -62,7 +62,7 @@ class Links(ChepyCore):
         decoded = base64.urlsafe_b64decode(self._convert_to_str())
         timestamp = ord(chr(decoded[0]))
         timestamp += ord(chr(decoded[1])) * 256
-        timestamp += ord(chr(decoded[2])) * 256 ** 2
-        timestamp += ord(chr(decoded[3])) * 256 ** 3
+        timestamp += ord(chr(decoded[2])) * 256**2
+        timestamp += ord(chr(decoded[3])) * 256**3
         self.state = timestamp
         return self

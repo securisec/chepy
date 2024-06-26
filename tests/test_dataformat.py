@@ -175,6 +175,13 @@ def test_from_hex():
     assert (
         Chepy("41;41;41").from_hex(delimiter=";", join_by="%").out.decode() == "A%A%A"
     )
+    assert (
+        Chepy("%41;41;41").from_hex(delimiter=";", join_by="%").out.decode() == "A%A%A"
+    )
+    assert (
+        Chepy("%41;0x41;%41").from_hex(delimiter=";", join_by="%").out.decode()
+        == "A%A%A"
+    )
 
 
 def test_hex_to_int():
@@ -242,10 +249,6 @@ def test_bytearray_to_str():
 
 def test_get_by_index():
     assert Chepy([1, "a", True]).get_by_index(2).state
-
-
-def test_get_by_key():
-    assert Chepy('{"some": "data"}').json_to_dict().get_by_key("some").o == b"data"
 
 
 def test_to_bytes():
