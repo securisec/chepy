@@ -85,19 +85,14 @@ def test_get_by_key():
         }
     }
     assert Chepy(data2).get_by_key("menu.popup.menuitem[1].value").o == b"Open"
-    assert Chepy(data2).get_by_key(
-        "menu.popup.menuitem[1].value", "menu.popup.menuitem[2].value"
-    ).o == ["Open", "Close"]
-    assert (
-        Chepy(data2).get_by_key("menu..popup..menuitem[0]..value", split_key="..").o
-        == b"New"
-    )
-    assert Chepy(data2).get_by_key("menu", split_key=None).o.get("id") == "file"
-    assert Chepy(data2).get_by_key("menu.popup.menuitem[*].value").o == [
+    assert Chepy(data2).get_by_key("menu.popup.menuitem[].value").o == [
         "New",
         "Open",
         "Close",
     ]
+    assert Chepy(data2).get_by_key("menu.popup.menuitem[0].value").o == b"New"
+    assert Chepy(data2).get_by_key("menu").o.get("id") == "file"
+    assert Chepy([{"a": "b"}, {"a": "d"}]).get_by_key("[].a").o == ["b", "d"]
 
 
 def test_delete_state():
@@ -321,3 +316,8 @@ out = c52f0da8f2217771f4f4cd06e2f014f9
     c.regex_search("out = (.+)").get_by_index(0).from_hex()
     c.aes_decrypt(c.get_register("$R0"), key_format="base64", mode="ECB")
     assert c.o == b"hello"
+
+
+def test_ixs():
+    assert Chepy("b").prefix("a").o == b"ab"
+    assert Chepy("b").suffix("a").o == b"ba"

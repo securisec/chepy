@@ -159,6 +159,26 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def dict_get_items(self, *keys: str) -> DataFormatT:
+        """Get items from a dict. If no keys are specified, it will return all items.
+        Returns:
+            Chepy: The Chepy object.
+        Examples:
+            >>> o = Chepy({"a": 1, "b": 2}).dict_get_items("a", "b", "c").o
+            [1, 2]
+        """
+        assert isinstance(self.state, dict), "Not a dict object"
+        if len(keys) == 0:
+            self.state = list(self.state.values())
+            return self
+        o = list()
+        for k in keys:
+            if self.state.get(k):
+                o.append(self.state.get(k))
+        self.state = o
+        return self
+
+    @ChepyDecorators.call_stack
     def yaml_to_json(self) -> DataFormatT:  # pragma: no cover
         """Convert yaml to a json string
 

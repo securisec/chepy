@@ -18,6 +18,7 @@ from urllib.parse import urljoin
 import lazy_import
 import pyperclip
 import json
+import jmespath
 
 jsonpickle = lazy_import.lazy_module("jsonpickle")
 import regex as re
@@ -702,41 +703,6 @@ class ChepyCore(object):
         else:  # pragma: no cover
             raise NotImplementedError
 
-    def _get_nested_value(self, data, key, split_by="."):
-        """Get a dict value based on a string key with dot notation. Supports array indexing.
-        If split_by is None or "", returns only the first key
-
-        Args:
-            data (dict): Data
-            key (str): Dict key in a dot notation and array
-            split_by (str, optional): Chars to split key by. Defaults to ".".
-        """
-        if not split_by:
-            return data[key]
-        try:
-            keys = key.split(split_by)
-            for key in keys:
-                if "[" in key:
-                    # Extract the key and index
-                    key, index_str = key.split("[")
-                    index_str = index_str.rstrip("]").strip()
-                    if index_str == "*":
-                        data = [data[key][i] for i in range(len(data[key]))]
-                    else:
-                        index = int(index_str)
-                        data = data[key][index]
-                else:
-                    if isinstance(data, list):
-                        data = [
-                            data[i][key] for i in range(len(data)) if key in data[i]
-                        ]
-                    else:
-                        data = data[key] if key in data else data
-            return data
-        except Exception as e:  # pragma: no cover
-            self._error_logger(e)
-            return data
-
     @property
     def o(self):
         """Get the final output
@@ -776,27 +742,28 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def get_by_key(self, *keys: str, split_key: str = "."):
-        """Get value from a dict. Supports nested keys and arrays.
-        If only one key is specified, the obj is return else a new list is returned
+    def get_by_key(self, query: str):
+        """This method support json query support.
 
         Args:
             keys (Tuple[Union[Hashable, None]]): Keys to extract.
-            split_key (str, optional): Split nested keys. Defaults to "."
-            nested (bool, optional): If the specified keys are nested. Supports array indexing. Defaults to True
 
         Returns:
             Chepy: The Chepy object.
-        """
-        assert isinstance(self.state, dict), "State is not a dictionary"
 
-        if len(keys) == 1:
-            self.state = self._get_nested_value(self.state, keys[0], split_by=split_key)
-        else:
-            self.state = [
-                self._get_nested_value(self.state, key, split_by=split_key)
-                for key in keys
-            ]
+        Examples:
+            >>> Chepy({"a":{"b": "c"}}).get_by_key('a.b')
+            >>> 'c'
+        """
+        assert isinstance(
+            self.state,
+            (
+                dict,
+                list,
+            ),
+        ), "State does not contain valid data"
+
+        self.state = jmespath.search(query, self.state)
         return self
 
     @ChepyDecorators.call_stack
@@ -1560,6 +1527,34 @@ class ChepyCore(object):
                     self._registers[f"$R{i}"] = matches[i]
 
         self.state = old_state
+        return self
+
+    @ChepyDecorators.call_stack
+    def prefix(self, data: bytes):
+        """Add a prefix to the data in state. The state is converted to bytes
+
+        Args:
+            data (bytes): Data to add
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._str_to_bytes(data)
+        self.state = data + self._convert_to_bytes()
+        return self
+
+    @ChepyDecorators.call_stack
+    def suffix(self, data: bytes):
+        """Add a suffix to the data in state. The state is converted to bytes
+
+        Args:
+            data (bytes): Data to add
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._str_to_bytes(data)
+        self.state = self._convert_to_bytes() + data
         return self
 
     def get_register(self, key: str) -> Union[str, bytes]:

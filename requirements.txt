@@ -9,6 +9,7 @@ fire==0.6.0
 lazy-import
 hexdump
 jsonpickle
+jmespath==1.0.1
 prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
