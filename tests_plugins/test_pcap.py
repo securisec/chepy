@@ -48,7 +48,7 @@ def test_pcap_convo():
         Chepy("tests/files/test.pcapng")
         .read_pcap()
         .pcap_convos()
-        .get_by_key("10.10.10.11", split_key="")
+        .get_by_key("10.10.10.11", split_key="", py_style=True)
         .o["ICMP"]
     )
 

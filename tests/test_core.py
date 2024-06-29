@@ -93,6 +93,25 @@ def test_get_by_key():
     assert Chepy(data2).get_by_key("menu.popup.menuitem[0].value").o == b"New"
     assert Chepy(data2).get_by_key("menu").o.get("id") == "file"
     assert Chepy([{"a": "b"}, {"a": "d"}]).get_by_key("[].a").o == ["b", "d"]
+    # pyton style keys
+    assert Chepy(data2).get_by_key(
+        "menu.popup.menuitem[1].value", "menu.popup.menuitem[2].value", py_style=True
+    ).o == ["Open", "Close"]
+    assert (
+        Chepy(data2)
+        .get_by_key("menu..popup..menuitem[0]..value", split_key="..", py_style=True)
+        .o
+        == b"New"
+    )
+    assert (
+        Chepy(data2).get_by_key("menu", split_key=None, py_style=True).o.get("id")
+        == "file"
+    )
+    assert Chepy(data2).get_by_key("menu.popup.menuitem[*].value", py_style=True).o == [
+        "New",
+        "Open",
+        "Close",
+    ]
 
 
 def test_delete_state():
@@ -321,3 +340,15 @@ out = c52f0da8f2217771f4f4cd06e2f014f9
 def test_ixs():
     assert Chepy("b").prefix("a").o == b"ab"
     assert Chepy("b").suffix("a").o == b"ba"
+
+
+def test_dump_json():
+    data = {
+        "key1": b"some byte data",
+        "key2": [b"more byte data", b"\x00\x01\x02", "\x03"],
+        "key3": {"nestedKey": b"nested byte data"},
+        b"byte_key": b"\x00\x01",
+    }
+
+    assert Chepy(data).dump_json().json_to_dict().get_by_key('byte_key').o == b'\x00\x01'
+    assert Chepy(True).dump_json().o == b'true'

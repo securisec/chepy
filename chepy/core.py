@@ -741,12 +741,48 @@ class ChepyCore(object):
             self.state = [self.state[int(index)] for index in indexes]
         return self
 
+    def _get_nested_value(self, data, key, split_by="."):
+        """Get a dict value based on a string key with dot notation. Supports array indexing.
+        If split_by is None or "", returns only the first key
+        Args:
+            data (dict): Data
+            key (str): Dict key in a dot notation and array
+            split_by (str, optional): Chars to split key by. Defaults to ".".
+        """
+        if not split_by:
+            return data[key]
+        try:
+            keys = key.split(split_by)
+            for key in keys:
+                if "[" in key:
+                    # Extract the key and index
+                    key, index_str = key.split("[")
+                    index_str = index_str.rstrip("]").strip()
+                    if index_str == "*":
+                        data = [data[key][i] for i in range(len(data[key]))]
+                    else:
+                        index = int(index_str)
+                        data = data[key][index]
+                else:
+                    if isinstance(data, list):
+                        data = [
+                            data[i][key] for i in range(len(data)) if key in data[i]
+                        ]
+                    else:
+                        data = data[key] if key in data else data
+            return data
+        except Exception as e:  # pragma: no cover
+            self._error_logger(e)
+            return data
+
     @ChepyDecorators.call_stack
-    def get_by_key(self, query: str):
-        """This method support json query support.
+    def get_by_key(self, *keys: str, py_style: bool = False, split_key: str = "."):
+        """This method support json keys support.
 
         Args:
             keys (Tuple[Union[Hashable, None]]): Keys to extract.
+            split_key (str, optional): Split nested keys. Defaults to "."
+            nested (bool, optional): If the specified keys are nested. Supports array indexing. Defaults to True
 
         Returns:
             Chepy: The Chepy object.
@@ -763,7 +799,21 @@ class ChepyCore(object):
             ),
         ), "State does not contain valid data"
 
-        self.state = jmespath.search(query, self.state)
+        if py_style:
+            if len(keys) == 1:
+                self.state = self._get_nested_value(
+                    self.state, keys[0], split_by=split_key
+                )
+            else:
+                self.state = [
+                    self._get_nested_value(self.state, key, split_by=split_key)
+                    for key in keys
+                ]
+        else:
+            o = jmespath.search(keys[0], self.state)
+            if o is None:  # pragma: no cover
+                raise ValueError("Query did not match any data")
+            self.state = o
         return self
 
     @ChepyDecorators.call_stack
@@ -1585,4 +1635,34 @@ class ChepyCore(object):
             Chepy: The Chepy object.
         """
         self._registers[key] = val
+        return self
+
+    @ChepyDecorators.call_stack
+    def dump_json(self):
+        """Json serialize the state
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+
+        # Function to recursively convert bytes to UTF-8 strings or Base64-encoded strings
+        def encode_bytes(obj):
+            if isinstance(obj, bytes):
+                try:
+                    # Try to decode as UTF-8
+                    return obj.decode("utf-8")
+                except UnicodeDecodeError:  # pragma: no cover
+                    # If decoding fails, encode as Base64
+                    return base64.b64encode(obj).decode("utf-8")
+            elif isinstance(obj, dict):
+                return {
+                    encode_bytes(k) if isinstance(k, bytes) else k: encode_bytes(v)
+                    for k, v in obj.items()
+                }
+            elif isinstance(obj, list):
+                return [encode_bytes(item) for item in obj]
+            else:
+                return obj
+
+        self.state = json.dumps(encode_bytes(self.state))
         return self
