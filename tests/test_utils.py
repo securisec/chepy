@@ -32,11 +32,7 @@ def test_search():
         == 5
     )
     assert (
-        len(
-            Chepy("loLolololoL")
-            .regex_search("ol", ignore_case=True, is_bytes=True)
-            .o
-        )
+        len(Chepy("loLolololoL").regex_search("ol", ignore_case=True, is_bytes=True).o)
         == 5
     )
     assert (
@@ -102,6 +98,7 @@ def test_split_chunks():
     c1 = Chepy(data).split_chunks(2)
     assert len(c1.o) == 6
     assert c1.o == [b"he", b"ll", b"o ", b"wo", b"rl", b"d"]
+    assert Chepy([1, 2, 3, 4]).split_chunks(2).o == [[1, 2], [3, 4]]
 
 
 def test_select_n():
@@ -248,3 +245,18 @@ def test_shuffle():
 
 def test_drop_bytes():
     assert Chepy("hello").drop_bytes(2, 2).o == b"heo"
+
+def test_without_pick():
+    data1 = 'hello'
+    data2 = [1,2,'a', 'b']
+    data3 = {'a':1, 2: 3}
+    # test without
+    assert Chepy(data1).without('ll').o == b'heo'
+    assert Chepy(data1).without('l', b'l').o == b'heo'
+    assert Chepy(data2).without(1, 'a').o == [2,'b']
+    assert Chepy(data3).without('a').o == {2: 3}
+    # test pick
+    assert Chepy(data1).pick('ll').o == b'll'
+    assert Chepy(data1).pick('l', b'l').o == b'll'
+    assert Chepy(data2).pick(1, 'a').o == [1,'a']
+    assert Chepy(data3).pick('a').o == {'a': 1}

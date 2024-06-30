@@ -2,7 +2,7 @@ import lazy_import
 import random
 import difflib
 from collections import OrderedDict
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Any
 
 import chepy.modules.internal.colors as _int_colors
 
@@ -252,7 +252,9 @@ class Utils(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        data = self._convert_to_bytes()
+        data = self.state
+        if not isinstance(data, list):
+            data = self._convert_to_bytes()
         data_chunks = []
         for i in range(0, len(data), chunk_size):
             data_chunks.append(data[i : i + chunk_size])
@@ -746,4 +748,74 @@ class Utils(ChepyCore):
         end = start + length
         data = self._convert_to_bytes()
         self.state = data[:start] + data[end:]
+        return self
+
+    @ChepyDecorators.call_stack
+    def without(self, *values: Any):
+        """Remove specified values from the state. Works on strings, bytes, lists and dicts
+
+        Raises:
+            TypeError: If state does not contain valid data
+
+        Returns:
+            Chepy: The chepy object.
+        """
+        collection = self.state
+        if isinstance(collection, list):
+            self.state = [item for item in collection if item not in values]
+        elif isinstance(collection, dict):
+            self.state = {
+                k: v
+                for k, v in collection.items()
+                if k not in values and v not in values
+            }
+        elif isinstance(
+            collection,
+            (
+                bytes,
+                str,
+            ),
+        ):
+            if isinstance(collection, str):
+                collection = collection.encode()
+            byte_values = set()
+            for value in values:
+                if isinstance(value, str):
+                    byte_values.update(value.encode())
+                elif isinstance(value, bytes):
+                    byte_values.update(value)
+            self.state = bytes([char for char in collection if char not in byte_values])
+        else:  # pragma: no cover
+            raise TypeError("Input should be a list, dictionary, string, or bytes")
+        return self
+
+    @ChepyDecorators.call_stack
+    def pick(self, *values: Any):
+        """Only pick specified values from the state. Works on strings, bytes, lists and dicts
+
+        Raises:
+            TypeError: If state does not contain valid data
+
+        Returns:
+            Chepy: The chepy object.
+        """
+        collection = self.state
+        if isinstance(collection, list):
+            self.state = [item for item in collection if item in values]
+        elif isinstance(collection, dict):
+            self.state = {
+                k: v for k, v in collection.items() if k in values or v in values
+            }
+        elif isinstance(collection, (bytes, str)):
+            if isinstance(collection, str):
+                collection = collection.encode()
+            byte_values = set()
+            for value in values:
+                if isinstance(value, str):
+                    byte_values.update(value.encode())
+                elif isinstance(value, bytes):
+                    byte_values.update(value)
+            self.state = bytes([char for char in collection if char in byte_values])
+        else:  # pragma: no cover
+            raise TypeError("Input should be a list, dictionary, string, or bytes")
         return self
