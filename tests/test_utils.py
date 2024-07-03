@@ -246,17 +246,38 @@ def test_shuffle():
 def test_drop_bytes():
     assert Chepy("hello").drop_bytes(2, 2).o == b"heo"
 
+
 def test_without_pick():
-    data1 = 'hello'
-    data2 = [1,2,'a', 'b']
-    data3 = {'a':1, 2: 3}
+    data1 = "hello"
+    data2 = [1, 2, "a", "b"]
+    data3 = {"a": 1, 2: 3}
     # test without
-    assert Chepy(data1).without('ll').o == b'heo'
-    assert Chepy(data1).without('l', b'l').o == b'heo'
-    assert Chepy(data2).without(1, 'a').o == [2,'b']
-    assert Chepy(data3).without('a').o == {2: 3}
+    assert Chepy(data1).without("ll").o == b"heo"
+    assert Chepy(data1).without("l", b"l").o == b"heo"
+    assert Chepy(data2).without(1, "a").o == [2, "b"]
+    assert Chepy(data3).without("a").o == {2: 3}
     # test pick
-    assert Chepy(data1).pick('ll').o == b'll'
-    assert Chepy(data1).pick('l', b'l').o == b'll'
-    assert Chepy(data2).pick(1, 'a').o == [1,'a']
-    assert Chepy(data3).pick('a').o == {'a': 1}
+    assert Chepy(data1).pick("ll").o == b"ll"
+    assert Chepy(data1).pick("l", b"l").o == b"ll"
+    assert Chepy(data2).pick(1, "a").o == [1, "a"]
+    assert Chepy(data3).pick("a").o == {"a": 1}
+
+
+def test_alpha_range():
+    assert Chepy("a-e").expand_alpha_range().o == ["a", "b", "c", "d", "e"]
+    assert Chepy("a-cA-C0-2").expand_alpha_range().o == [
+        "a",
+        "b",
+        "c",
+        "A",
+        "B",
+        "C",
+        "0",
+        "1",
+        "2",
+    ]
+    assert (
+        Chepy("a-cA-C0-2").expand_alpha_range("").o
+        == "".join(["a", "b", "c", "A", "B", "C", "0", "1", "2"]).encode()
+    )
+    assert Chepy(" a-c:").expand_alpha_range().o == [" ", "a", "b", "c", ":"]

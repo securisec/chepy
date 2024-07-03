@@ -819,3 +819,53 @@ class Utils(ChepyCore):
         else:  # pragma: no cover
             raise TypeError("Input should be a list, dictionary, string, or bytes")
         return self
+
+    @ChepyDecorators.call_stack
+    def expand_alpha_range(self, join_by: Union[str, None] = None):
+        """Get all alphanumberic or hex chars for the specified range
+
+        Args:
+            join_by (str, optional): Join by. Defaults to Union[str, None].
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        alph_str = self._convert_to_str()
+        hold = []
+
+        def expand_range(start, end):
+            return [str(x) for x in range(int(start), int(end) + 1)]
+
+        def expand_char_range(start, end):
+            return [chr(x) for x in range(ord(start), ord(end) + 1)]
+
+        hold = []
+        i = 0
+        length = len(alph_str)
+
+        while i < length:
+            # Match numerical ranges like 10-20
+            num_match = re.match(r"(\d+)-(\d+)", alph_str[i:])
+            if num_match:
+                start, end = num_match.groups()
+                hold.extend(expand_range(start, end))
+                i += len(start) + len(end) + 1  # move past the number range
+            elif i < length - 2 and alph_str[i + 1] == "-" and alph_str[i] != "\\":
+                # Handle character ranges like a-z
+                start = alph_str[i]
+                end = alph_str[i + 2]
+                hold.extend(expand_char_range(start, end))
+                i += 2
+            elif (
+                i < length - 2 and alph_str[i] == "\\" and alph_str[i + 1] == "-"
+            ):  # pragma: no cover
+                hold.append("-")
+                i += 1
+            else:
+                hold.append(alph_str[i])
+            i += 1
+
+        if join_by is not None:
+            hold = join_by.join(hold)
+        self.state = hold
+        return self

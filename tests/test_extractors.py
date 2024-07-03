@@ -239,9 +239,7 @@ def test_find_continuous_patterns():
 
 def test_zero_with_chars_tags():
     assert (
-        Chepy("this 󠁮󠁩󠁣is 󠁣󠁻󠀰just 󠁲󠁟󠀱a 󠀵󠁟󠀱simple 󠀷󠁽text file")
-        .extract_zero_width_chars_tags()
-        .o
+        Chepy("this 󠁮󠁩󠁣is 󠁣󠁻󠀰just 󠁲󠁟󠀱a 󠀵󠁟󠀱simple 󠀷󠁽text file").extract_zero_width_chars_tags().o
         == b"nicc{0r_15_17}"
     )
 
@@ -252,7 +250,7 @@ def test_decode_zero_width():
             "e2808be2808be2808be2808befbbbfe280ace2808b68656c6c6fe2808be2808be2808be2808befbbbfe2808be2808ce2808be2808be2808be2808be280acefbbbfefbbbfe2808be2808be2808be2808befbbbfe2808defbbbfe2808be2808be2808be2808befbbbfe2808be2808ce2808be2808be2808be2808befbbbfe280ace2808c"
         )
         .from_hex()
-        .decode_zero_width("\u200B\u200c\u200d\u202c\ufeff")
+        .decode_zero_width("\u200b\u200c\u200d\u202c\ufeff")
         .o["hidden"]
         == "secret"
     )
@@ -271,7 +269,7 @@ def test_decode_zero_width():
         )
         .from_hex()
         .decode_zero_width(
-            "\u200B\u200C\u200D\u200E\u202A\u202C\u202D\u2062\u2063\ufeff"
+            "\u200b\u200c\u200d\u200e\u202a\u202c\u202d\u2062\u2063\ufeff"
         )
         .o["hidden"]
         == "secret"
@@ -296,3 +294,9 @@ def test_html_tags():
 def test_html_comments():
     c = Chepy("tests/files/test.html").load_file().extract_html_comments()
     assert len(c.o) == 3
+
+
+def test_aws_access_key_from_account_id():
+    assert (
+        Chepy("ASIAQNZGKIQY56JQ7WML").aws_account_id_from_access_key().o == 29608264753
+    )

@@ -1,5 +1,6 @@
 import math
 from binascii import unhexlify
+import base64
 from typing import TypeVar, Union, List
 from urllib.parse import urlparse as _pyurlparse
 import lazy_import
@@ -683,4 +684,20 @@ class Extractors(ChepyCore):
         self.state = list(
             filter(lambda x: x != "", self._parsel_obj().xpath("//comment()").getall())
         )
+        return self
+
+    @ChepyDecorators.call_stack
+    def aws_account_id_from_access_key(self):
+        """Extract AWS account id from access key
+
+        Returns:
+            Chepy: The Chepy object. 
+        """
+        trimmed_AWSKeyID = self._convert_to_str()[4:]
+        x = base64.b32decode(trimmed_AWSKeyID)
+        y = x[0:6]
+        z = int.from_bytes(y, byteorder='big', signed=False)
+        mask = int.from_bytes(unhexlify(b'7fffffffff80'), byteorder='big', signed=False)
+        
+        self.state = (z & mask)>>7
         return self
