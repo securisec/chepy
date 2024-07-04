@@ -15,6 +15,7 @@ import csv
 import sqlite3
 import collections
 from random import randint
+import regex as re
 from .internal.constants import Encoding
 from .internal.helpers import (
     detect_delimiter,
@@ -23,6 +24,8 @@ from .internal.helpers import (
     UUEncoderDecoder,
     Base92,
     Base45,
+    _Base64,
+    expand_alpha_range,
 )
 
 yaml = lazy_import.lazy_module("yaml")
@@ -494,7 +497,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_base64(self, custom: str = None, url_safe: bool = False) -> DataFormatT:
+    def to_base64(self, alphabet: str = "standard") -> DataFormatT:
         """Encode as Base64
 
         Base64 is a notation for encoding arbitrary byte data using a
@@ -503,8 +506,7 @@ class DataFormat(ChepyCore):
         into an ASCII Base64 string.
 
         Args:
-            custom (str, optional): Provide a custom charset to base64 with
-            url_safe (bool, optional): Encode with url safe charset.
+            alphabet (str, optional): Provide a custom charset to base64 with. Valid values are: filename_safe, itoa64, radix_64, rot13, standard, unix_crypt, url_safe, xml, xxencoding, z64
 
         Returns:
             Chepy: The Chepy object.
@@ -515,27 +517,23 @@ class DataFormat(ChepyCore):
             >>> Chepy("Some data").to_base64(custom=custom).o
             b'IqxhNG/YMLFV'
         """
-        if url_safe:
-            self.state = base64.urlsafe_b64encode(self._convert_to_bytes()).replace(
-                b"=", b""
+        data = self._convert_to_bytes()
+        alphabet = alphabet.strip()
+
+        char_set = expand_alpha_range(
+            _Base64.base_64_chars.get(alphabet, alphabet), join_by=""
+        )
+        if len(char_set) < 63 or len(char_set) > 66:  # pragma: no cover
+            raise ValueError(
+                "Invalid base64 chars. Should be 63-66 chars. " + str(len(char_set))
             )
-            return self
-        if custom is not None:
-            x = base64.b64encode(self._convert_to_bytes())
-            std_base64chars = (
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-            )
-            self.state = bytes(
-                str(x)[2:-1].translate(str(x)[2:-1].maketrans(std_base64chars, custom)),
-                "utf-8",
-            )
-        else:
-            self.state = base64.b64encode(self._convert_to_bytes())
+
+        self.state = _Base64.encode_base64(data, alphabet=char_set)
         return self
 
     @ChepyDecorators.call_stack
     def from_base64(
-        self, custom: str = None, url_safe: bool = False, remove_whitespace: bool = True
+        self, alphabet: str = "standard", remove_non_alpha: bool = True
     ) -> DataFormatT:
         """Decode as Base64
 
@@ -545,9 +543,9 @@ class DataFormat(ChepyCore):
         into an ASCII Base64 string.
 
         Args:
-            custom (str, optional): Provide a custom charset to base64 with
-            url_safe (bool, optional): If true, decode url safe. Defaults to False
-            remove_whitespace(bool, optional): If true, all whitespaces are removed
+            alphabet (str, optional): Provide a custom charset to base64 with. Valid values are: filename_safe, itoa64, radix_64, rot13, standard, unix_crypt, url_safe, xml, xxencoding, z64
+            remove_whitespace(bool, optional): If true, all whitespaces are removed (Defaults to True)
+            remove_non_alpha(bool, optional): If true, all whitespaces are removed. (Defaults to True)
 
         Returns:
             Chepy: The Chepy object.
@@ -555,23 +553,36 @@ class DataFormat(ChepyCore):
         Examples:
             Base64 decode using a custom string
             >>> c = Chepy("QqxhNG/mMKtYPqoz64FVR42=")
-            >>> c.from_base64(custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+            >>> c.from_base64(alphabet="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             >>> c.out
             b"some random? data"
         """
-        if remove_whitespace:
-            data = self.remove_whitespace().o
-        data = self._convert_to_str()
-        if custom is not None:
-            std_base64chars = (
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+        alphabet = alphabet.strip()
+        char_set = expand_alpha_range(
+            _Base64.base_64_chars.get(alphabet, alphabet), join_by=""
+        )
+        if len(char_set) < 63 or len(char_set) > 65:  # pragma: no cover
+            raise ValueError(
+                "Invalid base64 chars. Should be 63-65 chars. " + str(len(char_set))
             )
-            data = data.translate(str.maketrans(custom, std_base64chars))
-        data += "=="
-        if url_safe:
-            self.state = base64.urlsafe_b64decode(data)
-        else:
-            self.state = base64.b64decode(data)
+
+        data = self._convert_to_str()
+
+        if remove_non_alpha:
+            data = re.sub("[^" + char_set + "]", "", data)
+
+        # if is_standard or alphabet == 'url_safe':
+        #     data += "=="
+        padding_needed = len(data) % 4
+        if padding_needed and alphabet != "url_safe":
+            data += "=" * (4 - padding_needed)
+
+        # if is_standard:
+        #     self.state = base64.b64decode(data)
+        # if alphabet == 'url_safe':
+        #     self.state = base64.urlsafe_b64decode(data)
+        # else:
+        self.state = _Base64.decode_base64(data, char_set)
         return self
 
     @ChepyDecorators.call_stack

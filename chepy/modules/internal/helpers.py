@@ -1,5 +1,6 @@
 from typing import List, Union
 import binascii
+import regex as re
 
 
 class Base45:
@@ -377,3 +378,158 @@ class Rotate:
         result[-1] |= carryBits
 
         return b"".join([chr(x).encode() for x in result])
+
+
+class _Base64:
+    base_64_chars = {
+        "standard": "A-Za-z0-9+/=",
+        "url_safe": "A-Za-z0-9-_",
+        "filename_safe": "A-Za-z0-9+\\-=",
+        "itoa64": "./0-9A-Za-z=",
+        "xml": "A-Za-z0-9_.",
+        # "y64": "A-Za-z0-9._-",
+        "z64": "0-9a-zA-Z+/=",
+        "radix_64": "0-9A-Za-z+/=",
+        # "uuencoding": " -_",
+        "xxencoding": "+\\-0-9A-Za-z",
+        # "binHex": "!-,-0-689@A-NP-VX-Z[`a-fh-mp-r",
+        "rot13": "N-ZA-Mn-za-m0-9+/=",
+        "unix_crypt": "./0-9A-Za-z",
+        # "atom128": "/128GhIoPQROSTeUbADfgHijKLM+n0pFWXY456xyzB7=39VaqrstJklmNuZvwcdEC",
+        # "megan35": "3GHIJKLMNOPQRSTUb=cdefghijklmnopWXYZ/12+406789VaqrstuvwxyzABCDEF5",
+        # "zong22": "ZKj9n+yf0wDVX1s/5YbdxSo=ILaUpPBCHg8uvNO4klm6iJGhQ7eFrWczAMEq3RTt2",
+        # "hazz15": "HNO4klm6ij9n+J2hyf0gzA8uvwDEq3X1Q7ZKeFrWcVTts/MRGYbdxSo=ILaUpPBC5",
+    }
+
+    @staticmethod
+    def decode_base64(data, alphabet):
+        output = []
+        i = 0
+
+        # Calculate the necessary padding
+        padding_required = (4 - len(data) % 4) % 4
+        data += padding_required * "="
+
+        while i < len(data):
+            enc1 = alphabet.index(data[i]) if i < len(data) and data[i] != "=" else 0
+            i += 1
+            enc2 = alphabet.index(data[i]) if i < len(data) and data[i] != "=" else 0
+            i += 1
+            enc3 = alphabet.index(data[i]) if i < len(data) and data[i] != "=" else 0
+            i += 1
+            enc4 = alphabet.index(data[i]) if i < len(data) and data[i] != "=" else 0
+            i += 1
+
+            chr1 = (enc1 << 2) | (enc2 >> 4)
+            chr2 = ((enc2 & 15) << 4) | (enc3 >> 2)
+            chr3 = ((enc3 & 3) << 6) | enc4
+
+            if 0 <= chr1 < 256:
+                output.append(chr1)
+            if 0 <= chr2 < 256 and data[i - 2] != "=":
+                output.append(chr2)
+            if 0 <= chr3 < 256 and data[i - 1] != "=":
+                output.append(chr3)
+
+        return bytes(output)
+
+    @staticmethod
+    def encode_base64(data: bytes, alphabet: str):
+        output = ""
+        i = 0
+        padding_char = (
+            "=" if alphabet[-1] == "=" else None
+        )  # Check if '=' is in the alphabet, otherwise use None
+
+        while i < len(data):
+            chr1 = data[i] if i < len(data) else 0
+            i += 1
+            chr2 = data[i] if i < len(data) else 0
+            i += 1
+            chr3 = data[i] if i < len(data) else 0
+            i += 1
+
+            enc1 = chr1 >> 2
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4)
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6)
+            enc4 = chr3 & 63
+
+            if i > len(data) + 1:
+                enc3 = 64
+                enc4 = 64
+            elif i > len(data):
+                enc4 = 64
+
+            output += alphabet[enc1]
+            output += alphabet[enc2]
+            output += (
+                alphabet[enc3]
+                if enc3 < 64
+                else (padding_char if padding_char is not None else "")
+            )
+            output += (
+                alphabet[enc4]
+                if enc4 < 64
+                else (padding_char if padding_char is not None else "")
+            )
+
+        # Remove padding characters if they are not part of the alphabet
+        if padding_char is None:
+            output = output.rstrip(
+                alphabet[-1]
+            )  # Strip the last character of the alphabet if it's not '='
+
+        return output
+
+
+def expand_alpha_range(alph_str: str, join_by: Union[str, None] = None):
+    def expand_range(start, end):
+        return [str(x) for x in range(int(start), int(end) + 1)]
+
+    def expand_char_range(start, end):
+        return [chr(x) for x in range(ord(start), ord(end) + 1)]
+
+    hold = []
+    i = 0
+    length = len(alph_str)
+
+    while i < length:
+        # Check for numeric ranges
+        if (
+            i < length - 2
+            and alph_str[i].isdigit()
+            and alph_str[i + 1] == "-"
+            and alph_str[i + 2].isdigit()
+        ):
+            start = ""
+            while i < length and alph_str[i].isdigit():
+                start += alph_str[i]
+                i += 1
+            i += 1  # Skip the '-'
+            end = ""
+            while i < length and alph_str[i].isdigit():
+                end += alph_str[i]
+                i += 1
+            hold.extend(expand_range(start, end))
+        elif (
+            i < length - 2
+            and alph_str[i].isalpha()
+            and alph_str[i + 1] == "-"
+            and alph_str[i + 2].isalpha()
+        ):
+            start = alph_str[i]
+            end = alph_str[i + 2]
+            hold.extend(expand_char_range(start, end))
+            i += 3
+        elif (
+            i < length - 2 and alph_str[i] == "\\" and alph_str[i + 1] == "-"
+        ):  # pragma: no cover
+            hold.append("-")
+            i += 2
+        else:
+            hold.append(alph_str[i])
+            i += 1
+
+    if join_by is not None:
+        return join_by.join(hold)
+    return hold

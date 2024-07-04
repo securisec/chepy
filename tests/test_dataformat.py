@@ -117,28 +117,28 @@ GX3DOIZTI5BROYZV63BRMIZXE5BRGM2V6YLEMU4DQMRQMV6Q====""")
 
 def test_to_base64():
     assert Chepy("some data").to_base64().out.decode() == "c29tZSBkYXRh"
+    assert Chepy("test").to_base64(alphabet="url_safe").o == b"dGVzdA"
     assert (
-        Chepy("some random? data")
-        .to_base64(
-            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
-        )
-        .o
+        Chepy("some random? data").to_base64(alphabet="itoa64").o
         == b"QqxhNG/mMKtYPqoz64FVR42="
     )
-    assert Chepy("test").to_base64(url_safe=True).o == b"dGVzdA"
+    data = "some random data"
+    assert Chepy(data).to_base64("rot13").o == b"p29gMFOlLJ5xo20tMTS0LD=="
+    assert Chepy(data).to_base64("radix_64").o == b"SszjPI1oOMvaRsqWP65qOG=="
+    assert Chepy(data).to_base64("xml").o == b"c29tZSByYW5kb20gZGF0YQ"
+    assert Chepy(data).to_base64("xxencoding").o == b"QqxhNG-mMKtYPqoUN43oME"
+    assert Chepy(data).to_base64("filename_safe").o == b"c29tZSByYW5kb20gZGF0YQ=="
+    assert Chepy(data).to_base64("z64").o == b"sSZJpi1OomVArSQwp65Qog=="
+    assert Chepy(data).to_base64("unix_crypt").o == b"QqxhNG/mMKtYPqoUN43oME"
 
 
 def test_from_base64():
     assert Chepy("c29tZSByYW5kb20/IGRhdGE").from_base64().o == b"some random? data"
     assert (
-        Chepy("QqxhNG/mMKtYPqoz64FVR42=")
-        .from_base64(
-            custom="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz="
-        )
-        .o
+        Chepy("QqxhNG/mMKtYPqoz64FVR42=").from_base64(alphabet="itoa64").o
         == b"some random? data"
     )
-    assert Chepy("dGVzdA").from_base64(url_safe=True).o == b"test"
+    assert Chepy("dGVzdA").from_base64(alphabet="url_safe").o == b"test"
     assert (
         Chepy("""YW1hdGV1cnNDVEZ7cGljMF93NDVuN19nMDBkX24wdWdoXzUwX2lfNzAwa19zb20zX2NyMzR0MXYz
 X2wxYjNydDEzNV9hZGU4ODIwZX0=""")
@@ -146,6 +146,14 @@ X2wxYjNydDEzNV9hZGU4ODIwZX0=""")
         .o
         == b"amateursCTF{pic0_w45n7_g00d_n0ugh_50_i_700k_som3_cr34t1v3_l1b3rt135_ade8820e}"
     )
+    assert Chepy("q6lIr6YwtSZOr6g=").from_base64("z64").o == b"hello world"
+    assert Chepy("nTIfoT8tq29loTD=").from_base64("rot13").o == b"hello world"
+    data = b"some random data"
+    assert Chepy("c29tZSByYW5kb20gZGF0YQ").from_base64("xml").o == data
+    assert Chepy("QqxhNG-mMKtYPqoUN43oME").from_base64("xxencoding").o == data
+    assert Chepy("c29tZSByYW5kb20gZGF0YQ==").from_base64("filename_safe").o == data
+    assert Chepy("sSZJpi1OomVArSQwp65Qog==").from_base64("z64").o == data
+    assert Chepy("QqxhNG/mMKtYPqoUN43oME").from_base64("unix_crypt").o == data
 
 
 def test_decode_bytes():

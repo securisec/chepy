@@ -59,8 +59,10 @@ jobs:
         pip install sphinx recommonmark pytest==8.1.1 pytest-cov==5.0.0 pyperclip 
         
     - name: Test with pytest
+      env:
+        COVERAGE_CORE: sysmon
       run: |
-        COVERAGE_CORE=sysmon pytest -v --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
+        pytest -v --disable-pytest-warnings --cov-report=xml --cov=chepy --cov-config=.coveragerc tests/
         coverage report -m
         
     - name: Test plugins osx

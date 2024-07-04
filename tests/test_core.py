@@ -185,7 +185,7 @@ def test_run_recipe():
             recipes=[
                 {
                     "function": "from_base64",
-                    "args": {"custom": None},
+                    "args": {"alphabet": 'standard'},
                 },
                 {"function": "swap_case", "args": {}},
             ]
@@ -197,9 +197,11 @@ def test_run_recipe():
 
 def test_recipe():
     temp = str(Path(tempfile.gettempdir()) / os.urandom(24).hex())
-    Chepy("tests/files/encoding").load_file().reverse().rot_13().from_base64(
+    Chepy(
+        "tests/files/encoding"
+    ).load_file().reverse().rot_13().from_base64().from_base32(
         remove_whitespace=False
-    ).from_base32(remove_whitespace=False).str_from_hexdump().save_recipe(temp)
+    ).str_from_hexdump().save_recipe(temp)
 
     assert (
         Chepy("tests/files/encoding").load_recipe(temp).o
@@ -350,5 +352,7 @@ def test_dump_json():
         b"byte_key": b"\x00\x01",
     }
 
-    assert Chepy(data).dump_json().json_to_dict().get_by_key('byte_key').o == b'\x00\x01'
-    assert Chepy(True).dump_json().o == b'true'
+    assert (
+        Chepy(data).dump_json().json_to_dict().get_by_key("byte_key").o == b"\x00\x01"
+    )
+    assert Chepy(True).dump_json().o == b"true"
