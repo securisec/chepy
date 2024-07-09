@@ -1,6 +1,5 @@
 import base64
 import binascii
-import codecs
 import itertools
 import string
 import random
@@ -162,7 +161,9 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def rot_13(self, amount=13, rotate_lower=True, rotate_upper=True, rotate_numbers=False) -> EncryptionEncodingT:
+    def rot_13(
+        self, amount=13, rotate_lower=True, rotate_upper=True, rotate_numbers=False
+    ) -> EncryptionEncodingT:
         """Rot 13
 
         Args:
@@ -172,20 +173,20 @@ class EncryptionEncoding(ChepyCore):
             rotate_numbers (bool, optional): Rotate numbers. Defaults to False.
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         text = self._convert_to_str()
         result = []
         for char in text:
-            if rotate_lower and 'a' <= char <= 'z':  # Lowercase letters
-                result.append(chr((ord(char) - ord('a') + amount) % 26 + ord('a')))
-            elif rotate_upper and 'A' <= char <= 'Z':  # Uppercase letters
-                result.append(chr((ord(char) - ord('A') + amount) % 26 + ord('A')))
-            elif rotate_numbers and '0' <= char <= '9':  # Numbers
-                result.append(chr((ord(char) - ord('0') + amount) % 10 + ord('0')))
+            if rotate_lower and "a" <= char <= "z":  # Lowercase letters
+                result.append(chr((ord(char) - ord("a") + amount) % 26 + ord("a")))
+            elif rotate_upper and "A" <= char <= "Z":  # Uppercase letters
+                result.append(chr((ord(char) - ord("A") + amount) % 26 + ord("A")))
+            elif rotate_numbers and "0" <= char <= "9":  # Numbers
+                result.append(chr((ord(char) - ord("0") + amount) % 10 + ord("0")))
             else:
                 result.append(char)  # Non-alphabetical characters remain unchanged
-        self.state = ''.join(result)
+        self.state = "".join(result)
         return self
 
     @ChepyDecorators.call_stack
@@ -311,19 +312,19 @@ class EncryptionEncoding(ChepyCore):
     def xor(
         self,
         key: str,
-        key_type: Literal["hex", "utf", "base64", "decimal"] = "hex",
+        key_type: Literal["hex", "utf8", "base64", "decimal"] = "hex",
     ) -> EncryptionEncodingT:
         """XOR state with a key
 
         Args:
             key (str): Required. The key to xor by
-            key_type (str, optional): The key type. Valid values are hex, utf, decimal and base64. Defaults to "hex".
+            key_type (str, optional): The key type. Valid values are hex, utf8, decimal and base64. Defaults to "hex".
 
         Returns:
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("secret").xor(key="secret", key_type="utf").to_hex()
+            >>> Chepy("secret").xor(key="secret", key_type="utf8").to_hex()
             000000000000
         """
 
@@ -334,7 +335,7 @@ class EncryptionEncoding(ChepyCore):
                 x.append(char ^ key_val)
 
         else:
-            if key_type == "utf":
+            if key_type == "utf8":
                 key = str(key)
                 key = binascii.hexlify(key.encode())
             elif key_type == "base64":
@@ -1917,4 +1918,23 @@ class EncryptionEncoding(ChepyCore):
                     j += 1
 
         self.state = "".join(plaintext).strip()
+        return self
+
+    @ChepyDecorators.call_stack
+    def gpp_decrypt(self):
+        """Decrypt Group Policy Preferences (GPP) password
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        password = self._convert_to_bytes()
+        password = base64.b64decode(password + b"=" * 3)
+        key = (
+            b"\x4e\x99\x06\xe8\xfc\xb6\x6c\xc9\xfa\xf4\x93\x10\x62\x0f\xfe\xe8"
+            b"\xf4\x96\xe8\x06\xcc\x05\x79\x90\x20\x9b\x09\xa4\x33\xb6\x6c\x1b"
+        )
+        iv = b"\x00" * 16
+        aes = AES.new(key, AES.MODE_CBC, iv)
+        self.state = Padding.unpad(aes.decrypt(password), 16)
+        self.remove_nullbytes()
         return self

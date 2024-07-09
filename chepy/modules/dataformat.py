@@ -551,7 +551,6 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            Base64 decode using a custom string
             >>> c = Chepy("QqxhNG/mMKtYPqoz64FVR42=")
             >>> c.from_base64(alphabet="./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
             >>> c.out

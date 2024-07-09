@@ -185,7 +185,7 @@ def test_run_recipe():
             recipes=[
                 {
                     "function": "from_base64",
-                    "args": {"alphabet": 'standard'},
+                    "args": {"alphabet": "standard"},
                 },
                 {"function": "swap_case", "args": {}},
             ]
@@ -356,3 +356,11 @@ def test_dump_json():
         Chepy(data).dump_json().json_to_dict().get_by_key("byte_key").o == b"\x00\x01"
     )
     assert Chepy(True).dump_json().o == b"true"
+
+
+def test_walk_dir():
+    assert b"script.py" in Chepy("tests/files/").walk_dir().join("\n").o
+
+
+def test_search_dir():
+    assert len(Chepy("tests/files/qr/").search_dir("PNG").o) == 2

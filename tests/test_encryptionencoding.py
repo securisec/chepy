@@ -58,7 +58,7 @@ def test_rotate_bruteforce():
 
 
 def test_xor_utf():
-    assert Chepy("some data").xor("UD", "utf").o == b"&+8!u 404"
+    assert Chepy("some data").xor("UD", "utf8").o == b"&+8!u 404"
 
 
 def test_xor_base64():
@@ -74,17 +74,17 @@ def test_xor_binary():
         Chepy("./tests/files/hello")
         .load_file()
         .to_hex()
-        .xor("A", "utf")
+        .xor("A", "utf8")
         .to_hex()
         .o.decode()[0:6]
         == "222727"
     )
     assert (
-        Chepy("./tests/files/hello").load_file().xor(41, "utf").to_hex().o[0:6]
+        Chepy("./tests/files/hello").load_file().xor(41, "utf8").to_hex().o[0:6]
         == b"fbcbd9"
     )
     assert (
-        Chepy("./tests/files/hello").xor(key=41, key_type="utf").to_hex().o[0:6]
+        Chepy("./tests/files/hello").xor(key=41, key_type="utf8").to_hex().o[0:6]
         == b"1a1e40"
     )
 
@@ -910,3 +910,8 @@ def test_railfence():
 
 def test_rot13():
     assert Chepy("Abc1").rot_13(rotate_numbers=True).o == b"Nop4"
+
+
+def test_gpp_decrypt():
+    p = "B+iL/dnbBHSlVf66R8HOuAiGHAtFOVLZwXu0FYf+jQ6553UUgGNwSZucgdz98klzBuFqKtTpO1bRZIsrF8b4Hu5n6KccA7SBWlbLBWnLXAkPquHFwdC70HXBcRlz38q2"
+    assert Chepy(p).gpp_decrypt().o == b"DUCTF{D0n7_Us3_P4s5w0rds_1n_Gr0up_P0l1cy}"

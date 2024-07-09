@@ -1666,3 +1666,38 @@ class ChepyCore(object):
 
         self.state = json.dumps(encode_bytes(self.state))
         return self
+
+    @ChepyDecorators.call_stack
+    def walk_dir(self):
+        """Walk a directory and get all file paths
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        p = self._convert_to_str()
+        paths = Path(p).glob("**/*")
+        self.state = [str(p) for p in paths]
+        return self
+
+    @ChepyDecorators.call_stack
+    def search_dir(self, pattern: Union[bytes, str]):
+        """Search all files in a directory. Pattern is case insensitive
+
+        Args:
+            pattern (Union[bytes, str]): regex to search
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        paths = self._convert_to_str()
+        rgx = re.compile(self._str_to_bytes(pattern), flags=re.I)
+        hold = []
+        for path in Path(paths).glob("**/*"):
+            if path.is_dir(): # pragma: no cover
+                continue
+            data = path.read_bytes()
+            matched = rgx.findall(data)
+            if matched:
+                hold += matched
+        self.state = hold
+        return self
