@@ -200,8 +200,9 @@ class CodeTidy(ChepyCore):
         hold = ""
         for char in list(self._convert_to_str()):
             upper = char.upper()
-            if chars.get(upper):
-                hold += chars.get(upper)
+            char_to_append = chars.get(upper)
+            if char_to_append:
+                hold += char_to_append
             else:
                 hold += char
         self.state = hold

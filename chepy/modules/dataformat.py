@@ -459,8 +459,12 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_int(self) -> DataFormatT:
+    def to_int(self, byteorder: Literal['little', 'big']='big', base:int=10) -> DataFormatT:
         """Converts the string representation of a number into an int
+
+        Args:
+            byteorder(Literal['little', 'big']): Byte order if state is bytes
+            base(int): If state is a str, the base to convert it to. 
 
         Returns:
             Chepy: The Chepy object.
@@ -469,7 +473,10 @@ class DataFormat(ChepyCore):
             >>> Chepy("1").to_int().o
             1
         """
-        self.state = int(self.state)
+        if isinstance(self.state, bytes):
+            self.state = int.from_bytes(self.state, byteorder)
+        elif isinstance(self.state, str):
+            self.state = int(self.state, base)
         return self
 
     @ChepyDecorators.call_stack

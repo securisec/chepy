@@ -53,7 +53,7 @@ class AritmeticLogic(ChepyCore):
             # Convert the result back to a byte
             hold += result_code.to_bytes(1, byteorder="big")
 
-        self.state = hold
+        self.state = hold.decode()
         return self
 
     @ChepyDecorators.call_stack

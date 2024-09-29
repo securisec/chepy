@@ -1594,7 +1594,7 @@ class ChepyCore(object):
         return self
 
     @ChepyDecorators.call_stack
-    def suffix(self, data: bytes):
+    def suffix(self, data: Union[str, bytes]):
         """Add a suffix to the data in state. The state is converted to bytes
 
         Args:

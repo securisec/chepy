@@ -241,6 +241,7 @@ def test_join():
 
 def test_to_int():
     assert Chepy("1").to_int().o == 1
+    assert Chepy('AQAB').from_base64().to_int().o == 65537
 
 
 def test_normalize_hex():
