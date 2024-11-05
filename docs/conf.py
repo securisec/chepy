@@ -26,8 +26,8 @@ def setup(app):
 # -- Project information -----------------------------------------------------
 
 project = "Chepy"
-copyright = "2019, Hapsida @securisec"
-author = "Hapsida @securisec"
+copyright = "2019, @securisec"
+author = "@securisec"
 
 master_doc = 'index'
 

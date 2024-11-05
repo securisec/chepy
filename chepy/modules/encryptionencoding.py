@@ -341,13 +341,18 @@ class EncryptionEncoding(ChepyCore):
             elif key_type == "base64":
                 key = binascii.hexlify(base64.b64decode(key.encode()))
             elif key_type == "decimal":
-                key = binascii.hexlify(
-                    int(key).to_bytes(len(str(key)), byteorder="big")
-                )
+                if int(key) < 0 or int(key) > 255:
+                    raise ValueError("Invalid decimal key")  # pragma: no cover
 
-            key = binascii.unhexlify(key)
-            for char, key_val in zip(self._convert_to_bytes(), itertools.cycle(key)):
-                x.append(char ^ key_val)
+            _s = self._convert_to_bytes()
+
+            if key_type == "decimal":
+                for b in _s:
+                    x.append(b ^ int(key))
+            else:
+                key = binascii.unhexlify(key)
+                for char, key_val in zip(_s, itertools.cycle(key)):
+                    x.append(char ^ key_val)
 
         self.state = bytes(x)
         return self
