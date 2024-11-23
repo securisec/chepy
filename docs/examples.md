@@ -47,7 +47,7 @@ from chepy import Chepy
 data = 'X9guXK1UxvTxBYLJiYAD'
 c = Chepy(data)
 
-c.from_base64(url_safe=True)
+c.from_base64(alphabet='url_safe')
 c.to_hex()
 c.slice(0, 8)
 c.swap_endianness()

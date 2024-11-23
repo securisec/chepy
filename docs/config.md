@@ -6,7 +6,7 @@ If any of the config options are missing, Chepy will automatically assign defaul
 
 ## chepy.conf
 ### Plugin.enableplugins
-This should be set to either `true` or `false` to control if plugins should be loaded by Chepy.
+This should be set to either `true` or `false` to control if plugins should be loaded by Chepy. This can be optionally controlled via the `CHEPY_PLUGINS` environment variable. Valid values are `true` and `false`.
 ### Plugin.pluginpath
 This path controls where chepy will look for plugins and extensions. For more information, see [plugins](/plugins)
 

@@ -1,4 +1,5 @@
 import sys
+import os
 import logging
 import importlib
 import inspect
@@ -58,6 +59,10 @@ class ChepyConfig(object):
         self.enable_plugins = json.loads(
             self.__get_conf_value("false", "EnablePlugins", "Plugins")
         )
+
+        self.enable_plugins = (
+            os.environ.get("CHEPY_PLUGINS", "false") == "true"
+        ) or self.enable_plugins
 
         if self.enable_plugins:
             if plugin_path != "None":
