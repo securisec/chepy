@@ -22,7 +22,7 @@ pycipher
 pycryptodome
 pydash
 pyjwt==1.7.1
-pyOpenSSL==24.2.1
+pyOpenSSL==23.2.0
 pyperclip
 PyYAML
 regex
