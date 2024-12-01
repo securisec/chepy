@@ -1,13 +1,6 @@
 from typing import Literal, TypeVar, Union
 
 from ..core import ChepyCore, ChepyDecorators
-from cryptography.hazmat.primitives.serialization import (
-    pkcs12,
-    Encoding,
-    PrivateFormat,
-    NoEncryption,
-    PublicFormat,
-)
 import lazy_import
 
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
@@ -222,27 +215,15 @@ class Publickey(ChepyCore):
             Chepy: The Chepy object.
         """
         password = self._to_bytes(password)
-        key, cert, additional_certs = pkcs12.load_key_and_certificates(
-            self._convert_to_bytes(),
-            password=password,
-        )
-
-        private_key_pem, public_key_pem = None, None
-        if key:
-            private_key_pem = key.private_bytes(
-                encoding=Encoding.PEM,
-                format=PrivateFormat.PKCS8,
-                encryption_algorithm=NoEncryption(),  # Use a password here if encryption is needed
-            )
-
-        if cert:
-            public_key = cert.public_key()
-            public_key_pem = public_key.public_bytes(
-                encoding=Encoding.PEM,
-                format=PublicFormat.SubjectPublicKeyInfo,
-            )
-
-        self.state = {"private": private_key_pem, "cert": public_key_pem}
+        pk12 = OpenSSL.crypto.load_pkcs12(self._convert_to_bytes(), password)
+        self.state = {
+            "private": OpenSSL.crypto.dump_privatekey(
+                OpenSSL.crypto.FILETYPE_PEM, pk12.get_privatekey()
+            ),
+            "cert": OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, pk12.get_certificate()
+            ),
+        }
         return self
 
     @ChepyDecorators.call_stack

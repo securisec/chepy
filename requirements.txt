@@ -1,7 +1,6 @@
 base58
 colorama
 crccheck
-cryptography==43.0.3
 decorator
 docstring-parser
 emoji==2.0.0
