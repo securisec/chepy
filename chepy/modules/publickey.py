@@ -1,12 +1,19 @@
-from typing import Literal, TypeVar
+from typing import Literal, TypeVar, Union
 
+from ..core import ChepyCore, ChepyDecorators
+from cryptography.hazmat.primitives.serialization import (
+    pkcs12,
+    Encoding,
+    PrivateFormat,
+    NoEncryption,
+    PublicFormat,
+)
 import lazy_import
 
 RSA = lazy_import.lazy_module("Crypto.PublicKey.RSA")
 ECC = lazy_import.lazy_module("Crypto.PublicKey.ECC")
 OpenSSL = lazy_import.lazy_module("OpenSSL")
 
-from ..core import ChepyCore, ChepyDecorators
 
 PublickeyT = TypeVar("PublickeyT", bound="Publickey")
 
@@ -205,7 +212,7 @@ class Publickey(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def dump_pkcs12_cert(self, password: str) -> PublickeyT:
+    def dump_pkcs12_cert(self, password: Union[str, bytes]) -> PublickeyT:
         """Get the private key and cert from pkcs12 cert
 
         Args:
@@ -214,17 +221,28 @@ class Publickey(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        if isinstance(password, str):
-            password = password.encode()
-        pk12 = OpenSSL.crypto.load_pkcs12(self._convert_to_bytes(), password)
-        self.state = {
-            "private": OpenSSL.crypto.dump_privatekey(
-                OpenSSL.crypto.FILETYPE_PEM, pk12.get_privatekey()
-            ),
-            "cert": OpenSSL.crypto.dump_certificate(
-                OpenSSL.crypto.FILETYPE_PEM, pk12.get_certificate()
-            ),
-        }
+        password = self._to_bytes(password)
+        key, cert, additional_certs = pkcs12.load_key_and_certificates(
+            self._convert_to_bytes(),
+            password=password,
+        )
+
+        private_key_pem, public_key_pem = None, None
+        if key:
+            private_key_pem = key.private_bytes(
+                encoding=Encoding.PEM,
+                format=PrivateFormat.PKCS8,
+                encryption_algorithm=NoEncryption(),  # Use a password here if encryption is needed
+            )
+
+        if cert:
+            public_key = cert.public_key()
+            public_key_pem = public_key.public_bytes(
+                encoding=Encoding.PEM,
+                format=PublicFormat.SubjectPublicKeyInfo,
+            )
+
+        self.state = {"private": private_key_pem, "cert": public_key_pem}
         return self
 
     @ChepyDecorators.call_stack
@@ -253,8 +271,8 @@ class Publickey(ChepyCore):
     @ChepyDecorators.call_stack
     def generate_ecc_keypair(
         self,
-        curve: Literal['p256', 'p384', 'p521'] = 'p256',
-        format: Literal["PEM", "DER"] = "PEM"
+        curve: Literal["p256", "p384", "p521"] = "p256",
+        format: Literal["PEM", "DER"] = "PEM",
     ) -> PublickeyT:
         """Generate RSA key pair
 

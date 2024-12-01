@@ -1,6 +1,7 @@
 base58
 colorama
 crccheck
+cryptography==43.0.3
 decorator
 docstring-parser
 emoji==2.0.0
@@ -14,13 +15,14 @@ lz4==4.3.2
 msgpack==1.0.4
 parsel==1.9.1
 passlib==1.7.4
+PGPy==0.6.0
 pretty-errors==1.2.25
 prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
 pydash
 pyjwt==1.7.1
-pyOpenSSL==23.2.0
+pyOpenSSL==24.2.1
 pyperclip
 PyYAML
 regex

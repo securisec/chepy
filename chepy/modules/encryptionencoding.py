@@ -3,6 +3,8 @@ import binascii
 import itertools
 import string
 import random
+import regex as re
+import json
 from typing import Literal, TypeVar, Dict, Any, Union
 from .internal.ls47 import (
     encrypt_pad as _ls47_enc,
@@ -15,9 +17,8 @@ from .internal.helpers import detect_delimiter
 import lazy_import
 
 jwt = lazy_import.lazy_module("jwt")
+pgpy = lazy_import.lazy_module("pgpy")
 
-import regex as re
-import json
 
 AES = lazy_import.lazy_module("Crypto.Cipher.AES")
 ARC4 = lazy_import.lazy_module("Crypto.Cipher.ARC4")
@@ -1942,4 +1943,49 @@ class EncryptionEncoding(ChepyCore):
         aes = AES.new(key, AES.MODE_CBC, iv)
         self.state = Padding.unpad(aes.decrypt(password), 16)
         self.remove_nullbytes()
+        return self
+
+    @ChepyDecorators.call_stack
+    def pgp_decrypt(
+        self, passphrase: Union[str | bytes], armoured: bool = False
+    ) -> EncryptionEncodingT:
+        """Decrypt PGP encrypted file with passphrase
+
+        Args:
+            passphrase (Union[str | bytes]): passphrase
+            armoured (bool): PGP armoured format
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        out = pgpy.PGPMessage.decrypt(
+            pgpy.PGPMessage.from_blob(data), passphrase=passphrase
+        )
+        if armoured:
+            self.state = out.__str__()
+        else:
+            self.state = out.message
+        return self
+
+    @ChepyDecorators.call_stack
+    def pgp_encrypt(
+        self, passphrase: Union[str, bytes], armoured=False
+    ) -> EncryptionEncodingT:
+        """PGP encrypt
+
+        Args:
+            passphrase (Union[str, bytes]): passphrase
+            armoured (bool, optional): PGP armoured format. Defaults to False.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        passphrase = self._to_bytes(passphrase)
+        msg = pgpy.PGPMessage.new(self._convert_to_bytes())
+        enc = pgpy.PGPMessage.encrypt(msg, passphrase)
+        if armoured:
+            self.state = pgpy.PGPMessage.from_blob(enc.__bytes__()).__str__()
+        else:
+            self.state = enc.__bytes__()
         return self

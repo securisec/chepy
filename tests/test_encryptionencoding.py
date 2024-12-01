@@ -915,3 +915,13 @@ def test_rot13():
 def test_gpp_decrypt():
     p = "B+iL/dnbBHSlVf66R8HOuAiGHAtFOVLZwXu0FYf+jQ6553UUgGNwSZucgdz98klzBuFqKtTpO1bRZIsrF8b4Hu5n6KccA7SBWlbLBWnLXAkPquHFwdC70HXBcRlz38q2"
     assert Chepy(p).gpp_decrypt().o == b"DUCTF{D0n7_Us3_P4s5w0rds_1n_Gr0up_P0l1cy}"
+
+
+def test_pgp_passphrase():
+    data = b"foo bar"
+    passphrase = "1234pass"
+    assert b"PGP MESSAGE" in Chepy(data).pgp_encrypt(passphrase, True).o
+
+    c1 = Chepy(data).pgp_encrypt(passphrase)
+    assert Chepy(c1.o).pgp_decrypt(passphrase).o == data
+    assert b"PGP MESSAGE" in Chepy(c1.o).pgp_decrypt(passphrase, True).o
