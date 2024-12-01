@@ -53,6 +53,6 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3.12",
     ],
-    python_requires="<=3.12",
+    python_requires="<3.13",
     entry_points={"console_scripts": ["chepy = chepy.__main__:main"]},
 )
