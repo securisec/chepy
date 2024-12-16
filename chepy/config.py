@@ -60,9 +60,11 @@ class ChepyConfig(object):
             self.__get_conf_value("false", "EnablePlugins", "Plugins")
         )
 
-        self.enable_plugins = (
-            os.environ.get("CHEPY_PLUGINS", "false") == "true"
-        ) or self.enable_plugins
+        plugin_envar = os.environ.get("CHEPY_PLUGINS", "")
+        if plugin_envar == "true":
+            self.enable_plugins = True
+        elif plugin_envar != "":
+            self.enable_plugins = False
 
         if self.enable_plugins:
             if plugin_path != "None":

@@ -496,6 +496,19 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def strip_non_printable(self) -> UtilsT:
+        """String non printable characters
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        printable_set = set(range(32, 127)) | {9, 10, 13, 12}
+        # Filter out non-printable characters
+        self.state = bytes(b for b in data if b in printable_set)
+        return self
+
+    @ChepyDecorators.call_stack
     def find_replace(self, pattern: str, repl: str, ignore_case=True) -> UtilsT:
         """Replace matched pattern with repln
 

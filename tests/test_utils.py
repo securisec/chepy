@@ -181,6 +181,10 @@ def test_strip():
     assert Chepy("some some data").strip(r"some\s").o == b"data"
 
 
+def test_string_non_printable():
+    assert Chepy("Hello\x00W\xc1orld\x1b!").strip_non_printable().o == b"HelloWorld!"
+
+
 def test_find_replace():
     assert Chepy("some some data").find_replace(r"some\s", "data").o == b"datadatadata"
 

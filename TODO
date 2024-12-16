@@ -9,11 +9,10 @@ New ideas:
   ☐ save registers https://t.co/pBNRufibY8?amp=1 
   ☐ cbor encode/decode https://github.com/agronholm/cbor2 (plugin)
   ☐ fuzzy search
-  ☐ pgp, generate, encrypt, decrypt, verify
+  ☐ 🚧 pgp, generate, encrypt, decrypt, verify
   ☐ swap little and big endian
   ☐ ignore error method
   ☐ swap bytes
-  ☐ @high disable plugins from code
   ☐ homophonic decoder
   ☐ append method for core to add data to the state
   ☐ qr create 
@@ -48,6 +47,7 @@ Misc:
   ☐ cyberchef recipe to chepy recipe converter
 
 Archive:
+  ✔ @high disable plugins from code
   ✔ 🐙 update config to use envars for plugins
   ✔ register support in callstack
   ✔ ecb no padding in aes/des
