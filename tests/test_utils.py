@@ -285,3 +285,9 @@ def test_alpha_range():
         == "".join(["a", "b", "c", "A", "B", "C", "0", "1", "2"]).encode()
     )
     assert Chepy(" a-c:").expand_alpha_range().o == [" ", "a", "b", "c", ":"]
+
+
+def test_word_count():
+    assert Chepy("apple,banana,apple,orange,banana,apple").split_and_count(
+        ",", 2
+    ).o == {b"apple": 3, b"banana": 2}

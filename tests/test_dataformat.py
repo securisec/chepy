@@ -463,6 +463,7 @@ def test_stringify():
 def test_select():
     assert Chepy("abcd").select(0, 2).o == b"ab"
     assert Chepy("abcd").select(2).o == b"cd"
+    assert Chepy("abcd").select('(b|c)').o == b"bcd"
 
 
 def test_length():

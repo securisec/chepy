@@ -1,7 +1,7 @@
 import lazy_import
 import random
 import difflib
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 from typing import TypeVar, Union, Any
 from .internal.helpers import expand_alpha_range as _ex_al_range
 
@@ -846,4 +846,54 @@ class Utils(ChepyCore):
         """
         alph_str = self._convert_to_str()
         self.state = _ex_al_range(alph_str=alph_str, join_by=join_by)
+        return self
+
+    @ChepyDecorators.call_stack
+    def split_and_count(self, pattern: Union[str, bytes], threshold=None) -> UtilsT:
+        """
+        Splits a string by a regex pattern, counts occurrences of unique items,
+        and returns a dictionary with keys ordered by the number of matches.
+        Items with counts below the threshold are excluded.
+        Returns a dictionary where keys are unique items from the split,
+        values are their counts, and keys are ordered by the count.
+
+        Args:
+            pattern (Union[str, bytes]): The regex pattern to split the string.
+            threshold (int, optional): Minimum count for an item to be included in the result.
+                                        Defaults to None, meaning no threshold is applied.
+
+        Returns:
+            Chepy: The Chepy object.
+
+        Examples:
+            >>> Chepy("apple,banana,apple,orange,banana,apple").split_and_count(",", 2)
+            {b"apple": 3, b"banana": 2}
+        """
+        data = self._convert_to_bytes()
+        pattern = self._to_bytes(pattern)
+        # Split the string using the regex pattern
+        split_items = re.split(pattern, data)
+
+        # Filter out any empty strings from the split results
+        filtered_items = [item for item in split_items if item]
+
+        # Count occurrences of unique items
+        item_counts = Counter(filtered_items)
+
+        # Filter items based on the threshold
+        if threshold is not None:
+            item_counts = {
+                item: count
+                for item, count in item_counts.items()
+                if count >= int(threshold)
+            }
+
+        # Sort items by count (in descending order), preserving insertion order for equal counts
+        sorted_counts = dict(
+            sorted(
+                item_counts.items(), key=lambda x: (-x[1], filtered_items.index(x[0]))
+            )
+        )
+
+        self.state = sorted_counts
         return self

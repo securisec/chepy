@@ -595,11 +595,12 @@ class Extractors(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def xpath_selector(self, query: str, namespaces: str = None):
+    def xpath_selector(self, query: str, index: int = None, namespaces: str = None):
         """Extract data using valid xpath selectors
 
         Args:
             query (str): Required. Xpath query
+            index (int, optional): Matched index. Get the matched node by index. Defaults to None.
             namespaces (str, optional): Namespace. Applies for XML data. Defaults to None.
 
         Returns:
@@ -608,16 +609,16 @@ class Extractors(ChepyCore):
         Examples:
             >>> c = Chepy("http://example.com")
             >>> c.http_request()
-            >>> c.xpath_selector("//title/text()")
-            >>> c.get_by_index(0)
+            >>> c.xpath_selector("//title/text()", index=0)
             >>> c.o
             "Example Domain"
         """
-        self.state = (
+        s = (
             parsel.Selector(self._convert_to_str(), namespaces=namespaces)
             .xpath(query)
             .getall()
         )
+        self.state = s if (index is None) else s[int(index)]
         return self
 
     @ChepyDecorators.call_stack
@@ -691,13 +692,13 @@ class Extractors(ChepyCore):
         """Extract AWS account id from access key
 
         Returns:
-            Chepy: The Chepy object. 
+            Chepy: The Chepy object.
         """
         trimmed_AWSKeyID = self._convert_to_str()[4:]
         x = base64.b32decode(trimmed_AWSKeyID)
         y = x[0:6]
-        z = int.from_bytes(y, byteorder='big', signed=False)
-        mask = int.from_bytes(unhexlify(b'7fffffffff80'), byteorder='big', signed=False)
-        
-        self.state = (z & mask)>>7
+        z = int.from_bytes(y, byteorder="big", signed=False)
+        mask = int.from_bytes(unhexlify(b"7fffffffff80"), byteorder="big", signed=False)
+
+        self.state = (z & mask) >> 7
         return self

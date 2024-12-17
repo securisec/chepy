@@ -279,6 +279,8 @@ def test_decode_zero_width():
 def test_xpath_selector():
     c = Chepy("tests/files/test.html").load_file().xpath_selector("//p/text()")
     assert "This domain" in c.o[0]
+    c = Chepy("tests/files/test.html").load_file().xpath_selector("//p/text()", index=0)
+    assert b"This domain" in c.o
 
 
 def test_css_selector():

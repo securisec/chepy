@@ -459,12 +459,14 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def to_int(self, byteorder: Literal['little', 'big']='big', base:int=10) -> DataFormatT:
+    def to_int(
+        self, byteorder: Literal["little", "big"] = "big", base: int = 10
+    ) -> DataFormatT:
         """Converts the string representation of a number into an int
 
         Args:
             byteorder(Literal['little', 'big']): Byte order if state is bytes
-            base(int): If state is a str, the base to convert it to. 
+            base(int): If state is a str, the base to convert it to.
 
         Returns:
             Chepy: The Chepy object.
@@ -1405,7 +1407,7 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def select(self, start: int, end: int = None) -> DataFormatT:
+    def select(self, start: Union[int, str, bytes], end: int = None) -> DataFormatT:
         """Get an item by specifying an index
 
         Args:
@@ -1415,10 +1417,24 @@ class DataFormat(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
+        data = self._convert_to_bytes()
+        if isinstance(
+            start,
+            (
+                str,
+                bytes,
+            ),
+        ):
+            pattern = self._to_bytes(start)
+            s = re.search(pattern, data)
+            if s is not None:
+                start = s.start()
+            else:  # pragma: no cover
+                raise ValueError("Pattern not found")
         if end is None:
-            self.state = self.state[start:]
+            self.state = data[start:]
         else:
-            self.state = self.state[start:end]
+            self.state = data[start:end]
         return self
 
     @ChepyDecorators.call_stack
