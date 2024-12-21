@@ -139,7 +139,7 @@ class ChepyCore(object):
             logging.exception(
                 "\n\nCannot print current state. Either chain with "
                 "another method, or use one of the output methods "
-                "Example: .o, .out, .state or .out\n\n"
+                "Example: .o, .out, or .state\n\n"
             )
             return ""
 

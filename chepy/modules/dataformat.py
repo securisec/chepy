@@ -478,7 +478,7 @@ class DataFormat(ChepyCore):
         if isinstance(self.state, bytes):
             self.state = int.from_bytes(self.state, byteorder)
         elif isinstance(self.state, str):
-            self.state = int(self.state, base)
+            self.state = int(self.state, int(base))
         return self
 
     @ChepyDecorators.call_stack
@@ -1492,6 +1492,20 @@ class DataFormat(ChepyCore):
         s = self._convert_to_str()
         o = s.maketrans(x, y)
         self.state = s.translate(o)
+        return self
+
+    @ChepyDecorators.call_stack
+    def remove(self, pattern: Union[str, bytes] = b"") -> DataFormatT:
+        """Remove is identifcal to find_replace, except it removes the identified
+        pattern with an empty value.
+
+        Args:
+            pattern (Union[str, bytes], optional): Replace non-printable characters with this. Defaults to ''.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.find_replace(pattern, b"")
         return self
 
     @ChepyDecorators.call_stack

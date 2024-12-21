@@ -187,6 +187,7 @@ def test_string_non_printable():
 
 def test_find_replace():
     assert Chepy("some some data").find_replace(r"some\s", "data").o == b"datadatadata"
+    assert Chepy("some some data").remove(r"some\s").o == b"data"
 
 
 def test_escape_string():

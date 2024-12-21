@@ -509,7 +509,9 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def find_replace(self, pattern: str, repl: str, ignore_case=True) -> UtilsT:
+    def find_replace(
+        self, pattern: Union[bytes, str], repl: Union[bytes, str], ignore_case=True
+    ) -> UtilsT:
         """Replace matched pattern with repln
 
         Args:
@@ -527,7 +529,12 @@ class Utils(ChepyCore):
         flags = 0
         if ignore_case:
             flags = re.IGNORECASE
-        self.state = re.sub(pattern, repl, self._convert_to_str(), flags=flags)
+        self.state = re.sub(
+            self._to_bytes(pattern),
+            self._to_bytes(repl),
+            self._convert_to_bytes(),
+            flags=flags,
+        )
         return self
 
     @ChepyDecorators.call_stack

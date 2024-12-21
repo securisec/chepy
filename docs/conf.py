@@ -16,20 +16,25 @@ from recommonmark.transform import AutoStructify
 
 sys.path.insert(0, os.path.abspath("."))
 
+
 def setup(app):
-    app.add_config_value('recommonmark_config', {
-            'enable_eval_rst': True,
-            }, True)
+    app.add_config_value(
+        "recommonmark_config",
+        {
+            "enable_eval_rst": True,
+        },
+        True,
+    )
     app.add_transform(AutoStructify)
 
 
 # -- Project information -----------------------------------------------------
 
 project = "Chepy"
-copyright = "2019, @securisec"
+copyright = "2025, @securisec"
 author = "@securisec"
 
-master_doc = 'index'
+master_doc = "index"
 
 
 # -- General configuration ---------------------------------------------------
@@ -66,7 +71,8 @@ html_static_path = ["_static"]
 autodoc_member_order = "groupwise"
 
 source_suffix = {
-    '.rst': 'restructuredtext',
-    '.txt': 'markdown',
-    '.md': 'markdown',
+    ".rst": "restructuredtext",
+    ".txt": "markdown",
+    ".md": "markdown",
 }
+
