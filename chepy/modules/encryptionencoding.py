@@ -1206,7 +1206,7 @@ class EncryptionEncoding(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def atbash_encode(self) -> EncryptionEncodingT:
+    def atbash(self) -> EncryptionEncodingT:
         """Encode with Atbash cipher
 
         Returns:
@@ -1216,21 +1216,20 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("secret").atbash_encode().o
             "HVXIVG"
         """
-        self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)
-        return self
-
-    @ChepyDecorators.call_stack
-    def atbash_decode(self) -> EncryptionEncodingT:
-        """Decode Atbash cipher
-
-        Returns:
-            Chepy: The Chepy object.
-
-        Examples:
-            >>> Chepy("hvxivg").atbash_decode().o
-            "SECRET"
-        """
-        self.state = pycipher.Atbash().decipher(self._convert_to_str(), keep_punct=True)
+        key = 'ZYXWVUTSRQPONMLKJIHGFEDCBA'
+        data = self._convert_to_str()
+        ret = ''
+        arr = Ciphers.ATBASH
+        for c in data:
+            if c.isalpha():
+                if c.islower():
+                    ret += key[arr[c.upper()]].lower()
+                else:
+                    ret += key[arr[c]]
+            else: 
+                ret += c
+        self.state = ret
+        # self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)
         return self
 
     @ChepyDecorators.call_stack

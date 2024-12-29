@@ -690,11 +690,7 @@ def test_affine_decode():
 
 
 def test_atbash_encode():
-    assert Chepy("secret").atbash_encode().o == b"hvxivg".upper()
-
-
-def test_atbash_decode():
-    assert Chepy("hvxivg").atbash_decode().o == b"secret".upper()
+    assert Chepy("AbCd1.2").atbash().o == b"ZyXw1.2"
 
 
 def test_to_morse_code():
