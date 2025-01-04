@@ -57,7 +57,8 @@ def test_fork():
 def test_save_buffer():
     c = Chepy("A").save_buffer(0).str_to_hex().save_buffer(1)
     assert c.buffers[0] == "A"
-    assert c.buffers[1] == b"41"
+    assert c.buffers[1] == "41"
+    assert Chepy('ffffd64c').from_hex().swap_endianness().str_to_hex('\\x').out_as_any == '\\x4c\\xd6\\xff\\xff'
 
 
 def test_load_buffer():

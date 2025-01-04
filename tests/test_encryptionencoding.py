@@ -69,6 +69,10 @@ def test_xor_hex():
     assert Chepy("some data").xor("5544", "hex").o == b"&+8!u 404"
 
 
+def test_xor_raw():
+    assert Chepy("ab\xffcd").xor("\x31\x03", "raw").o == b"Pa\xce`U"
+
+
 def test_xor_binary():
     assert (
         Chepy("./tests/files/hello")
@@ -691,6 +695,7 @@ def test_affine_decode():
 
 def test_atbash_encode():
     assert Chepy("AbCd1.2").atbash().o == b"ZyXw1.2"
+    assert Chepy("zbCc;oo?|c;oAp9P%").atbash().atbash().o == b"zbCc;oo?|c;oAp9P%"
 
 
 def test_to_morse_code():

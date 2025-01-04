@@ -13,8 +13,9 @@ def test_base16_decode():
     assert Chepy("74657374").from_base16().o == b"test"
 
 
-def test_bytes_to_ascii():
-    assert Chepy([116, 101, 115, 116]).bytes_to_ascii().o == b"test"
+def test_list_to_bytes():
+    assert Chepy([116, 101, 115, 116]).list_to_bytes().o == b"test"
+    assert Chepy([116, 101, 115, 116]).list_to_bytes(True).o == b"test"
 
 
 def test_dict_to_json():
@@ -225,7 +226,7 @@ def test_from_url_encoding():
     )
 
 
-def test_to_list():
+def test_str_list_to_list():
     assert Chepy("[1,2,'lol', true]").str_list_to_list().o == [1, 2, "lol", True]
 
 
@@ -241,7 +242,7 @@ def test_join():
 
 def test_to_int():
     assert Chepy("1").to_int().o == 1
-    assert Chepy('AQAB').from_base64().to_int().o == 65537
+    assert Chepy("AQAB").from_base64().to_int().o == 65537
 
 
 def test_normalize_hex():
@@ -270,8 +271,10 @@ def test_from_bytes():
     )
 
 
-def test_str_to_list():
-    assert Chepy("abc").str_to_list().o == ["a", "b", "c"]
+def test_to_list():
+    assert Chepy("abc").to_list().o == ["a", "b", "c"]
+    assert Chepy(bytearray(b"abc")).to_list().o == [97, 98, 99]
+    assert Chepy(b"abc").to_list().o == [97, 98, 99]
 
 
 def test_str_to_dict():
@@ -444,6 +447,12 @@ def test_nato_convert():
     )
 
 
+def test_swap_values():
+    assert Chepy("abcd").swap_values("0", "3").o == b"dbca"
+    assert Chepy("abcd").swap_values([0, 1], [3, 2]).o == b"dcba"
+    assert Chepy([1, 2, 3]).swap_values("0", "2").o == [3, 2, 1]
+
+
 def test_swap_strings():
     assert Chepy("oY u").swap_strings(2).o == b"You "
 
@@ -463,7 +472,7 @@ def test_stringify():
 def test_select():
     assert Chepy("abcd").select(0, 2).o == b"ab"
     assert Chepy("abcd").select(2).o == b"cd"
-    assert Chepy("abcd").select('(b|c)').o == b"bcd"
+    assert Chepy("abcd").select("(b|c)").o == b"bcd"
 
 
 def test_length():

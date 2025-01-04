@@ -715,6 +715,15 @@ class ChepyCore(object):
         return self.state
 
     @property
+    def out_as_any(self):
+        """Get the final output
+
+        Returns:
+            Any: Final output
+        """
+        return self.state
+
+    @property
     def out(self) -> Any:
         """Get the final output
 

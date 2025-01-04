@@ -313,9 +313,10 @@ class EncryptionEncoding(ChepyCore):
     def xor(
         self,
         key: str,
-        key_type: Literal["hex", "utf8", "base64", "decimal"] = "hex",
+        key_type: Literal["hex", "utf8", "base64", "decimal", "raw"] = "hex",
     ) -> EncryptionEncodingT:
-        """XOR state with a key
+        """XOR state with a key. In raw format, both the state and the key is converted
+        to a bytearray.
 
         Args:
             key (str): Required. The key to xor by
@@ -330,8 +331,18 @@ class EncryptionEncoding(ChepyCore):
         """
 
         x = bytearray(b"")
+
+        if key_type == "raw":
+            _data_ba = bytearray()
+            _data = self._convert_to_str()
+            _data_ba.extend(map(ord, _data))
+            raw_key = bytearray()
+            raw_key.extend(map(ord, key))
+            for char, key_val in zip(_data_ba, itertools.cycle(raw_key)):
+                x.append(char ^ key_val)
+
         # check if state is a list and keys are list
-        if isinstance(self.state, bytearray) and isinstance(key, bytearray):
+        elif isinstance(self.state, bytearray) and isinstance(key, bytearray):
             for char, key_val in zip(self.state, itertools.cycle(key)):
                 x.append(char ^ key_val)
 
@@ -1216,9 +1227,10 @@ class EncryptionEncoding(ChepyCore):
             >>> Chepy("secret").atbash_encode().o
             "HVXIVG"
         """
-        key = 'ZYXWVUTSRQPONMLKJIHGFEDCBA'
+        # Reference https://github.com/jameslyons/pycipher/blob/master/pycipher/atbash.py
+        key = "ZYXWVUTSRQPONMLKJIHGFEDCBA"
         data = self._convert_to_str()
-        ret = ''
+        ret = ""
         arr = Ciphers.ATBASH
         for c in data:
             if c.isalpha():
@@ -1226,7 +1238,7 @@ class EncryptionEncoding(ChepyCore):
                     ret += key[arr[c.upper()]].lower()
                 else:
                     ret += key[arr[c]]
-            else: 
+            else:
                 ret += c
         self.state = ret
         # self.state = pycipher.Atbash().encipher(self._convert_to_str(), keep_punct=True)

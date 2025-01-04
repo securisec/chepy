@@ -63,14 +63,20 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def bytes_to_ascii(self) -> DataFormatT:
+    def list_to_bytes(self, ascii: bool = False) -> DataFormatT:
         """Convert bytes (array of bytes) to ascii
+
+        Args:
+            ascii (bool, optional): Output as ascii, by default False
 
         Returns:
             Chepy: The Chepy object.
         """
         assert isinstance(self.state, list), "Data in state is not a list"
-        self.state = bytearray(self.state).decode()
+        if ascii:
+            self.state = bytearray(self.state).decode()
+        else:
+            self.state = bytes(bytearray(self.state))
         return self
 
     @ChepyDecorators.call_stack
@@ -729,13 +735,19 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def str_to_hex(self) -> DataFormatT:
+    def str_to_hex(self, delimiter: Union[str, bytes] = b"") -> DataFormatT:
         """Converts a string to a hex string
+
+        Args:
+            delimiter (Union[str, bytes], optional): Format delimiter. Defaults to b'
 
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = binascii.hexlify(self._convert_to_bytes())
+        data = self._convert_to_bytes()
+        delimiter = self._bytes_to_str(delimiter)
+        out = delimiter + delimiter.join(f"{byte:02x}" for byte in data)
+        self.state = out
         return self
 
     @ChepyDecorators.call_stack
@@ -903,7 +915,7 @@ class DataFormat(ChepyCore):
             raise TypeError("State is not a bytearray")
 
     @ChepyDecorators.call_stack
-    def str_to_list(self) -> DataFormatT:
+    def to_list(self) -> DataFormatT:
         """Convert string to list
 
         Converts the string in state to an array of individual characyers
@@ -912,10 +924,13 @@ class DataFormat(ChepyCore):
             Chepy: The Chepy object.
 
         Examples:
-            >>> Chepy("abc").str_to_list().o
+            >>> Chepy("abc").to_list().o
             ["a", "b", "c"]
         """
-        self.state = list(self._convert_to_str())
+        if isinstance(self.state, (bytearray, bytes, str)):
+            self.state = list(self.state)
+        else:  # pragma: no cover
+            raise ValueError("State is not a valid data type")
         return self
 
     @ChepyDecorators.call_stack
@@ -1363,6 +1378,51 @@ class DataFormat(ChepyCore):
         data = data.split(delimiter)
         d = {v: k for k, v in Encoding.NATO_CONSTANTS_DICT.items()}
         self.state = join_by.join([d.get(p, p) for p in data])
+        return self
+
+    @ChepyDecorators.call_stack
+    def swap_values(
+        self, indices1: Union[str, List[int]], indices2: Union[str, List[int]]
+    ):
+        """Swaps the values in the global bytes based on indices specified in two lists.
+
+        Args:
+            indices1 (Union[str, List[int]]): The first indices. If string, it should be , delimited
+            indices2 (Union[str, List[int]]): The second indices. If string, it should be , delimited
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(indices1, str):
+            indices1 = [int(x.strip()) for x in indices1.split(",")]
+        if isinstance(indices2, str):
+            indices2 = [int(x.strip()) for x in indices2.split(",")]
+
+        is_list = isinstance(self.state, list)
+        if is_list:
+            data = self.state
+        else:
+            data = bytearray(self._convert_to_bytes())
+
+        # Check if both lists are of the same length
+        if len(indices1) != len(indices2):  # pragma: no cover
+            raise ValueError("The two argument lists must have the same length.")
+
+        # Swap values in the byte list
+        for idx1, idx2 in zip(indices1, indices2):
+            # Validate indices are within bounds
+            if (
+                idx1 < 0 or idx1 >= len(data) or idx2 < 0 or idx2 >= len(data)
+            ):  # pragma: no cover
+                raise IndexError(
+                    f"Index out of range. Lenth of state is {len(data)}, indices provided {idx1} {idx2}"
+                )
+
+            # Perform the swap
+            data[idx1], data[idx2] = data[idx2], data[idx1]
+
+        # Convert the modified list back to bytes
+        self.state = data if is_list else bytes(data)
         return self
 
     @ChepyDecorators.call_stack
