@@ -751,8 +751,12 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def int_to_hex(self) -> DataFormatT:
+    def int_to_hex(self, unsigned_int: bool = True, bit_size: int = 64) -> DataFormatT:
         """Converts an integer into its hex equivalent
+
+        Args:
+            unsigned_int (bool, optional): Calculate the unsigned hexadecimal representation. Defaults to True
+            bit_size (int, optional): Used when unsinged_int is used
 
         Returns:
             Chepy: The Chepy object.
@@ -761,7 +765,11 @@ class DataFormat(ChepyCore):
             >>> Chepy(101).int_to_hex().o
             "65"
         """
-        self.state = format(self._convert_to_int(), "x")
+        i = self._convert_to_int()
+        if unsigned_int and i < 0:
+            self.state = hex((1 << bit_size) + i).strip("0x").strip("-0x")
+        else:
+            self.state = format(self._convert_to_int(), "x")
         return self
 
     @ChepyDecorators.call_stack
@@ -1584,11 +1592,12 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def swap_endianness(self, word_length: int = 4) -> DataFormatT:
+    def swap_endianness(self, word_length: int = 4, pad_incomplete: bool=True) -> DataFormatT:
         """Swap endianness.
 
         Args:
             word_length (int, optional): Word length. Use 8 for big endian. Defaults to 4.
+            pad_incomplete (bool, optional): Pad incomplete word. Defaults to True.
 
         Returns:
             Chepy: The Chepy object.
@@ -1604,6 +1613,8 @@ class DataFormat(ChepyCore):
             swapped_word = struct.unpack("<" + "B" * word_length, word)[::-1]
             swapped_data += struct.pack("B" * word_length, *swapped_word)
 
+        if not pad_incomplete:
+            swapped_data = swapped_data.replace(b'\x00', b'')
         self.state = swapped_data
         return self
 

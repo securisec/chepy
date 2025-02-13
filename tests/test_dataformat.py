@@ -204,6 +204,7 @@ def test_hex_to_bytes():
 
 def test_int_to_hex():
     assert Chepy(101).int_to_hex().o == b"65"
+    assert Chepy(-0x2152411021524111).int_to_hex().o == b"deadbeefdeadbeef"
 
 
 def test_hex_to_str():
@@ -517,7 +518,8 @@ def test_base91():
 
 
 def test_swap_endianness():
-    assert Chepy("4142").from_hex().swap_endianness().o == b"\x00\x00\x42A"
+    assert Chepy("4142").from_hex().swap_endianness().o == b"\x00\x00BA"
+    assert Chepy("4142").from_hex().swap_endianness(pad_incomplete=False).o == b"BA"
 
 
 def test_bruteforce_base_xx():
