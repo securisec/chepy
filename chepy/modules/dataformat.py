@@ -1592,7 +1592,9 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def swap_endianness(self, word_length: int = 4, pad_incomplete: bool=True) -> DataFormatT:
+    def swap_endianness(
+        self, word_length: int = 4, pad_incomplete: bool = True
+    ) -> DataFormatT:
         """Swap endianness.
 
         Args:
@@ -1614,7 +1616,7 @@ class DataFormat(ChepyCore):
             swapped_data += struct.pack("B" * word_length, *swapped_word)
 
         if not pad_incomplete:
-            swapped_data = swapped_data.replace(b'\x00', b'')
+            swapped_data = swapped_data.replace(b"\x00", b"")
         self.state = swapped_data
         return self
 
@@ -2388,4 +2390,32 @@ class DataFormat(ChepyCore):
             hold.append(dict(collections.OrderedDict(zip(columns, r))))
 
         self.state = hold
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_italics(self) -> DataFormatT:
+        """Convert string alphabets to italics
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        text = self._convert_to_str()
+        normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        italic = "𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡"
+        translation_table = str.maketrans(normal, italic)
+        self.state = text.translate(translation_table)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_italics(self) -> DataFormatT:
+        """Convert italic string alphabets to ascii
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        text = self._convert_to_str()
+        normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        italic = "𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡"
+        translation_table = str.maketrans(italic, normal)
+        self.state = text.translate(translation_table)
         return self

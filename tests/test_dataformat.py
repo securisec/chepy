@@ -841,3 +841,14 @@ def test_parse_sqlite():
         .o
         == b"bar"
     )
+
+
+def test_italics():
+    assert (
+        Chepy("hello 123 !@$@# world").to_italics().out_as_any
+        == "𝘩𝘦𝘭𝘭𝘰 123 !@$@# 𝘸𝘰𝘳𝘭𝘥"
+    )
+    assert (
+        Chepy("𝘩𝘦𝘭𝘭𝘰 123 !@$@# 𝘸𝘰𝘳𝘭𝘥").from_italics().out_as_any
+        == "hello 123 !@$@# world"
+    )
