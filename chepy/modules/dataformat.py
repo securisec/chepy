@@ -751,6 +751,24 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def int_to_bytes(self, length: Union[int, None]=None, byteorder: str = 'big'):
+        """Int to bytes conversion
+
+        Args:
+            length (int, optional): Length of bytes. If not specified, byteorder is ignored and long_to_bytes is used. 
+            byteorder (str, optional): Endianness. Defaults to 'big'.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_int()
+        if not length:
+            self.state = crypto_number.long_to_bytes(self.state)
+        else:
+            self.state = data.to_bytes(int(length), byteorder=byteorder)
+        return self
+
+    @ChepyDecorators.call_stack
     def int_to_hex(self, unsigned_int: bool = True, bit_size: int = 64) -> DataFormatT:
         """Converts an integer into its hex equivalent
 

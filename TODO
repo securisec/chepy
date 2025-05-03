@@ -27,6 +27,7 @@ New ideas:
   ☐ ✨ whitespace encoding https://www.dcode.fr/whitespace-language
   ☐ beaufort
   ☐ 🔥 update python_requires in setup.py on python version change
+  ☐ update base85 https://github.com/gorakhargosh/mom/blob/master/mom/codec/base85.py#L343
 
 Bug:
 

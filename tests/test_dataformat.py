@@ -202,6 +202,14 @@ def test_hex_to_bytes():
     assert Chepy("ab00").hex_to_bytes().o == b"\xab\x00"
 
 
+def test_int_to_bytes():
+    data = [17235, 17223]
+    assert Chepy(data[0]).int_to_bytes().o == b"CS"
+    assert Chepy(data[0]).int_to_bytes(2).o == b"CS"
+    assert Chepy(data[0]).int_to_bytes(2, "little").o == b"SC"
+    assert Chepy(data[0]).int_to_bytes(4, "big").o == b"\x00\x00CS"
+
+
 def test_int_to_hex():
     assert Chepy(101).int_to_hex().o == b"65"
     assert Chepy(-0x2152411021524111).int_to_hex().o == b"deadbeefdeadbeef"
