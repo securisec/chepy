@@ -669,12 +669,13 @@ def test_blowfish_decrypt():
     )
 
 
-def test_vigener_encode():
+def test_vigenere_encode():
     assert (
         Chepy("shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}").vigenere_encode("victory").o
         == b"npcdhzaon{a4Rmp!_K1N5q0p_4vQfKkT1uA3R}"
     )
     assert Chepy("secret").vigenere_encode("secret").o == b"kieiim"
+    assert Chepy("Vigenère").vigenere_encode("key").o.decode() == "Fmeorèpo"
 
 
 def test_vigenere_decode():
@@ -683,6 +684,7 @@ def test_vigenere_decode():
         == b"shaktictf{y4Yyy!_M1S5i0n_4cCoMpL1sH3D}"
     )
     assert Chepy("kieiim").vigenere_decode("secret").o == b"secret"
+    assert Chepy("Fmeorèpo").vigenere_decode("key").o.decode() == "Vigenère"
 
 
 def test_affine_encode():

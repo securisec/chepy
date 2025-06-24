@@ -1120,7 +1120,7 @@ class EncryptionEncoding(ChepyCore):
             raise ValueError("The key must consist only of letters")  # pragma: no cover
 
         for i in range(len(input_str)):
-            if input_str[i].isalpha():
+            if input_str[i].isalpha() and input_str[i].lower() in alphabet:
                 is_upper = input_str[i].isupper()
                 input_char = input_str[i].lower()
                 key_char = key[(i - fail) % len(key)]
@@ -1162,7 +1162,7 @@ class EncryptionEncoding(ChepyCore):
             raise ValueError("The key must consist only of letters")  # pragma: no cover
 
         for i in range(len(input_str)):
-            if input_str[i].isalpha():
+            if input_str[i].isalpha() and input_str[i].lower() in alphabet:
                 is_upper = input_str[i].isupper()
                 input_char = input_str[i].lower()
                 key_char = key[(i - fail) % len(key)]
