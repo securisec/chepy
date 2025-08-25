@@ -533,3 +533,40 @@ def expand_alpha_range(alph_str: str, join_by: Union[str, None] = None):
     if join_by is not None:
         return join_by.join(hold)
     return hold
+
+
+class Zeckendorf:
+    @staticmethod
+    def generate_fibonacci_numbers(max_val):
+        """Generate Fibonacci numbers up to max_val, starting from F(2)=1, F(3)=2, etc."""
+        fibs = [1, 2]  # Start with F(2)=1, F(3)=2
+        while fibs[-1] < max_val:
+            next_fib = fibs[-1] + fibs[-2]
+            if next_fib > max_val:
+                break
+            fibs.append(next_fib)
+        return fibs
+
+    @staticmethod
+    def to_zeckendorf(n):
+        """Convert a positive integer to its Zeckendorf representation (non-neighbouring Fibonacci sum)."""
+        if n <= 0:
+            return []  # pragma: no cover
+
+        # Generate Fibonacci numbers up to n
+        fibs = Zeckendorf.generate_fibonacci_numbers(n)
+
+        result = []
+        i = len(fibs) - 1
+
+        # Greedy algorithm: use largest possible Fibonacci numbers
+        while n > 0 and i >= 0:
+            if fibs[i] <= n:
+                result.append(fibs[i])
+                n -= fibs[i]
+                # Skip the immediate previous Fibonacci number to ensure non-neighbouring
+                i -= 2
+            else:
+                i -= 1
+
+        return sorted(result, reverse=True)

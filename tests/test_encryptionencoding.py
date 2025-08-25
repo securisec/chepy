@@ -928,3 +928,13 @@ def test_pgp_passphrase():
     c1 = Chepy(data).pgp_encrypt(passphrase)
     assert Chepy(c1.o).pgp_decrypt(passphrase).o == data
     assert b"PGP MESSAGE" in Chepy(c1.o).pgp_decrypt(passphrase, True).o
+
+
+def test_zeckendorf():
+    assert (
+        Chepy("YnJ1bm5lcns3aDNfZzAxZDNuX3BoMV8wZl96ZWNrZW5kb3JmfQ==")
+        .to_zeckendorf(space_delim=".", byte_delim="|")
+        .from_zeckendorf(space_delim=".", byte_delim="|")
+        .o
+        == b"YnJ1bm5lcns3aDNfZzAxZDNuX3BoMV8wZl96ZWNrZW5kb3JmfQ=="
+    )

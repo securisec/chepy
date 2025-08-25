@@ -13,6 +13,7 @@ from .internal.ls47 import (
 )
 from .internal.constants import Ciphers, Rabbit
 from .internal.helpers import detect_delimiter
+from .internal.helpers import Zeckendorf
 
 import lazy_import
 
@@ -1999,4 +2000,67 @@ class EncryptionEncoding(ChepyCore):
             self.state = pgpy.PGPMessage.from_blob(enc.__bytes__()).__str__()
         else:
             self.state = enc.__bytes__()
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_zeckendorf(self, space_delim=".", byte_delim="|") -> EncryptionEncodingT:
+        """Convert the current state to a Zeckendorf representation.
+
+        Args:
+            space_delim (str, optional): Delimiter for space-separated Fibonacci numbers. Defaults to ".".
+            byte_delim (str, optional): Delimiter for byte-separated groups. Defaults to "|".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(space_delim, str):
+            space_delim = space_delim.encode()
+        if isinstance(byte_delim, str):
+            byte_delim = byte_delim.encode()
+        data = self._convert_to_bytes()
+
+        encoded_parts = []
+
+        for byte_val in data:
+            if byte_val == 0:
+                # Handle zero case - we'll represent it as empty (no Fibonacci numbers)
+                encoded_parts.append("")  # pragma: no cover
+            else:
+                zeck_repr = Zeckendorf.to_zeckendorf(byte_val)
+                zeck_str = space_delim.join(str(x).encode() for x in zeck_repr)
+                encoded_parts.append(zeck_str)
+
+        self.state = byte_delim.join(encoded_parts)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_zeckendorf(self, space_delim=".", byte_delim="|") -> EncryptionEncodingT:
+        """Decode a Zeckendorf representation into bytes.
+
+        Args:
+            space_delim (str, optional): Delimiter for space-separated Fibonacci numbers. Defaults to ".".
+            byte_delim (str, optional): Delimiter for byte-separated groups. Defaults to "|".
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        if isinstance(space_delim, str):
+            space_delim = space_delim.encode()
+        if isinstance(byte_delim, str):
+            byte_delim = byte_delim.encode()
+
+        data = self._convert_to_bytes()
+        parts = data.split(byte_delim)
+        decoded_bytes = []
+
+        for part in parts:
+            if not part:  # Empty part represents 0
+                decoded_bytes.append(0)  # pragma: no cover
+            else:
+                # Sum the Fibonacci numbers
+                fib_nums = [int(s) for s in part.split(space_delim) if s]
+                byte_val = sum(fib_nums)
+                decoded_bytes.append(byte_val)
+
+        self.state = bytes(decoded_bytes)
         return self

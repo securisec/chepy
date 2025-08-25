@@ -1,3 +1,6 @@
+.vscode/
+.venv/
+mise.toml
 bin/
 pyvenv.cfg
 .envrc
