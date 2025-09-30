@@ -26,6 +26,8 @@ from decorator import decorator
 
 from .modules.internal.colors import blue, cyan, green, magenta, red, yellow
 
+LOGGER = logging.getLogger("chepy")
+
 
 class ChepyDecorators(object):
     """A class to house all the decorators for Chepy"""
@@ -56,7 +58,7 @@ class ChepyDecorators(object):
     def is_stdout(func, *args, **kwargs):  # pragma: no cover
         """Detect if method is being called from the cli"""
         if sys.stdout.isatty():
-            logging.warning(f"{func.__name__} may not work as expected on the cli")
+            LOGGER.warning(f"{func.__name__} may not work as expected on the cli")
         return func(*args, **kwargs)
 
 
@@ -99,15 +101,8 @@ class ChepyCore(object):
         self._stack = list()
         #: Holds register values
         self._registers = dict()
-
-        #: Log level
-        self.log_level = logging.INFO
-        #: Log format message
-        self.log_format = "%(levelname)-2s - %(message)s"
-        logging.getLogger().setLevel(self.log_level)
-        logging.basicConfig(format=self.log_format)
         # logger
-        self._log = logging
+        self._log = LOGGER
 
     @property
     def recipe(self) -> List[Dict[str, Union[str, Dict[str, Any]]]]:
@@ -136,7 +131,7 @@ class ChepyCore(object):
         except UnicodeDecodeError:  # pragma: no cover
             return "Could not convert to str, but the data exists in the states. Use o, output or out() to access the values"
         except:  # pragma: no cover
-            logging.exception(
+            self._log.exception(
                 "\n\nCannot print current state. Either chain with "
                 "another method, or use one of the output methods "
                 "Example: .o, .out, or .state\n\n"
@@ -186,7 +181,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object.
         """
-        logging.info(blue(data))
+        self._log.info(blue(data))
         return None
 
     def _warning_logger(self, data: str) -> None:  # pragma: no cover
@@ -198,7 +193,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object.
         """
-        logging.warning(yellow(data))
+        self._log.warning(yellow(data))
         return None
 
     def _error_logger(self, data: str) -> None:  # pragma: no cover
@@ -210,7 +205,7 @@ class ChepyCore(object):
         Returns:
             Chepy: The Chepy object.
         """
-        logging.error(red(data))
+        self._log.error(red(data))
         return None
 
     def subsection(
@@ -463,7 +458,7 @@ class ChepyCore(object):
         try:
             del self.states[index]
         except KeyError:  # pragma: no cover
-            logging.warning("{} does not exist".format(index))
+            self._log.warning("{} does not exist".format(index))
         return self
 
     @ChepyDecorators.call_stack
@@ -541,7 +536,7 @@ class ChepyCore(object):
         try:
             del self.buffers[index]
         except KeyError:  # pragma: no cover
-            logging.warning("{} does not exist".format(index))
+            self._log.warning("{} does not exist".format(index))
         return self
 
     @ChepyDecorators.call_stack
@@ -1520,7 +1515,7 @@ class ChepyCore(object):
         """
         # dont run if from cli
         if sys.stdout.isatty():  # pragma: no cover
-            logging.warning("callback cannot be used via the cli")
+            self._log.warning("callback cannot be used via the cli")
             return self
         self.state = callback_function(self.state)
         return self
@@ -1702,7 +1697,7 @@ class ChepyCore(object):
         rgx = re.compile(self._str_to_bytes(pattern), flags=re.I)
         hold = []
         for path in Path(paths).glob("**/*"):
-            if path.is_dir(): # pragma: no cover
+            if path.is_dir():  # pragma: no cover
                 continue
             data = path.read_bytes()
             matched = rgx.findall(data)
