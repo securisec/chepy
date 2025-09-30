@@ -2064,3 +2064,109 @@ class EncryptionEncoding(ChepyCore):
 
         self.state = bytes(decoded_bytes)
         return self
+
+    @ChepyDecorators.call_stack
+    def sms_encode_multitap(self):
+        """
+        Encode text to multi-tap SMS format.
+        Example: 'sun' -> '7778866'
+        Preserves special characters that aren't on phone keys.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        KEY_MAP = {
+            "2": "ABC",
+            "3": "DEF",
+            "4": "GHI",
+            "5": "JKL",
+            "6": "MNO",
+            "7": "PQRS",
+            "8": "TUV",
+            "9": "WXYZ",
+            "0": " ",
+        }
+        REVERSE_MAP = {}
+
+        for key, letters in KEY_MAP.items():
+            for i, letter in enumerate(letters):
+                REVERSE_MAP[letter] = key * (i + 1)
+
+        result = []
+
+        for char in self._convert_to_str():
+            upper_char = char.upper()
+
+            # Check if character can be encoded
+            if upper_char in REVERSE_MAP:
+                result.append(REVERSE_MAP[upper_char])
+            else:
+                # Preserve special characters as-is
+                result.append(char)
+
+        self.state = "".join(result)
+        return self
+
+    @ChepyDecorators.call_stack
+    def sms_decode_multitap(self):
+        """
+        Decode multi-tap SMS format to text.
+        Example: '7778866' -> 'SUN'
+        Preserves special characters that aren't numeric keypresses.
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        KEY_MAP = {
+            "2": "ABC",
+            "3": "DEF",
+            "4": "GHI",
+            "5": "JKL",
+            "6": "MNO",
+            "7": "PQRS",
+            "8": "TUV",
+            "9": "WXYZ",
+            "0": " ",
+        }
+
+        result = []
+        i = 0
+
+        encoded = self._convert_to_str()
+
+        while i < len(encoded):
+            current_char = encoded[i]
+
+            # If it's not a digit, preserve it as-is
+            if not current_char.isdigit():
+                result.append(current_char)
+                i += 1
+                continue
+
+            # If it's not a valid key, preserve it
+            if current_char not in KEY_MAP:  # pragma: no cover
+                result.append(current_char)
+                i += 1
+                continue
+
+            letters = KEY_MAP[current_char]
+            letters_count = len(letters)
+
+            # Count consecutive same digits
+            count = 0
+            while i < len(encoded) and encoded[i] == current_char:
+                count += 1
+                i += 1
+
+            # Decode groups of presses, handling wrapping
+            while count > 0:
+                presses_for_this_letter = count % letters_count
+                if presses_for_this_letter == 0:
+                    presses_for_this_letter = letters_count
+
+                letter_index = presses_for_this_letter - 1
+                result.append(letters[letter_index])
+                count -= presses_for_this_letter
+
+        self.state = "".join(result)
+        return self

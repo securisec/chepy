@@ -938,3 +938,14 @@ def test_zeckendorf():
         .o
         == b"YnJ1bm5lcns3aDNfZzAxZDNuX3BoMV8wZl96ZWNrZW5kb3JmfQ=="
     )
+
+
+def test_sms_multitap():
+    assert (
+        Chepy("!!77773322288777444777733222~~").sms_decode_multitap().o
+        == b"!!securisec~~".upper()
+    )
+    assert (
+        Chepy("!!securisec~~").sms_encode_multitap().o
+        == b"!!77773322288777444777733222~~"
+    )
