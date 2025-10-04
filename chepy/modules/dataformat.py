@@ -12,11 +12,12 @@ import itertools
 import quopri
 import io
 import csv
+from six import indexbytes, int2byte, unichr
 import sqlite3
 import collections
 from random import randint
 import regex as re
-from .internal.constants import Encoding
+from .internal.constants import Encoding, Base65536
 from .internal.helpers import (
     detect_delimiter,
     Rotate,
@@ -751,11 +752,11 @@ class DataFormat(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
-    def int_to_bytes(self, length: Union[int, None]=None, byteorder: str = 'big'):
+    def int_to_bytes(self, length: Union[int, None] = None, byteorder: str = "big"):
         """Int to bytes conversion
 
         Args:
-            length (int, optional): Length of bytes. If not specified, byteorder is ignored and long_to_bytes is used. 
+            length (int, optional): Length of bytes. If not specified, byteorder is ignored and long_to_bytes is used.
             byteorder (str, optional): Endianness. Defaults to 'big'.
 
         Returns:
@@ -2163,6 +2164,50 @@ class DataFormat(ChepyCore):
             base62.insert(0, alphabet[remainder])
 
         self.state = "".join(base62)
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_base65536(self) -> DataFormatT:
+        """Decode Base 65536 for unicode
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_str()
+        stream = io.BytesIO()
+        done = False
+        for ch in data:
+            code_point = ord(ch)
+            b1 = code_point & ((1 << 8) - 1)
+            try:
+                b2 = Base65536.B2[code_point - b1]
+            except KeyError:  # pragma: no cover
+                raise ValueError("Invalid base65536 code point: %d" % code_point)
+            b = int2byte(b1) if b2 == -1 else int2byte(b1) + int2byte(b2)
+            if len(b) == 1:
+                if done:  # pragma: no cover
+                    raise ValueError("base65536 sequence continued after final byte")
+                done = True
+            stream.write(b)
+        self.state = stream.getvalue()
+        return self
+
+    @ChepyDecorators.call_stack
+    def to_base65536(self) -> DataFormatT:
+        """Encode to Base 65536. Base64 for unicode
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        data = self._convert_to_bytes()
+        stream = io.StringIO()
+        length = len(data)
+        for x in range(0, length, 2):
+            b1 = indexbytes(data, x)
+            b2 = indexbytes(data, x + 1) if x + 1 < length else -1
+            code_point = Base65536.BLOCK_START[b2] + b1
+            stream.write(unichr(code_point))
+        self.state = stream.getvalue()
         return self
 
     @ChepyDecorators.call_stack

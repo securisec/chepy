@@ -684,6 +684,10 @@ def test_base62():
     )
     assert Chepy("3bfP0XZgTym6SsUKeZS5Z6qoKa").from_base62().o == b"hello !!123!! world"
 
+def test_base65536():
+    assert Chepy('驳𓍣鹲驳ᕣ').from_base65536().o == b'securisec'
+    assert Chepy('securisec').to_base65536().o.decode() == '驳𓍣鹲驳ᕣ'
+
 
 def test_cut():
     assert Chepy("abcd").cut(1, 2).o == b"b"
