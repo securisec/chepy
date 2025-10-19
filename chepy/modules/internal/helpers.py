@@ -232,15 +232,41 @@ class UUEncoderDecoder:
 
     def uudecode(self):
         lines = self.data.strip().split(b"\n")
-        if len(lines) < 3 or b"begin 644" not in lines[0].lower():  # pragma: no cover
-            raise ValueError("Invalid UUencode format. Missing header")
 
-        data_lines = lines[1:-1]  # Remove header and footer
+        # More flexible header check - just look for "begin"
+        if len(lines) < 3 or not lines[0].lower().startswith(b"begin"):
+            raise ValueError(
+                "Invalid UUencode format. Missing header"
+            )  # pragma: no cover
+
+        # Find where data actually starts (skip header)
+        data_start = 1
+
+        # Find where data ends (before 'end' or backtick line)
+        data_end = len(lines)
+        for i in range(len(lines) - 1, 0, -1):
+            if lines[i].strip().lower() == b"end":
+                data_end = i
+                break
+            elif (
+                lines[i].strip() == b"`"
+            ):  # Handle backtick before end  # pragma: no cover
+                data_end = i
+                break
+
+        data_lines = lines[data_start:data_end]
 
         decoded_data = []
         for line in data_lines:
-            decoded_chunk = binascii.a2b_uu(line)
-            decoded_data.append(decoded_chunk)
+            # Skip empty lines and backticks
+            if not line.strip() or line.strip() == b"`":
+                continue
+            try:
+                decoded_chunk = binascii.a2b_uu(line)
+                decoded_data.append(decoded_chunk)
+            except binascii.Error:  # pragma: no cover
+                # Skip lines that can't be decoded (like extra backticks)
+                continue
 
         return b"".join(decoded_data)
 
