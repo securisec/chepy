@@ -5,7 +5,7 @@ decorator
 docstring-parser
 emoji==2.0.0
 exrex
-fire==0.6.0
+fire==0.7.1
 hexdump
 jmespath==1.0.1
 jsonpickle
@@ -27,3 +27,4 @@ PyYAML
 regex
 setuptools
 typing_extensions
+pretty-errors==1.2.25

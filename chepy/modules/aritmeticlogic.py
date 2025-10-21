@@ -67,7 +67,6 @@ class AritmeticLogic(ChepyCore):
             Chepy: The Chepy object.
         """
         data = self._convert_to_str()
-        print("🟢 ", data)
         if not delimiter:
             delimiter = detect_delimiter(data)
         # only work on numbers

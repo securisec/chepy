@@ -1016,7 +1016,6 @@ class DataFormat(ChepyCore):
         out = []
         if not delimiter:
             delimiter = detect_delimiter(data)
-        print("🟢 ", delimiter)
         for c in data.split(delimiter):
             out.append(chr(int(c, base)))
         self.state = join_by.join(out)
