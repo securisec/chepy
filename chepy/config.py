@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 from configparser import ConfigParser
 
+LOGGER = logging.getLogger("chepy")
+
 
 class ChepyConfig(object):
     def __init__(self):
@@ -142,5 +144,5 @@ class ChepyConfig(object):
                     loaded = getattr(plugin, klass)
                     plugins.append(loaded)
                 except:
-                    logging.warning(f"Error loading {plugin.__name__}")
+                    LOGGER.warning(f"Error loading {plugin.__name__}")
         return plugins
