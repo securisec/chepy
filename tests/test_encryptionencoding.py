@@ -766,6 +766,29 @@ def test_monoalphabetic_substitution():
     assert Chepy("lol").monoalphabetic_substitution({"l": "t", "o": "s"}).o == b"tst"
 
 
+def test_salsa20():
+    data = "securisec"
+    enc_data = "07 89 19 8b d9 85 59 c7 45".replace(" ", "")
+    assert (
+        Chepy(data)
+        .salsa20_encrypt(
+            key="ff000000000000000000000000000000", nonce="0000000000000000"
+        )
+        .to_hex()
+        .o
+        == enc_data.encode()
+    )
+    assert (
+        Chepy(enc_data)
+        .from_hex()
+        .salsa20_decrypt(
+            key="ff000000000000000000000000000000", nonce="0000000000000000"
+        )
+        .o
+        == data.encode()
+    )
+
+
 def test_chacha_decrypt():
     assert (
         Chepy("0d118d5f5807747b085473553146a3c76cf1ef61b976519240")

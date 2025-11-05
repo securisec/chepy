@@ -1096,10 +1096,11 @@ class ChepyCore(object):
         Examples:
             >>> c = Chepy("some data").write_binary('/some/path/file')
         """
+        data = self._convert_to_bytes()
         if isinstance(path, bytes):  # pragma: no cover
             path = path.decode()
         with open(str(self._abs_path(path)), "wb+") as f:
-            f.write(self.state)
+            f.write(data)
         self._info_logger("File written to {}".format(self._abs_path(path)))
         return None
 
