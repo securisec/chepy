@@ -2481,3 +2481,41 @@ class DataFormat(ChepyCore):
         translation_table = str.maketrans(italic, normal)
         self.state = text.translate(translation_table)
         return self
+
+    @ChepyDecorators.call_stack
+    def to_fullwidth(self):
+        """Convert string to full width string
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        text = self._convert_to_str()
+        result = ""
+        for char in text:
+            if ord(char) in range(33, 127):
+                result += chr(ord(char) - 33 + 0xFF01)
+            elif char == " ":
+                result += "\u3000"
+            else:
+                result += char
+        self.state = result
+        return self
+
+    @ChepyDecorators.call_stack
+    def from_fullwidth(self):
+        """Convert full width string to regular string
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        text = self._convert_to_str()
+        result = ""
+        for char in text:
+            if ord(char) in range(0xFF01, 0xFF5F):  # Fullwidth ASCII range
+                result += chr(ord(char) - 0xFF01 + 33)
+            elif char == "\u3000":  # Ideographic space
+                result += " "
+            else:
+                result += char  # pragma: no cover
+        self.state = result
+        return self

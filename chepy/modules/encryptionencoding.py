@@ -2012,12 +2012,12 @@ class EncryptionEncoding(ChepyCore):
 
     @ChepyDecorators.call_stack
     def pgp_decrypt(
-        self, passphrase: Union[str | bytes], armoured: bool = False
+        self, passphrase: Union[str, bytes], armoured: bool = False
     ) -> EncryptionEncodingT:
         """Decrypt PGP encrypted file with passphrase
 
         Args:
-            passphrase (Union[str | bytes]): passphrase
+            passphrase (Union[str, bytes]): passphrase
             armoured (bool): PGP armoured format
 
         Returns:

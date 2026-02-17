@@ -71,6 +71,17 @@ class Utils(ChepyCore):
         return self
 
     @ChepyDecorators.call_stack
+    def remove_newlines(self):
+        """Remove new lines
+
+        Returns:
+            Chepy: The Chepy object.
+        """
+        self.data = self._convert_to_bytes()
+        self.state = self.data.translate(None, b"\r\n")
+        return self
+
+    @ChepyDecorators.call_stack
     def remove_whitespace(
         self,
         spaces: bool = True,

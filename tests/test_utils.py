@@ -53,6 +53,19 @@ def test_search():
     )
 
 
+def test_remove_newlines():
+    assert (
+        Chepy("""foo 
+bar
+baz\r\n
+bang
+""")
+        .remove_newlines()
+        .o
+        == b"foo barbazbang"
+    )
+
+
 def test_remove_nullbytes():
     assert (
         Chepy("./tests/files/hello")

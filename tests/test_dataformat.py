@@ -865,3 +865,9 @@ def test_italics():
         Chepy("𝘩𝘦𝘭𝘭𝘰 123 !@$@# 𝘸𝘰𝘳𝘭𝘥").from_italics().out_as_any
         == "hello 123 !@$@# world"
     )
+
+
+def test_fullwidth():
+    data = "union select；"
+    assert Chepy(data).to_fullwidth().o.decode() == "ｕｎｉｏｎ　ｓｅｌｅｃｔ；"
+    assert Chepy("ｕｎｉｏｎ　ｓｅｌｅｃｔ；").from_fullwidth().o == b"union select;"
