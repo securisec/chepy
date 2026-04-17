@@ -20,7 +20,6 @@ prompt_toolkit>=2.0.8
 pycipher
 pycryptodome
 pydash
-pyjwt~=1.7.1
 pyOpenSSL~=23.2.0
 pyperclip
 PyYAML

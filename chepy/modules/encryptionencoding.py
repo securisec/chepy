@@ -1,5 +1,7 @@
 import base64
 import binascii
+import hmac
+import hashlib
 import itertools
 import string
 import random
@@ -17,7 +19,6 @@ from .internal.helpers import Zeckendorf
 
 import lazy_import
 
-jwt = lazy_import.lazy_module("jwt")
 pgpy = lazy_import.lazy_module("pgpy")
 
 
@@ -424,9 +425,15 @@ class EncryptionEncoding(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
+        def _b64decode_pad(s):
+            s += "=" * (-len(s) % 4)
+            return json.loads(base64.urlsafe_b64decode(s))
+
+        token = self._convert_to_str()
+        parts = token.split(".")
         self.state = {
-            "payload": jwt.decode(self._convert_to_str(), verify=False),
-            "header": jwt.get_unverified_header(self._convert_to_str()),
+            "header": _b64decode_pad(parts[0]),
+            "payload": _b64decode_pad(parts[1]),
         }
         return self
 
@@ -443,9 +450,23 @@ class EncryptionEncoding(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = jwt.decode(
-            self._convert_to_str(), key=secret, algorithms=algorithm
-        )
+        token = self._convert_to_str().strip().replace(" ", "")
+        parts = token.split(".")
+        assert len(parts) == 3, "Invalid JWT format"
+
+        alg = algorithm[0] if isinstance(algorithm, list) else algorithm
+        hash_map = {"HS256": hashlib.sha256, "HS384": hashlib.sha384, "HS512": hashlib.sha512}
+        assert alg in hash_map, f"Unsupported algorithm: {alg}"
+
+        signing_input = f"{parts[0]}.{parts[1]}".encode()
+        expected_sig = base64.urlsafe_b64encode(
+            hmac.new(secret.encode(), signing_input, hash_map[alg]).digest()
+        ).rstrip(b"=")
+        actual_sig = parts[2].encode()
+        assert hmac.compare_digest(expected_sig, actual_sig), "Signature verification failed"
+
+        padded = parts[1] + "=" * (-len(parts[1]) % 4)
+        self.state = json.loads(base64.urlsafe_b64decode(padded))
         return self
 
     @ChepyDecorators.call_stack
@@ -463,7 +484,17 @@ class EncryptionEncoding(ChepyCore):
             data = self.state
         elif isinstance(self.state, str):
             data = json.loads(self.state)
-        self.state = jwt.encode(data, key=secret, algorithm=algorithms)
+
+        hash_map = {"HS256": hashlib.sha256, "HS384": hashlib.sha384, "HS512": hashlib.sha512}
+        assert algorithms in hash_map, f"Unsupported algorithm: {algorithms}"
+
+        header = base64.urlsafe_b64encode(json.dumps({"typ": "JWT", "alg": algorithms}, separators=(",", ":")).encode()).rstrip(b"=").decode()
+        payload = base64.urlsafe_b64encode(json.dumps(data, separators=(",", ":")).encode()).rstrip(b"=").decode()
+        signing_input = f"{header}.{payload}".encode()
+        sig = base64.urlsafe_b64encode(
+            hmac.new(secret.encode(), signing_input, hash_map[algorithms]).digest()
+        ).rstrip(b"=").decode()
+        self.state = f"{header}.{payload}.{sig}"
         return self
 
     @ChepyDecorators.call_stack
