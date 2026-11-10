@@ -106,6 +106,12 @@ def test_split_lines():
     )
 
 
+def test_split_lines_keeps_spaces_within_lines():
+    # split_lines must split on newline characters only, not on
+    # every whitespace run
+    assert Chepy("a b\nc d").split_lines().o == ["a b", "c d"]
+
+
 def test_split_chunks():
     data = "hello world"
     c1 = Chepy(data).split_chunks(2)

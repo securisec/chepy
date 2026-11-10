@@ -231,7 +231,7 @@ class Utils(ChepyCore):
         Returns:
             Chepy: The Chepy object.
         """
-        self.state = self._convert_to_str().split()
+        self.state = self._convert_to_str().splitlines()
         return self
 
     @ChepyDecorators.call_stack
